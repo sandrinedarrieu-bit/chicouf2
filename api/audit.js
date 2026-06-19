@@ -11,9 +11,9 @@ export default async function handler(req, res) {
   const contextBlock = context ? ` Contexte: ${context}` : '';
   const proField = mode === 'pro' ? `"angle_commercial":"<10 mots>","offre_recommandee":"P1|P2|P1+P2"` : `"prochaine_etape":"P1|P2"`;
 
-  const prompt = `Analyse ${url}${contextBlock}. Réponds UNIQUEMENT avec ce JSON, valeurs max 40 caractères, SANS apostrophes ni guillemets dans les textes:
+  const prompt = `Analyse ${url}${contextBlock}. Réponds UNIQUEMENT avec ce JSON, valeurs max 40 caractères:
 {"score_global":7,"niveau":"Bon","titre_diagnostic":"Titre","resume":"Resume","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Bon","analyse":"Analyse","reco":"Reco"}],"points_forts":["Point1","Point2"],"priorites":["Action1","Action2","Action3"],${proField}}
-Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des sections: Bon|Moyen|Faible. N'utilise jamais d'apostrophe (remplace "qu'il" par "que cela", etc).`;
+Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des sections: Bon|Moyen|Faible.`;
 
   const fallback = {
     score_global: 5, niveau: 'Analyse partielle',
@@ -49,30 +49,22 @@ Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des
 
     const buffer = await response.arrayBuffer();
     const text = new TextDecoder().decode(buffer);
-
-    if (!response.ok) {
-      // Erreur API Anthropic — on l'expose pour debug
-      return res.status(200).json({ ...fallback, debug_error: `API status ${response.status}: ${text.substring(0,300)}` });
-    }
-
     const data = JSON.parse(text);
     const raw = (data.content || []).map(b => b.text || '').join('').trim();
 
+    // Extraire et parser le JSON
     const start = raw.indexOf('{');
     const end = raw.lastIndexOf('}');
-    if (start === -1 || end === -1) return res.status(200).json({ ...fallback, debug_error: 'Pas de JSON dans la réponse: ' + raw.substring(0,200) });
+    if (start === -1 || end === -1) return res.status(200).json(fallback);
 
     try {
-      let jsonStr = raw.substring(start, end + 1);
-      // Nettoyer les caractères de contrôle qui cassent le JSON
-      jsonStr = jsonStr.replace(/[\u0000-\u001F]+/g, ' ');
-      const audit = JSON.parse(jsonStr);
+      const audit = JSON.parse(raw.substring(start, end + 1));
       return res.status(200).json(audit);
     } catch(e) {
-      return res.status(200).json({ ...fallback, debug_error: 'Parse error: ' + e.message });
+      return res.status(200).json(fallback);
     }
 
   } catch(err) {
-    return res.status(200).json({ ...fallback, debug_error: 'Catch error: ' + err.message });
+    return res.status(200).json(fallback);
   }
 }
