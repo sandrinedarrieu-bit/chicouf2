@@ -686,8 +686,8 @@ function toggleAuditSection(header) {
 function showAuditError(msg){const el=document.getElementById('auditError');el.textContent=msg;el.classList.add('visible');}
 function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
 document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
-</script>
 
+function handleSubmit() {
   const prenom = document.getElementById('prenom').value.trim();
   const email  = document.getElementById('email').value.trim();
   if (!prenom || !email) { alert('Merci de renseigner au minimum votre prénom et votre email.'); return; }
@@ -698,4 +698,5 @@ document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='E
 }
 </script>
 </body>
+</html>
 </html>
