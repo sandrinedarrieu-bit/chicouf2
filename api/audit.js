@@ -49,21 +49,27 @@ Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des
 
     const buffer = await response.arrayBuffer();
     const text = new TextDecoder().decode(buffer);
+
+    if (!response.ok) {
+      // Erreur API Anthropic — on l'expose pour debug
+      return res.status(200).json({ ...fallback, debug_error: `API status ${response.status}: ${text.substring(0,300)}` });
+    }
+
     const data = JSON.parse(text);
     const raw = (data.content || []).map(b => b.text || '').join('').trim();
 
     const start = raw.indexOf('{');
     const end = raw.lastIndexOf('}');
-    if (start === -1 || end === -1) return res.status(200).json(fallback);
+    if (start === -1 || end === -1) return res.status(200).json({ ...fallback, debug_error: 'Pas de JSON dans la réponse: ' + raw.substring(0,200) });
 
     try {
       const audit = JSON.parse(raw.substring(start, end + 1));
       return res.status(200).json(audit);
     } catch(e) {
-      return res.status(200).json(fallback);
+      return res.status(200).json({ ...fallback, debug_error: 'Parse error: ' + e.message });
     }
 
   } catch(err) {
-    return res.status(200).json(fallback);
+    return res.status(200).json({ ...fallback, debug_error: 'Catch error: ' + err.message });
   }
 }
