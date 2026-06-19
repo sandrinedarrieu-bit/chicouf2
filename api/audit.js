@@ -93,8 +93,12 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       if (scoreP1 >= scoreP2) {
         // Package 1 — reprendre le point faible reel de la section conversion
         const conv = getSection('conversion');
-        const detail = conv ? conv.analyse.toLowerCase() : 'le suivi de vos prospects';
-        audit.prochaine_etape = `Le Package 1 Relation Client repondrait directement a ce constat : ${detail} Vous ne perdriez plus aucun prospect.`;
+        const detail = conv ? conv.analyse.toLowerCase() : 'le suivi de vos contacts';
+        if (audit.type_structure === 'association') {
+          audit.prochaine_etape = `Le Package 1 vous aiderait a mieux suivre vos adherents et benevoles : ${detail} Vous ne perdriez plus le contact avec vos participants.`;
+        } else {
+          audit.prochaine_etape = `Le Package 1 Relation Client repondrait directement a ce constat : ${detail} Vous ne perdriez plus aucun prospect.`;
+        }
       } else {
         // Package 2 — identifier la section la plus faible parmi design/seo/contenu/mobile
         const candidats = ['seo','design','contenu','mobile'].map(id => ({ id, s: getSection(id), score: getScore(id) }));
@@ -102,7 +106,11 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
         const top = candidats[0];
         const labels = { seo: 'votre referencement', design: 'votre design', contenu: 'votre contenu', mobile: 'votre experience mobile' };
         const detail = top.s ? top.s.analyse.toLowerCase() : '';
-        audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
+        if (audit.type_structure === 'association') {
+          audit.prochaine_etape = `Le Package 2 ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite aupres de nouveaux benevoles et participants.`;
+        } else {
+          audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
+        }
       }
     }
 
