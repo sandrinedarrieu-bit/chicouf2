@@ -526,276 +526,157 @@
 <script>
 // ── AUDIT ──────────────────────────────────────────────
 let auditMode = 'client';
-let lastAudit = null;
-let lastUrl = '';
-
-const auditStepMessages = [
-  "Lecture du site…",
-  "Analyse design & structure…",
-  "Évaluation contenu & SEO…",
-  "Génération des recommandations…"
-];
+const auditStepMessages = ["Lecture du site…","Analyse design & structure…","Évaluation contenu & SEO…","Génération des recommandations…"];
 
 function setAuditMode(mode) {
   auditMode = mode;
-  document.getElementById('aBtnClient').classList.toggle('active', mode === 'client');
-  document.getElementById('aBtnPro').classList.toggle('active', mode === 'pro');
-  document.getElementById('auditProExtras').classList.toggle('visible', mode === 'pro');
-
-  document.getElementById('auditInputTitle').textContent =
-    mode === 'pro' ? 'Analyser un site prospect' : 'Analysez votre site gratuitement';
-
-  document.getElementById('auditInputSub').textContent =
-    mode === 'pro'
-      ? "Entrez l'URL du site à auditer. Ajoutez du contexte pour des recommandations commerciales précises."
-      : "Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.";
-
-  document.querySelectorAll('.audit-pro-block').forEach(b =>
-    b.classList.toggle('visible', mode === 'pro')
-  );
+  document.getElementById('aBtnClient').classList.toggle('active', mode==='client');
+  document.getElementById('aBtnPro').classList.toggle('active', mode==='pro');
+  document.getElementById('auditProExtras').classList.toggle('visible', mode==='pro');
+  document.getElementById('auditInputTitle').textContent = mode==='pro' ? 'Analyser un site prospect' : 'Analysez votre site gratuitement';
+  document.getElementById('auditInputSub').textContent = mode==='pro' ? 'Entrez l\'URL du site à auditer. Ajoutez du contexte pour des recommandations commerciales précises.' : 'Entrez l\'adresse de votre site pour recevoir un audit de présence en ligne.';
+  document.querySelectorAll('.audit-pro-block').forEach(b => b.classList.toggle('visible', mode==='pro'));
 }
 
 async function lancerAudit() {
   const url = document.getElementById('auditUrl').value.trim();
   const context = document.getElementById('auditContext').value.trim();
-
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
-    showAuditError("Merci d'entrer une URL valide commençant par https://");
-    return;
+    showAuditError("Merci d'entrer une URL valide commençant par https://"); return;
   }
-
   hideAuditError();
-
   document.getElementById('auditResults').classList.remove('visible');
-  document.getElementById('auditSections').innerHTML = '';
-  document.getElementById('auditCta').style.display = 'none';
+  document.getElementById('auditSections').innerHTML='';
+  document.getElementById('auditCta').style.display='none';
   document.getElementById('auditLoading').classList.add('visible');
-  document.getElementById('btnAudit').disabled = true;
-
-  const stepsEl = document.getElementById('auditSteps');
-  stepsEl.innerHTML = '';
-
-  auditStepMessages.forEach((msg, i) => {
-    setTimeout(() => {
-      const el = document.createElement('div');
-      el.className = 'audit-step';
-      el.textContent = msg;
-      stepsEl.appendChild(el);
-    }, i * 1800);
-  });
+  document.getElementById('btnAudit').disabled=true;
+  const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
+  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1800); });
 
   try {
-    const resp = await fetch('/api/audit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, context, mode: auditMode })
-    });
-
+    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context, mode:auditMode})});
     const respText = await resp.text();
     let audit;
-
     try {
       audit = JSON.parse(respText);
-    } catch (e) {
+    } catch(e) {
+      // Tenter d'extraire le JSON entre { et }
       try {
         const start = respText.indexOf('{');
         const end = respText.lastIndexOf('}');
         if (start !== -1 && end !== -1) {
           audit = JSON.parse(respText.substring(start, end + 1));
-        } else {
-          throw new Error('JSON introuvable');
-        }
-      } catch (e2) {
+        } else throw new Error('JSON introuvable');
+      } catch(e2) {
+        // Fallback visuel
         audit = {
-          score_global: 5,
-          niveau: 'Analyse partielle',
+          score_global: 5, niveau: 'Analyse partielle',
           titre_diagnostic: 'Votre site a du potentiel à révéler',
           resume: 'Nous avons parcouru votre site. Contactez-nous pour recevoir votre rapport complet personnalisé.',
           sections: [
-            { id: 'design', icon: '🎨', titre: 'Design', score: 'À améliorer', analyse: 'Un retour détaillé vous attend.', reco: 'Échangeons 30 min pour en discuter.' },
-            { id: 'contenu', icon: '✍️', titre: 'Contenu', score: 'À améliorer', analyse: 'Un retour détaillé vous attend.', reco: 'Échangeons 30 min pour en discuter.' },
-            { id: 'seo', icon: '🔍', titre: 'SEO', score: 'À améliorer', analyse: 'Un retour détaillé vous attend.', reco: 'Échangeons 30 min pour en discuter.' },
-            { id: 'conversion', icon: '🎯', titre: 'Conversion', score: 'À améliorer', analyse: 'Un retour détaillé vous attend.', reco: 'Échangeons 30 min pour en discuter.' },
-            { id: 'mobile', icon: '📱', titre: 'Mobile', score: 'À améliorer', analyse: 'Un retour détaillé vous attend.', reco: 'Échangeons 30 min pour en discuter.' }
+            {id:'design',icon:'🎨',titre:'Design',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'contenu',icon:'✍️',titre:'Contenu',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'seo',icon:'🔍',titre:'SEO',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'conversion',icon:'🎯',titre:'Conversion',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
           ],
           points_forts: ['Votre site est en ligne et accessible'],
-          priorites: [
-            'Contactez CHIC OUF pour un audit approfondi',
-            'Réservez un échange gratuit de 30 min'
-          ],
+          priorites: ['Contactez CHIC OUF pour un audit approfondi','Réservez un échange gratuit de 30 min'],
           prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
         };
       }
     }
-
     if (audit.error) throw new Error(audit.error);
-
     document.getElementById('auditLoading').classList.remove('visible');
-    document.getElementById('btnAudit').disabled = false;
-
+    document.getElementById('btnAudit').disabled=false;
     afficherAudit(audit, url);
-
     lastAudit = audit;
     lastUrl = url;
-
-  } catch (err) {
+  } catch(err) {
     document.getElementById('auditLoading').classList.remove('visible');
-    document.getElementById('btnAudit').disabled = false;
-    showAuditError("Erreur lors de l'analyse. Vérifiez l'URL et réessayez. (" + err.message + ")");
+    document.getElementById('btnAudit').disabled=false;
+    showAuditError("Erreur lors de l'analyse. Vérifiez l'URL et réessayez. ("+err.message+")");
   }
 }
 
 function afficherAudit(audit, url) {
-  const score = audit.score_global || 5;
+  const score = audit.score_global||5;
   const sc = document.getElementById('auditScoreCircle');
-
-  sc.className = 'audit-score-circle ' + (score >= 7 ? 'ascore-a' : score >= 5 ? 'ascore-b' : 'ascore-c');
-
-  document.getElementById('auditScoreNum').textContent = score;
-  document.getElementById('auditSiteUrl').textContent = url;
-  document.getElementById('auditScoreTitre').textContent = audit.titre_diagnostic || '';
-  document.getElementById('auditScoreSummary').textContent = audit.resume || '';
-
-  const container = document.getElementById('auditSections');
-  container.innerHTML = '';
-
-  (audit.sections || []).forEach((s, i) => {
-    const bc = s.score === 'Bon' ? 'abadge-good' : s.score === 'Urgent' ? 'abadge-bad' : 'abadge-mid';
-    const div = document.createElement('div');
-    div.className = 'audit-result-section';
-
-    div.innerHTML = `
-      <div class="audit-section-header" onclick="toggleAuditSection(this)">
-        <div class="audit-section-left">
-          <span>${s.icon}</span>
-          <span class="audit-section-title">${s.titre}</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.6rem;">
-          <span class="audit-score-badge ${bc}">${s.score}</span>
-          <span class="audit-chevron">▼</span>
-        </div>
-      </div>
-
-      <div class="audit-section-body ${i === 0 ? 'open' : ''}">
-        <p>${s.analyse}</p>
-        <p><strong>→ À faire :</strong> ${s.reco}</p>
-        ${
-          auditMode === 'pro' && s.id === 'conversion' && audit.angle_commercial
-            ? `<div class="audit-pro-block visible">
-                <div class="audit-pro-label">💼 Angle commercial</div>
-                <p>${audit.angle_commercial}</p>
-              </div>`
-            : ''
-        }
-      </div>
-    `;
-
+  sc.className='audit-score-circle '+(score>=7?'ascore-a':score>=5?'ascore-b':'ascore-c');
+  document.getElementById('auditScoreNum').textContent=score;
+  document.getElementById('auditSiteUrl').textContent=url;
+  document.getElementById('auditScoreTitre').textContent=audit.titre_diagnostic||'';
+  document.getElementById('auditScoreSummary').textContent=audit.resume||'';
+  const container=document.getElementById('auditSections'); container.innerHTML='';
+  (audit.sections||[]).forEach((s,i)=>{
+    const bc=s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
+    const div=document.createElement('div'); div.className='audit-result-section';
+    div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p>${auditMode==='pro'&&s.id==='conversion'&&audit.angle_commercial?`<div class="audit-pro-block visible"><div class="audit-pro-label">💼 Angle commercial</div><p>${audit.angle_commercial}</p></div>`:''}</div>`;
     container.appendChild(div);
   });
-
-  if (audit.points_forts || audit.priorites) {
-    const sd = document.createElement('div');
-    sd.className = 'audit-result-section';
-
-    const pfH = (audit.points_forts || []).map(p => `<li>${p}</li>`).join('');
-    const prH = (audit.priorites || []).map(p => `<li>${p}</li>`).join('');
-
-    sd.innerHTML = `
-      <div class="audit-section-header" onclick="toggleAuditSection(this)">
-        <div class="audit-section-left">
-          <span>📋</span>
-          <span class="audit-section-title">Synthèse & Priorités</span>
-        </div>
-        <span class="audit-chevron">▼</span>
-      </div>
-
-      <div class="audit-section-body open">
-        ${pfH ? `<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>` : ''}
-        ${prH ? `<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>` : ''}
-      </div>
-    `;
-
+  if (audit.points_forts||audit.priorites) {
+    const sd=document.createElement('div'); sd.className='audit-result-section';
+    const pfH=(audit.points_forts||[]).map(p=>`<li>${p}</li>`).join('');
+    const prH=(audit.priorites||[]).map(p=>`<li>${p}</li>`).join('');
+    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''} ${auditMode==='pro'&&audit.offre_recommandee?`<div class="audit-pro-block visible" style="margin-top:.75rem;"><div class="audit-pro-label">💼 Offre recommandée</div><p>${audit.offre_recommandee}</p></div>`:''}</div>`;
     container.appendChild(sd);
   }
 
+  const cta=document.getElementById('auditCta'); cta.style.display='block';
+  // Afficher directement le bloc email, cacher le CTA séparé
   document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditCta').style.display = 'none';
+
+  // Stocker la prochaine étape pour l'email
+  const etape = auditMode==='pro'
+    ? (audit.angle_commercial || '')
+    : (audit.prochaine_etape || '');
+  document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditResults').classList.add('visible');
-  document.getElementById('auditResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+let lastAudit = null;
+let lastUrl = '';
 
 async function envoyerRapport() {
   const email = document.getElementById('auditEmail').value.trim();
   const prenom = document.getElementById('auditPrenom').value.trim();
   const errEl = document.getElementById('auditEmailError');
-
   errEl.style.display = 'none';
-
-  if (!email || !email.includes('@')) {
-    errEl.textContent = "Merci d'entrer un email valide.";
-    errEl.style.display = 'block';
-    return;
-  }
-
+  if (!email || !email.includes('@')) { errEl.textContent = 'Merci d\'entrer un email valide.'; errEl.style.display = 'block'; return; }
   const btn = document.getElementById('btnSendReport');
-  btn.disabled = true;
-  btn.textContent = 'Envoi…';
-
+  btn.disabled = true; btn.textContent = 'Envoi…';
   try {
     const resp = await fetch('/api/send-report', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, prenom, url: lastUrl, audit: lastAudit })
     });
-
     const result = await resp.json();
-
     if (result.error) throw new Error(result.error);
-
     document.getElementById('auditEmailSuccess').style.display = 'block';
     btn.style.display = 'none';
-
-  } catch (err) {
-    errEl.textContent = "Erreur d'envoi : " + err.message;
+  } catch(err) {
+    errEl.textContent = 'Erreur d\'envoi : ' + err.message;
     errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Envoyer →';
+    btn.disabled = false; btn.textContent = 'Envoyer →';
   }
 }
 
 function toggleAuditSection(header) {
-  const body = header.nextElementSibling;
-  const chevron = header.querySelector('.audit-chevron');
-
-  body.classList.toggle('open');
-  chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+  const body=header.nextElementSibling; const chevron=header.querySelector('.audit-chevron');
+  body.classList.toggle('open'); chevron.style.transform=body.classList.contains('open')?'rotate(180deg)':'';
 }
-
-function showAuditError(msg) {
-  const el = document.getElementById('auditError');
-  el.textContent = msg;
-  el.classList.add('visible');
-}
-
-function hideAuditError() {
-  document.getElementById('auditError').classList.remove('visible');
-}
-
-document.getElementById('auditUrl').addEventListener('keydown', e => {
-  if (e.key === 'Enter') lancerAudit();
-});
+function showAuditError(msg){const el=document.getElementById('auditError');el.textContent=msg;el.classList.add('visible');}
+function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
+document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
 
 function handleSubmit() {
   const prenom = document.getElementById('prenom').value.trim();
-  const email = document.getElementById('email').value.trim();
-
-  if (!prenom || !email) {
-    alert('Merci de renseigner au minimum votre prénom et votre email.');
-    return;
-  }
-
+  const email  = document.getElementById('email').value.trim();
+  if (!prenom || !email) { alert('Merci de renseigner au minimum votre prénom et votre email.'); return; }
   document.getElementById('formWrapper').style.display = 'none';
-
   const s = document.getElementById('formSuccess');
   s.style.display = 'block';
   s.style.gridColumn = '2';
