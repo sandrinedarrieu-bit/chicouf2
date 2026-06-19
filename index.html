@@ -621,6 +621,22 @@ function afficherAudit(audit, url) {
     sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''} ${auditMode==='pro'&&audit.offre_recommandee?`<div class="audit-pro-block visible" style="margin-top:.75rem;"><div class="audit-pro-label">💼 Offre recommandée</div><p>${audit.offre_recommandee}</p></div>`:''}</div>`;
     container.appendChild(sd);
   }
+
+  // Bloc package recommandé — toujours visible
+  const etapeText = auditMode==='pro' ? (audit.angle_commercial||'') : (audit.prochaine_etape||'');
+  const etapeLower = etapeText.toLowerCase();
+  let badgeLabel = '', badgeIcon = '';
+  if (etapeLower.includes('package 1') || etapeLower.includes('relation client')) {
+    badgeLabel = 'Package 1 · Relation client'; badgeIcon = '🤝';
+  } else if (etapeLower.includes('package 2') || etapeLower.includes('communication') || etapeLower.includes('prospection')) {
+    badgeLabel = 'Package 2 · Communication'; badgeIcon = '📣';
+  }
+  if (badgeLabel) {
+    const recoDiv = document.createElement('div');
+    recoDiv.style.cssText = 'background:var(--lilas-l);border-radius:14px;padding:1.25rem 1.5rem;margin-top:.75rem;';
+    recoDiv.innerHTML = `<div style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ouf);margin-bottom:.4rem;">${badgeIcon} ${badgeLabel} recommandé</div><p style="font-size:.9rem;color:var(--chic);margin:0;">${etapeText}</p>`;
+    container.appendChild(recoDiv);
+  }
   const cta=document.getElementById('auditCta'); cta.style.display='block';
   // Afficher directement le bloc email, cacher le CTA séparé
   document.getElementById('auditEmailBox').style.display = 'block';
