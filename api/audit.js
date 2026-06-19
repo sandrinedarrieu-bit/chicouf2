@@ -75,8 +75,9 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
     // Calcul automatique du package recommande a partir des scores (fiable, pas demande a Claude)
     if (mode !== 'pro') {
       const sections = audit.sections || [];
+      const getSection = (id) => sections.find(x => x.id === id);
       const getScore = (id) => {
-        const s = sections.find(x => x.id === id);
+        const s = getSection(id);
         if (!s) return 1;
         if (s.score === 'Bon') return 0;
         if (s.score === 'Urgent') return 2;
@@ -86,9 +87,18 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       const scoreP1 = getScore('conversion') * 4;
 
       if (scoreP1 >= scoreP2) {
-        audit.prochaine_etape = 'Le Package 1 Relation Client serait une belle premiere etape pour structurer le suivi de vos prospects et ne plus en perdre aucun.';
+        // Package 1 — reprendre le point faible reel de la section conversion
+        const conv = getSection('conversion');
+        const detail = conv ? conv.analyse.toLowerCase() : 'le suivi de vos prospects';
+        audit.prochaine_etape = `Le Package 1 Relation Client repondrait directement a ce constat : ${detail} Vous ne perdriez plus aucun prospect.`;
       } else {
-        audit.prochaine_etape = 'Le Package 2 Communication vous aiderait a ameliorer votre visibilite en ligne et a attirer plus de prospects qualifies.';
+        // Package 2 — identifier la section la plus faible parmi design/seo/contenu/mobile
+        const candidats = ['seo','design','contenu','mobile'].map(id => ({ id, s: getSection(id), score: getScore(id) }));
+        candidats.sort((a,b) => b.score - a.score);
+        const top = candidats[0];
+        const labels = { seo: 'votre referencement', design: 'votre design', contenu: 'votre contenu', mobile: 'votre experience mobile' };
+        const detail = top.s ? top.s.analyse.toLowerCase() : '';
+        audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
       }
     }
 
