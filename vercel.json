@@ -1,6 +1,9 @@
 {
   "functions": {
     "api/audit.js": {
+      "maxDuration": 60
+    },
+    "api/send-report.js": {
       "maxDuration": 30
     }
   }
