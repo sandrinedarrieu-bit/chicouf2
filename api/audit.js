@@ -92,7 +92,7 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       }
     }
 
-    return res.status(200).json(audit);
+    return res.status(200).json({ ...audit, _version: 'v3-calcul-auto' });
 
   } catch (err) {
     return res.status(200).json({ ...fallback, debug_error: 'Catch: ' + err.message });
