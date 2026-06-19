@@ -50,6 +50,10 @@ export default async function handler(req, res) {
                 'fldHRtR1PkT3xmUcW': audit.niveau || '',
                 'fldSMV28x33cEvUrU': audit.titre_diagnostic || '',
                 'fldLwVlQKDPQoy7iY': packageReco,
+                // Actions prioritaires
+                'fld1ZRALbf7Ph7L94': audit.priorites?.[0] || '',
+                'fldftAEyRGpwUrbb8': audit.priorites?.[1] || '',
+                'fldn3Y7PW28aZcqbA': audit.priorites?.[2] || '',
                 'fldfW7xcErUNiUaKD': new Date().toISOString().split('T')[0]
               }
             }]
