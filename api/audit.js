@@ -11,9 +11,9 @@ export default async function handler(req, res) {
   const contextBlock = context ? ` Contexte: ${context}` : '';
   const proField = mode === 'pro' ? `"angle_commercial":"<10 mots>","offre_recommandee":"P1|P2|P1+P2"` : `"prochaine_etape":"P1|P2"`;
 
-  const prompt = `Analyse ${url}${contextBlock}. Réponds UNIQUEMENT avec ce JSON, valeurs max 40 caractères:
+  const prompt = `Analyse ${url}${contextBlock}. Réponds UNIQUEMENT avec ce JSON, valeurs max 40 caractères, SANS apostrophes ni guillemets dans les textes:
 {"score_global":7,"niveau":"Bon","titre_diagnostic":"Titre","resume":"Resume","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Bon","analyse":"Analyse","reco":"Reco"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Bon","analyse":"Analyse","reco":"Reco"}],"points_forts":["Point1","Point2"],"priorites":["Action1","Action2","Action3"],${proField}}
-Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des sections: Bon|Moyen|Faible.`;
+Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des sections: Bon|Moyen|Faible. N'utilise jamais d'apostrophe (remplace "qu'il" par "que cela", etc).`;
 
   const fallback = {
     score_global: 5, niveau: 'Analyse partielle',
@@ -63,7 +63,10 @@ Remplace toutes les valeurs par ton analyse réelle. Score entre 1-10. score des
     if (start === -1 || end === -1) return res.status(200).json({ ...fallback, debug_error: 'Pas de JSON dans la réponse: ' + raw.substring(0,200) });
 
     try {
-      const audit = JSON.parse(raw.substring(start, end + 1));
+      let jsonStr = raw.substring(start, end + 1);
+      // Nettoyer les caractères de contrôle qui cassent le JSON
+      jsonStr = jsonStr.replace(/[\u0000-\u001F]+/g, ' ');
+      const audit = JSON.parse(jsonStr);
       return res.status(200).json(audit);
     } catch(e) {
       return res.status(200).json({ ...fallback, debug_error: 'Parse error: ' + e.message });
