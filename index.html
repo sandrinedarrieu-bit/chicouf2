@@ -618,7 +618,7 @@ function afficherAudit(audit, url) {
     const sd=document.createElement('div'); sd.className='audit-result-section';
     const pfH=(audit.points_forts||[]).map(p=>`<li>${p}</li>`).join('');
     const prH=(audit.priorites||[]).map(p=>`<li>${p}</li>`).join('');
-    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''} ${auditMode==='pro'&&audit.offre_recommandee?`<div class="audit-pro-block visible" style="margin-top:.75rem;"><div class="audit-pro-label">💼 Offre recommandée</div><p>${audit.offre_recommandee}</p></div>`:''}</div>`;
+    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''}</div>`;
     container.appendChild(sd);
   }
 
