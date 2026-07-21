@@ -113,16 +113,16 @@
     .tarif-btn-dark:hover { opacity: .85; }
 
     /* CAPE */
-    #cape { background: var(--nuit); color: var(--white); padding: clamp(4rem,8vw,6rem) clamp(1.25rem,5vw,3rem); }
+    #cape { background: var(--white); color: var(--body); padding: clamp(4rem,8vw,6rem) clamp(1.25rem,5vw,3rem); border-top: 1px solid #E8E6E1; border-bottom: 1px solid #E8E6E1; }
     .cape-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
     .cape-text .section-eyebrow,.cape-text .section-title { text-align: left; }
-    .cape-text .section-title { color: var(--white); margin: 0 0 1rem; }
-    .cape-text p { color: rgba(255,255,255,.7); font-size: .975rem; margin-bottom: 1.5rem; }
+    .cape-text .section-title { color: var(--chic); margin: 0 0 1rem; }
+    .cape-text p { color: var(--body); font-size: .975rem; margin-bottom: 1.5rem; }
     .cape-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .cape-pillar { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius); padding: 1.25rem; }
-    .cape-letter { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--lilas); line-height: 1; margin-bottom: .35rem; }
-    .cape-pillar strong { display: block; color: var(--white); font-size: .88rem; margin-bottom: .2rem; }
-    .cape-pillar span { color: rgba(255,255,255,.5); font-size: .8rem; }
+    .cape-pillar { background: var(--lilas-l); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 1.25rem; }
+    .cape-letter { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--ouf); line-height: 1; margin-bottom: .35rem; }
+    .cape-pillar strong { display: block; color: var(--chic); font-size: .88rem; margin-bottom: .2rem; }
+    .cape-pillar span { color: var(--muted); font-size: .8rem; }
 
     /* APROPOS */
     #apropos { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,3rem); }
@@ -141,17 +141,17 @@
     .apropos-card p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
 
     /* CONTACT */
-    #contact { background: var(--nuit); padding: clamp(4rem,8vw,6rem) clamp(1.25rem,5vw,3rem); }
+    #contact { background: var(--cream); padding: clamp(4rem,8vw,6rem) clamp(1.25rem,5vw,3rem); border-top: 1px solid #E8E6E1; }
     .contact-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
     .contact-left .section-eyebrow,.contact-left .section-title { text-align: left; }
-    .contact-left .section-title { color: var(--white); margin: 0 0 1rem; }
-    .contact-left > p { color: rgba(255,255,255,.65); font-size: .975rem; margin-bottom: 2rem; line-height: 1.7; }
-    .rdv-box { background: rgba(123,92,240,.2); border: 1px solid rgba(123,92,240,.4); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
-    .rdv-box p { color: rgba(255,255,255,.8); font-size: .9rem; margin-bottom: 1rem; }
+    .contact-left .section-title { color: var(--chic); margin: 0 0 1rem; }
+    .contact-left > p { color: var(--body); font-size: .975rem; margin-bottom: 2rem; line-height: 1.7; }
+    .rdv-box { background: var(--lilas-l); border: 1px solid rgba(123,92,240,.3); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .rdv-box p { color: var(--chic); font-size: .9rem; margin-bottom: 1rem; }
     .btn-calendly { display: inline-flex; align-items: center; gap: .5rem; background: var(--ouf); color: var(--white); padding: .8rem 1.5rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
     .btn-calendly:hover { opacity: .85; }
     .btn-calendly svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
-    .contact-hint { color: rgba(255,255,255,.35); font-size: .82rem; }
+    .contact-hint { color: var(--muted); font-size: .82rem; }
 
     .contact-form { background: var(--white); border-radius: 18px; padding: 2.5rem; }
     .contact-form h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--chic); margin-bottom: 1.5rem; }
@@ -483,8 +483,8 @@
 <section id="cape">
   <div style="text-align:center;margin-bottom:2.5rem;">
     <p class="section-eyebrow" style="margin-bottom:.6rem;">2 diagnostics gratuits</p>
-    <div style="display:inline-flex;gap:.4rem;background:rgba(255,255,255,.08);border-radius:999px;padding:4px;">
-      <a href="#audit" style="padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;color:rgba(255,255,255,.55);text-decoration:none;white-space:nowrap;">🔍 Audit de site</a>
+    <div style="display:inline-flex;gap:.4rem;background:#F0EDE8;border-radius:999px;padding:4px;">
+      <a href="#audit" style="padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap;">🔍 Audit de site</a>
       <span style="background:var(--ouf);color:#fff;padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;white-space:nowrap;">🧭 Maturité IA (CAPE)</span>
     </div>
   </div>
@@ -492,8 +492,8 @@
     <div class="cape-text">
       <p class="section-eyebrow">Diagnostic gratuit 2/2 · Ma méthode</p>
       <h2 class="section-title">On commence toujours par un diagnostic</h2>
-      <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:white">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
-      <p>Ce diagnostic est <strong style="color:white">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
+      <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:var(--chic)">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
+      <p>Ce diagnostic est <strong style="color:var(--chic)">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" class="btn-primary" style="display:inline-block;margin-top:.5rem;">Faire le diagnostic →</a>
       <p style="margin-top:.85rem;font-size:.85rem;color:rgba(255,255,255,.45);">Vous avez un site ? <a href="#audit" style="color:var(--lilas);">Faites aussi l'audit gratuit</a> (30 sec).</p>
     </div>
