@@ -97,15 +97,23 @@
     /* CAS D'USAGE */
     #cas-usage { padding: clamp(3.5rem,7vw,6rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
     .usecases-header { max-width: var(--max); margin: 0 auto 3rem; }
-    .usecases-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-    .usecase-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.75rem; display: flex; flex-direction: column; }
-    .usecase-tag { display: inline-block; align-self: flex-start; background: var(--lilas-l); color: var(--ouf); font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 999px; margin-bottom: 1rem; }
-    .usecase-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .65rem; line-height: 1.3; }
+    .usecase-group { max-width: var(--max-wide); margin: 0 auto 2.5rem; }
+    .usecase-group:last-child { margin-bottom: 0; }
+    .usecase-group-title { display: flex; align-items: center; gap: .6rem; font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--chic); margin-bottom: 1.1rem; }
+    .usecase-group-title .num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--lilas-l); color: var(--ouf); font-size: .82rem; font-weight: 800; flex-shrink: 0; }
+    .usecases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .usecase-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.6rem; display: flex; flex-direction: column; }
+    .usecase-card h3 { font-family: 'Syne', sans-serif; font-size: 1.02rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
     .usecase-card p { font-size: .875rem; color: var(--body); line-height: 1.65; }
+    .usecases-cta { max-width: var(--max-wide); margin: 2.5rem auto 0; background: var(--chic); border-radius: 18px; padding: 2rem; text-align: center; }
+    .usecases-cta p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 1.1rem; }
+    .usecases-cta a { display: inline-block; background: var(--ouf); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+    .usecases-cta a:hover { opacity: .88; }
 
     /* TARIFS */
-    #tarifs { padding: clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
+    /* TARIFS (styles réutilisés dans la section Services) */
     .tarifs-grid { max-width: var(--max); margin: 3rem auto 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .tarifs-grid-2 { max-width: 760px; margin: 3rem auto 0; display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
     .tarif-card { border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 2rem; text-align: center; }
     .tarif-card.featured { border: 2px solid var(--ouf); background: var(--cream); position: relative; }
     .tarif-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--or); color: var(--chic); font-size: .72rem; font-weight: 700; padding: .25rem .8rem; border-radius: 999px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
@@ -276,7 +284,7 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.contact-inner,.form-row,.usecases-grid { grid-template-columns: 1fr; }
+      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid { grid-template-columns: 1fr; }
       .apropos-bio { grid-template-columns: 1fr; }
       .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
@@ -295,9 +303,8 @@
   </a>
   <ul class="nav-links">
     <li><a href="#audit">Diagnostics gratuits</a></li>
-    <li><a href="#services">Services</a></li>
+    <li><a href="#services">Nos offres</a></li>
     <li><a href="#cas-usage">Exemples de cas d'usage</a></li>
-    <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#apropos">Qui suis-je ?</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
@@ -463,6 +470,8 @@
     </div>
 
   </div>
+
+  <p style="text-align:center;margin-top:2rem;font-size:.875rem;color:var(--muted);">💡 Vous combinez 2 ou 3 packages ? <a href="#contact" style="color:var(--ouf);font-weight:500;">Un tarif préférentiel s'applique</a> — parlons-en.</p>
 </section>
 
 <section id="cas-usage">
@@ -471,67 +480,43 @@
     <h2 class="section-title">Ce que ça change concrètement</h2>
     <p class="section-sub">Des automatisations et outils déjà déployés, adaptables à votre activité.</p>
   </div>
-  <div class="usecases-grid">
 
+  <div class="usecases-grid" style="max-width:var(--max-wide);margin:0 auto;">
     <div class="usecase-card">
-      <span class="usecase-tag">Package 1</span>
-      <h3>Fini les relances manuelles</h3>
-      <p>Une association ou un club qui gère des inscriptions, des équipes ou des membres n'a plus besoin de suivre les dossiers à la main : validation automatique, email de confirmation, ajout au calendrier — tout se déclenche seul dès qu'un statut change.</p>
+      <h3>Le suivi centralisé de vos clients</h3>
+      <p>Fini les informations client éparpillées entre carnets, tableurs et boîte mail : coordonnées, historique, échéances et documents sont centralisés dans un seul outil, avec relances automatiques (rendez-vous, paiements, documents manquants).</p>
     </div>
-
     <div class="usecase-card">
-      <span class="usecase-tag">Package 1</span>
-      <h3>Une conformité qui se met à jour toute seule</h3>
-      <p>Un organisme soumis à des obligations réglementaires (formation, association agréée, secteur médico-social) reçoit une synthèse automatique de sa veille, sans avoir à éplucher ses emails un par un.</p>
+      <h3>Vos documents remplis automatiquement</h3>
+      <p>Devis, contrats, convocations, comptes-rendus… si vous rédigez souvent les mêmes documents avec juste quelques informations qui changent (nom, dates, montants), je peux automatiser leur génération à partir d'un simple formulaire — à l'image de l'outil construit pour la gestion des délais juridiques, mais adaptable à n'importe quel type de document.</p>
     </div>
-
     <div class="usecase-card">
-      <span class="usecase-tag">Package 2</span>
       <h3>Votre propre outil de diagnostic, comme celui-ci</h3>
       <p>Vous venez de tester l'audit gratuit de ce site ? Je peux construire le même type d'outil pour votre activité : un diagnostic en ligne qui capte des prospects automatiquement, 24h/24.</p>
     </div>
-
     <div class="usecase-card">
-      <span class="usecase-tag">Package 2</span>
       <h3>Réservation et paiement, sans commission de plateforme</h3>
       <p>Un artisan ou un indépendant qui prend des rendez-vous (coach, salle, atelier) peut avoir son propre système de réservation et de paiement intégré, sans dépendre d'un outil tiers qui prélève des frais.</p>
     </div>
-
     <div class="usecase-card">
-      <span class="usecase-tag">Package 3</span>
-      <h3>Un outil métier sur-mesure, même pour un besoin très spécifique</h3>
-      <p>Preuve que je sais construire au-delà de l'automatisation générique : un outil qui applique des règles précises à un métier (calculs, échéances, obligations) — utile même pour des besoins très particuliers.</p>
+      <h3>Un simulateur de devis intégré à votre site</h3>
+      <p>Plutôt qu'un simple formulaire de contact, votre site propose un vrai outil : le visiteur entre ses critères (matériaux, surface, options) et voit le tarif s'afficher instantanément — un argument de conversion directement sur votre présence en ligne, pas juste un gain de temps en coulisses.</p>
     </div>
-
-  </div>
-</section>
-
-<section id="tarifs">
-  <p class="section-eyebrow">Tarifs</p>
-  <h2 class="section-title">Transparent et sans surprise</h2>
-  <p class="section-sub">Chaque mission démarre par un échange gratuit de 30 min pour cadrer précisément le périmètre.</p>
-  <div class="tarifs-grid">
-    <div class="tarif-card">
-      <p class="tarif-label">Diagnostics gratuits</p>
-      <div class="tarif-price">Gratuit</div>
-      <p class="tarif-detail">Audit de site (30 sec) + Formulaire CAPE (10 min) · compte-rendu détaillé par email</p>
-      <a href="#audit" class="tarif-btn tarif-btn-outline" style="margin-bottom:.6rem;">Analyser mon site</a>
-      <a href="https://tally.so/r/68PxQB" target="_blank" class="tarif-btn tarif-btn-outline">Faire le diagnostic CAPE</a>
+    <div class="usecase-card">
+      <h3>Vos réseaux sociaux alimentés sans y penser</h3>
+      <p>Vous savez que vous devriez publier régulièrement, mais le temps manque toujours. Vos contenus (offres, actualités, témoignages clients) sont programmés et publiés automatiquement sur vos réseaux, à partir d'une simple base de contenus que vous alimentez quand vous voulez.</p>
     </div>
-    <div class="tarif-card featured">
-      <span class="tarif-badge">Le plus choisi</span>
-      <p class="tarif-label accent">Un package</p>
-      <div class="tarif-price">490 – 690 €</div>
-      <p class="tarif-detail">HT · livraison 2 à 4 semaines · documentation incluse</p>
-      <a href="#contact" class="tarif-btn tarif-btn-fill">Demander un devis</a>
-    </div>
-    <div class="tarif-card">
-      <p class="tarif-label">Plusieurs packages</p>
-      <div class="tarif-price">Sur devis</div>
-      <p class="tarif-detail">Bundle personnalisé · tarif préférentiel · suivi post-livraison</p>
-      <a href="#contact" class="tarif-btn tarif-btn-dark">Parlons-en</a>
+    <div class="usecase-card">
+      <h3>Un chatbot qui répond à vos clients, même la nuit</h3>
+      <p>Vos visiteurs posent souvent les mêmes questions (horaires, tarifs, disponibilités) et n'ont pas toujours envie d'attendre une réponse par email. Un assistant IA intégré à votre site répond instantanément, 24h/24, et peut même qualifier vos prospects ou prendre un rendez-vous à votre place.</p>
     </div>
   </div>
+
+  <div class="usecases-cta">
+    <p>Vous vous reconnaissez dans un de ces cas ?</p>
+    <a href="#contact">📅 Réservons 30 min pour en discuter</a>
+  </div>
+
 </section>
 
 <section id="cape">
