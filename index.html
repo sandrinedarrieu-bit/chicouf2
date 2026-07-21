@@ -55,6 +55,9 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(123,92,240,.45); }
     .btn-ghost { border: 1px solid rgba(255,255,255,.25); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .975rem; text-decoration: none; transition: border-color .2s, background .2s; }
     .btn-ghost:hover { border-color: rgba(255,255,255,.6); background: rgba(255,255,255,.06); }
+    .btn-stacked { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: 1rem 2rem; text-align: center; }
+    .btn-stacked .btn-title { font-size: .975rem; font-weight: 500; }
+    .btn-stacked .btn-sub { font-size: .76rem; font-weight: 400; opacity: .8; }
 
     /* STATS */
     .intro-band { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
@@ -124,6 +127,13 @@
     /* APROPOS */
     #apropos { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,3rem); }
     .apropos-inner { max-width: var(--max); margin: 0 auto; }
+    .apropos-bio { display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; align-items: center; margin: 2.5rem 0 3rem; background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 2rem; }
+    .apropos-photo { width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; }
+    .apropos-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .apropos-photo-placeholder { text-align: center; color: var(--ouf); font-size: .8rem; padding: 1rem; line-height: 1.5; }
+    .apropos-bio-text p { font-size: .975rem; color: var(--body); line-height: 1.75; margin-bottom: 1rem; }
+    .apropos-bio-text p:last-child { margin-bottom: 0; }
+    .apropos-bio-signature { font-family: 'Georgia', serif; font-style: italic; color: var(--chic); font-size: .95rem; margin-top: 1.25rem !important; }
     .apropos-grid { margin-top: 3rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
     .apropos-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 2rem 1.5rem; }
     .apropos-card .icon { font-size: 1.75rem; margin-bottom: 1rem; }
@@ -258,6 +268,8 @@
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.contact-inner,.form-row { grid-template-columns: 1fr; }
+      .apropos-bio { grid-template-columns: 1fr; }
+      .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
       .audit-url-row { flex-direction:column; }
       .audit-score-hero { grid-template-columns:1fr; text-align:center; }
@@ -273,7 +285,7 @@
     <span class="nav-logo-text">CHIC <span>OUF</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="#audit">Audit gratuit</a></li>
+    <li><a href="#audit">Diagnostics gratuits</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#cape">Méthode CAPE</a></li>
@@ -291,9 +303,16 @@
   <p class="hero-sub">Chic qu'ils soient là. Ouf que ça tourne tout seul.</p>
   <p class="hero-claim">Relation client & communication pour TPE, artisans et associations — sans jargon, sans effort.</p>
   <div class="hero-actions">
-    <a href="#audit" class="btn-primary">Analyser mon site gratuitement</a>
-    <a href="#services" class="btn-ghost">Découvrir les services →</a>
+    <a href="#audit" class="btn-primary btn-stacked">
+      <span class="btn-title">🔍 Analyser mon site (gratuit)</span>
+      <span class="btn-sub">Score /10 + recommandations par email</span>
+    </a>
+    <a href="#cape" class="btn-primary btn-stacked" style="background:var(--chic);">
+      <span class="btn-title">🧭 Évaluer ma maturité IA (gratuit)</span>
+      <span class="btn-sub">Rapport personnalisé par email</span>
+    </a>
   </div>
+  <p style="margin-top:1.25rem;"><a href="#services" style="color:rgba(255,255,255,.5);font-size:.875rem;text-decoration:none;">Découvrir les services →</a></p>
 </section>
 
 <div class="intro-band">
@@ -305,7 +324,7 @@
 <!-- AUDIT -->
 <section id="audit">
   <div class="audit-inner">
-    <p class="section-eyebrow">Outil gratuit</p>
+    <p class="section-eyebrow">Diagnostic gratuit 1/2</p>
     <h2 class="section-title">Analysez votre site en 30 secondes</h2>
     <p class="section-sub" style="margin-bottom:2rem;">Collez une URL et obtenez un diagnostic personnalisé — design, contenu, référencement, conversion.</p>
 
@@ -366,6 +385,7 @@
           <a href="https://calendly.com/votre-lien-ici" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
           <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
         </div>
+        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
       </div>
     </div>
   </div>
@@ -456,11 +476,12 @@
 <section id="cape">
   <div class="cape-inner">
     <div class="cape-text">
-      <p class="section-eyebrow">Ma méthode</p>
+      <p class="section-eyebrow">Diagnostic gratuit 2/2 · Ma méthode</p>
       <h2 class="section-title">On commence toujours par un diagnostic</h2>
       <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:white">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
       <p>Ce diagnostic est <strong style="color:white">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" class="btn-primary" style="display:inline-block;margin-top:.5rem;">Faire le diagnostic →</a>
+      <p style="margin-top:.85rem;font-size:.85rem;color:rgba(255,255,255,.45);">Vous avez un site ? <a href="#audit" style="color:var(--lilas);">Faites aussi l'audit gratuit</a> (30 sec).</p>
     </div>
     <div class="cape-pillars">
       <div class="cape-pillar"><div class="cape-letter">C</div><strong>Connaissance</strong><span>Ce que vous savez déjà sur l'IA</span></div>
@@ -476,6 +497,19 @@
     <p class="section-eyebrow">Pourquoi moi</p>
     <h2 class="section-title">Une consultante qui connaît votre réalité terrain</h2>
     <p class="section-sub">30 ans d'expérience dans des structures de taille humaine — je prends en charge l'intégralité de chaque mission, de A à Z.</p>
+
+    <div class="apropos-bio">
+      <div class="apropos-photo">
+        <!-- Remplace ce bloc par : <img src="assets/sandrine.jpg" alt="Sandrine Darrieu"> -->
+        <div class="apropos-photo-placeholder">📷<br>Ta photo ici<br><span style="opacity:.7;">(assets/sandrine.jpg)</span></div>
+      </div>
+      <div class="apropos-bio-text">
+        <p>Après plus de 30 ans dans des structures de taille humaine — EHPAD, espaces associatifs, organismes de formation — j'ai vu de près combien un outil mal choisi ou mal expliqué peut devenir un fardeau plutôt qu'une aide.</p>
+        <p>C'est cette expérience terrain qui m'a poussée à me former au no-code et à l'intelligence artificielle, avec une certification Product Builder (RNCP), pour proposer des solutions vraiment pensées pour ceux qui n'ont ni le temps ni l'envie de devenir des experts techniques.</p>
+        <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC OUF</p>
+      </div>
+    </div>
+
     <div class="apropos-grid">
       <div class="apropos-card"><div class="icon">🏗️</div><h3>Je gère tout, vous validez</h3><p>Vous me confiez l'objectif. Je construis la solution, je la teste, je vous la livre opérationnelle — sans vous imposer un suivi technique.</p></div>
       <div class="apropos-card"><div class="icon">🧭</div><h3>Terrain avant tout</h3><p>Médico-social, associatif, formation, artisanat… Je pars de vos contraintes réelles, pas d'une solution préfabriquée.</p></div>
@@ -517,6 +551,7 @@
           <option>Package 2 · Communication &amp; Prospection</option>
           <option>Package 3 · Présence digitale complète</option>
           <option>Plusieurs packages</option>
+          <option>Audit de site gratuit</option>
           <option>Diagnostic CAPE</option>
           <option>Autre</option>
         </select>
@@ -529,7 +564,7 @@
     <div class="form-success" id="formSuccess">
       <div class="s-icon">✅</div>
       <h4>Message envoyé !</h4>
-      <p>Merci, je vous réponds sous 48h ouvrées.<br>En attendant, faites le diagnostic CAPE si ce n'est pas encore fait !</p>
+      <p>Merci, je vous réponds sous 48h ouvrées.<br>En attendant, faites l'audit de site ou le diagnostic CAPE si ce n'est pas encore fait !</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" style="display:inline-block;margin-top:1rem;background:var(--ouf);color:#fff;padding:.75rem 1.5rem;border-radius:var(--radius);font-size:.88rem;text-decoration:none;">Faire le diagnostic →</a>
     </div>
   </div>
@@ -537,9 +572,9 @@
 
 <footer>
   <div class="footer-brand">CHIC <span>OUF</span></div>
-  <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en Intelligence Artificielle et Transformation Digitale CHIC OUF - 📞 07 56 92 59 84 - 🌐 chicouf.vercel.app</p>
-  <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84</p>
-  <p style="margin-top:.5rem;"><a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
+  <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en Intelligence Artificielle et Transformation Digitale · Brunoy, Île-de-France</p>
+  <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84 · chicouf.vercel.app</p>
+  <p style="margin-top:.5rem;"><a href="#audit">Audit de site gratuit</a> · <a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
 </footer>
 
 <script>
