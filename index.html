@@ -73,7 +73,7 @@
     .package-divider::before,.package-divider::after { content:''; flex:1; height:1px; background:linear-gradient(to right, transparent, var(--lilas), transparent); opacity:.4; }
     .package-divider span { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); white-space: nowrap; font-weight: 500; }
 
-    .packages-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .packages-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
     .package-card { background: var(--white); border-radius: 18px; padding: 2.75rem 2.5rem; border: 1px solid #E8E6E1; display: flex; flex-direction: column; transition: box-shadow .25s; position: relative; overflow: hidden; }
     .package-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--chic), var(--ouf)); }
     .package-card:hover { box-shadow: 0 12px 40px rgba(45,31,110,.1); }
@@ -298,7 +298,7 @@
 <div class="intro-band">
   <div class="intro-stat"><strong>30+</strong><span>ans d'expérience terrain</span></div>
   <div class="intro-stat"><strong>100%</strong><span>solutions no-code accessibles</span></div>
-  <div class="intro-stat"><strong>2</strong><span>packages clés en main</span></div>
+  <div class="intro-stat"><strong>3</strong><span>packages clés en main</span></div>
 </div>
 
 <!-- AUDIT -->
@@ -373,10 +373,10 @@
 <section id="services">
   <div class="packages-header">
     <p class="section-eyebrow">Nos offres</p>
-    <h2 class="section-title">Deux leviers pour développer votre activité</h2>
+    <h2 class="section-title">Trois leviers pour développer votre activité</h2>
     <p class="section-sub">Je prends en charge l'ensemble de la mission — de l'analyse à la livraison — pour que vous n'ayez qu'à utiliser le résultat.</p>
   </div>
-  <div class="package-divider"><span>Choisissez votre priorité — ou combinez les deux</span></div>
+  <div class="package-divider"><span>Choisissez votre priorité — ou combinez-les</span></div>
   <div class="packages-grid">
 
     <div class="package-card">
@@ -407,6 +407,20 @@
       <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
     </div>
 
+    <div class="package-card">
+      <div class="pkg-icon">🌐</div>
+      <p class="pkg-label">Package 3</p>
+      <h3 class="pkg-title">Présence digitale complète</h3>
+      <p class="pkg-desc">Je pilote la création ou la refonte de votre site, votre référencement et votre visibilité en ligne, en m'appuyant sur mon réseau de production spécialisé pour les aspects techniques avancés.</p>
+      <p class="pkg-note">Vous me confiez le périmètre, je coordonne et je livre une solution opérationnelle clé en main.</p>
+      <div class="pkg-price">
+        <span class="pkg-price-from">à partir de</span>
+        <span class="pkg-price-amount">690 €</span>
+        <span class="pkg-price-note">HT · selon périmètre</span>
+      </div>
+      <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
+    </div>
+
   </div>
 </section>
 
@@ -429,7 +443,7 @@
       <a href="#contact" class="tarif-btn tarif-btn-fill">Demander un devis</a>
     </div>
     <div class="tarif-card">
-      <p class="tarif-label">Les deux packages</p>
+      <p class="tarif-label">Plusieurs packages</p>
       <div class="tarif-price">Sur devis</div>
       <p class="tarif-detail">Bundle personnalisé · tarif préférentiel · suivi post-livraison</p>
       <a href="#contact" class="tarif-btn tarif-btn-dark">Parlons-en</a>
@@ -498,7 +512,8 @@
           <option value="">— Choisir —</option>
           <option>Package 1 · Relation client</option>
           <option>Package 2 · Communication &amp; Prospection</option>
-          <option>Les deux packages</option>
+          <option>Package 3 · Présence digitale complète</option>
+          <option>Plusieurs packages</option>
           <option>Diagnostic CAPE</option>
           <option>Autre</option>
         </select>
