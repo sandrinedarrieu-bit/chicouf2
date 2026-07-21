@@ -21,6 +21,7 @@
       --white:    #FFFFFF;
       --radius:   12px;
       --max:      1080px;
+      --max-wide: 1320px;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
@@ -67,22 +68,22 @@
     .section-sub { text-align: center; font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
 
     /* PACKAGES */
-    #services { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,3rem); }
+    #services { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,4vw,2.5rem); }
     .packages-header { margin-bottom: 3.5rem; }
-    .package-divider { display: flex; align-items: center; gap: 1rem; max-width: var(--max); margin: 0 auto 3.5rem; }
+    .package-divider { display: flex; align-items: center; gap: 1rem; max-width: var(--max-wide); margin: 0 auto 3.5rem; }
     .package-divider::before,.package-divider::after { content:''; flex:1; height:1px; background:linear-gradient(to right, transparent, var(--lilas), transparent); opacity:.4; }
     .package-divider span { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); white-space: nowrap; font-weight: 500; }
 
-    .packages-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-    .package-card { background: var(--white); border-radius: 18px; padding: 2.75rem 2.5rem; border: 1px solid #E8E6E1; display: flex; flex-direction: column; transition: box-shadow .25s; position: relative; overflow: hidden; }
+    .packages-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .package-card { background: var(--white); border-radius: 18px; padding: 2.25rem 1.75rem; border: 1px solid #E8E6E1; display: flex; flex-direction: column; transition: box-shadow .25s; position: relative; overflow: hidden; }
     .package-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--chic), var(--ouf)); }
     .package-card:hover { box-shadow: 0 12px 40px rgba(45,31,110,.1); }
 
-    .pkg-icon { width: 54px; height: 54px; background: var(--lilas-l); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
-    .pkg-label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); margin-bottom: .4rem; }
-    .pkg-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--chic); margin-bottom: 1rem; line-height: 1.2; }
-    .pkg-desc { font-size: 1rem; color: var(--body); margin-bottom: .75rem; line-height: 1.7; }
-    .pkg-note { font-size: .88rem; color: var(--muted); font-style: italic; margin-bottom: 2rem; flex: 1; }
+    .pkg-icon { width: 50px; height: 50px; background: var(--lilas-l); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; font-size: 1.4rem; }
+    .pkg-label { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); margin-bottom: .4rem; }
+    .pkg-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--chic); margin-bottom: .9rem; line-height: 1.25; }
+    .pkg-desc { font-size: .92rem; color: var(--body); margin-bottom: .75rem; line-height: 1.6; }
+    .pkg-note { font-size: .82rem; color: var(--muted); font-style: italic; margin-bottom: 1.5rem; flex: 1; }
     .pkg-price { background: var(--lilas-l); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
     .pkg-price-from { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
     .pkg-price-amount { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--chic); }
