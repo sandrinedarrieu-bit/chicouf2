@@ -94,6 +94,15 @@
     .pkg-cta { display: block; text-align: center; background: var(--chic); color: var(--white); padding: .9rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: background .2s; }
     .pkg-cta:hover { background: var(--nuit); }
 
+    /* CAS D'USAGE */
+    #cas-usage { padding: clamp(3.5rem,7vw,6rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
+    .usecases-header { max-width: var(--max); margin: 0 auto 3rem; }
+    .usecases-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .usecase-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.75rem; display: flex; flex-direction: column; }
+    .usecase-tag { display: inline-block; align-self: flex-start; background: var(--lilas-l); color: var(--ouf); font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .3rem .7rem; border-radius: 999px; margin-bottom: 1rem; }
+    .usecase-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .65rem; line-height: 1.3; }
+    .usecase-card p { font-size: .875rem; color: var(--body); line-height: 1.65; }
+
     /* TARIFS */
     #tarifs { padding: clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
     .tarifs-grid { max-width: var(--max); margin: 3rem auto 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
@@ -267,7 +276,7 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.contact-inner,.form-row { grid-template-columns: 1fr; }
+      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.contact-inner,.form-row,.usecases-grid { grid-template-columns: 1fr; }
       .apropos-bio { grid-template-columns: 1fr; }
       .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
@@ -287,6 +296,7 @@
   <ul class="nav-links">
     <li><a href="#audit">Diagnostics gratuits</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="#cas-usage">Exemples de cas d'usage</a></li>
     <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#apropos">Qui suis-je ?</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
@@ -311,7 +321,11 @@
       <span class="btn-sub">Rapport personnalisé par email</span>
     </a>
   </div>
-  <p style="margin-top:1.25rem;"><a href="#services" style="color:rgba(255,255,255,.5);font-size:.875rem;text-decoration:none;">Découvrir les services →</a></p>
+  <p style="margin-top:1.25rem;">
+    <a href="#services" style="color:rgba(255,255,255,.5);font-size:.875rem;text-decoration:none;">Découvrir les services →</a>
+    <span style="color:rgba(255,255,255,.25);margin:0 .6rem;">·</span>
+    <a href="#cas-usage" style="color:rgba(255,255,255,.5);font-size:.875rem;text-decoration:none;">Voir des exemples concrets →</a>
+  </p>
 </section>
 
 <div class="intro-band">
@@ -446,6 +460,47 @@
         <span class="pkg-price-note">HT · selon périmètre</span>
       </div>
       <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="cas-usage">
+  <div class="usecases-header">
+    <p class="section-eyebrow">Quelques cas d'usage</p>
+    <h2 class="section-title">Ce que ça change concrètement</h2>
+    <p class="section-sub">Des automatisations et outils déjà déployés, adaptables à votre activité.</p>
+  </div>
+  <div class="usecases-grid">
+
+    <div class="usecase-card">
+      <span class="usecase-tag">Package 1</span>
+      <h3>Fini les relances manuelles</h3>
+      <p>Une association ou un club qui gère des inscriptions, des équipes ou des membres n'a plus besoin de suivre les dossiers à la main : validation automatique, email de confirmation, ajout au calendrier — tout se déclenche seul dès qu'un statut change.</p>
+    </div>
+
+    <div class="usecase-card">
+      <span class="usecase-tag">Package 1</span>
+      <h3>Une conformité qui se met à jour toute seule</h3>
+      <p>Un organisme soumis à des obligations réglementaires (formation, association agréée, secteur médico-social) reçoit une synthèse automatique de sa veille, sans avoir à éplucher ses emails un par un.</p>
+    </div>
+
+    <div class="usecase-card">
+      <span class="usecase-tag">Package 2</span>
+      <h3>Votre propre outil de diagnostic, comme celui-ci</h3>
+      <p>Vous venez de tester l'audit gratuit de ce site ? Je peux construire le même type d'outil pour votre activité : un diagnostic en ligne qui capte des prospects automatiquement, 24h/24.</p>
+    </div>
+
+    <div class="usecase-card">
+      <span class="usecase-tag">Package 2</span>
+      <h3>Réservation et paiement, sans commission de plateforme</h3>
+      <p>Un artisan ou un indépendant qui prend des rendez-vous (coach, salle, atelier) peut avoir son propre système de réservation et de paiement intégré, sans dépendre d'un outil tiers qui prélève des frais.</p>
+    </div>
+
+    <div class="usecase-card">
+      <span class="usecase-tag">Package 3</span>
+      <h3>Un outil métier sur-mesure, même pour un besoin très spécifique</h3>
+      <p>Preuve que je sais construire au-delà de l'automatisation générique : un outil qui applique des règles précises à un métier (calculs, échéances, obligations) — utile même pour des besoins très particuliers.</p>
     </div>
 
   </div>
