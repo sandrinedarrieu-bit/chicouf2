@@ -94,6 +94,16 @@
     .pkg-cta { display: block; text-align: center; background: var(--chic); color: var(--white); padding: .9rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: background .2s; }
     .pkg-cta:hover { background: var(--nuit); }
 
+    /* DIAGNOSTICS OVERVIEW */
+    #diagnostics-overview { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); }
+    .diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .diag-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; text-align: center; }
+    .diag-card .diag-icon { font-size: 1.6rem; margin-bottom: .75rem; }
+    .diag-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
+    .diag-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; min-height: 3.2rem; }
+    .diag-card a { display: block; background: var(--ouf); color: var(--white); padding: .75rem; border-radius: 10px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+    .diag-card a:hover { opacity: .88; }
+
     /* CAS D'USAGE */
     #cas-usage { padding: clamp(3.5rem,7vw,6rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
     .usecases-header { max-width: var(--max); margin: 0 auto 3rem; }
@@ -284,7 +294,7 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid { grid-template-columns: 1fr; }
+      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid { grid-template-columns: 1fr; }
       .apropos-bio { grid-template-columns: 1fr; }
       .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
@@ -341,17 +351,30 @@
   <div class="intro-stat"><strong>3</strong><span>packages clés en main</span></div>
 </div>
 
+<section id="diagnostics-overview">
+  <p class="section-eyebrow">2 diagnostics gratuits</p>
+  <h2 class="section-title">Par où commencer ?</h2>
+  <p class="section-sub" style="margin-bottom:2rem;">Choisissez selon votre besoin — les deux sont gratuits et donnent lieu à un rapport par email.</p>
+  <div class="diag-grid">
+    <div class="diag-card">
+      <div class="diag-icon">🔍</div>
+      <h3>Audit de site</h3>
+      <p>Score sur 10 et recommandations concrètes (design, contenu, SEO, conversion) en 30 secondes.</p>
+      <a href="#audit">Analyser mon site →</a>
+    </div>
+    <div class="diag-card">
+      <div class="diag-icon">🧭</div>
+      <h3>Maturité IA (CAPE)</h3>
+      <p>Rapport personnalisé sur votre niveau d'adoption de l'IA et vos angles morts, en 10 minutes.</p>
+      <a href="#cape">Faire le diagnostic →</a>
+    </div>
+  </div>
+</section>
+
 <!-- AUDIT -->
 <section id="audit">
   <div class="audit-inner">
-    <div style="text-align:center;margin-bottom:1.75rem;">
-      <p class="section-eyebrow" style="margin-bottom:.6rem;">2 diagnostics gratuits</p>
-      <div style="display:inline-flex;gap:.4rem;background:#F0EDE8;border-radius:999px;padding:4px;">
-        <span style="background:var(--ouf);color:#fff;padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;white-space:nowrap;">🔍 Audit de site</span>
-        <a href="#cape" style="padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap;">🧭 Maturité IA (CAPE)</a>
-      </div>
-    </div>
-    <p class="section-eyebrow">Diagnostic gratuit 1/2</p>
+    <p class="section-eyebrow">Diagnostic gratuit</p>
     <h2 class="section-title">Analysez votre site en 30 secondes</h2>
     <p class="section-sub" style="margin-bottom:2rem;">Collez une URL et obtenez un diagnostic personnalisé — design, contenu, référencement, conversion.</p>
 
@@ -520,21 +543,16 @@
 </section>
 
 <section id="cape">
-  <div style="text-align:center;margin-bottom:2.5rem;">
-    <p class="section-eyebrow" style="margin-bottom:.6rem;">2 diagnostics gratuits</p>
-    <div style="display:inline-flex;gap:.4rem;background:#F0EDE8;border-radius:999px;padding:4px;">
-      <a href="#audit" style="padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap;">🔍 Audit de site</a>
-      <span style="background:var(--ouf);color:#fff;padding:.55rem 1.25rem;border-radius:999px;font-size:.85rem;font-weight:500;white-space:nowrap;">🧭 Maturité IA (CAPE)</span>
-    </div>
+  <div style="text-align:center;max-width:var(--max);margin:0 auto 3rem;">
+    <p class="section-eyebrow">Diagnostic gratuit</p>
+    <h2 class="section-title">On commence toujours par un diagnostic</h2>
   </div>
   <div class="cape-inner">
     <div class="cape-text">
-      <p class="section-eyebrow">Diagnostic gratuit 2/2 · Ma méthode</p>
-      <h2 class="section-title">On commence toujours par un diagnostic</h2>
       <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:var(--chic)">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
       <p>Ce diagnostic est <strong style="color:var(--chic)">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" class="btn-primary" style="display:inline-block;margin-top:.5rem;">Faire le diagnostic →</a>
-      <p style="margin-top:.85rem;font-size:.85rem;color:rgba(255,255,255,.45);">Vous avez un site ? <a href="#audit" style="color:var(--lilas);">Faites aussi l'audit gratuit</a> (30 sec).</p>
+      <p style="margin-top:.85rem;font-size:.85rem;color:var(--muted);">Vous avez un site ? <a href="#audit" style="color:var(--ouf);">Faites aussi l'audit gratuit</a> (30 sec).</p>
     </div>
     <div class="cape-pillars">
       <div class="cape-pillar"><div class="cape-letter">C</div><strong>Connaissance</strong><span>Ce que vous savez déjà sur l'IA</span></div>
