@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Automatisation et relation client pour TPE | CHIC OUF</title>
-  <meta name="description" content="CHIC OUF aide les TPE, artisans et associations à automatiser leur suivi client, leurs relances, leur administratif et leur communication, sans complexité technique." />
+  <title>Automatisation et relation client pour TPE | CHIC · OUF</title>
+  <meta name="description" content="CHIC · OUF aide les TPE, artisans et associations à automatiser leur suivi client, leurs relances, leur administratif et leur communication, sans complexité technique." />
   <link rel="canonical" href="https://chicouf2.vercel.app/" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="CHIC OUF" />
+  <meta property="og:site_name" content="CHIC · OUF" />
   <meta property="og:title" content="Moins d'administratif. Plus de clients suivis." />
-  <meta property="og:description" content="CHIC OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
+  <meta property="og:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
   <meta property="og:url" content="https://chicouf2.vercel.app/" />
   <meta property="og:locale" content="fr_FR" />
   <!-- Ajouter une image de partage (1200x630px) et décommenter la ligne suivante : -->
@@ -18,13 +18,13 @@
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Moins d'administratif. Plus de clients suivis." />
-  <meta name="twitter:description" content="CHIC OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
+  <meta name="twitter:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "CHIC OUF",
+    "name": "CHIC · OUF",
     "description": "Automatisation et relation client pour TPE, artisans et associations : suivi client, relances, administratif, communication et présence en ligne.",
     "url": "https://chicouf2.vercel.app/",
     "email": "chicouf@free.fr",
@@ -67,6 +67,7 @@
     nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
     .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .nav-logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--or); flex-shrink: 0; }
+    .nav-logo-badge { flex-shrink: 0; }
     .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
     .nav-logo-text span { color: var(--lilas); }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -365,15 +366,19 @@
 
 <nav>
   <a class="nav-logo" href="#">
-    <span class="nav-logo-dot"></span>
-    <span class="nav-logo-text">CHIC <span>OUF</span></span>
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
   </a>
   <ul class="nav-links">
     <li><a href="#diagnostics-overview">Diagnostics gratuits</a></li>
     <li><a href="#solutions-ia">Solutions IA</a></li>
     <li><a href="#services">Nos offres</a></li>
     <li><a href="#cas-usage">Exemples de cas d'usage</a></li>
-    <li><a href="#apropos">Pourquoi CHIC OUF ?</a></li>
+    <li><a href="#apropos">Pourquoi CHIC · OUF ?</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
 </nav>
@@ -385,7 +390,7 @@
     <span class="hero-brand-text"><span>OUF</span></span>
   </div>
   <h1 class="hero-claim" style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.6rem,4vw,2.6rem);color:var(--white);max-width:720px;margin:0 auto 1rem;line-height:1.3;">Moins d'administratif. Plus de clients suivis. Et enfin du temps pour votre métier.</h1>
-  <p class="hero-sub" style="max-width:560px;margin:0 auto 2rem;">CHIC OUF organise et automatise votre suivi client, vos relances et votre communication — toutes ces tâches importantes qui passent toujours après les urgences.</p>
+  <p class="hero-sub" style="max-width:560px;margin:0 auto 2rem;">CHIC · OUF organise et automatise votre suivi client, vos relances et votre communication — toutes ces tâches importantes qui passent toujours après les urgences.</p>
   <div class="hero-actions">
     <a href="#diagnostics-overview" class="btn-primary btn-stacked">
       <span class="btn-title">Trouver par où commencer gratuitement</span>
@@ -438,10 +443,10 @@
       </div>
       <div class="apropos-bio-text">
         <p>Il est 19 h. La journée est terminée, mais il reste un devis à envoyer, deux clients à relancer, un rendez-vous à confirmer. Ces tâches sont importantes — mais elles passent toujours après les urgences et le cœur de métier. Une relance oubliée peut devenir un client perdu.</p>
-        <p style="font-family:'Syne',sans-serif;font-weight:800;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC OUF</p>
+        <p style="font-family:'Syne',sans-serif;font-weight:800;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC · OUF</p>
         <p>Après plus de 30 ans dans des structures de taille humaine — EHPAD, espaces associatifs, organismes de formation — j'ai compris que le problème n'était pas le manque d'outils, mais le manque de temps pour les choisir, les paramétrer et les faire fonctionner ensemble. Je prends en charge l'intégralité de chaque mission, de A à Z.</p>
-        <p>C'est pour cela que j'ai créé CHIC OUF : des solutions simples qui organisent et automatisent vos tâches répétitives, sans vous obliger à devenir spécialiste de l'intelligence artificielle. Vos contacts centralisés, vos relances au bon moment, vos documents remplis automatiquement — vous restez concentré sur votre métier, le reste continue d'avancer.</p>
-        <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC OUF</p>
+        <p>C'est pour cela que j'ai créé CHIC · OUF : des solutions simples qui organisent et automatisent vos tâches répétitives, sans vous obliger à devenir spécialiste de l'intelligence artificielle. Vos contacts centralisés, vos relances au bon moment, vos documents remplis automatiquement — vous restez concentré sur votre métier, le reste continue d'avancer.</p>
+        <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC · OUF</p>
       </div>
     </div>
 
@@ -527,7 +532,7 @@
 <section id="solutions-ia">
   <div class="packages-header">
     <p class="section-eyebrow">Solutions IA</p>
-    <h2 class="section-title">Ce que CHIC OUF peut faire avancer à votre place</h2>
+    <h2 class="section-title">Ce que CHIC · OUF peut faire avancer à votre place</h2>
     <p class="section-sub">Répondre, relancer, organiser, publier ou prendre des rendez-vous : choisissez les tâches qui vous prennent du temps, je construis la solution adaptée.</p>
   </div>
 
@@ -745,7 +750,7 @@
       <p class="faq-a">Non. La solution vous est livrée prête à l'emploi, avec une documentation claire pour que vous puissiez l'utiliser sans compétence technique préalable.</p>
     </div>
     <div class="faq-item">
-      <p class="faq-q">Vais-je dépendre de CHIC OUF après la livraison ?</p>
+      <p class="faq-q">Vais-je dépendre de CHIC · OUF après la livraison ?</p>
       <p class="faq-a">Non. L'objectif est que vous restiez autonome. Un accompagnement complémentaire peut être proposé si vous le souhaitez, mais rien ne vous y oblige.</p>
     </div>
     <div class="faq-item">
@@ -812,7 +817,7 @@
 </section>
 
 <footer>
-  <div class="footer-brand">CHIC <span>OUF</span></div>
+  <div class="footer-brand">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></div>
   <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en Intelligence Artificielle et Transformation Digitale · Brunoy, Île-de-France</p>
   <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84 · chicouf2.vercel.app</p>
   <p style="margin-top:.5rem;"><a href="#audit">Audit de site gratuit</a> · <a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
@@ -877,7 +882,7 @@ async function lancerAudit() {
             {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
           ],
           points_forts: ['Votre site est en ligne et accessible'],
-          priorites: ['Contactez CHIC OUF pour un audit approfondi','Réservez un échange gratuit de 30 min'],
+          priorites: ['Contactez CHIC · OUF pour un audit approfondi','Réservez un échange gratuit de 30 min'],
           prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
         };
       }
@@ -968,10 +973,32 @@ function showAuditError(msg){const el=document.getElementById('auditError');el.t
 function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
 document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
 
-function handleSubmit() {
+async function handleSubmit() {
   const prenom = document.getElementById('prenom').value.trim();
+  const nom = document.getElementById('nom').value.trim();
   const email  = document.getElementById('email').value.trim();
+  const structure = document.getElementById('structure').value.trim();
+  const interet = document.getElementById('interet').value;
+  const message = document.getElementById('message').value.trim();
   if (!prenom || !email) { alert('Merci de renseigner au minimum votre prénom et votre email.'); return; }
+
+  const btn = document.querySelector('.form-submit');
+  const originalText = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Envoi…';
+
+  try {
+    await fetch('https://hook.eu1.make.com/vca8gxk9px1lhajkc4hv66dawntolahk', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ prenom, nom, email, structure, interet, message, source: 'chicouf2.vercel.app', date: new Date().toISOString() })
+    });
+  } catch(err) {
+    // Le webhook Make peut être lent à répondre ou bloquer le CORS ; on n'empêche pas
+    // l'utilisateur de voir la confirmation, mais on log l'erreur pour debug.
+    console.error('Erreur envoi formulaire :', err);
+  }
+
+  btn.disabled = false; btn.textContent = originalText;
   document.getElementById('formWrapper').style.display = 'none';
   const s = document.getElementById('formSuccess');
   s.style.display = 'block';
