@@ -88,6 +88,9 @@
     .pkg-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--chic); margin-bottom: .9rem; line-height: 1.25; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
     .pkg-desc { font-size: .92rem; color: var(--body); margin-bottom: .75rem; line-height: 1.6; }
     .pkg-note { font-size: .82rem; color: var(--muted); font-style: italic; margin-bottom: 1.5rem; flex: 1; }
+    .pkg-includes { list-style: none; padding: 0; margin: 0 0 1.25rem; font-size: .85rem; color: var(--body); }
+    .pkg-includes li { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: .5rem; }
+    .pkg-includes li::before { content: "✓"; color: var(--ouf); font-weight: 700; flex-shrink: 0; }
     .pkg-price { background: var(--lilas-l); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
     .pkg-price-from { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
     .pkg-price-amount { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--chic); }
@@ -120,6 +123,17 @@
     .usecases-cta p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 1.1rem; }
     .usecases-cta a { display: inline-block; background: var(--ouf); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
     .usecases-cta a:hover { opacity: .88; }
+    .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
+    .proof-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.6rem; }
+    .proof-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--chic); margin-bottom: 1rem; }
+    .proof-row { display: flex; gap: .6rem; margin-bottom: .65rem; font-size: .85rem; line-height: 1.55; }
+    .proof-row .proof-label { flex-shrink: 0; font-weight: 700; color: var(--ouf); min-width: 72px; }
+    .proof-row p { color: var(--body); margin: 0; }
+    .faq-wrap { max-width: var(--max); margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid #E8E6E1; padding: 1.35rem 0; }
+    .faq-item:first-child { border-top: 1px solid #E8E6E1; }
+    .faq-q { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1rem; margin-bottom: .6rem; }
+    .faq-a { font-size: .9rem; color: var(--body); line-height: 1.65; }
     .solutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
     .solution-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
     .solution-card:hover { box-shadow: 0 12px 28px rgba(0,0,0,.06); transform: translateY(-2px); }
@@ -301,7 +315,7 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid { grid-template-columns: 1fr; }
+      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid,.proof-grid { grid-template-columns: 1fr; }
       .apropos-bio { grid-template-columns: 1fr; }
       .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
@@ -338,8 +352,8 @@
   <p class="hero-sub" style="max-width:560px;margin:0 auto 2rem;">CHIC OUF prend en charge le suivi client, les relances et la communication qui passent toujours après le reste.</p>
   <div class="hero-actions">
     <a href="#diagnostics-overview" class="btn-primary btn-stacked">
-      <span class="btn-title">Recevoir mon plan d'amélioration gratuit</span>
-      <span class="btn-sub">10 min · Rapport personnalisé · Sans engagement</span>
+      <span class="btn-title">Trouver par où commencer gratuitement</span>
+      <span class="btn-sub">Choisissez votre diagnostic et recevez vos premières recommandations</span>
     </a>
   </div>
   <p style="margin-top:1.25rem;">
@@ -350,8 +364,8 @@
 
 <div class="intro-band">
   <div class="intro-stat"><strong>30+</strong><span>ans d'expérience terrain</span></div>
-  <div class="intro-stat"><strong>100%</strong><span>solutions no-code accessibles</span></div>
-  <div class="intro-stat"><strong>3</strong><span>packages clés en main</span></div>
+  <div class="intro-stat"><strong>De A à Z</strong><span>une mission entièrement prise en charge</span></div>
+  <div class="intro-stat"><strong>Sans dépendance</strong><span>des outils documentés et transmis</span></div>
 </div>
 
 <section id="diagnostics-overview" style="scroll-margin-top:90px;">
@@ -474,8 +488,8 @@
 <section id="solutions-ia">
   <div class="packages-header">
     <p class="section-eyebrow">Solutions IA</p>
-    <h2 class="section-title">Des agents et outils IA au service de votre activité</h2>
-    <p class="section-sub">Six solutions concrètes, pensées pour les dirigeants de TPE, artisans et associations qui veulent gagner en efficacité sans complexité technique.</p>
+    <h2 class="section-title">Ce que CHIC OUF peut faire avancer à votre place</h2>
+    <p class="section-sub">Répondre, relancer, organiser, publier ou prendre des rendez-vous : choisissez les tâches qui vous prennent du temps, je construis la solution adaptée.</p>
   </div>
 
   <div class="solutions-grid">
@@ -526,13 +540,19 @@
       <p class="pkg-label">Offre 1</p>
       <h3 class="pkg-title">Aucun client oublié</h3>
       <p class="pkg-desc">Je mets en place les outils et les automatisations pour que vous ne perdiez plus aucun contact, aucune relance, aucune opportunité.</p>
-      <p class="pkg-note">Vous me confiez le périmètre, je livre une solution opérationnelle clé en main.</p>
+      <ul class="pkg-includes">
+        <li>Centralisation des contacts</li>
+        <li>Historique des échanges</li>
+        <li>Relances automatiques</li>
+        <li>Suivi des échéances</li>
+        <li>Prise en main et documentation</li>
+      </ul>
       <div class="pkg-price">
         <span class="pkg-price-from">à partir de</span>
         <span class="pkg-price-amount">490 €</span>
         <span class="pkg-price-note">HT · selon périmètre</span>
       </div>
-      <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
+      <a href="#contact" class="pkg-cta">Organiser mon suivi client →</a>
     </div>
 
     <div class="package-card">
@@ -540,13 +560,18 @@
       <p class="pkg-label">Offre 2</p>
       <h3 class="pkg-title">Visible et régulier</h3>
       <p class="pkg-desc">Je construis votre présence en ligne et vos outils de prospection pour que vous trouviez de nouveaux clients sans y passer vos journées.</p>
-      <p class="pkg-note">Vous me confiez le périmètre, je livre une solution opérationnelle clé en main.</p>
+      <ul class="pkg-includes">
+        <li>Plan de communication</li>
+        <li>Création et programmation de contenus</li>
+        <li>Organisation de la prospection</li>
+        <li>Relances structurées</li>
+      </ul>
       <div class="pkg-price">
         <span class="pkg-price-from">à partir de</span>
         <span class="pkg-price-amount">590 €</span>
         <span class="pkg-price-note">HT · selon périmètre</span>
       </div>
-      <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
+      <a href="#contact" class="pkg-cta">Développer ma visibilité →</a>
     </div>
 
     <div class="package-card">
@@ -554,18 +579,23 @@
       <p class="pkg-label">Offre 3</p>
       <h3 class="pkg-title">Votre activité en ligne</h3>
       <p class="pkg-desc">Je pilote la création ou la refonte de votre site, votre référencement et votre visibilité en ligne, en m'appuyant sur mon réseau de production spécialisé pour les aspects techniques avancés.</p>
-      <p class="pkg-note">Vous me confiez le périmètre, je coordonne et je livre une solution opérationnelle clé en main.</p>
+      <ul class="pkg-includes">
+        <li>Site professionnel neuf ou refondu</li>
+        <li>Référencement (SEO) de base</li>
+        <li>Coordination technique avancée si besoin</li>
+        <li>Prise en main et documentation</li>
+      </ul>
       <div class="pkg-price">
         <span class="pkg-price-from">à partir de</span>
         <span class="pkg-price-amount">690 €</span>
         <span class="pkg-price-note">HT · selon périmètre</span>
       </div>
-      <a href="#contact" class="pkg-cta">Me contacter pour en discuter →</a>
+      <a href="#contact" class="pkg-cta">Lancer mon site →</a>
     </div>
 
   </div>
 
-  <p style="text-align:center;margin-top:2rem;font-size:.875rem;color:var(--muted);">💡 Vous combinez 2 ou 3 packages ? <a href="#contact" style="color:var(--ouf);font-weight:500;">Un tarif préférentiel s'applique</a> — parlons-en.</p>
+  <p style="text-align:center;margin-top:2rem;font-size:.875rem;color:var(--muted);">💡 Vous combinez plusieurs offres ? <a href="#contact" style="color:var(--ouf);font-weight:500;">Un tarif préférentiel s'applique</a> — parlons-en.</p>
 </section>
 
 <section id="cas-usage">
@@ -613,6 +643,29 @@
 
 </section>
 
+<section id="preuves">
+  <div class="usecases-header">
+    <p class="section-eyebrow">Concrètement</p>
+    <h2 class="section-title">Des solutions déjà mises en pratique</h2>
+    <p class="section-sub">Deux exemples de ce que ces automatisations donnent une fois en place.</p>
+  </div>
+
+  <div class="proof-grid">
+    <div class="proof-card">
+      <h3>Suivi automatisé des échéances</h3>
+      <div class="proof-row"><span class="proof-label">Avant</span><p>Des informations et des dates importantes suivies manuellement, réparties entre plusieurs fichiers.</p></div>
+      <div class="proof-row"><span class="proof-label">Solution</span><p>Centralisation des dossiers, alertes automatiques et génération de documents.</p></div>
+      <div class="proof-row"><span class="proof-label">Résultat</span><p>Un suivi plus clair, avec beaucoup moins de risque d'oubli.</p></div>
+    </div>
+    <div class="proof-card">
+      <h3>Gestion d'une réservation sportive</h3>
+      <div class="proof-row"><span class="proof-label">Avant</span><p>Vérification manuelle de la disponibilité d'un terrain selon le sport, la date et le créneau.</p></div>
+      <div class="proof-row"><span class="proof-label">Solution</span><p>Parcours de réservation relié en direct aux disponibilités réelles.</p></div>
+      <div class="proof-row"><span class="proof-label">Résultat</span><p>Une réservation simplifiée, aussi bien pour l'utilisateur que pour le gestionnaire.</p></div>
+    </div>
+  </div>
+</section>
+
 <section id="cape">
   <div style="text-align:center;max-width:var(--max);margin:0 auto 3rem;">
     <p class="section-eyebrow">Diagnostic gratuit</p>
@@ -630,6 +683,35 @@
       <div class="cape-pillar"><div class="cape-letter">A</div><strong>Adoption</strong><span>Vos outils actuellement en usage</span></div>
       <div class="cape-pillar"><div class="cape-letter">P</div><strong>Processus</strong><span>Vos flux de travail automatisables</span></div>
       <div class="cape-pillar"><div class="cape-letter">E</div><strong>Engagement</strong><span>Votre posture face au changement</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="usecases-header">
+    <p class="section-eyebrow">Questions fréquentes</p>
+    <h2 class="section-title">Vos hésitations, à plat</h2>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <p class="faq-q">Dois-je déjà utiliser des outils numériques ?</p>
+      <p class="faq-a">Non. Je pars de votre organisation actuelle et je vous propose uniquement les outils réellement utiles pour votre activité.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Dois-je savoir utiliser l'intelligence artificielle ?</p>
+      <p class="faq-a">Non. La solution vous est livrée prête à l'emploi, avec une documentation claire pour que vous puissiez l'utiliser sans compétence technique préalable.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Vais-je dépendre de CHIC OUF après la livraison ?</p>
+      <p class="faq-a">Non. L'objectif est que vous restiez autonome. Un accompagnement complémentaire peut être proposé si vous le souhaitez, mais rien ne vous y oblige.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Combien de temps faut-il pour mettre en place une solution ?</p>
+      <p class="faq-a">Le délai dépend du périmètre de votre projet. Il est défini clairement après le diagnostic et avant le démarrage de la mission.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Mes données sont-elles protégées ?</p>
+      <p class="faq-a">Les outils utilisés respectent les exigences RGPD, et l'accès à vos données reste limité à ce qui est strictement nécessaire à la mission. Ce point peut être précisé ensemble selon votre secteur d'activité.</p>
     </div>
   </div>
 </section>
@@ -666,7 +748,7 @@
           <option>Offre 1 · Aucun client oublié</option>
           <option>Offre 2 · Visible et régulier</option>
           <option>Offre 3 · Votre activité en ligne</option>
-          <option>Plusieurs packages</option>
+          <option>Plusieurs offres</option>
           <option>Audit de site gratuit</option>
           <option>Diagnostic CAPE</option>
           <option>Autre</option>
@@ -689,7 +771,7 @@
 <footer>
   <div class="footer-brand">CHIC <span>OUF</span></div>
   <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en Intelligence Artificielle et Transformation Digitale · Brunoy, Île-de-France</p>
-  <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84 · chicouf.vercel.app</p>
+  <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84 · chicouf2.vercel.app</p>
   <p style="margin-top:.5rem;"><a href="#audit">Audit de site gratuit</a> · <a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
 </footer>
 
