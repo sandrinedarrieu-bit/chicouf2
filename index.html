@@ -120,6 +120,12 @@
     .usecases-cta p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 1.1rem; }
     .usecases-cta a { display: inline-block; background: var(--ouf); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
     .usecases-cta a:hover { opacity: .88; }
+    .solutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
+    .solution-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
+    .solution-card:hover { box-shadow: 0 12px 28px rgba(0,0,0,.06); transform: translateY(-2px); }
+    .solution-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
+    .solution-card h3 { font-family: 'Syne', sans-serif; font-size: 1.08rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
+    .solution-card p { font-size: .9rem; color: var(--body); line-height: 1.65; }
 
     /* TARIFS */
     /* TARIFS (styles réutilisés dans la section Services) */
@@ -295,7 +301,7 @@
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid { grid-template-columns: 1fr; }
+      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid { grid-template-columns: 1fr; }
       .apropos-bio { grid-template-columns: 1fr; }
       .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
@@ -314,6 +320,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#diagnostics-overview">Diagnostics gratuits</a></li>
+    <li><a href="#solutions-ia">Solutions IA</a></li>
     <li><a href="#services">Nos offres</a></li>
     <li><a href="#cas-usage">Exemples de cas d'usage</a></li>
     <li><a href="#apropos">Qui suis-je ?</a></li>
@@ -438,6 +445,47 @@
         </div>
         <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="solutions-ia">
+  <div class="packages-header">
+    <p class="section-eyebrow">Solutions IA</p>
+    <h2 class="section-title">Des agents et outils IA au service de votre activité</h2>
+    <p class="section-sub">Six solutions concrètes, pensées pour les dirigeants de TPE, artisans et associations qui veulent gagner en efficacité sans complexité technique.</p>
+  </div>
+
+  <div class="solutions-grid">
+    <div class="solution-card">
+      <div class="solution-icon">📞</div>
+      <h3>Réceptionniste IA</h3>
+      <p>Un agent IA qui prend en charge vos appels et messages 24h/24, qualifie chaque demande et peut fixer un rendez-vous en toute autonomie — pour que votre activité reste joignable, même lorsque vous êtes sur le terrain ou fermé.</p>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">🗂️</div>
+      <h3>Assistant virtuel IA</h3>
+      <p>Un assistant qui gère vos tâches administratives courantes — mails, relances, organisation — et vous restitue l'essentiel au bon moment, pour recentrer votre temps sur votre cœur de métier.</p>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">🎯</div>
+      <h3>Prospection IA</h3>
+      <p>Identification de prospects qualifiés, messages personnalisés et relances structurées : une démarche de prospection continue et méthodique, sans mobiliser vos soirées ni un budget commercial dédié.</p>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">✍️</div>
+      <h3>Création de contenu IA</h3>
+      <p>Rédaction et publication automatisées de vos contenus, appuyées sur une veille ciblée des sujets de votre secteur — pour maintenir une présence régulière sur vos réseaux et votre site sans y consacrer vos journées.</p>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">🎬</div>
+      <h3>Création de vidéo IA</h3>
+      <p>Production de vidéos professionnelles — présentation, témoignages, contenus réseaux — sans caméra ni compétences de montage, pour tirer parti d'un format qui capte davantage l'attention et convertit mieux.</p>
+    </div>
+    <div class="solution-card">
+      <div class="solution-icon">🌐</div>
+      <h3>Création de site internet</h3>
+      <p>Un site professionnel, rapide à déployer, conçu pour être visible sur les moteurs de recherche et pour transformer vos visiteurs en contacts qualifiés.</p>
     </div>
   </div>
 </section>
