@@ -63,7 +63,7 @@ export default async function handler(req, res) {
                 'fldJLI4dys1YxMU7L': audit.score_global || 0,
                 'fldHRtR1PkT3xmUcW': audit.niveau || '',
                 'fldSMV28x33cEvUrU': audit.titre_diagnostic || '',
-                'fldLwVlQKDPQoy7iY': packageReco,
+                'fldLwVlQKDPQoy7iY': packageReco + (solIa ? ` | Solution IA suggérée : ${solIa.titre} (${solIa.prix})` : ''),
                 // Actions prioritaires
                 'fld1ZRALbf7Ph7L94': audit.priorites?.[0] || '',
                 'fldftAEyRGpwUrbb8': audit.priorites?.[1] || '',
