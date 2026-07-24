@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Automatisation, visibilité IA et étude de marché pour TPE | CHIC · OUF</title>
-  <meta name="description" content="CHIC · OUF aide les TPE, artisans et associations à gagner du temps (automatisation), à développer leur visibilité et trouver des clients (site, GEO, prospection), et à lancer leur entreprise sur de bonnes bases (étude de marché)." />
+  <title>Automatisation et relation client pour TPE | CHIC · OUF</title>
+  <meta name="description" content="CHIC · OUF aide les TPE, artisans et associations à automatiser leur suivi client, leurs relances, leur administratif et leur communication, sans complexité technique." />
   <link rel="canonical" href="https://chicouf2.vercel.app/" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CHIC · OUF" />
   <meta property="og:title" content="Moins d'administratif. Plus de clients suivis." />
-  <meta property="og:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps, développe votre visibilité (site + audit GEO) et vous accompagne dans le lancement de votre entreprise." />
+  <meta property="og:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
   <meta property="og:url" content="https://chicouf2.vercel.app/" />
   <meta property="og:locale" content="fr_FR" />
   <!-- Ajouter une image de partage (1200x630px) et décommenter la ligne suivante : -->
@@ -18,14 +18,14 @@
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Moins d'administratif. Plus de clients suivis." />
-  <meta name="twitter:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps, développe votre visibilité (site + audit GEO) et vous accompagne dans le lancement de votre entreprise." />
+  <meta name="twitter:description" content="CHIC · OUF organise et automatise les tâches qui vous prennent du temps : suivi client, relances, documents, communication et présence en ligne." />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "CHIC · OUF",
-    "description": "Automatisation et relation client, visibilité en ligne (site + audit GEO) et étude de marché pour TPE, artisans et associations.",
+    "description": "Automatisation et relation client pour TPE, artisans et associations : suivi client, relances, administratif, communication et présence en ligne.",
     "url": "https://chicouf2.vercel.app/",
     "email": "chicouf@free.fr",
     "telephone": "+33756925984",
@@ -41,7 +41,7 @@
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -61,23 +61,25 @@
     }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 90px !important; }
-    body { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
+    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
 
     /* NAV */
-    nav { position: sticky; top: 0; z-index: 100; background: var(--cream); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 68px; border-bottom: 1px solid #E8E6E1; }
+    nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
     .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--or); flex-shrink: 0; }
     .nav-logo-badge { flex-shrink: 0; }
-    .nav-logo-text { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; color: var(--nuit); }
-    .nav-logo-text span { color: var(--ouf); font-weight: 700; }
-    .nav-links { display: flex; gap: 2.25rem; list-style: none; }
-    .nav-links a { color: var(--body); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
-    .nav-links a:hover { color: var(--nuit); }
-    .nav-cta { background: var(--nuit) !important; color: var(--white) !important; padding: .65rem 1.4rem; border-radius: 999px; font-weight: 600; font-size: .85rem; transition: opacity .2s !important; }
+    .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+    .nav-logo-text span { color: var(--lilas); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--ouf); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: opacity .2s !important; }
     .nav-cta:hover { opacity: .85; }
 
     /* HERO */
     .hero { background: var(--cream); padding: clamp(3.5rem,7vw,5.5rem) clamp(1.25rem,5vw,3rem); position: relative; overflow: hidden; }
     .hero-inner { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3rem; align-items: center; }
+
     .hero-claim { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(2rem,4vw,3rem); color: var(--chic); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 1.4rem; }
     .hero-claim em { font-style: italic; color: var(--ouf); }
     .hero-sub { font-size: 1.05rem; font-weight: 400; color: var(--body); max-width: 46ch; line-height: 1.6; margin-bottom: 2rem; }
@@ -104,13 +106,12 @@
     /* STATS */
     .intro-band { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
     .intro-stat { text-align: center; background: var(--white); border-radius: var(--radius); padding: 1.5rem 1rem; border: 1px solid #E8E6E1; }
-    .intro-stat strong { display: block; font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 700; color: var(--chic); }
+    .intro-stat strong { display: block; font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--chic); }
     .intro-stat span { font-size: .875rem; color: var(--muted); }
 
     /* SECTIONS */
     .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
-    .section-title { text-align: center; font-family: 'Fraunces', serif; font-size: clamp(1.7rem,3.5vw,2.5rem); font-weight: 600; letter-spacing: -0.01em; color: var(--chic); line-height: 1.18; max-width: 640px; margin: 0 auto 1rem; }
-    .section-title em { font-style: italic; color: var(--ouf); }
+    .section-title { text-align: center; font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 800; color: var(--chic); line-height: 1.2; max-width: 640px; margin: 0 auto 1rem; }
     .section-sub { text-align: center; font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
 
     /* PACKAGES */
@@ -121,20 +122,13 @@
     .package-divider span { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); white-space: nowrap; font-weight: 500; }
 
     .packages-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-    .package-card { background: var(--white); border-radius: 18px; padding: 2.25rem 1.75rem; border: 1px solid #E8E6E1; border-left: 4px solid var(--nuit); display: flex; flex-direction: column; transition: box-shadow .25s, transform .25s; position: relative; overflow: hidden; }
-    .package-card:hover { box-shadow: 0 12px 40px rgba(45,31,110,.1); transform: translateY(-3px); }
-    .package-card.card-1 { border-left-color: var(--nuit); }
-    .package-card.card-2 { border-left-color: var(--ouf); }
-    .package-card.card-3 { border-left-color: var(--or); }
-    .package-card.card-1 .pkg-icon { background: #ECEBF2; }
-    .package-card.card-2 .pkg-icon { background: var(--lilas-l); }
-    .package-card.card-3 .pkg-icon { background: #FDF1DD; }
-    .package-card.card-3 .pkg-cta { background: var(--or); }
-    .package-card.card-3 .pkg-cta:hover { background: #d9890a; }
+    .package-card { background: var(--white); border-radius: 18px; padding: 2.25rem 1.75rem; border: 1px solid #E8E6E1; display: flex; flex-direction: column; transition: box-shadow .25s; position: relative; overflow: hidden; }
+    .package-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--chic), var(--ouf)); }
+    .package-card:hover { box-shadow: 0 12px 40px rgba(45,31,110,.1); }
 
     .pkg-icon { width: 50px; height: 50px; background: var(--lilas-l); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; font-size: 1.4rem; }
     .pkg-label { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); margin-bottom: .4rem; }
-    .pkg-title { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 700; color: var(--chic); margin-bottom: .9rem; line-height: 1.25; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
+    .pkg-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--chic); margin-bottom: .9rem; line-height: 1.25; overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
     .pkg-desc { font-size: .92rem; color: var(--body); margin-bottom: .75rem; line-height: 1.6; }
     .pkg-note { font-size: .82rem; color: var(--muted); font-style: italic; margin-bottom: 1.5rem; flex: 1; }
     .pkg-includes { list-style: none; padding: 0; margin: 0 0 1.25rem; font-size: .85rem; color: var(--body); }
@@ -142,20 +136,17 @@
     .pkg-includes li::before { content: "✓"; color: var(--ouf); font-weight: 700; flex-shrink: 0; }
     .pkg-price { background: var(--lilas-l); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
     .pkg-price-from { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-    .pkg-price-amount { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 700; color: var(--chic); }
+    .pkg-price-amount { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--chic); }
     .pkg-price-note { font-size: .78rem; color: var(--muted); }
     .pkg-cta { display: block; text-align: center; background: var(--chic); color: var(--white); padding: .9rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: background .2s; }
     .pkg-cta:hover { background: var(--nuit); }
 
     /* DIAGNOSTICS OVERVIEW */
     #diagnostics-overview { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); }
-    .diag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-    .diag-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; text-align: center; border-top: 3px solid var(--nuit); }
-    .diag-card.diag-1 { border-top-color: var(--nuit); }
-    .diag-card.diag-2 { border-top-color: var(--ouf); }
-    .diag-card.diag-3 { border-top-color: var(--or); }
+    .diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .diag-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; text-align: center; }
     .diag-card .diag-icon { font-size: 1.6rem; margin-bottom: .75rem; }
-    .diag-card h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; color: var(--chic); margin-bottom: .6rem; }
+    .diag-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
     .diag-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; min-height: 3.2rem; }
     .diag-card a { display: block; background: var(--ouf); color: var(--white); padding: .75rem; border-radius: 10px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
     .diag-card a:hover { opacity: .88; }
@@ -165,11 +156,11 @@
     .usecases-header { max-width: var(--max); margin: 0 auto 3rem; }
     .usecase-group { max-width: var(--max-wide); margin: 0 auto 2.5rem; }
     .usecase-group:last-child { margin-bottom: 0; }
-    .usecase-group-title { display: flex; align-items: center; gap: .6rem; font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--chic); margin-bottom: 1.1rem; }
-    .usecase-group-title .num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--lilas-l); color: var(--ouf); font-size: .82rem; font-weight: 700; flex-shrink: 0; }
+    .usecase-group-title { display: flex; align-items: center; gap: .6rem; font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--chic); margin-bottom: 1.1rem; }
+    .usecase-group-title .num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--lilas-l); color: var(--ouf); font-size: .82rem; font-weight: 800; flex-shrink: 0; }
     .usecases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
     .usecase-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.6rem; display: flex; flex-direction: column; }
-    .usecase-card h3 { font-family: 'Fraunces', serif; font-size: 1.02rem; font-weight: 700; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
+    .usecase-card h3 { font-family: 'Syne', sans-serif; font-size: 1.02rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
     .usecase-card p { font-size: .875rem; color: var(--body); line-height: 1.65; }
     .usecases-cta { max-width: var(--max-wide); margin: 2.5rem auto 0; background: var(--chic); border-radius: 18px; padding: 2rem; text-align: center; }
     .usecases-cta p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 1.1rem; }
@@ -177,20 +168,20 @@
     .usecases-cta a:hover { opacity: .88; }
     .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
     .proof-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.6rem; }
-    .proof-card h3 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--chic); margin-bottom: 1rem; }
+    .proof-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--chic); margin-bottom: 1rem; }
     .proof-row { display: flex; gap: .6rem; margin-bottom: .65rem; font-size: .85rem; line-height: 1.55; }
     .proof-row .proof-label { flex-shrink: 0; font-weight: 700; color: var(--ouf); min-width: 72px; }
     .proof-row p { color: var(--body); margin: 0; }
     .faq-wrap { max-width: var(--max); margin: 0 auto; }
     .faq-item { border-bottom: 1px solid #E8E6E1; padding: 1.35rem 0; }
     .faq-item:first-child { border-top: 1px solid #E8E6E1; }
-    .faq-q { font-family: 'Fraunces', serif; font-weight: 700; color: var(--chic); font-size: 1rem; margin-bottom: .6rem; }
+    .faq-q { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1rem; margin-bottom: .6rem; }
     .faq-a { font-size: .9rem; color: var(--body); line-height: 1.65; }
     .solutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
     .solution-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
     .solution-card:hover { box-shadow: 0 12px 28px rgba(0,0,0,.06); transform: translateY(-2px); }
     .solution-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
-    .solution-card h3 { font-family: 'Fraunces', serif; font-size: 1.08rem; font-weight: 700; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
+    .solution-card h3 { font-family: 'Syne', sans-serif; font-size: 1.08rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; line-height: 1.3; }
     .solution-card p { font-size: .9rem; color: var(--body); line-height: 1.65; }
 
     /* TARIFS */
@@ -202,7 +193,7 @@
     .tarif-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--or); color: var(--chic); font-size: .72rem; font-weight: 700; padding: .25rem .8rem; border-radius: 999px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
     .tarif-label { font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem; }
     .tarif-label.accent { color: var(--ouf); }
-    .tarif-price { font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 700; color: var(--chic); }
+    .tarif-price { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--chic); }
     .tarif-detail { font-size: .85rem; color: var(--muted); margin: .5rem 0 1.5rem; }
     .tarif-btn { display: block; text-align: center; padding: .7rem; border-radius: 8px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: opacity .2s, background .2s; }
     .tarif-btn-outline { border: 1.5px solid var(--ouf); color: var(--ouf); }
@@ -220,7 +211,7 @@
     .cape-text p { color: var(--body); font-size: .975rem; margin-bottom: 1.5rem; }
     .cape-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .cape-pillar { background: var(--lilas-l); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 1.25rem; }
-    .cape-letter { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 700; color: var(--ouf); line-height: 1; margin-bottom: .35rem; }
+    .cape-letter { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--ouf); line-height: 1; margin-bottom: .35rem; }
     .cape-pillar strong { display: block; color: var(--chic); font-size: .88rem; margin-bottom: .2rem; }
     .cape-pillar span { color: var(--muted); font-size: .8rem; }
 
@@ -233,11 +224,11 @@
     .apropos-photo-placeholder { text-align: center; color: var(--ouf); font-size: .8rem; padding: 1rem; line-height: 1.5; }
     .apropos-bio-text p { font-size: .975rem; color: var(--body); line-height: 1.75; margin-bottom: 1rem; }
     .apropos-bio-text p:last-child { margin-bottom: 0; }
-    .apropos-bio-signature { font-family: 'Fraunces', serif; font-style: italic; color: var(--chic); font-size: .95rem; margin-top: 1.25rem !important; }
+    .apropos-bio-signature { font-family: 'Georgia', serif; font-style: italic; color: var(--chic); font-size: .95rem; margin-top: 1.25rem !important; }
     .apropos-grid { margin-top: 3rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
     .apropos-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 2rem 1.5rem; }
     .apropos-card .icon { font-size: 1.75rem; margin-bottom: 1rem; }
-    .apropos-card h3 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--chic); margin-bottom: .5rem; }
+    .apropos-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--chic); margin-bottom: .5rem; }
     .apropos-card p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
 
     /* CONTACT */
@@ -254,24 +245,24 @@
     .contact-hint { color: var(--muted); font-size: .82rem; }
 
     .contact-form { background: var(--white); border-radius: 18px; padding: 2.5rem; }
-    .contact-form h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; color: var(--chic); margin-bottom: 1.5rem; }
+    .contact-form h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--chic); margin-bottom: 1.5rem; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .form-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
     .form-group label { font-size: .82rem; font-weight: 500; color: var(--chic); }
-    .form-group input,.form-group select,.form-group textarea { border: 1px solid #E0DDD8; border-radius: 8px; padding: .7rem .9rem; font-family: 'Inter', sans-serif; font-size: .9rem; color: var(--body); background: var(--cream); outline: none; transition: border-color .2s, box-shadow .2s; }
+    .form-group input,.form-group select,.form-group textarea { border: 1px solid #E0DDD8; border-radius: 8px; padding: .7rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--body); background: var(--cream); outline: none; transition: border-color .2s, box-shadow .2s; }
     .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color: var(--ouf); box-shadow: 0 0 0 3px rgba(123,92,240,.12); }
     .form-group textarea { resize: vertical; min-height: 110px; }
-    .form-submit { width: 100%; background: var(--ouf); color: var(--white); border: none; padding: .95rem; border-radius: var(--radius); font-family: 'Inter', sans-serif; font-size: .95rem; font-weight: 500; cursor: pointer; transition: opacity .2s, transform .15s; }
+    .form-submit { width: 100%; background: var(--ouf); color: var(--white); border: none; padding: .95rem; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; cursor: pointer; transition: opacity .2s, transform .15s; }
     .form-submit:hover { opacity: .88; transform: translateY(-1px); }
     .form-note { font-size: .78rem; color: var(--muted); text-align: center; margin-top: .75rem; }
     .form-success { display: none; text-align: center; padding: 2.5rem 1.5rem; }
     .form-success .s-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-    .form-success h4 { font-family: 'Fraunces', serif; color: var(--chic); font-size: 1.1rem; margin-bottom: .5rem; }
+    .form-success h4 { font-family: 'Syne', sans-serif; color: var(--chic); font-size: 1.1rem; margin-bottom: .5rem; }
     .form-success p { color: var(--muted); font-size: .9rem; }
 
     /* FOOTER */
     footer { background: #262636; color: rgba(255,255,255,.35); text-align: center; font-size: .8rem; padding: 2rem; }
-    footer .footer-brand { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.7); margin-bottom: .5rem; }
+    footer .footer-brand { font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.7); margin-bottom: .5rem; }
     footer .footer-brand span { color: var(--lilas); }
     footer a { color: var(--ouf); text-decoration: none; }
 
@@ -279,22 +270,22 @@
     #audit { padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
     .audit-inner { max-width: 760px; margin: 0 auto; }
     .audit-toggle { display:flex; max-width:320px; margin:0 auto 2rem; background:#F0EDE8; border-radius:999px; padding:4px; }
-    .audit-mode-btn { flex:1; padding:.5rem 1rem; border:none; border-radius:999px; font-family:'Inter',sans-serif; font-size:.85rem; font-weight:500; cursor:pointer; transition:background .2s,color .2s; background:transparent; color:var(--muted); }
+    .audit-mode-btn { flex:1; padding:.5rem 1rem; border:none; border-radius:999px; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:500; cursor:pointer; transition:background .2s,color .2s; background:transparent; color:var(--muted); }
     .audit-mode-btn.active { background:var(--ouf); color:var(--white); }
     .audit-input-card { background:var(--cream); border-radius:16px; padding:2rem; border:1px solid #E8E6E1; margin-bottom:1.5rem; }
-    .audit-input-card h3 { font-family:'Fraunces',serif; font-size:1rem; font-weight:700; color:var(--chic); margin-bottom:.3rem; }
+    .audit-input-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--chic); margin-bottom:.3rem; }
     .audit-input-card p { font-size:.85rem; color:var(--muted); margin-bottom:1.1rem; }
     .audit-url-row { display:flex; gap:.75rem; }
-    .audit-url-input { flex:1; border:1.5px solid #E0DDD8; border-radius:10px; padding:.75rem 1rem; font-family:'Inter',sans-serif; font-size:.9rem; color:var(--body); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; }
+    .audit-url-input { flex:1; border:1.5px solid #E0DDD8; border-radius:10px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--body); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; }
     .audit-url-input:focus { border-color:var(--ouf); box-shadow:0 0 0 3px rgba(123,92,240,.12); }
     .audit-url-input::placeholder { color:#C5C2BD; }
-    .btn-audit { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'Inter',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
+    .btn-audit { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
     .btn-audit:hover { opacity:.88; transform:translateY(-1px); }
     .btn-audit:disabled { opacity:.45; cursor:not-allowed; transform:none; }
     .audit-pro-extras { display:none; margin-top:1rem; border-top:1px solid #E8E6E1; padding-top:1rem; }
     .audit-pro-extras.visible { display:block; }
     .audit-pro-extras label { font-size:.8rem; font-weight:500; color:var(--chic); display:block; margin-bottom:.35rem; }
-    .audit-pro-extras textarea { width:100%; border:1.5px solid #E0DDD8; border-radius:10px; padding:.65rem 1rem; font-family:'Inter',sans-serif; font-size:.85rem; color:var(--body); background:var(--white); resize:vertical; min-height:65px; outline:none; transition:border-color .2s; }
+    .audit-pro-extras textarea { width:100%; border:1.5px solid #E0DDD8; border-radius:10px; padding:.65rem 1rem; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--body); background:var(--white); resize:vertical; min-height:65px; outline:none; transition:border-color .2s; }
     .audit-pro-extras textarea:focus { border-color:var(--ouf); }
     .audit-error { display:none; background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem; color:#B91C1C; font-size:.88rem; }
     .audit-error.visible { display:block; }
@@ -309,20 +300,20 @@
     #auditResults { display:none; }
     #auditResults.visible { display:block; }
     .audit-score-hero { background:var(--chic); border-radius:16px; padding:1.75rem; margin-bottom:1.25rem; display:grid; grid-template-columns:auto 1fr; gap:1.25rem; align-items:center; }
-    .audit-score-circle { width:80px; height:80px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Fraunces',serif; flex-shrink:0; }
-    .audit-score-circle .snum { font-size:1.8rem; font-weight:700; line-height:1; }
+    .audit-score-circle { width:80px; height:80px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Syne',sans-serif; flex-shrink:0; }
+    .audit-score-circle .snum { font-size:1.8rem; font-weight:800; line-height:1; }
     .audit-score-circle .sden { font-size:.7rem; color:rgba(255,255,255,.45); }
     .ascore-a { background:rgba(34,197,94,.2); border:2px solid #22C55E; color:#22C55E; }
     .ascore-b { background:rgba(245,158,11,.2); border:2px solid #F59E0B; color:#F59E0B; }
     .ascore-c { background:rgba(239,68,68,.2); border:2px solid #EF4444; color:#EF4444; }
-    .audit-score-info h4 { font-family:'Fraunces',serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
+    .audit-score-info h4 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
     .audit-score-url { font-size:.78rem; color:rgba(255,255,255,.4); margin-bottom:.5rem; word-break:break-all; }
     .audit-score-summary { font-size:.875rem; color:rgba(255,255,255,.72); line-height:1.6; }
     .audit-result-section { background:var(--white); border-radius:12px; border:1px solid #E8E6E1; margin-bottom:.75rem; overflow:hidden; }
     .audit-section-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; cursor:pointer; user-select:none; transition:background .15s; }
     .audit-section-header:hover { background:var(--cream); }
     .audit-section-left { display:flex; align-items:center; gap:.65rem; }
-    .audit-section-title { font-family:'Fraunces',serif; font-size:.9rem; font-weight:700; color:var(--chic); }
+    .audit-section-title { font-family:'Syne',sans-serif; font-size:.9rem; font-weight:700; color:var(--chic); }
     .audit-score-badge { font-size:.8rem; font-weight:700; padding:.2rem .6rem; border-radius:999px; }
     .abadge-good { background:rgba(34,197,94,.12); color:#16A34A; }
     .abadge-mid  { background:rgba(245,158,11,.12); color:#D97706; }
@@ -340,16 +331,16 @@
     .audit-reco-list li::before { content:'→'; color:var(--ouf); font-weight:700; flex-shrink:0; }
     /* Email capture — CTA principal */
     .audit-email-box { background:var(--chic); border-radius:16px; padding:2rem; margin-top:1.25rem; text-align:center; }
-    .audit-email-box h4 { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:700; color:var(--white); margin-bottom:.4rem; }
+    .audit-email-box h4 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
     .audit-email-box p { font-size:.88rem; color:rgba(255,255,255,.65); margin-bottom:1.25rem; }
     .audit-email-fields { display:flex; gap:.65rem; max-width:520px; margin:0 auto; }
-    .audit-email-input { flex:1; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'Inter',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; }
+    .audit-email-input { flex:1; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; }
     .audit-email-input::placeholder { color:rgba(255,255,255,.4); }
     .audit-email-input:focus { border-color:var(--lilas); }
-    .audit-prenom-input { width:130px; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'Inter',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; flex-shrink:0; }
+    .audit-prenom-input { width:130px; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; flex-shrink:0; }
     .audit-prenom-input::placeholder { color:rgba(255,255,255,.4); }
     .audit-prenom-input:focus { border-color:var(--lilas); }
-    .btn-send-report { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:8px; font-family:'Inter',sans-serif; font-size:.9rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
+    .btn-send-report { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
     .btn-send-report:hover { opacity:.88; transform:translateY(-1px); }
     .btn-send-report:disabled { opacity:.45; cursor:not-allowed; transform:none; }
     .audit-email-success { display:none; text-align:center; padding:.75rem; font-size:.9rem; color:#A7F3D0; font-weight:500; margin-top:.5rem; }
@@ -357,7 +348,7 @@
     @media(max-width:600px) { .audit-email-fields { flex-direction:column; } .audit-prenom-input { width:100%; } }
 
     .audit-cta { background:var(--chic); border-radius:16px; padding:1.75rem; text-align:center; margin-top:1.25rem; }
-    .audit-cta h4 { font-family:'Fraunces',serif; font-size:1.05rem; font-weight:700; color:var(--white); margin-bottom:.4rem; }
+    .audit-cta h4 { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
     .audit-cta p { color:rgba(255,255,255,.6); font-size:.85rem; margin-bottom:1.1rem; }
     .audit-cta-actions { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
     .btn-acta { background:var(--ouf); color:var(--white); padding:.7rem 1.5rem; border-radius:var(--radius); font-size:.88rem; font-weight:500; text-decoration:none; transition:opacity .2s; }
@@ -381,7 +372,7 @@
 
 <nav>
   <a class="nav-logo" href="#">
-    <svg class="nav-logo-badge" width="28" height="28" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
       <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
       <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
@@ -389,11 +380,13 @@
     <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="#offre-temps">Gagnez du temps</a></li>
-    <li><a href="#offre-visibilite">Visibilité &amp; clients</a></li>
-    <li><a href="#offre-lancement">Lancement</a></li>
+    <li><a href="#diagnostics-overview">Diagnostics gratuits</a></li>
+    <li><a href="#solutions-ia">Solutions IA</a></li>
+    <li><a href="#services">Nos offres</a></li>
+    <li><a href="#cas-usage">Exemples de cas d'usage</a></li>
+    <li><a href="#apropos">Pourquoi CHIC · OUF ?</a></li>
+    <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
-  <a href="#audit" class="nav-cta">Faire mon audit gratuit</a>
 </nav>
 
 <section class="hero">
@@ -431,30 +424,23 @@
 </div>
 
 <section id="diagnostics-overview" style="scroll-margin-top:90px;">
-  <p class="section-eyebrow">Diagnostics gratuits</p>
+  <p class="section-eyebrow">2 diagnostics gratuits</p>
   <h2 class="section-title">Par où commencer ?</h2>
-  <p class="section-sub" style="margin-bottom:2rem;">Choisissez selon votre besoin du moment — chaque branche démarre par un diagnostic ou un échange gratuit, avant toute proposition payante.</p>
+  <p class="section-sub" style="margin-bottom:2rem;">Choisissez selon votre besoin — les deux sont gratuits et donnent lieu à un rapport par email.</p>
   <div class="diag-grid">
-    <div class="diag-card diag-1">
-      <div class="diag-icon">🧭</div>
-      <h3>Maturité IA (CAPE)</h3>
-      <p>Rapport personnalisé sur votre niveau d'adoption de l'IA et vos angles morts, en 10 minutes.</p>
-      <p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:.5rem 0 .75rem;">À choisir si vous voulez gagner du temps et identifier les tâches que l'IA peut simplifier dans votre activité.</p>
-      <a href="#cape">Faire le diagnostic →</a>
-    </div>
-    <div class="diag-card diag-2">
+    <div class="diag-card">
       <div class="diag-icon">🔍</div>
       <h3>Audit de site</h3>
       <p>Score sur 10 et recommandations concrètes (design, contenu, SEO, conversion) en 30 secondes.</p>
       <p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:.5rem 0 .75rem;">À choisir si vous voulez améliorer votre site, sa visibilité et sa capacité à générer des contacts.</p>
       <a href="#audit">Analyser mon site →</a>
     </div>
-    <div class="diag-card diag-3">
-      <div class="diag-icon">🚀</div>
-      <h3>Cadrage de projet</h3>
-      <p>Un premier échange gratuit de 30 min pour clarifier votre marché et les grandes étapes de votre lancement.</p>
-      <p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:.5rem 0 .75rem;">À choisir si vous n'avez pas encore démarré votre activité et voulez partir sur de bonnes bases.</p>
-      <a href="#offre-lancement">En discuter →</a>
+    <div class="diag-card">
+      <div class="diag-icon">🧭</div>
+      <h3>Maturité IA (CAPE)</h3>
+      <p>Rapport personnalisé sur votre niveau d'adoption de l'IA et vos angles morts, en 10 minutes.</p>
+      <p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:.5rem 0 .75rem;">À choisir si vous voulez gagner du temps et identifier les tâches que l'IA peut simplifier dans votre activité.</p>
+      <a href="#cape">Faire le diagnostic →</a>
     </div>
   </div>
 </section>
@@ -472,7 +458,7 @@
       <div class="apropos-bio-text">
         <p>Il est 19 h. La journée est terminée, mais il reste un devis à envoyer, deux clients à relancer, un rendez-vous à confirmer. Ces tâches sont importantes — mais elles passent toujours après les urgences et le cœur de métier. Une relance oubliée peut devenir un client perdu.</p>
         <p>C'est exactement cet équilibre que résume notre signature : <em>Chic qu'ils soient là</em>, parce que l'intelligence artificielle apporte enfin des solutions vraiment nouvelles et accessibles à votre activité — et <em>Ouf que ça tourne tout seul</em>, parce que vous ressentez le soulagement de ne plus avoir à faire certaines tâches vous-même, et de pouvoir enfin vous concentrer sur votre cœur de métier.</p>
-        <p style="font-family:'Fraunces',serif;font-weight:700;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC · OUF</p>
+        <p style="font-family:'Syne',sans-serif;font-weight:800;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC · OUF</p>
         <p>Après plus de 30 ans dans des structures de taille humaine — EHPAD, espaces associatifs, organismes de formation — j'ai compris que le problème n'était pas le manque d'outils, mais le manque de temps pour les choisir, les paramétrer et les faire fonctionner ensemble. Je prends en charge l'intégralité de chaque mission, de A à Z.</p>
         <p>C'est pour cela que j'ai créé CHIC · OUF : des solutions simples qui organisent et automatisent vos tâches répétitives, sans vous obliger à devenir spécialiste de l'intelligence artificielle. Vos contacts centralisés, vos relances au bon moment, vos documents remplis automatiquement — vous restez concentré sur votre métier, le reste continue d'avancer.</p>
         <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC · OUF</p>
@@ -544,7 +530,6 @@
         <div class="audit-email-error" id="auditEmailError"></div>
         <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
         <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
-        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.65);border-top:1px solid rgba(255,255,255,.12);padding-top:1rem;">Ce score reflète votre visibilité sur Google. Mais un nombre croissant de vos clients potentiels demandent conseil directement à ChatGPT — <a href="#offre-visibilite" style="color:var(--lilas);">découvrez notre audit GEO</a> pour savoir si vous y êtes visible.</p>
       </div>
       <div class="audit-cta" id="auditCta" style="display:none;">
         <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
@@ -609,16 +594,16 @@
   <div class="package-divider"><span>Choisissez votre priorité — ou combinez-les</span></div>
   <div class="packages-grid">
 
-    <div class="package-card card-1" id="offre-temps">
+    <div class="package-card" id="offre-temps">
       <div class="pkg-icon">🤝</div>
       <p class="pkg-label">Offre 1</p>
       <h3 class="pkg-title">Gagnez du temps au quotidien</h3>
-      <p class="pkg-desc">Vous êtes déjà en activité et l'administratif vous prend trop de temps. Je mets en place les outils et les automatisations pour que vous ne perdiez plus aucun contact, aucune relance, aucune opportunité.</p>
+      <p class="pkg-desc">Je mets en place les outils et les automatisations pour que vous ne perdiez plus aucun contact, aucune relance, aucune opportunité — et que l'administratif vous prenne moins de temps.</p>
       <ul class="pkg-includes">
-        <li>Diagnostic de maturité IA (CAPE)</li>
-        <li>Centralisation des contacts et historique</li>
-        <li>Relances et suivi des échéances automatiques</li>
-        <li>Génération de documents (devis, factures…)</li>
+        <li>Centralisation des contacts</li>
+        <li>Historique des échanges</li>
+        <li>Relances automatiques</li>
+        <li>Suivi des échéances</li>
         <li>Prise en main et documentation</li>
       </ul>
       <div class="pkg-price">
@@ -629,30 +614,31 @@
       <a href="#contact" class="pkg-cta">Organiser mon suivi client →</a>
     </div>
 
-    <div class="package-card card-2" id="offre-visibilite">
+    <div class="package-card" id="offre-visibilite">
       <div class="pkg-icon">🌐</div>
       <p class="pkg-label">Offre 2</p>
       <h3 class="pkg-title">Développez votre visibilité, trouvez des clients</h3>
-      <p class="pkg-desc">Un site qui vous représente bien, une présence régulière, et une prospection organisée — pour que vos futurs clients vous trouvent et vous contactent.</p>
+      <p class="pkg-desc">Je construis votre présence en ligne — site, communication, prospection — pour que vos futurs clients vous trouvent et vous contactent.</p>
       <ul class="pkg-includes">
-        <li>Audit de site (design, contenu, SEO, conversion)</li>
-        <li>Création ou refonte de site professionnel</li>
-        <li>Communication et contenus programmés</li>
-        <li>Chatbot de qualification et prise de contact</li>
-        <li>Prospection ciblée et relances structurées</li>
+        <li>Plan de communication et contenus programmés</li>
+        <li>Site professionnel neuf ou refondu</li>
+        <li>Référencement (SEO) de base</li>
+        <li>Identification de prospects et messages personnalisés</li>
+        <li>Prise en main et documentation</li>
       </ul>
       <div class="pkg-price">
         <span class="pkg-price-from">à partir de</span>
         <span class="pkg-price-amount">590 €</span>
         <span class="pkg-price-note">HT · selon périmètre</span>
       </div>
+      <p style="font-size:.78rem;color:var(--muted);margin:-.75rem 0 1rem;">Tarif de base ; la création de site est chiffrée séparément selon le périmètre.</p>
       <div style="background:var(--lilas-l);border:1px dashed var(--ouf);border-radius:10px;padding:1rem 1.1rem;margin-bottom:1.25rem;font-size:.82rem;color:var(--chic);line-height:1.55;">
-        <strong style="color:var(--chic);">Nouveau — Audit GEO :</strong> une fois votre site audité, découvrez ce que ChatGPT et les autres IA répondent quand on leur demande de vous recommander, et quels concurrents elles citent à votre place. Proposé en complément payant après l'audit gratuit.
+        <strong>Nouveau — Audit GEO :</strong> une fois votre site audité, découvrez ce que ChatGPT et les autres IA répondent quand on leur demande de vous recommander, et quels concurrents elles citent à votre place. Proposé en complément payant après l'audit gratuit de site.
       </div>
       <a href="#contact" class="pkg-cta">Développer ma visibilité →</a>
     </div>
 
-    <div class="package-card card-3" id="offre-lancement">
+    <div class="package-card" id="offre-lancement">
       <div class="pkg-icon">🚀</div>
       <p class="pkg-label">Offre 3</p>
       <h3 class="pkg-title">Lancez votre entreprise sur de bonnes bases</h3>
@@ -793,14 +779,6 @@
     <div class="faq-item">
       <p class="faq-q">Mes données sont-elles protégées ?</p>
       <p class="faq-a">La protection de vos données est prise en compte dès la conception de la solution. Les outils, les accès et les données nécessaires sont examinés selon votre activité, et ces points sont précisés avant le démarrage de la mission.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">C'est quoi, un audit GEO ?</p>
-      <p class="faq-a">Le GEO (Generative Engine Optimization) consiste à savoir comment ChatGPT, Perplexity ou Gemini parlent de votre entreprise quand un client potentiel leur demande conseil. L'audit révèle si vous êtes cité, quels concurrents sont recommandés à votre place, et ce qui pourrait renforcer votre visibilité auprès de ces IA.</p>
-    </div>
-    <div class="faq-item">
-      <p class="faq-q">Je n'ai pas encore créé mon entreprise, pouvez-vous m'aider ?</p>
-      <p class="faq-a">Oui. L'offre Lancement vous accompagne avant même le démarrage : étude de marché, analyse de la concurrence et positionnement, pour poser des bases solides avant de créer votre site ou votre structure.</p>
     </div>
   </div>
 </section>
