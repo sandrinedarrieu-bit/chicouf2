@@ -156,7 +156,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, warning: 'Email non envoyé : clé Resend manquante' });
     }
 
-    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'chicouf@free.fr';
+    const OWNER_EMAIL = process.env.OWNER_EMAIL || ' chicouf@free.fr';
 
     // 3a. Email au visiteur : son rapport d'audit complet et personnalisé
     const resendResp = await fetch('https://api.resend.com/emails', {
