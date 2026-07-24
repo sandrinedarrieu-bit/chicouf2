@@ -156,6 +156,9 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, warning: 'Email non envoyé : clé Resend manquante' });
     }
 
+    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'chicouf@free.fr';
+
+    // 3a. Email au visiteur : son rapport d'audit complet et personnalisé
     const resendResp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -164,8 +167,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: 'CHIC OUF <onboarding@resend.dev>',
-        to: [process.env.OWNER_EMAIL || email],
-        reply_to: email,
+        to: [email],
+        reply_to: OWNER_EMAIL,
         subject: `Audit de présence en ligne — ${url}`,
         html
       })
@@ -175,6 +178,47 @@ export default async function handler(req, res) {
     console.log('Resend result:', JSON.stringify(result));
 
     if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
+
+    // 3b. Notification interne : Sandrine est prévenue à chaque demande d'audit,
+    // que l'email au visiteur ait réussi ou non ci-dessus.
+    try {
+      const notifHtml = `<!DOCTYPE html><html lang="fr"><body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#F8F7F4;padding:24px;">
+        <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #E8E6E1;">
+          <p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2D1F6E;">🔔 Nouvelle demande d'audit de site</p>
+          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Prénom :</strong> ${prenom_display}</p>
+          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Email :</strong> ${email}</p>
+          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Site analysé :</strong> ${url}</p>
+          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Score :</strong> ${audit.score_global}/10 (${audit.niveau})</p>
+          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Package recommandé :</strong> ${packageReco}</p>
+          ${solIa ? `<p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Solution IA suggérée :</strong> ${solIa.titre} (${solIa.prix})</p>` : ''}
+        </div>
+      </body></html>`;
+
+      const notifResp = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        },
+        body: JSON.stringify({
+          from: 'CHIC OUF <onboarding@resend.dev>',
+          to: [OWNER_EMAIL],
+          reply_to: email,
+          subject: `🔔 Demande d'audit — ${prenom_display} (${url})`,
+          html: notifHtml
+        })
+      });
+      const notifResult = await notifResp.json();
+      if (notifResult.error) {
+        console.error('Notification interne non envoyée :', notifResult.error);
+      } else {
+        console.log('Notification interne envoyée à', OWNER_EMAIL);
+      }
+    } catch (notifErr) {
+      // Ne bloque jamais la réponse au visiteur si la notification interne échoue
+      console.error('Erreur notification interne :', notifErr.message);
+    }
+
     return res.status(200).json({ success: true });
 
   } catch (err) {
