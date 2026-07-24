@@ -25,6 +25,20 @@ export default async function handler(req, res) {
       packageReco = 'Package 1 + Package 2';
     }
 
+    // Solution IA precise recommandee par audit.js (avec tarif), independante du package ci-dessus
+    const solIa = audit.solution_ia_recommandee;
+    const solutionIaHtml = solIa ? `<div style="margin:0 32px 8px;background:#FFF8EC;border:1px dashed #F5C77A;border-radius:10px;padding:14px 18px;">
+      <table style="width:100%;"><tr>
+        <td style="vertical-align:top;">
+          <p style="margin:0;font-size:13px;color:#7A5200;font-weight:700;">🔧 Solution suggérée : ${solIa.titre}</p>
+          <p style="margin:4px 0 0;font-size:13px;color:#555;">${solIa.description}</p>
+        </td>
+        <td style="vertical-align:top;text-align:right;white-space:nowrap;padding-left:12px;">
+          <span style="display:inline-block;background:#F59E0B;color:#2C2C3E;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;">${solIa.prix}</span>
+        </td>
+      </tr></table>
+    </div>` : '';
+
     // ── 1. AIRTABLE ──────────────────────────────────
     console.log('Airtable config:', {
       hasBaseId: !!process.env.AIRTABLE_BASE_ID,
@@ -120,6 +134,7 @@ export default async function handler(req, res) {
     <p style="margin:0;font-size:13px;color:#7B5CF0;font-weight:600;">💡 ${packageReco} — la prochaine étape recommandée</p>
     <p style="margin:4px 0 0;font-size:13px;color:#555;">${etape}</p>
   </div>` : ''}
+  ${solutionIaHtml}
   <div style="margin:8px 32px 32px;background:#2C2C3E;border-radius:12px;padding:24px;text-align:center;">
     <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#fff;">Parlons de votre projet</p>
     <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,.6);">30 minutes offertes pour transformer ces recommandations en plan d'action.</p>
