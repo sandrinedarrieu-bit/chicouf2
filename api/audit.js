@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     seo:        { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site conçu pour être visible sur les moteurs de recherche." },
     mobile:     { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site optimisé pour l'expérience mobile de vos visiteurs." },
     contenu:    { nom: 'Création de contenu IA',    prix: 'à partir de 250 €', pitch: "rédaction et publication automatisées, sans y consacrer vos journées." },
-    conversion: { nom: 'Réceptionniste IA',          prix: 'à partir de 350 €', pitch: "un agent IA qui qualifie chaque demande et peut fixer un rendez-vous, 24h/24." }
+    conversion: { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site restructuré autour de CTAs clairs et d'un parcours de conversion optimisé." }
   };
 
   const prompt = `Analyse ce site: ${url}${contextBlock}
@@ -87,6 +87,9 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
     }
 
     // Calcul automatique du package recommande a partir des scores (fiable, pas demande a Claude)
+    // Cet audit ne mesure que le site (design/seo/contenu/conversion/mobile) : il n'evalue rien
+    // qui releve du CRM/suivi client, donc il recommande toujours le Package 2 (Communication &
+    // Visibilite), coherent avec ce qu'il mesure reellement.
     if (mode !== 'pro') {
       const sections = audit.sections || [];
       const getSection = (id) => sections.find(x => x.id === id);
@@ -97,30 +100,15 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
         if (s.score === 'Urgent') return 2;
         return 1;
       };
-      const scoreP2 = getScore('design') + getScore('seo') + getScore('contenu') + getScore('mobile');
-      const scoreP1 = getScore('conversion') * 4;
-
-      if (scoreP1 >= scoreP2) {
-        // Package 1 — reprendre le point faible reel de la section conversion
-        const conv = getSection('conversion');
-        const detail = conv ? conv.analyse.toLowerCase() : 'le suivi de vos contacts';
-        if (audit.type_structure === 'association') {
-          audit.prochaine_etape = `Le Package 1 vous aiderait a mieux suivre vos adherents et benevoles : ${detail} Vous ne perdriez plus le contact avec vos participants.`;
-        } else {
-          audit.prochaine_etape = `Le Package 1 Relation Client repondrait directement a ce constat : ${detail} Vous ne perdriez plus aucun prospect.`;
-        }
+      const candidats = ['seo','design','contenu','mobile','conversion'].map(id => ({ id, s: getSection(id), score: getScore(id) }));
+      candidats.sort((a, b) => b.score - a.score);
+      const top = candidats[0];
+      const labels = { seo: 'votre referencement', design: 'votre design', contenu: 'votre contenu', mobile: 'votre experience mobile', conversion: 'vos parcours de conversion' };
+      const detail = top.s ? top.s.analyse.toLowerCase() : '';
+      if (audit.type_structure === 'association') {
+        audit.prochaine_etape = `Le Package 2 ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite aupres de nouveaux benevoles et participants.`;
       } else {
-        // Package 2 — identifier la section la plus faible parmi design/seo/contenu/mobile
-        const candidats = ['seo','design','contenu','mobile'].map(id => ({ id, s: getSection(id), score: getScore(id) }));
-        candidats.sort((a,b) => b.score - a.score);
-        const top = candidats[0];
-        const labels = { seo: 'votre referencement', design: 'votre design', contenu: 'votre contenu', mobile: 'votre experience mobile' };
-        const detail = top.s ? top.s.analyse.toLowerCase() : '';
-        if (audit.type_structure === 'association') {
-          audit.prochaine_etape = `Le Package 2 ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite aupres de nouveaux benevoles et participants.`;
-        } else {
-          audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
-        }
+        audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
       }
     }
 
