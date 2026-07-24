@@ -434,9 +434,9 @@
     <div class="diag-card">
       <div class="diag-icon">🔍</div>
       <h3>Audit de site</h3>
-      <p>Recommandations concrètes sur votre site (design, contenu, SEO, conversion), envoyées par email.</p>
+      <p>Score sur 10 et recommandations concrètes (design, contenu, SEO, conversion) en 30 secondes.</p>
       <p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:.5rem 0 .75rem;">À choisir si vous voulez améliorer votre site, sa visibilité et sa capacité à générer des contacts.</p>
-      <a href="#contact">Demander mon audit →</a>
+      <a href="#audit">Analyser mon site →</a>
     </div>
     <div class="diag-card">
       <div class="diag-icon">🧭</div>
@@ -473,6 +473,74 @@
       <div class="apropos-card"><div class="icon">🏗️</div><h3>Je gère tout, vous validez</h3><p>Vous me confiez l'objectif. Je construis la solution, je la teste, je vous la livre opérationnelle — sans vous imposer un suivi technique.</p></div>
       <div class="apropos-card"><div class="icon">🧭</div><h3>Terrain avant tout</h3><p>Médico-social, associatif, formation, artisanat… Je pars de vos contraintes réelles, pas d'une solution préfabriquée.</p></div>
       <div class="apropos-card"><div class="icon">⚙️</div><h3>Vous restez autonomes</h3><p>Chaque livrable vient avec une documentation claire pour que vous puissiez utiliser les outils sans dépendre de moi.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- AUDIT -->
+<section id="audit">
+  <div class="audit-inner">
+    <div class="audit-toggle">
+      <button class="audit-mode-btn active" id="aBtnClient" onclick="setAuditMode('client')">👤 Mon site</button>
+      <button class="audit-mode-btn" id="aBtnPro" onclick="setAuditMode('pro')">🔍 Mode pro</button>
+    </div>
+
+    <div class="audit-input-card">
+      <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
+      <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
+      <div class="audit-url-row">
+        <input type="url" class="audit-url-input" id="auditUrl" placeholder="https://www.monsite.fr" />
+        <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
+      </div>
+      <div class="audit-pro-extras" id="auditProExtras">
+        <label>Contexte (optionnel)</label>
+        <textarea id="auditContext" placeholder="Ex : restaurant familial en Normandie, cible touristes et locaux…"></textarea>
+      </div>
+    </div>
+
+    <div class="audit-error" id="auditError"></div>
+
+    <div class="audit-loading" id="auditLoading">
+      <div class="audit-spinner"></div>
+      <p>Analyse en cours…</p>
+      <div class="audit-steps" id="auditSteps"></div>
+    </div>
+
+    <div id="auditResults">
+      <div class="audit-score-hero">
+        <div class="audit-score-circle" id="auditScoreCircle">
+          <span class="snum" id="auditScoreNum">--</span>
+          <span class="sden">/10</span>
+        </div>
+        <div class="audit-score-info">
+          <div class="audit-score-url" id="auditSiteUrl"></div>
+          <h4 id="auditScoreTitre"></h4>
+          <p class="audit-score-summary" id="auditScoreSummary"></p>
+        </div>
+      </div>
+      <div id="auditSections"></div>
+      <div class="audit-email-box" id="auditEmailBox" style="display:none;">
+        <h4>📩 Recevoir mon audit par email</h4>
+        <p>Votre rapport complet, mis en page et prêt à partager — gratuitement.</p>
+        <div class="audit-email-fields">
+          <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
+          <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
+          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Envoyer →</button>
+        </div>
+        <div class="audit-email-error" id="auditEmailError"></div>
+        <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
+      </div>
+      <div class="audit-cta" id="auditCta" style="display:none;">
+        <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
+        <p id="auditCtaSub"></p>
+        <div class="audit-cta-actions">
+          <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
+          <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
+        </div>
+        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
+      </div>
     </div>
   </div>
 </section>
@@ -555,7 +623,7 @@
         <li>Prise en main et documentation</li>
       </ul>
       <div style="background:var(--lilas-l);border:1px dashed var(--ouf);border-radius:10px;padding:1rem 1.1rem;margin-bottom:1.25rem;font-size:.82rem;color:var(--chic);line-height:1.55;">
-        <strong>Nouveau — Audit GEO :</strong> découvrez ce que ChatGPT et les autres IA répondent quand on leur demande de vous recommander, et quels concurrents elles citent à votre place.
+        <strong>Nouveau — Audit GEO :</strong> une fois votre site audité, découvrez ce que ChatGPT et les autres IA répondent quand on leur demande de vous recommander, et quels concurrents elles citent à votre place. Proposé en complément payant après l'audit gratuit de site.
       </div>
       <a href="#contact" class="pkg-cta">Développer ma visibilité →</a>
     </div>
@@ -607,8 +675,8 @@
 
   <div class="usecases-grid" id="usecases-more" style="max-width:var(--max-wide);margin:1.25rem auto 0;display:none;">
     <div class="usecase-card">
-      <h3>Votre propre outil de diagnostic</h3>
-      <p>Je peux construire pour votre activité un diagnostic en ligne sur mesure, qui capte des prospects automatiquement et vous envoie un rapport personnalisé, 24h/24.</p>
+      <h3>Votre propre outil de diagnostic, comme celui-ci</h3>
+      <p>Vous venez de tester l'audit gratuit de ce site ? Je peux construire le même type d'outil pour votre activité : un diagnostic en ligne qui capte des prospects automatiquement, 24h/24.</p>
     </div>
     <div class="usecase-card">
       <h3>Un chatbot qui répond à vos clients, même la nuit</h3>
@@ -660,6 +728,7 @@
       <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:var(--chic)">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
       <p>Ce diagnostic est <strong style="color:var(--chic)">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" class="btn-primary" style="display:inline-block;margin-top:.5rem;">Faire le diagnostic →</a>
+      <p style="margin-top:.85rem;font-size:.85rem;color:var(--muted);">Vous avez un site ? <a href="#audit" style="color:var(--ouf);">Faites aussi l'audit gratuit</a> (30 sec).</p>
     </div>
     <div class="cape-pillars">
       <div class="cape-pillar"><div class="cape-letter">C</div><strong>Connaissance</strong><span>Ce que vous savez déjà sur l'IA</span></div>
@@ -733,6 +802,7 @@
           <option>Accompagnement 2 · Audit GEO (visibilité IA)</option>
           <option>Accompagnement 3 · Lancer mon entreprise / étude de marché</option>
           <option>Plusieurs accompagnements</option>
+          <option>Audit de site gratuit</option>
           <option>Diagnostic CAPE</option>
           <option>Autre</option>
         </select>
@@ -745,7 +815,7 @@
     <div class="form-success" id="formSuccess">
       <div class="s-icon">✅</div>
       <h4>Message envoyé !</h4>
-      <p>Merci, je vous réponds sous 48h ouvrées.<br>En attendant, faites le diagnostic CAPE si ce n'est pas encore fait !</p>
+      <p>Merci, je vous réponds sous 48h ouvrées.<br>En attendant, faites l'audit de site ou le diagnostic CAPE si ce n'est pas encore fait !</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" style="display:inline-block;margin-top:1rem;background:var(--ouf);color:#fff;padding:.75rem 1.5rem;border-radius:var(--radius);font-size:.88rem;text-decoration:none;">Faire le diagnostic →</a>
     </div>
   </div>
@@ -755,11 +825,159 @@
   <div class="footer-brand">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></div>
   <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en Intelligence Artificielle et Transformation Digitale · Brunoy, Île-de-France</p>
   <p style="margin-top:.35rem;">chicouf@free.fr · 07 56 92 59 84 · chicouf2.vercel.app</p>
-  <p style="margin-top:.5rem;"><a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
+  <p style="margin-top:.5rem;"><a href="#audit">Audit de site gratuit</a> · <a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a></p>
   <p style="margin-top:.5rem;"><a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
 </footer>
 
 <script>
+// ── AUDIT ──────────────────────────────────────────────
+let auditMode = 'client';
+const auditStepMessages = ["Lecture du site…","Analyse design & structure…","Évaluation contenu & SEO…","Génération des recommandations…"];
+
+function setAuditMode(mode) {
+  auditMode = mode;
+  document.getElementById('aBtnClient').classList.toggle('active', mode==='client');
+  document.getElementById('aBtnPro').classList.toggle('active', mode==='pro');
+  document.getElementById('auditProExtras').classList.toggle('visible', mode==='pro');
+  document.getElementById('auditInputTitle').textContent = mode==='pro' ? 'Analyser un site prospect' : 'Analysez votre site gratuitement';
+  document.getElementById('auditInputSub').textContent = mode==='pro' ? 'Entrez l\'URL du site à auditer. Ajoutez du contexte pour des recommandations commerciales précises.' : 'Entrez l\'adresse de votre site pour recevoir un audit de présence en ligne.';
+  document.querySelectorAll('.audit-pro-block').forEach(b => b.classList.toggle('visible', mode==='pro'));
+}
+
+async function lancerAudit() {
+  const url = document.getElementById('auditUrl').value.trim();
+  const context = document.getElementById('auditContext').value.trim();
+  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+    showAuditError("Merci d'entrer une URL valide commençant par https://"); return;
+  }
+  hideAuditError();
+  document.getElementById('auditResults').classList.remove('visible');
+  document.getElementById('auditSections').innerHTML='';
+  document.getElementById('auditCta').style.display='none';
+  document.getElementById('auditLoading').classList.add('visible');
+  document.getElementById('btnAudit').disabled=true;
+  const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
+  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1800); });
+
+  try {
+    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context, mode:auditMode})});
+    const respText = await resp.text();
+    let audit;
+    try {
+      audit = JSON.parse(respText);
+    } catch(e) {
+      // Tenter d'extraire le JSON entre { et }
+      try {
+        const start = respText.indexOf('{');
+        const end = respText.lastIndexOf('}');
+        if (start !== -1 && end !== -1) {
+          audit = JSON.parse(respText.substring(start, end + 1));
+        } else throw new Error('JSON introuvable');
+      } catch(e2) {
+        // Fallback visuel
+        audit = {
+          score_global: 5, niveau: 'Analyse partielle',
+          titre_diagnostic: 'Votre site a du potentiel à révéler',
+          resume: 'Nous avons parcouru votre site. Contactez-nous pour recevoir votre rapport complet personnalisé.',
+          sections: [
+            {id:'design',icon:'🎨',titre:'Design',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'contenu',icon:'✍️',titre:'Contenu',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'seo',icon:'🔍',titre:'SEO',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'conversion',icon:'🎯',titre:'Conversion',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
+          ],
+          points_forts: ['Votre site est en ligne et accessible'],
+          priorites: ['Contactez CHIC · OUF pour un audit approfondi','Réservez un échange gratuit de 30 min'],
+          prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
+        };
+      }
+    }
+    if (audit.error) throw new Error(audit.error);
+    document.getElementById('auditLoading').classList.remove('visible');
+    document.getElementById('btnAudit').disabled=false;
+    afficherAudit(audit, url);
+    lastAudit = audit;
+    lastUrl = url;
+  } catch(err) {
+    document.getElementById('auditLoading').classList.remove('visible');
+    document.getElementById('btnAudit').disabled=false;
+    showAuditError("Erreur lors de l'analyse. Vérifiez l'URL et réessayez. ("+err.message+")");
+  }
+}
+
+function afficherAudit(audit, url) {
+  const score = audit.score_global||5;
+  const sc = document.getElementById('auditScoreCircle');
+  sc.className='audit-score-circle '+(score>=7?'ascore-a':score>=5?'ascore-b':'ascore-c');
+  document.getElementById('auditScoreNum').textContent=score;
+  document.getElementById('auditSiteUrl').textContent=url;
+  document.getElementById('auditScoreTitre').textContent=audit.titre_diagnostic||'';
+  document.getElementById('auditScoreSummary').textContent=audit.resume||'';
+  const container=document.getElementById('auditSections'); container.innerHTML='';
+  (audit.sections||[]).forEach((s,i)=>{
+    const bc=s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
+    const div=document.createElement('div'); div.className='audit-result-section';
+    div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p>${auditMode==='pro'&&s.id==='conversion'&&audit.angle_commercial?`<div class="audit-pro-block visible"><div class="audit-pro-label">💼 Angle commercial</div><p>${audit.angle_commercial}</p></div>`:''}</div>`;
+    container.appendChild(div);
+  });
+  if (audit.points_forts||audit.priorites) {
+    const sd=document.createElement('div'); sd.className='audit-result-section';
+    const pfH=(audit.points_forts||[]).map(p=>`<li>${p}</li>`).join('');
+    const prH=(audit.priorites||[]).map(p=>`<li>${p}</li>`).join('');
+    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''} ${auditMode==='pro'&&audit.offre_recommandee?`<div class="audit-pro-block visible" style="margin-top:.75rem;"><div class="audit-pro-label">💼 Offre recommandée</div><p>${audit.offre_recommandee}</p></div>`:''}</div>`;
+    container.appendChild(sd);
+  }
+
+  const cta=document.getElementById('auditCta'); cta.style.display='block';
+  // Afficher directement le bloc email, cacher le CTA séparé
+  document.getElementById('auditEmailBox').style.display = 'block';
+  document.getElementById('auditCta').style.display = 'none';
+
+  // Stocker la prochaine étape pour l'email
+  const etape = auditMode==='pro'
+    ? (audit.angle_commercial || '')
+    : (audit.prochaine_etape || '');
+  document.getElementById('auditEmailBox').style.display = 'block';
+  document.getElementById('auditResults').classList.add('visible');
+  document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+let lastAudit = null;
+let lastUrl = '';
+
+async function envoyerRapport() {
+  const email = document.getElementById('auditEmail').value.trim();
+  const prenom = document.getElementById('auditPrenom').value.trim();
+  const errEl = document.getElementById('auditEmailError');
+  errEl.style.display = 'none';
+  if (!email || !email.includes('@')) { errEl.textContent = 'Merci d\'entrer un email valide.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('btnSendReport');
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    const resp = await fetch('/api/send-report', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email, prenom, url: lastUrl, audit: lastAudit })
+    });
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+    document.getElementById('auditEmailSuccess').style.display = 'block';
+    btn.style.display = 'none';
+  } catch(err) {
+    errEl.textContent = 'Erreur d\'envoi : ' + err.message;
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Envoyer →';
+  }
+}
+
+function toggleAuditSection(header) {
+  const body=header.nextElementSibling; const chevron=header.querySelector('.audit-chevron');
+  body.classList.toggle('open'); chevron.style.transform=body.classList.contains('open')?'rotate(180deg)':'';
+}
+function showAuditError(msg){const el=document.getElementById('auditError');el.textContent=msg;el.classList.add('visible');}
+function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
+document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
+
 async function handleSubmit() {
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
