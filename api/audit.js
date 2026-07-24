@@ -12,6 +12,16 @@ export default async function handler(req, res) {
 
   const contextBlock = context ? ` Contexte: ${context}` : '';
 
+  // Catalogue des Solutions IA proposées sur le site, avec leur tarif affiché,
+  // pour recommander la solution la plus pertinente selon le point faible détecté.
+  const SOLUTIONS_IA = {
+    design:     { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site professionnel, rapide à déployer et pensé pour convertir." },
+    seo:        { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site conçu pour être visible sur les moteurs de recherche." },
+    mobile:     { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site optimisé pour l'expérience mobile de vos visiteurs." },
+    contenu:    { nom: 'Création de contenu IA',    prix: 'à partir de 250 €', pitch: "rédaction et publication automatisées, sans y consacrer vos journées." },
+    conversion: { nom: 'Réceptionniste IA',          prix: 'à partir de 350 €', pitch: "un agent IA qui qualifie chaque demande et peut fixer un rendez-vous, 24h/24." }
+  };
+
   const prompt = `Analyse ce site: ${url}${contextBlock}
 Tu representes CHIC OUF, une consultante qui propose 2 services pour TPE, artisans ET associations :
 - Package 1 "Relation client/adherents" : CRM no-code, automatisation des relances, formulaires, tableau de bord, onboarding
@@ -114,7 +124,34 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       }
     }
 
-    return res.status(200).json({ ...audit, _version: 'v3-calcul-auto' });
+    // Recommandation d'une Solution IA precise (avec tarif), en complement du package ci-dessus.
+    // Base sur le point le plus faible, tous criteres confondus (design/seo/contenu/mobile/conversion).
+    if (mode !== 'pro') {
+      const sections = audit.sections || [];
+      const getSection = (id) => sections.find(x => x.id === id);
+      const weaknessScore = (id) => {
+        const s = getSection(id);
+        if (!s) return 0;
+        if (s.score === 'Urgent') return 2;
+        if (s.score === 'A ameliorer') return 1;
+        return 0;
+      };
+      const candidats = Object.keys(SOLUTIONS_IA).map(id => ({ id, score: weaknessScore(id), s: getSection(id) }));
+      candidats.sort((a, b) => b.score - a.score);
+      const top = candidats[0];
+
+      if (top && top.score > 0) {
+        const sol = SOLUTIONS_IA[top.id];
+        const detail = top.s ? top.s.analyse : '';
+        audit.solution_ia_recommandee = {
+          titre: sol.nom,
+          prix: sol.prix,
+          description: detail ? `${sol.pitch} (${detail})` : sol.pitch
+        };
+      }
+    }
+
+    return res.status(200).json({ ...audit, _version: 'v4-solution-ia' });
 
   } catch (err) {
     return res.status(200).json({ ...fallback, debug_error: 'Catch: ' + err.message });
