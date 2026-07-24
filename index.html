@@ -255,6 +255,7 @@
     .form-submit { width: 100%; background: var(--ouf); color: var(--white); border: none; padding: .95rem; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; cursor: pointer; transition: opacity .2s, transform .15s; }
     .form-submit:hover { opacity: .88; transform: translateY(-1px); }
     .form-note { font-size: .78rem; color: var(--muted); text-align: center; margin-top: .75rem; }
+    .form-error { display:none; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.3); color:#B91C1C; font-size:.85rem; text-align:center; padding:.75rem 1rem; border-radius:8px; margin-top:.75rem; }
     .form-success { display: none; text-align: center; padding: 2.5rem 1.5rem; }
     .form-success .s-icon { font-size: 2.5rem; margin-bottom: 1rem; }
     .form-success h4 { font-family: 'Syne', sans-serif; color: var(--chic); font-size: 1.1rem; margin-bottom: .5rem; }
@@ -809,6 +810,7 @@
       </div>
       <div class="form-group"><label for="message">Votre message</label><textarea id="message" placeholder="Décrivez brièvement votre situation ou votre besoin…"></textarea></div>
       <button class="form-submit" onclick="handleSubmit()">Envoyer le message →</button>
+      <p class="form-error" id="formError" style="display:none;">⚠️ L'envoi a échoué, veuillez réessayer ou nous contacter par email.</p>
       <p class="form-note">🔒 Vos informations sont utilisées uniquement pour répondre à votre demande. Pour en savoir plus, consultez notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
     </div>
 
@@ -990,24 +992,31 @@ async function handleSubmit() {
   const btn = document.querySelector('.form-submit');
   const originalText = btn.textContent;
   btn.disabled = true; btn.textContent = 'Envoi…';
+  const errEl = document.getElementById('formError');
+  errEl.style.display = 'none';
 
   try {
-    await fetch('https://hook.eu1.make.com/vca8gxk9px1lhajkc4hv66dawntolahk', {
+    const resp = await fetch('https://hook.eu1.make.com/vca8gxk9px1lhajkc4hv66dawntolahk', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ prenom, nom, email, structure, interet, message, source: 'chicouf2.vercel.app', date: new Date().toISOString() })
     });
+    if (!resp.ok) {
+      throw new Error('Réponse invalide de Make (statut ' + resp.status + ')');
+    }
+    // Succès confirmé par Make
+    btn.disabled = false; btn.textContent = originalText;
+    document.getElementById('formWrapper').style.display = 'none';
+    const s = document.getElementById('formSuccess');
+    s.style.display = 'block';
+    s.style.gridColumn = '2';
   } catch(err) {
-    // Le webhook Make peut être lent à répondre ou bloquer le CORS ; on n'empêche pas
-    // l'utilisateur de voir la confirmation, mais on log l'erreur pour debug.
+    // Échec réel (réseau, CORS, ou statut non-OK renvoyé par Make) : on informe le visiteur
+    // au lieu de lui montrer une fausse confirmation.
     console.error('Erreur envoi formulaire :', err);
+    btn.disabled = false; btn.textContent = originalText;
+    errEl.style.display = 'block';
   }
-
-  btn.disabled = false; btn.textContent = originalText;
-  document.getElementById('formWrapper').style.display = 'none';
-  const s = document.getElementById('formSuccess');
-  s.style.display = 'block';
-  s.style.gridColumn = '2';
 }
 </script>
 <script>
