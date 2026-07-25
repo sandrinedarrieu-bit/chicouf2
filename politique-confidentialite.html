@@ -14,15 +14,17 @@
       --chic:  #2D1F6E;
       --ouf:   #7B5CF0;
       --lilas: #A78BFA;
+      --or:    #F59E0B;
       --cream: #F8F7F4;
       --body:  #3D3D3D;
       --muted: #8A8A8A;
       --white: #FFFFFF;
     }
     body { font-family: 'DM Sans', sans-serif; color: var(--body); background: var(--cream); line-height: 1.7; }
-    header { background: var(--nuit); padding: 2rem clamp(1.25rem,5vw,3rem); text-align: center; }
+    header { background: var(--nuit); padding: 1.25rem clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     header a { color: rgba(255,255,255,.6); font-size: .85rem; text-decoration: none; }
-    header .brand { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--white); font-size: 1.1rem; margin-bottom: .5rem; }
+    header .brand { display: inline-flex; align-items: center; gap: 8px; font-family: 'Georgia', serif; font-weight: 700; letter-spacing: .06em; color: var(--white); font-size: 1.1rem; }
+    header .brand span { color: var(--lilas); }
     main { max-width: 760px; margin: 0 auto; padding: clamp(2.5rem,6vw,4rem) clamp(1.25rem,5vw,2rem); }
     h1 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: clamp(1.5rem,3vw,2rem); margin-bottom: 1.5rem; }
     h2 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1.05rem; margin: 2rem 0 .75rem; }
@@ -40,7 +42,14 @@
 <body>
 
 <header>
-  <div class="brand">CHIC OUF</div>
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    CHIC <span style="color:var(--or);">·</span> <span>OUF</span>
+  </div>
   <a href="index.html">← Retour au site</a>
 </header>
 
@@ -77,14 +86,14 @@
 
   <h2>Vos droits</h2>
   <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données.</p>
-  <p>Pour exercer ces droits, contactez-nous à : chicouf@free.fr</p>
+  <p>Pour exercer ces droits, contactez-nous à : contact.chicouf@free.fr</p>
   <p>Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank">www.cnil.fr</a>).</p>
 
   <h2>Cookies</h2>
   <p>Ce site n'utilise actuellement aucun cookie de mesure d'audience ou de publicité. Des cookies strictement nécessaires peuvent être utilisés pour assurer le fonctionnement des services proposés (formulaires, diagnostics).</p>
 
   <h2>Contact</h2>
-  <p>Pour toute question relative à cette politique de confidentialité : chicouf@free.fr</p>
+  <p>Pour toute question relative à cette politique de confidentialité : contact.chicouf@free.fr</p>
 </main>
 
 <footer>© CHIC OUF — <a href="index.html">Retour au site</a></footer>
