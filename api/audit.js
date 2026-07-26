@@ -131,7 +131,7 @@ CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE sour
 - Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
 - Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
 - Schéma structuré JSON-LD déjà présent sur la page : ${siteExtract.schemaJsonLdTypes.length ? `oui (types : ${siteExtract.schemaJsonLdTypes.join(', ')})` : 'non'}
-${siteExtract.probablementSiteDynamiqueJS ? "- ATTENTION : très peu de texte a pu être extrait du HTML brut. Ce site est probablement une application JavaScript (le contenu réel s'affiche après chargement par le navigateur, invisible dans le HTML brut). Dans ce cas, NE JAMAIS affirmer qu'un élément est absent (formulaire, CTA, contenu...) : indique explicitement dans les analyses concernées que ce point n'a pas pu être vérifié automatiquement, avec un score 'A ameliorer' neutre plutôt que 'Urgent'." : ''}
+${siteExtract.probablementSiteDynamiqueJS ? "- ATTENTION : très peu de texte a pu être extrait du HTML brut. Ce site est probablement une application JavaScript (le contenu réel s'affiche après chargement par le navigateur, invisible dans le HTML brut). Dans ce cas, NE JAMAIS affirmer qu'un élément est absent (formulaire, CTA, contenu...) : indique explicitement dans les analyses concernées que ce point n'a pas pu être vérifié automatiquement, avec un score 'À améliorer' neutre plutôt que 'Urgent'." : ''}
 
 Extrait du texte visible de la page (tronqué) :
 """
@@ -141,7 +141,7 @@ ${siteExtract.extraitTexte || '(aucun texte extrait)'}
 RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque. En particulier, si "Schéma structuré JSON-LD déjà présent" indique "oui", ne recommande JAMAIS d'ajouter un schéma structuré ou un type qui figure déjà dans la liste des types détectés (par exemple ne pas recommander d'ajouter "LocalBusiness" si "ProfessionalService" est déjà présent, car ProfessionalService EST un sous-type de LocalBusiness ; ne pas recommander "FAQPage" s'il est déjà dans la liste).`
     : `
 
-ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "A ameliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
+ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "À améliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
 
   const prompt = `Analyse ce site: ${url}${contextBlock}
 Tu representes CHIC OUF, une consultante qui propose 2 services pour TPE, artisans ET associations :
@@ -154,20 +154,20 @@ IMPORTANT - Adapte ton vocabulaire au type de structure que tu detectes :
 ${siteContentBlock}
 
 Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par champ) :
-{"score_global":<1-10>,"niveau":"Faible|Moyen|Bon|Tres bon","titre_diagnostic":"<titre encourageant>","resume":"<1 phrase bienveillante>","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"}],"points_forts":["<pf1>","<pf2>"],"priorites":["<p1>","<p2>","<p3>"],"type_structure":"association|entreprise"${proInstructions}}
+{"score_global":<1-10>,"niveau":"Faible|Moyen|Bon|Très bon","titre_diagnostic":"<titre encourageant>","resume":"<1 phrase bienveillante>","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Très bon|Bon|À améliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Très bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Très bon|Bon|À améliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Très bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Très bon|Bon|À améliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Très bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Très bon|Bon|À améliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Très bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Très bon|Bon|À améliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Très bon: encouragement a maintenir, sans forcer une critique artificielle>"}],"points_forts":["<pf1>","<pf2>"],"priorites":["<p1>","<p2>","<p3>"],"type_structure":"association|entreprise"${proInstructions}}
 
-IMPORTANT sur la notation : "Tres bon" est un score legitime et pleinement valide pour une section, a utiliser des que ce critere est reellement solide et sans point faible reel detectable dans le contenu fourni. N'evite pas ce score par reflexe pour "avoir quelque chose a dire" : il n'est pas obligatoire de trouver une critique constructive artificielle quand tout va bien. Une section peut etre "Tres bon" avec un simple encouragement a maintenir en reco, sans qu'il y ait besoin d'inventer un axe d'amelioration mineur.`;
+IMPORTANT sur la notation : "Très bon" est un score legitime et pleinement valide pour une section, a utiliser des que ce critere est reellement solide et sans point faible reel detectable dans le contenu fourni. N'evite pas ce score par reflexe pour "avoir quelque chose a dire" : il n'est pas obligatoire de trouver une critique constructive artificielle quand tout va bien. Une section peut etre "Très bon" avec un simple encouragement a maintenir en reco, sans qu'il y ait besoin d'inventer un axe d'amelioration mineur.`;
 
   const fallback = {
     score_global: 5, niveau: 'Analyse partielle',
     titre_diagnostic: 'Votre site a du potentiel',
     resume: 'Contactez-nous pour votre rapport complet.',
     sections: [
-      {id:'design',icon:'🎨',titre:'Design',score:'A ameliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
-      {id:'contenu',icon:'✍️',titre:'Contenu',score:'A ameliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
-      {id:'seo',icon:'🔍',titre:'SEO',score:'A ameliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
-      {id:'conversion',icon:'🎯',titre:'Conversion',score:'A ameliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
-      {id:'mobile',icon:'📱',titre:'Mobile',score:'A ameliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'}
+      {id:'design',icon:'🎨',titre:'Design',score:'À améliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
+      {id:'contenu',icon:'✍️',titre:'Contenu',score:'À améliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
+      {id:'seo',icon:'🔍',titre:'SEO',score:'À améliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
+      {id:'conversion',icon:'🎯',titre:'Conversion',score:'À améliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'},
+      {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Retour disponible sur demande.',reco:'Echangeons 30 min.'}
     ],
     points_forts: ['Votre site est en ligne et accessible'],
     priorites: ['Contactez CHIC OUF pour un audit approfondi','Reservez un echange gratuit de 30 min']
@@ -224,7 +224,7 @@ IMPORTANT sur la notation : "Tres bon" est un score legitime et pleinement valid
       const getScore = (id) => {
         const s = getSection(id);
         if (!s) return 1;
-        if (s.score === 'Tres bon') return -1;
+        if (s.score === 'Très bon') return -1;
         if (s.score === 'Bon') return 0;
         if (s.score === 'Urgent') return 2;
         return 1;
@@ -250,7 +250,7 @@ IMPORTANT sur la notation : "Tres bon" est un score legitime et pleinement valid
         const s = getSection(id);
         if (!s) return 0;
         if (s.score === 'Urgent') return 2;
-        if (s.score === 'A ameliorer') return 1;
+        if (s.score === 'À améliorer') return 1;
         return 0;
       };
       const candidats = Object.keys(SOLUTIONS_IA).map(id => ({ id, score: weaknessScore(id), s: getSection(id) }));
