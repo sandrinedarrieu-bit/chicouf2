@@ -590,7 +590,7 @@
       <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
       <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
       <div class="audit-url-row">
-        <input type="url" class="audit-url-input" id="auditUrl" placeholder="https://www.monsite.fr" />
+        <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
         <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
       </div>
     </div>
@@ -925,11 +925,17 @@
 const auditStepMessages = ["Lecture du site…","Analyse design & structure…","Évaluation contenu & SEO…","Génération des recommandations…"];
 
 async function lancerAudit() {
-  const url = document.getElementById('auditUrl').value.trim();
+  let url = document.getElementById('auditUrl').value.trim();
   const context = '';
-  if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
-    showAuditError("Merci d'entrer une URL valide commençant par https://"); return;
+  if (!url) {
+    showAuditError("Merci d'entrer l'adresse de votre site."); return;
   }
+  // On accepte que le prospect tape juste "monsite.fr" ou "www.monsite.fr" sans protocole :
+  // on ajoute https:// automatiquement plutôt que de bloquer avec un message technique.
+  if (!/^https?:\/\//i.test(url)) {
+    url = 'https://' + url;
+  }
+  document.getElementById('auditUrl').value = url;
   hideAuditError();
   document.getElementById('auditResults').classList.remove('visible');
   document.getElementById('auditSections').innerHTML='';
