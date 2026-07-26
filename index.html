@@ -560,7 +560,7 @@
       <div class="audit-result-section">
         <div class="audit-section-header" onclick="toggleAuditSection(this)">
           <div class="audit-section-left"><span>🔍</span><span class="audit-section-title">SEO</span></div>
-          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-mid">A ameliorer</span><span class="audit-chevron">▼</span></div>
+          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-mid">À améliorer</span><span class="audit-chevron">▼</span></div>
         </div>
         <div class="audit-section-body">
           <p>Meta description présente, mais peu de mots-clés locaux détectés.</p>
@@ -990,7 +990,7 @@ function afficherAudit(audit, url) {
   document.getElementById('auditScoreSummary').textContent=audit.resume||'';
   const container=document.getElementById('auditSections'); container.innerHTML='';
   (audit.sections||[]).forEach((s,i)=>{
-    const bc=s.score==='Tres bon'?'abadge-excellent':s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
+    const bc=s.score==='Très bon'?'abadge-excellent':s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
     const div=document.createElement('div'); div.className='audit-result-section';
     div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p></div>`;
     container.appendChild(div);
