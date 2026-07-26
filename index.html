@@ -121,6 +121,7 @@
     .nav-links a:hover { color: var(--white); }
     .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
     .nav-cta:hover { background: var(--ouf-cta-hover); }
+    .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .5rem; }
 
     /* HERO */
     .hero { background: var(--cream); padding: clamp(3.5rem,7vw,5.5rem) clamp(1.25rem,5vw,3rem); position: relative; overflow: hidden; }
@@ -401,7 +402,10 @@
     .btn-acta-ghost:hover { border-color:rgba(255,255,255,.7); }
 
     @media (max-width: 768px) {
-      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--nuit); flex-direction: column; gap: 1.1rem; padding: 1.25rem clamp(1.25rem,5vw,3rem) 1.5rem; box-shadow: 0 8px 16px rgba(0,0,0,.15); }
+      .nav-links.open { display: flex; }
+      .nav-links .nav-cta { display: inline-block; width: fit-content; }
       .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid,.proof-grid { grid-template-columns: 1fr; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
       .audit-url-row { flex-direction:column; }
@@ -431,6 +435,7 @@
     </svg>
     <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
   </a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
   <ul class="nav-links">
     <li><a href="#diagnostics-overview">Par où commencer ?</a></li>
     <li><a href="#solutions-ia">Ce que je peux faire</a></li>
@@ -612,12 +617,12 @@
       </div>
       <div id="auditSections"></div>
       <div class="audit-email-box" id="auditEmailBox" style="display:none;">
-        <h4>📩 Recevoir mon audit par email</h4>
-        <p>Votre rapport complet, mis en page et prêt à partager — gratuitement.</p>
+        <h4>📩 Votre rapport complet vous attend</h4>
+        <p>Le détail par critère (design, contenu, SEO, conversion, mobile) et vos 3 actions prioritaires sont prêts — indiquez votre prénom et votre email pour les recevoir immédiatement, gratuitement.</p>
         <div class="audit-email-fields">
           <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
           <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
-          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Envoyer →</button>
+          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Recevoir mon rapport →</button>
         </div>
         <div class="audit-email-error" id="auditEmailError"></div>
         <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
@@ -988,29 +993,15 @@ function afficherAudit(audit, url) {
   document.getElementById('auditSiteUrl').textContent=url;
   document.getElementById('auditScoreTitre').textContent=audit.titre_diagnostic||'';
   document.getElementById('auditScoreSummary').textContent=audit.resume||'';
-  const container=document.getElementById('auditSections'); container.innerHTML='';
-  (audit.sections||[]).forEach((s,i)=>{
-    const bc=s.score==='Très bon'?'abadge-excellent':s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
-    const div=document.createElement('div'); div.className='audit-result-section';
-    div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p></div>`;
-    container.appendChild(div);
-  });
-  if (audit.points_forts||audit.priorites) {
-    const sd=document.createElement('div'); sd.className='audit-result-section';
-    const pfH=(audit.points_forts||[]).map(p=>`<li>${p}</li>`).join('');
-    const prH=(audit.priorites||[]).map(p=>`<li>${p}</li>`).join('');
-    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''}</div>`;
-    container.appendChild(sd);
-  }
 
-  const cta=document.getElementById('auditCta'); cta.style.display='block';
-  // Afficher directement le bloc email, cacher le CTA séparé
+  // Le détail (sections, points forts, priorités) n'est volontairement PAS affiché ici :
+  // seul l'aperçu (score + titre + résumé) est visible sur la page. Le rapport complet
+  // n'est envoyé que par email, une fois le prénom et l'email renseignés — c'est ce qui
+  // force une vraie capture de contact plutôt qu'une simple option facultative.
+  document.getElementById('auditSections').innerHTML = '';
+
   document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditCta').style.display = 'none';
-
-  // Stocker la prochaine étape pour l'email
-  const etape = audit.prochaine_etape || '';
-  document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditResults').classList.add('visible');
   document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -1035,7 +1026,8 @@ async function envoyerRapport() {
     const result = await resp.json();
     if (result.error) throw new Error(result.error);
     document.getElementById('auditEmailSuccess').style.display = 'block';
-    btn.style.display = 'none';
+    document.querySelector('.audit-email-fields').style.display = 'none';
+    document.querySelector('#auditEmailBox p').style.display = 'none';
   } catch(err) {
     errEl.textContent = 'Erreur d\'envoi : ' + err.message;
     errEl.style.display = 'block';
