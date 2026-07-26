@@ -162,7 +162,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, warning: 'Email non envoyé : clé Resend manquante' });
     }
 
-    const OWNER_EMAIL = process.env.OWNER_EMAIL || ' chicouf@free.fr';
+    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'contact.chicouf@free.fr';
 
     // 3a. Email au visiteur : son rapport d'audit complet et personnalisé
     const resendResp = await fetch('https://api.resend.com/emails', {
@@ -186,10 +186,12 @@ export default async function handler(req, res) {
     if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
 
     // 3b. Notification interne : Sandrine est prévenue à chaque demande d'audit,
-    // que l'email au visiteur ait réussi ou non ci-dessus.
+    // que l'email au visiteur ait réussi ou non ci-dessus. Elle reçoit un résumé
+    // rapide EN PLUS d'une copie intégrale du rapport envoyé au visiteur (le même
+    // contenu HTML), pour pouvoir vérifier exactement ce que chaque prospect a reçu.
     try {
       const notifHtml = `<!DOCTYPE html><html lang="fr"><body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#F8F7F4;padding:24px;">
-        <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #E8E6E1;">
+        <div style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #E8E6E1;">
           <p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2D1F6E;">🔔 Nouvelle demande d'audit de site</p>
           <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Prénom :</strong> ${prenom_display}</p>
           <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Email :</strong> ${email}</p>
@@ -198,7 +200,13 @@ export default async function handler(req, res) {
           <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Package recommandé :</strong> ${packageReco}</p>
           ${solIa ? `<p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Solution IA suggérée :</strong> ${solIa.titre} (${solIa.prix})</p>` : ''}
         </div>
+        <div style="max-width:580px;margin:16px auto 0;">
+          <p style="text-align:center;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A8A8A;margin-bottom:8px;">👇 Copie exacte du rapport envoyé au visiteur</p>
+        </div>
       </body></html>`;
+
+      // On assemble : le résumé ci-dessus, puis le rapport complet (même HTML que le visiteur a reçu)
+      const notifHtmlComplet = notifHtml.replace('</html>', '') + html.replace(/^[\s\S]*?<body[^>]*>/i, '').replace(/<\/body>[\s\S]*$/i, '') + '</body></html>';
 
       const notifResp = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -211,7 +219,7 @@ export default async function handler(req, res) {
           to: [OWNER_EMAIL],
           reply_to: email,
           subject: `🔔 Demande d'audit — ${prenom_display} (${url})`,
-          html: notifHtml
+          html: notifHtmlComplet
         })
       });
       const notifResult = await notifResp.json();
