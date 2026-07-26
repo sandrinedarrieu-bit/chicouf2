@@ -130,15 +130,10 @@ export default async function handler(req, res) {
     <p style="font-size:13px;font-weight:700;color:#2D1F6E;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">3 actions prioritaires</p>
     <ul style="margin:0;padding-left:18px;">${prioritesHtml}</ul>
   </div>
-  ${packageReco !== 'À définir' ? `<div style="margin:0 32px 8px;background:#F5F0FF;border-radius:10px;padding:14px 18px;">
-    <p style="margin:0;font-size:13px;color:#7B5CF0;font-weight:600;">💡 ${packageReco} — la prochaine étape recommandée</p>
-    <p style="margin:4px 0 0;font-size:13px;color:#555;">${etape}</p>
-  </div>` : ''}
-  ${solutionIaHtml}
   <div style="margin:8px 32px 32px;background:#2C2C3E;border-radius:12px;padding:24px;text-align:center;">
     <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#fff;">Parlons de votre projet</p>
     <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,.6);">30 minutes offertes pour transformer ces recommandations en plan d'action.</p>
-    <a href="https://calendly.com/votre-lien-ici" style="display:inline-block;background:#7B5CF0;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Réserver un créneau gratuit</a>
+    <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" style="display:inline-block;background:#7B5CF0;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Réserver un créneau gratuit</a>
   </div>
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
     <p style="margin:0;font-size:11px;color:#AAAAAA;">CHIC OUF · Sandrine Darrieu · Consultante No-Code & IA · Brunoy, Île-de-France</p>
