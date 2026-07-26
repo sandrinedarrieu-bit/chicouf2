@@ -220,10 +220,7 @@
     /* APROPOS */
     #apropos { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,3rem); }
     .apropos-inner { max-width: var(--max); margin: 0 auto; }
-    .apropos-bio { display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; align-items: center; margin: 2.5rem 0 3rem; background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 2rem; }
-    .apropos-photo { width: 100%; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; }
-    .apropos-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .apropos-photo-placeholder { text-align: center; color: var(--ouf); font-size: .8rem; padding: 1rem; line-height: 1.5; }
+    .apropos-bio { margin: 2.5rem 0 3rem; background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 2rem; }
     .apropos-bio-text p { font-size: .975rem; color: var(--body); line-height: 1.75; margin-bottom: 1rem; }
     .apropos-bio-text p:last-child { margin-bottom: 0; }
     .apropos-bio-signature { font-family: 'Georgia', serif; font-style: italic; color: var(--chic); font-size: .95rem; margin-top: 1.25rem !important; }
@@ -357,8 +354,6 @@
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid,.proof-grid { grid-template-columns: 1fr; }
-      .apropos-bio { grid-template-columns: 1fr; }
-      .apropos-photo { max-width: 220px; margin: 0 auto; }
       .cape-inner,.contact-inner { gap: 2.5rem; }
       .audit-url-row { flex-direction:column; }
       .audit-score-hero { grid-template-columns:1fr; text-align:center; }
@@ -381,8 +376,8 @@
     <li><a href="#diagnostics-overview">Par où commencer ?</a></li>
     <li><a href="#solutions-ia">Ce que je peux faire</a></li>
     <li><a href="#services">Nos accompagnements</a></li>
-    <li><a href="#cas-usage">Réalisations</a></li>
-    <li><a href="#apropos">Pourquoi CHIC · OUF ?</a></li>
+    <li><a href="#cas-usage">Exemples de projets</a></li>
+    <li><a href="#apropos">Pourquoi CHIC <span style="color:var(--or);">·</span> <span style="color:var(--lilas);">OUF</span> ?</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
 </nav>
@@ -456,17 +451,13 @@
     <h2 class="section-title">Les tâches importantes s'accumulent pendant que les urgences prennent toute la place</h2>
 
     <div class="apropos-bio">
-      <div class="apropos-photo">
-        <!-- Remplace ce bloc par : <img src="assets/sandrine.jpg" alt="Sandrine Darrieu"> -->
-        <div class="apropos-photo-placeholder">📷<br>Ta photo ici<br><span style="opacity:.7;">(assets/sandrine.jpg)</span></div>
-      </div>
       <div class="apropos-bio-text">
         <p>Il est 19 h. La journée est terminée, mais il reste un devis à envoyer, deux clients à relancer, un rendez-vous à confirmer. Ces tâches sont importantes — mais elles passent toujours après les urgences et le cœur de métier. Une relance oubliée peut devenir un client perdu.</p>
-        <p><strong>Chic quand les clients sont là. Ouf quand l'organisation suit.</strong> C'est toute la promesse de CHIC · OUF : vous aider à développer votre activité sans alourdir votre quotidien.</p>
-        <p style="font-family:'Syne',sans-serif;font-weight:800;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC · OUF</p>
+        <p><strong>Chic quand les clients sont là. Ouf quand l'organisation suit.</strong> C'est toute la promesse de CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> : vous aider à développer votre activité sans alourdir votre quotidien.</p>
+        <p style="font-family:'Syne',sans-serif;font-weight:800;color:var(--chic);font-size:1rem;margin:1.5rem 0 .75rem;">Pourquoi j'ai créé CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span></p>
         <p>Après plus de 30 ans dans des structures de taille humaine — EHPAD, espaces associatifs, organismes de formation — j'ai compris que le problème n'était pas le manque d'outils, mais le manque de temps pour les choisir, les paramétrer et les faire fonctionner ensemble. Je prends en charge l'intégralité de chaque mission, de A à Z.</p>
-        <p>C'est pour cela que j'ai créé CHIC · OUF : des accompagnements simples pour organiser votre activité, développer votre visibilité ou préparer un lancement, sans vous obliger à devenir spécialiste des outils numériques.</p>
-        <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC · OUF</p>
+        <p>C'est pour cela que j'ai créé CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> : des accompagnements simples pour organiser votre activité, développer votre visibilité ou préparer un lancement, sans vous obliger à devenir spécialiste des outils numériques.</p>
+        <p class="apropos-bio-signature">— Sandrine Darrieu, fondatrice de CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span></p>
       </div>
     </div>
 
@@ -716,7 +707,7 @@
       <p class="faq-a">Non. La solution vous est livrée prête à l'emploi, avec une documentation claire pour que vous puissiez l'utiliser sans compétence technique préalable.</p>
     </div>
     <div class="faq-item">
-      <p class="faq-q">Vais-je dépendre de CHIC · OUF après la livraison ?</p>
+      <p class="faq-q">Vais-je dépendre de CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> après la livraison ?</p>
       <p class="faq-a">Non. L'objectif est que vous restiez autonome. Un accompagnement complémentaire peut être proposé si vous le souhaitez, mais rien ne vous y oblige.</p>
     </div>
     <div class="faq-item">
@@ -841,7 +832,7 @@ async function lancerAudit() {
             {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
           ],
           points_forts: ['Votre site est en ligne et accessible'],
-          priorites: ['Contactez CHIC · OUF pour un audit approfondi','Réservez un échange gratuit de 30 min'],
+          priorites: ['Contactez CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> pour un audit approfondi','Réservez un échange gratuit de 30 min'],
           prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
         };
       }
