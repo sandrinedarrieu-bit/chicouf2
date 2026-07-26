@@ -33,17 +33,27 @@ export default async function handler(req, res) {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
+    const fetchStart = Date.now();
     const siteResp = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CHICOUF-Audit/1.0)' },
       redirect: 'follow',
       signal: controller.signal
     });
+    const responseTimeMs = Date.now() - fetchStart;
     clearTimeout(timeout);
+
+    // Détection anti-robot (Cloudflare, Sucuri, etc.) : soit via l'en-tête serveur,
+    // soit via les phrases caractéristiques d'une page de challenge/vérification.
+    const serverHeader = (siteResp.headers.get('server') || '').toLowerCase();
+    const hasCfRay = !!siteResp.headers.get('cf-ray');
 
     if (!siteResp.ok) {
       fetchError = `Le site a répondu avec le statut ${siteResp.status}`;
     } else {
       let html = await siteResp.text();
+
+      const botChallengePatterns = /checking your browser|cf-browser-verification|just a moment|verify you are human|attention required|ddos protection by|enable javascript and cookies to continue|are you a robot/i;
+      const looksLikeBotChallenge = (hasCfRay || serverHeader.includes('cloudflare')) && botChallengePatterns.test(html);
 
       // On retire d'abord les blocs explicitement marqués comme des exemples de démo
       // (ex: sur chicouf2.vercel.app lui-même, les exemples de rapport affichés aux
@@ -114,6 +124,8 @@ export default async function handler(req, res) {
         aUnLienMailtoOuTel: hasMailto || hasTel,
         aUnTitreH1: hasH1,
         schemaJsonLdTypes: ldJsonTypes,
+        tempsReponseMs: responseTimeMs,
+        ressembleABlocageAntiRobot: looksLikeBotChallenge,
         longueurTexteVisible: textLength,
         // Si le texte extrait est très court, le site est probablement une
         // application JS (React/Vue) dont le contenu réel n'est pas dans le
@@ -138,6 +150,8 @@ CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE sour
 - Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
 - Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
 - Schéma structuré JSON-LD déjà présent sur la page : ${siteExtract.schemaJsonLdTypes.length ? `oui (types : ${siteExtract.schemaJsonLdTypes.join(', ')})` : 'non'}
+- Temps de réponse mesuré du serveur (pas le chargement complet avec images/CSS, juste la réponse HTML) : ${siteExtract.tempsReponseMs} ms
+${siteExtract.ressembleABlocageAntiRobot ? "- ATTENTION CRITIQUE : cette page ressemble à une page de vérification anti-robot (Cloudflare ou similaire), pas au vrai contenu du site. Ne fais AUCUNE analyse de design/contenu/SEO/conversion basée sur ce texte : indique dans le resume que l'analyse automatique n'a pas pu accéder au vrai contenu du site (protection anti-robot détectée), mets un score global neutre (5/10) et un score 'A ameliorer' neutre partout, sans inventer de detail." : ''}
 ${siteExtract.probablementSiteDynamiqueJS ? "- ATTENTION : très peu de texte a pu être extrait du HTML brut. Ce site est probablement une application JavaScript (le contenu réel s'affiche après chargement par le navigateur, invisible dans le HTML brut). Dans ce cas, NE JAMAIS affirmer qu'un élément est absent (formulaire, CTA, contenu...) : indique explicitement dans les analyses concernées que ce point n'a pas pu être vérifié automatiquement, avec un score 'À améliorer' neutre plutôt que 'Urgent'." : ''}
 
 Extrait du texte visible de la page (tronqué) :
@@ -145,7 +159,7 @@ Extrait du texte visible de la page (tronqué) :
 ${siteExtract.extraitTexte || '(aucun texte extrait)'}
 """
 
-RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque. En particulier, si "Schéma structuré JSON-LD déjà présent" indique "oui", ne recommande JAMAIS d'ajouter un schéma structuré ou un type qui figure déjà dans la liste des types détectés (par exemple ne pas recommander d'ajouter "LocalBusiness" si "ProfessionalService" est déjà présent, car ProfessionalService EST un sous-type de LocalBusiness ; ne pas recommander "FAQPage" s'il est déjà dans la liste).`
+RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque. En particulier, si "Schéma structuré JSON-LD déjà présent" indique "oui", ne recommande JAMAIS d'ajouter un schéma structuré ou un type qui figure déjà dans la liste des types détectés (par exemple ne pas recommander d'ajouter "LocalBusiness" si "ProfessionalService" est déjà présent, car ProfessionalService EST un sous-type de LocalBusiness ; ne pas recommander "FAQPage" s'il est déjà dans la liste). Pour la section Mobile ou toute mention de vitesse/performance, utilise le vrai "Temps de réponse mesuré du serveur" fourni ci-dessus (cite le chiffre en ms) plutôt que de suggérer vaguement de "tester la vitesse de chargement" — tu as déjà la donnée réelle, sers-t'en.`
     : `
 
 ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "À améliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
