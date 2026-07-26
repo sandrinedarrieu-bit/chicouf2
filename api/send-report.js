@@ -148,6 +148,7 @@ export default async function handler(req, res) {
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
     <p style="margin:0;font-size:11px;color:#AAAAAA;"><span style="color:#2D1F6E;font-weight:700;">CHIC</span> <span style="color:#F59E0B;">·</span> <span style="color:#7B5CF0;font-weight:700;">OUF</span> · Sandrine Darrieu · Consultante en transformation digitale & Product Builder · Brunoy, Île-de-France et à distance partout en France</p>
     <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84</p>
+    <p style="margin:8px 0 0;font-size:10px;color:#BBBBBB;line-height:1.5;">Vous recevez cet email suite à votre demande d'audit sur chicouf2.vercel.app. Vous ne souhaitez pas être recontacté(e) ou plus recevoir d'emails de notre part ? Répondez simplement "STOP" à cet email, ou consultez notre <a href="https://chicouf2.vercel.app/politique-confidentialite.html" style="color:#8A8A8A;">politique de confidentialité</a>.</p>
   </div>
 </div></body></html>`;
 
@@ -174,6 +175,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'CHIC OUF <onboarding@resend.dev>',
         to: [email],
+        cc: [OWNER_EMAIL],
         reply_to: OWNER_EMAIL,
         subject: `Audit de présence en ligne — ${url}`,
         html
@@ -185,53 +187,11 @@ export default async function handler(req, res) {
 
     if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
 
-    // 3b. Notification interne : Sandrine est prévenue à chaque demande d'audit,
-    // que l'email au visiteur ait réussi ou non ci-dessus. Elle reçoit un résumé
-    // rapide EN PLUS d'une copie intégrale du rapport envoyé au visiteur (le même
-    // contenu HTML), pour pouvoir vérifier exactement ce que chaque prospect a reçu.
-    try {
-      const notifHtml = `<!DOCTYPE html><html lang="fr"><body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#F8F7F4;padding:24px;">
-        <div style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;padding:24px;border:1px solid #E8E6E1;">
-          <p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2D1F6E;">🔔 Nouvelle demande d'audit de site</p>
-          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Prénom :</strong> ${prenom_display}</p>
-          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Email :</strong> ${email}</p>
-          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Site analysé :</strong> ${url}</p>
-          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Score :</strong> ${audit.score_global}/10 (${audit.niveau})</p>
-          <p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Package recommandé :</strong> ${packageReco}</p>
-          ${solIa ? `<p style="margin:0 0 6px;font-size:14px;color:#3D3D3D;"><strong>Solution IA suggérée :</strong> ${solIa.titre} (${solIa.prix})</p>` : ''}
-        </div>
-        <div style="max-width:580px;margin:16px auto 0;">
-          <p style="text-align:center;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8A8A8A;margin-bottom:8px;">👇 Copie exacte du rapport envoyé au visiteur</p>
-        </div>
-      </body></html>`;
-
-      // On assemble : le résumé ci-dessus, puis le rapport complet (même HTML que le visiteur a reçu)
-      const notifHtmlComplet = notifHtml.replace('</html>', '') + html.replace(/^[\s\S]*?<body[^>]*>/i, '').replace(/<\/body>[\s\S]*$/i, '') + '</body></html>';
-
-      const notifResp = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
-        },
-        body: JSON.stringify({
-          from: 'CHIC OUF <onboarding@resend.dev>',
-          to: [OWNER_EMAIL],
-          reply_to: email,
-          subject: `🔔 Demande d'audit — ${prenom_display} (${url})`,
-          html: notifHtmlComplet
-        })
-      });
-      const notifResult = await notifResp.json();
-      if (notifResult.error) {
-        console.error('Notification interne non envoyée :', notifResult.error);
-      } else {
-        console.log('Notification interne envoyée à', OWNER_EMAIL);
-      }
-    } catch (notifErr) {
-      // Ne bloque jamais la réponse au visiteur si la notification interne échoue
-      console.error('Erreur notification interne :', notifErr.message);
-    }
+    // Simplification : la copie pour Sandrine se fait désormais via le "cc" ajouté
+    // directement sur l'envoi ci-dessus (même email, un seul envoi, donc pas de
+    // second point de défaillance possible). Le résumé (score, package recommandé,
+    // solution IA) reste disponible dans Airtable pour le suivi CRM.
+    console.log('Copie envoyée en CC à', OWNER_EMAIL, '- Score:', audit.score_global, '- Package:', packageReco);
 
     return res.status(200).json({ success: true });
 
