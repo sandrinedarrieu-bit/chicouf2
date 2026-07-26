@@ -154,7 +154,9 @@ IMPORTANT - Adapte ton vocabulaire au type de structure que tu detectes :
 ${siteContentBlock}
 
 Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par champ) :
-{"score_global":<1-10>,"niveau":"Faible|Moyen|Bon|Tres bon","titre_diagnostic":"<titre encourageant>","resume":"<1 phrase bienveillante>","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"}],"points_forts":["<pf1>","<pf2>"],"priorites":["<p1>","<p2>","<p3>"],"type_structure":"association|entreprise"${proInstructions}}`;
+{"score_global":<1-10>,"niveau":"Faible|Moyen|Bon|Tres bon","titre_diagnostic":"<titre encourageant>","resume":"<1 phrase bienveillante>","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Tres bon|Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce, ou si score Tres bon: encouragement a maintenir, sans forcer une critique artificielle>"}],"points_forts":["<pf1>","<pf2>"],"priorites":["<p1>","<p2>","<p3>"],"type_structure":"association|entreprise"${proInstructions}}
+
+IMPORTANT sur la notation : "Tres bon" est un score legitime et pleinement valide pour une section, a utiliser des que ce critere est reellement solide et sans point faible reel detectable dans le contenu fourni. N'evite pas ce score par reflexe pour "avoir quelque chose a dire" : il n'est pas obligatoire de trouver une critique constructive artificielle quand tout va bien. Une section peut etre "Tres bon" avec un simple encouragement a maintenir en reco, sans qu'il y ait besoin d'inventer un axe d'amelioration mineur.`;
 
   const fallback = {
     score_global: 5, niveau: 'Analyse partielle',
@@ -222,6 +224,7 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       const getScore = (id) => {
         const s = getSection(id);
         if (!s) return 1;
+        if (s.score === 'Tres bon') return -1;
         if (s.score === 'Bon') return 0;
         if (s.score === 'Urgent') return 2;
         return 1;
