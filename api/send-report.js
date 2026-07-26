@@ -112,7 +112,9 @@ export default async function handler(req, res) {
 <body style="margin:0;padding:0;background:#F8F7F4;font-family:'Helvetica Neue',Arial,sans-serif;">
 <div style="max-width:580px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
   <div style="background:#2C2C3E;padding:28px 32px;text-align:center;">
-    <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
+    <a href="https://chicouf2.vercel.app/" style="text-decoration:none;">
+      <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
+    </a>
     <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#CACACF;">Rapport d'audit · Présence en ligne</p>
   </div>
   <div style="padding:28px 32px 0;">
@@ -144,10 +146,11 @@ export default async function handler(req, res) {
     <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#fff;">Parlons de votre projet</p>
     <p style="margin:0 0 16px;font-size:13px;color:#ABABB2;">30 minutes offertes pour transformer ces recommandations en plan d'action.</p>
     <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" style="display:inline-block;background:#7B5CF0;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Réserver un créneau gratuit</a>
+    <p style="margin:10px 0 0;font-size:11px;color:#96969E;">ou copiez ce lien : <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" style="color:#A78BFA;">calendly.com/sandrine-darrieu/meeting-chic-ouf</a></p>
   </div>
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
     <p style="margin:0;font-size:11px;color:#AAAAAA;"><span style="color:#2D1F6E;font-weight:700;">CHIC</span> <span style="color:#F59E0B;">·</span> <span style="color:#7B5CF0;font-weight:700;">OUF</span> · Sandrine Darrieu · Consultante en transformation digitale & Product Builder · Brunoy, Île-de-France et à distance partout en France</p>
-    <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84</p>
+    <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84 · 🌐 <a href="https://chicouf2.vercel.app/" style="color:#7B5CF0;text-decoration:none;">chicouf2.vercel.app</a></p>
     <p style="margin:8px 0 0;font-size:10px;color:#BBBBBB;line-height:1.5;">Vous recevez cet email suite à votre demande d'audit sur chicouf2.vercel.app. Vous ne souhaitez pas être recontacté(e) ou plus recevoir d'emails de notre part ? Répondez simplement "STOP" à cet email, ou consultez notre <a href="https://chicouf2.vercel.app/politique-confidentialite.html" style="color:#8A8A8A;">politique de confidentialité</a>.</p>
   </div>
 </div></body></html>`;
