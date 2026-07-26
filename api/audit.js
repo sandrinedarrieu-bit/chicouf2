@@ -22,6 +22,98 @@ export default async function handler(req, res) {
     conversion: { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site restructuré autour de CTAs clairs et d'un parcours de conversion optimisé." }
   };
 
+  // ── Récupération réelle du contenu du site ─────────────────────────────
+  // Sans ça, le modèle analysait uniquement la chaîne de caractères de l'URL
+  // et inventait une analyse plausible mais non fondée (ex: "pas de formulaire
+  // de contact visible" sur un site qui en a un). On va chercher le vrai HTML,
+  // et on en extrait des signaux fiables (calculés en code, pas par le modèle)
+  // en plus d'un texte lisible pour l'analyse qualitative.
+  let siteExtract = null;
+  let fetchError = null;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const siteResp = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CHICOUF-Audit/1.0)' },
+      redirect: 'follow',
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!siteResp.ok) {
+      fetchError = `Le site a répondu avec le statut ${siteResp.status}`;
+    } else {
+      const html = await siteResp.text();
+
+      const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+      const descMatch = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
+      const viewportMatch = /<meta[^>]+name=["']viewport["']/i.test(html);
+
+      // Signaux détectés en code (fiables), pas laissés à l'appréciation du modèle.
+      // On élargit volontairement la détection de "formulaire" au-delà de la balise
+      // <form> native, car beaucoup de sites (dont celui de CHIC OUF) gèrent l'envoi
+      // en JavaScript (onclick) sans jamais utiliser de vraie balise <form>.
+      const hasForm = /<form[\s>]/i.test(html)
+        || /type=["']email["']/i.test(html)
+        || /<textarea/i.test(html)
+        || /type=["']submit["']/i.test(html);
+      const hasMailto = /mailto:/i.test(html);
+      const hasTel = /href=["']tel:/i.test(html);
+      const hasH1 = /<h1[\s>]/i.test(html);
+
+      // Texte lisible : on retire scripts/styles/balises, on compresse les espaces
+      let text = html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<!--[\s\S]*?-->/g, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const textLength = text.length;
+      text = text.slice(0, 6000);
+
+      siteExtract = {
+        titre: titleMatch ? titleMatch[1].trim() : '',
+        description: descMatch ? descMatch[1].trim() : '',
+        aUnViewportMobile: viewportMatch,
+        aUnFormulaire: hasForm,
+        aUnLienMailtoOuTel: hasMailto || hasTel,
+        aUnTitreH1: hasH1,
+        longueurTexteVisible: textLength,
+        // Si le texte extrait est très court, le site est probablement une
+        // application JS (React/Vue) dont le contenu réel n'est pas dans le
+        // HTML brut : on le signale plutôt que de laisser le modèle deviner.
+        probablementSiteDynamiqueJS: textLength < 200,
+        extraitTexte: text
+      };
+    }
+  } catch (err) {
+    fetchError = err.name === 'AbortError' ? 'Le site a mis trop de temps à répondre' : err.message;
+  }
+
+  const siteContentBlock = siteExtract
+    ? `
+
+CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE source de vérité) :
+- Titre de la page : ${siteExtract.titre || '(non trouvé)'}
+- Meta description : ${siteExtract.description || '(non trouvée)'}
+- Balise viewport mobile présente : ${siteExtract.aUnViewportMobile ? 'oui' : 'non'}
+- Un moyen de contact (formulaire, champ email/message, ou lien mailto/tel) est présent : ${siteExtract.aUnFormulaire ? 'oui' : 'non'}
+- Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
+- Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
+${siteExtract.probablementSiteDynamiqueJS ? "- ATTENTION : très peu de texte a pu être extrait du HTML brut. Ce site est probablement une application JavaScript (le contenu réel s'affiche après chargement par le navigateur, invisible dans le HTML brut). Dans ce cas, NE JAMAIS affirmer qu'un élément est absent (formulaire, CTA, contenu...) : indique explicitement dans les analyses concernées que ce point n'a pas pu être vérifié automatiquement, avec un score 'A ameliorer' neutre plutôt que 'Urgent'." : ''}
+
+Extrait du texte visible de la page (tronqué) :
+"""
+${siteExtract.extraitTexte || '(aucun texte extrait)'}
+"""
+
+RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque.`
+    : `
+
+ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "A ameliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
+
   const prompt = `Analyse ce site: ${url}${contextBlock}
 Tu representes CHIC OUF, une consultante qui propose 2 services pour TPE, artisans ET associations :
 - Package 1 "Relation client/adherents" : CRM no-code, automatisation des relances, formulaires, tableau de bord, onboarding
@@ -30,6 +122,7 @@ Tu representes CHIC OUF, une consultante qui propose 2 services pour TPE, artisa
 IMPORTANT - Adapte ton vocabulaire au type de structure que tu detectes :
 - Si c'est une ASSOCIATION (mots-cles: association, adherents, benevoles, lien social, gratuit, don, cotisation) : utilise "adherents", "benevoles", "participants", "activites", JAMAIS "clients", "leads", "offres commerciales", "conversion de prospects". Le Package 1 sert a suivre adherents/benevoles, le Package 2 sert a communiquer sur les evenements et activites.
 - Si c'est une ENTREPRISE/TPE/artisan : tu peux utiliser "clients", "prospects", "conversion" normalement.
+${siteContentBlock}
 
 Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par champ) :
 {"score_global":<1-10>,"niveau":"Faible|Moyen|Bon|Tres bon","titre_diagnostic":"<titre encourageant>","resume":"<1 phrase bienveillante>","sections":[{"id":"design","icon":"🎨","titre":"Design","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"contenu","icon":"✍️","titre":"Contenu","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"seo","icon":"🔍","titre":"SEO","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"conversion","icon":"🎯","titre":"Conversion","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"},{"id":"mobile","icon":"📱","titre":"Mobile","score":"Bon|A ameliorer|Urgent","analyse":"<1 phrase valorisante>","reco":"<1 invitation douce>"}],"points_forts":["<pf1>","<pf2>"],"priorites":["<p1>","<p2>","<p3>"],"type_structure":"association|entreprise"${proInstructions}}`;
