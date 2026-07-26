@@ -43,7 +43,14 @@ export default async function handler(req, res) {
     if (!siteResp.ok) {
       fetchError = `Le site a répondu avec le statut ${siteResp.status}`;
     } else {
-      const html = await siteResp.text();
+      let html = await siteResp.text();
+
+      // On retire d'abord les blocs explicitement marqués comme des exemples de démo
+      // (ex: sur chicouf2.vercel.app lui-même, les exemples de rapport affichés aux
+      // visiteurs). Sans ça, ces exemples fictifs seraient lus comme du vrai contenu
+      // du site et fausseraient l'analyse (ex: un exemple "Urgent" de démo ferait
+      // baisser le score réel du site qui l'affiche).
+      html = html.replace(/<!--\s*AUDIT_EXTRACT_IGNORE_START[\s\S]*?-->[\s\S]*?<!--\s*AUDIT_EXTRACT_IGNORE_END\s*-->/g, ' ');
 
       const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
       const descMatch = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
