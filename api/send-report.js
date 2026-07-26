@@ -103,7 +103,7 @@ export default async function handler(req, res) {
 <div style="max-width:580px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
   <div style="background:#2C2C3E;padding:28px 32px;text-align:center;">
     <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
-    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);">Rapport d'audit · Présence en ligne</p>
+    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#CACACF;">Rapport d'audit · Présence en ligne</p>
   </div>
   <div style="padding:28px 32px 0;">
     <p style="font-size:15px;color:#3D3D3D;">${prenom_display},</p>
@@ -132,7 +132,7 @@ export default async function handler(req, res) {
   </div>
   <div style="margin:8px 32px 32px;background:#2C2C3E;border-radius:12px;padding:24px;text-align:center;">
     <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#fff;">Parlons de votre projet</p>
-    <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,.6);">30 minutes offertes pour transformer ces recommandations en plan d'action.</p>
+    <p style="margin:0 0 16px;font-size:13px;color:#ABABB2;">30 minutes offertes pour transformer ces recommandations en plan d'action.</p>
     <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" style="display:inline-block;background:#7B5CF0;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Réserver un créneau gratuit</a>
   </div>
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
