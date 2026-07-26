@@ -153,6 +153,10 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
+        // temperature à 0 : pour un même contenu de site (inchangé entre deux tests),
+        // on veut un résultat stable plutôt qu'un score qui varie aléatoirement
+        // d'un passage à l'autre sur les catégories limites (ex: Bon vs Très bon).
+        temperature: 0,
         system: 'Tu es un expert en presence en ligne pour TPE francaises. Reponds UNIQUEMENT en JSON valide, sans markdown, sans backticks.',
         messages: [{ role: 'user', content: prompt }]
       })
