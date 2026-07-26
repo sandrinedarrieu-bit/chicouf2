@@ -61,6 +61,22 @@ export default async function handler(req, res) {
       const hasTel = /href=["']tel:/i.test(html);
       const hasH1 = /<h1[\s>]/i.test(html);
 
+      // Schéma structuré (JSON-LD) : on l'extrait et on le signale explicitement
+      // AVANT de le retirer du texte lisible plus bas. Sans ça, le modèle ne peut
+      // jamais savoir qu'un schéma existe déjà (il est invisible dans le texte
+      // visible), et recommande à tort d'en ajouter un qui est déjà en place.
+      const ldJsonBlocks = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+        .map(m => m[1]);
+      const ldJsonTypes = [];
+      for (const block of ldJsonBlocks) {
+        try {
+          const parsed = JSON.parse(block);
+          const t = parsed['@type'];
+          if (Array.isArray(t)) ldJsonTypes.push(...t);
+          else if (t) ldJsonTypes.push(t);
+        } catch (e) { /* bloc JSON-LD malformé, on l'ignore silencieusement */ }
+      }
+
       // Texte lisible : on retire scripts/styles/balises, on compresse les espaces
       let text = html
         .replace(/<script[\s\S]*?<\/script>/gi, ' ')
@@ -80,6 +96,7 @@ export default async function handler(req, res) {
         aUnFormulaire: hasForm,
         aUnLienMailtoOuTel: hasMailto || hasTel,
         aUnTitreH1: hasH1,
+        schemaJsonLdTypes: ldJsonTypes,
         longueurTexteVisible: textLength,
         // Si le texte extrait est très court, le site est probablement une
         // application JS (React/Vue) dont le contenu réel n'est pas dans le
@@ -102,6 +119,7 @@ CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE sour
 - Un moyen de contact (formulaire, champ email/message, ou lien mailto/tel) est présent : ${siteExtract.aUnFormulaire ? 'oui' : 'non'}
 - Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
 - Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
+- Schéma structuré JSON-LD déjà présent sur la page : ${siteExtract.schemaJsonLdTypes.length ? `oui (types : ${siteExtract.schemaJsonLdTypes.join(', ')})` : 'non'}
 ${siteExtract.probablementSiteDynamiqueJS ? "- ATTENTION : très peu de texte a pu être extrait du HTML brut. Ce site est probablement une application JavaScript (le contenu réel s'affiche après chargement par le navigateur, invisible dans le HTML brut). Dans ce cas, NE JAMAIS affirmer qu'un élément est absent (formulaire, CTA, contenu...) : indique explicitement dans les analyses concernées que ce point n'a pas pu être vérifié automatiquement, avec un score 'A ameliorer' neutre plutôt que 'Urgent'." : ''}
 
 Extrait du texte visible de la page (tronqué) :
@@ -109,7 +127,7 @@ Extrait du texte visible de la page (tronqué) :
 ${siteExtract.extraitTexte || '(aucun texte extrait)'}
 """
 
-RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque.`
+RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus. N'invente jamais un constat (ex: "pas de formulaire visible") qui contredit les signaux détectés automatiquement (ex: "Formulaire HTML détecté : oui"). Si une information n'est pas vérifiable dans ce contenu, dis-le prudemment plutôt que d'affirmer un manque. En particulier, si "Schéma structuré JSON-LD déjà présent" indique "oui", ne recommande JAMAIS d'ajouter un schéma structuré ou un type qui figure déjà dans la liste des types détectés (par exemple ne pas recommander d'ajouter "LocalBusiness" si "ProfessionalService" est déjà présent, car ProfessionalService EST un sous-type de LocalBusiness ; ne pas recommander "FAQPage" s'il est déjà dans la liste).`
     : `
 
 ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "A ameliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
