@@ -67,6 +67,11 @@ export default async function handler(req, res) {
       const hasMailto = /mailto:/i.test(html);
       const hasTel = /href=["']tel:/i.test(html);
       const hasH1 = /<h1[\s>]/i.test(html);
+      // Un formulaire de contact est très souvent embarqué via un service tiers
+      // dans un <iframe> (Jotform, Typeform, module CMS...) : dans ce cas le HTML
+      // brut de la page ne contient que la balise iframe, pas le vrai formulaire.
+      // On le signale pour éviter d'affirmer à tort qu'aucun formulaire n'existe.
+      const hasIframe = /<iframe[\s>]/i.test(html);
 
       // Schéma structuré (JSON-LD) : on l'extrait et on le signale explicitement
       // AVANT de le retirer du texte lisible plus bas. Sans ça, le modèle ne peut
@@ -105,6 +110,7 @@ export default async function handler(req, res) {
         description: descMatch ? descMatch[1].trim() : '',
         aUnViewportMobile: viewportMatch,
         aUnFormulaire: hasForm,
+        aUnIframe: hasIframe,
         aUnLienMailtoOuTel: hasMailto || hasTel,
         aUnTitreH1: hasH1,
         schemaJsonLdTypes: ldJsonTypes,
@@ -128,6 +134,7 @@ CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE sour
 - Meta description : ${siteExtract.description || '(non trouvée)'}
 - Balise viewport mobile présente : ${siteExtract.aUnViewportMobile ? 'oui' : 'non'}
 - Un moyen de contact (formulaire, champ email/message, ou lien mailto/tel) est présent : ${siteExtract.aUnFormulaire ? 'oui' : 'non'}
+- Un iframe est présent sur la page : ${siteExtract.aUnIframe ? 'oui' : 'non'}${siteExtract.aUnIframe && !siteExtract.aUnFormulaire ? " — ATTENTION : un iframe est présent mais aucun formulaire n'est détecté dans le HTML brut. Un iframe peut charger un formulaire de contact hébergé par un service tiers (Jotform, Typeform, module CMS...), invisible dans ce HTML. NE PAS affirmer categoriquement l'absence de formulaire de contact dans ce cas : indique plutôt que ce point n'a pas pu être vérifié automatiquement, avec un score neutre ('Bon' ou 'A ameliorer') plutôt que d'affirmer un manque comme certain." : ''}
 - Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
 - Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
 - Schéma structuré JSON-LD déjà présent sur la page : ${siteExtract.schemaJsonLdTypes.length ? `oui (types : ${siteExtract.schemaJsonLdTypes.join(', ')})` : 'non'}
