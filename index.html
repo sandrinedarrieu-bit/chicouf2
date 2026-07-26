@@ -747,6 +747,8 @@
 
     <div class="contact-form" id="formWrapper">
       <h3>Envoyez-moi un message</h3>
+      <!-- Honeypot anti-spam : invisible pour un visiteur humain, souvent rempli par les robots -->
+      <input type="text" id="website" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <div class="form-row">
         <div class="form-group"><label for="prenom">Prénom *</label><input type="text" id="prenom" placeholder="Marie" /></div>
         <div class="form-group"><label for="nom">Nom *</label><input type="text" id="nom" placeholder="Dupont" /></div>
@@ -933,6 +935,7 @@ async function handleSubmit() {
   const structure = document.getElementById('structure').value.trim();
   const interet = document.getElementById('interet').value;
   const message = document.getElementById('message').value.trim();
+  const website = document.getElementById('website').value.trim(); // honeypot
   if (!prenom || !email) { alert('Merci de renseigner au minimum votre prénom et votre email.'); return; }
 
   const btn = document.querySelector('.form-submit');
@@ -942,15 +945,16 @@ async function handleSubmit() {
   errEl.style.display = 'none';
 
   try {
-    const resp = await fetch('https://hook.eu1.make.com/vca8gxk9px1lhajkc4hv66dawntolahk', {
+    const resp = await fetch('/api/contact', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ prenom, nom, email, structure, interet, message, source: 'chicouf2.vercel.app', date: new Date().toISOString() })
+      body: JSON.stringify({ prenom, nom, email, structure, interet, message, website })
     });
+    const data = await resp.json().catch(() => ({}));
     if (!resp.ok) {
-      throw new Error('Réponse invalide de Make (statut ' + resp.status + ')');
+      throw new Error(data.error || ('Réponse invalide (statut ' + resp.status + ')'));
     }
-    // Succès confirmé par Make
+    // Succès confirmé par le serveur
     btn.disabled = false; btn.textContent = originalText;
     document.getElementById('formWrapper').style.display = 'none';
     const s = document.getElementById('formSuccess');
