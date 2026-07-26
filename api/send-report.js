@@ -12,7 +12,17 @@ export default async function handler(req, res) {
     if (!email || !audit) return res.status(400).json({ error: 'Données manquantes' });
 
     const scoreEmoji = audit.score_global >= 7 ? '🟢' : audit.score_global >= 5 ? '🟡' : '🔴';
-    const prenom_display = prenom || 'Bonjour';
+    // Mise en forme du prénom saisi (ex: "sandrine" -> "Sandrine", "jean-pierre" -> "Jean-Pierre"),
+    // au cas où le visiteur l'ait tapé tout en minuscules.
+    const formatPrenom = (str) => {
+      if (!str) return str;
+      return str
+        .toLowerCase()
+        .split(/([\s-])/)
+        .map(part => /^[\s-]$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
+    };
+    const prenom_display = prenom ? formatPrenom(prenom) : 'Bonjour';
 
     const etape = audit.prochaine_etape || audit.offre_recommandee || '';
     let packageReco = 'À définir';
@@ -57,7 +67,7 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             records: [{
               fields: {
-                'fld7tEbc6J5HMDmhh': prenom || '',
+                'fld7tEbc6J5HMDmhh': prenom_display !== 'Bonjour' ? prenom_display : '',
                 'fldgmi96dhLgaN5h1': email,
                 'fldHDiQol01sJ7M49': url || '',
                 'fldJLI4dys1YxMU7L': audit.score_global || 0,
