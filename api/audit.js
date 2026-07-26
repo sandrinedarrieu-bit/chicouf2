@@ -83,6 +83,61 @@ export default async function handler(req, res) {
       // On le signale pour éviter d'affirmer à tort qu'aucun formulaire n'existe.
       const hasIframe = /<iframe[\s>]/i.test(html);
 
+      // Beaucoup de sites vitrines répartissent l'info utile sur plusieurs pages
+      // (Contact, Services/Prestations, À propos) plutôt que sur la seule page
+      // d'accueil. Pour éviter des faux constats ("pas de formulaire", jugement
+      // hâtif sur le contenu) et enrichir la vraie analyse, on va chercher un lien
+      // évident vers chacune de ces pages et on les vérifie aussi, dans la limite
+      // de 3 pages annexes max et 5s chacune, pour rester rapide.
+      const pagesAnnexesConfig = [
+        { label: 'Contact', motsCles: 'contact' },
+        { label: 'Services/Prestations', motsCles: 'service|prestation' },
+        { label: 'À propos', motsCles: 'apropos|a-propos|about|qui-sommes' }
+      ];
+      const pagesAnnexesVerifiees = [];
+      let hasFormSurPageAnnexe = false;
+      let texteSupplémentaire = '';
+
+      for (const page of pagesAnnexesConfig) {
+        const regex = new RegExp(`<a[^>]+href=["']([^"']*(?:${page.motsCles})[^"']*)["']`, 'i');
+        const linkMatch = html.match(regex);
+        if (!linkMatch) continue;
+        try {
+          const pageUrl = new URL(linkMatch[1], url).toString();
+          if (pageUrl === url) continue; // évite de re-fetcher la même page que l'accueil
+          const pageController = new AbortController();
+          const pageTimeout = setTimeout(() => pageController.abort(), 5000);
+          const pageResp = await fetch(pageUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CHICOUF-Audit/1.0)' },
+            redirect: 'follow',
+            signal: pageController.signal
+          });
+          clearTimeout(pageTimeout);
+          if (!pageResp.ok) continue;
+          const pageHtml = await pageResp.text();
+          const pageHasForm = /<form[\s>]/i.test(pageHtml)
+            || /type=["']email["']/i.test(pageHtml)
+            || /<textarea/i.test(pageHtml)
+            || /type=["']submit["']/i.test(pageHtml);
+          if (pageHasForm) hasFormSurPageAnnexe = true;
+
+          const pageText = pageHtml
+            .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<!--[\s\S]*?-->/g, ' ')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          texteSupplémentaire += `\n\n[Page "${page.label}" — ${pageUrl}]\n${pageText.slice(0, 3000)}`;
+
+          pagesAnnexesVerifiees.push({ label: page.label, url: pageUrl, aUnFormulaire: pageHasForm });
+        } catch (e) {
+          // Page annexe inaccessible : on continue simplement sans bloquer l'analyse principale
+        }
+      }
+      const hasFormOnContactPage = hasFormSurPageAnnexe; // conservé pour compatibilité
+      const contactPageChecked = pagesAnnexesVerifiees.find(p => p.label === 'Contact')?.url || null;
+
       // Schéma structuré (JSON-LD) : on l'extrait et on le signale explicitement
       // AVANT de le retirer du texte lisible plus bas. Sans ça, le modèle ne peut
       // jamais savoir qu'un schéma existe déjà (il est invisible dans le texte
@@ -113,13 +168,18 @@ export default async function handler(req, res) {
       // d'une page comme celle de CHIC OUF dépasse largement 6000 caractères,
       // ce qui coupait avant la section contact et perdait des informations
       // réelles (ex: mots-clés locaux) sans que le modèle ne le sache.
-      text = text.slice(0, 15000);
+      // On ajoute aussi le texte des pages annexes (Contact/Services/À propos)
+      // trouvées ci-dessus, pour une analyse plus complète que la seule page d'accueil.
+      text = (text + texteSupplémentaire).slice(0, 15000);
 
       siteExtract = {
         titre: titleMatch ? titleMatch[1].trim() : '',
         description: descMatch ? descMatch[1].trim() : '',
         aUnViewportMobile: viewportMatch,
         aUnFormulaire: hasForm,
+        aUnFormulaireSurPageContact: hasFormOnContactPage,
+        pageContactVerifiee: contactPageChecked,
+        pagesAnnexesVerifiees,
         aUnIframe: hasIframe,
         aUnLienMailtoOuTel: hasMailto || hasTel,
         aUnTitreH1: hasH1,
@@ -145,7 +205,8 @@ CONTENU RÉEL DU SITE (récupéré automatiquement, à utiliser comme SEULE sour
 - Titre de la page : ${siteExtract.titre || '(non trouvé)'}
 - Meta description : ${siteExtract.description || '(non trouvée)'}
 - Balise viewport mobile présente : ${siteExtract.aUnViewportMobile ? 'oui' : 'non'}
-- Un moyen de contact (formulaire, champ email/message, ou lien mailto/tel) est présent : ${siteExtract.aUnFormulaire ? 'oui' : 'non'}
+- Un moyen de contact (formulaire, champ email/message, ou lien mailto/tel) est présent sur la page d'accueil : ${siteExtract.aUnFormulaire ? 'oui' : 'non'}
+${siteExtract.pagesAnnexesVerifiees && siteExtract.pagesAnnexesVerifiees.length ? `- Pages annexes également vérifiées automatiquement : ${siteExtract.pagesAnnexesVerifiees.map(p => `${p.label} (${p.url}) — formulaire ${p.aUnFormulaire ? 'présent' : 'non détecté'}`).join(' ; ')}. IMPORTANT : le texte de ces pages est inclus dans l'extrait ci-dessous, utilise-le pour ton analyse. Si un formulaire est présent sur une page annexe (ex: Contact) mais pas sur l'accueil, ne dis JAMAIS qu'il n'y a "aucun formulaire de contact sur le site" — précise plutôt qu'il se trouve sur cette page dédiée, ce qui est une pratique courante et non problématique.` : ''}
 - Un iframe est présent sur la page : ${siteExtract.aUnIframe ? 'oui' : 'non'}${siteExtract.aUnIframe && !siteExtract.aUnFormulaire ? " — ATTENTION : un iframe est présent mais aucun formulaire n'est détecté dans le HTML brut. Un iframe peut charger un formulaire de contact hébergé par un service tiers (Jotform, Typeform, module CMS...), invisible dans ce HTML. NE PAS affirmer categoriquement l'absence de formulaire de contact dans ce cas : indique plutôt que ce point n'a pas pu être vérifié automatiquement, avec un score neutre ('Bon' ou 'A ameliorer') plutôt que d'affirmer un manque comme certain." : ''}
 - Lien mailto ou tel détecté : ${siteExtract.aUnLienMailtoOuTel ? 'oui' : 'non'}
 - Titre H1 présent : ${siteExtract.aUnTitreH1 ? 'oui' : 'non'}
