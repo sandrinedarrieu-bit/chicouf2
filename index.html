@@ -33,7 +33,7 @@
     "telephone": "+33756925984",
     "image": "https://chicouf2.vercel.app/og-image.png",
     "priceRange": "490€ - 690€",
-    "areaServed": ["Brunoy", "Île-de-France", "France"],
+    "areaServed": ["Brunoy", "Yerres", "Boussy-Saint-Antoine", "Épinay-sous-Sénart", "Île-de-France", "France"],
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Brunoy",
@@ -92,6 +92,8 @@
       --nuit:     #2C2C3E;
       --chic:     #2D1F6E;
       --ouf:      #7B5CF0;
+      --ouf-cta:  #5F3AE0;
+      --ouf-cta-hover: #522FC7;
       --lilas:    #A78BFA;
       --lilas-l:  #F5F0FF;
       --or:       #F59E0B;
@@ -117,8 +119,8 @@
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
     .nav-links a:hover { color: var(--white); }
-    .nav-cta { background: var(--ouf); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: opacity .2s !important; }
-    .nav-cta:hover { opacity: .85; }
+    .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
+    .nav-cta:hover { background: var(--ouf-cta-hover); }
 
     /* HERO */
     .hero { background: var(--cream); padding: clamp(3.5rem,7vw,5.5rem) clamp(1.25rem,5vw,3rem); position: relative; overflow: hidden; }
@@ -192,7 +194,8 @@
     .diag-card .diag-icon { font-size: 1.6rem; margin-bottom: .75rem; }
     .diag-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
     .diag-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; min-height: 3.2rem; }
-    .diag-card a { display: block; background: var(--ouf); color: var(--white); padding: .75rem; border-radius: 10px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+    .diag-card a { display: block; background: var(--ouf-cta); color: var(--white); padding: .75rem; border-radius: 10px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: background .2s; }
+    .diag-card a:hover { background: var(--ouf-cta-hover); }
     .diag-card a:hover { opacity: .88; }
 
     /* CAS D'USAGE */
@@ -208,7 +211,8 @@
     .usecase-card p { font-size: .875rem; color: var(--body); line-height: 1.65; }
     .usecases-cta { max-width: var(--max-wide); margin: 2.5rem auto 0; background: var(--chic); border-radius: 18px; padding: 2rem; text-align: center; }
     .usecases-cta p { color: rgba(255,255,255,.75); font-size: 1rem; margin-bottom: 1.1rem; }
-    .usecases-cta a { display: inline-block; background: var(--ouf); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+    .usecases-cta a { display: inline-block; background: var(--ouf-cta); color: var(--white); padding: .85rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: background .2s; }
+    .usecases-cta a:hover { background: var(--ouf-cta-hover); }
     .usecases-cta a:hover { opacity: .88; }
     .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: var(--max-wide); margin: 0 auto; }
     .proof-card { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.6rem; }
@@ -242,7 +246,8 @@
     .tarif-btn { display: block; text-align: center; padding: .7rem; border-radius: 8px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: opacity .2s, background .2s; }
     .tarif-btn-outline { border: 1.5px solid var(--ouf); color: var(--ouf); }
     .tarif-btn-outline:hover { background: var(--lilas-l); }
-    .tarif-btn-fill { background: var(--ouf); color: #fff; }
+    .tarif-btn-fill { background: var(--ouf-cta); color: #fff; }
+    .tarif-btn-fill:hover { background: var(--ouf-cta-hover); }
     .tarif-btn-fill:hover { opacity: .85; }
     .tarif-btn-dark { background: var(--chic); color: #fff; }
     .tarif-btn-dark:hover { opacity: .85; }
@@ -280,7 +285,8 @@
     .contact-left > p { color: var(--body); font-size: .975rem; margin-bottom: 2rem; line-height: 1.7; }
     .rdv-box { background: var(--lilas-l); border: 1px solid rgba(123,92,240,.3); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
     .rdv-box p { color: var(--chic); font-size: .9rem; margin-bottom: 1rem; }
-    .btn-calendly { display: inline-flex; align-items: center; gap: .5rem; background: var(--ouf); color: var(--white); padding: .8rem 1.5rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+    .btn-calendly { display: inline-flex; align-items: center; gap: .5rem; background: var(--ouf-cta); color: var(--white); padding: .8rem 1.5rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: background .2s; }
+    .btn-calendly:hover { background: var(--ouf-cta-hover); }
     .btn-calendly:hover { opacity: .85; }
     .btn-calendly svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
     .contact-hint { color: var(--muted); font-size: .82rem; }
@@ -293,8 +299,8 @@
     .form-group input,.form-group select,.form-group textarea { border: 1px solid #E0DDD8; border-radius: 8px; padding: .7rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .9rem; color: var(--body); background: var(--cream); outline: none; transition: border-color .2s, box-shadow .2s; }
     .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color: var(--ouf); box-shadow: 0 0 0 3px rgba(123,92,240,.12); }
     .form-group textarea { resize: vertical; min-height: 110px; }
-    .form-submit { width: 100%; background: var(--ouf); color: var(--white); border: none; padding: .95rem; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; cursor: pointer; transition: opacity .2s, transform .15s; }
-    .form-submit:hover { opacity: .88; transform: translateY(-1px); }
+    .form-submit { width: 100%; background: var(--ouf-cta); color: var(--white); border: none; padding: .95rem; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; cursor: pointer; transition: background .2s, transform .15s; }
+    .form-submit:hover { background: var(--ouf-cta-hover); transform: translateY(-1px); }
     .form-note { font-size: .78rem; color: var(--muted); text-align: center; margin-top: .75rem; }
     .form-error { display:none; background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.3); color:#B91C1C; font-size:.85rem; text-align:center; padding:.75rem 1rem; border-radius:8px; margin-top:.75rem; }
     .form-success { display: none; text-align: center; padding: 2.5rem 1.5rem; }
@@ -318,8 +324,8 @@
     .audit-url-input { flex:1; border:1.5px solid #E0DDD8; border-radius:10px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--body); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; }
     .audit-url-input:focus { border-color:var(--ouf); box-shadow:0 0 0 3px rgba(123,92,240,.12); }
     .audit-url-input::placeholder { color:#C5C2BD; }
-    .btn-audit { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
-    .btn-audit:hover { opacity:.88; transform:translateY(-1px); }
+    .btn-audit { background:var(--ouf-cta); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:background .2s,transform .15s; }
+    .btn-audit:hover { background:var(--ouf-cta-hover); transform:translateY(-1px); }
     .btn-audit:disabled { opacity:.45; cursor:not-allowed; transform:none; }
     .audit-pro-extras { display:none; margin-top:1rem; border-top:1px solid #E8E6E1; padding-top:1rem; }
     .audit-pro-extras.visible { display:block; }
@@ -400,6 +406,16 @@
       .audit-url-row { flex-direction:column; }
       .audit-score-hero { grid-template-columns:1fr; text-align:center; }
       .audit-score-circle { margin:0 auto; }
+    }
+
+    /* Petits écrans (ex. iPhone SE, 375px et moins) : on resserre les paddings
+       pour que les formulaires (contact + audit) gardent une zone de saisie
+       confortable au lieu d'être écrasés par des marges pensées pour desktop. */
+    @media (max-width: 380px) {
+      .contact-form { padding: 1.5rem 1.25rem; }
+      .audit-input-card { padding: 1.25rem; }
+      .audit-url-row .btn-audit, .audit-url-row .audit-url-input { width: 100%; }
+      .form-row { gap: .75rem; }
     }
   </style>
 </head>
@@ -776,7 +792,7 @@
           Réserver un créneau
         </a>
       </div>
-      <p class="contact-hint">📍 Brunoy, Île-de-France · Interventions en présentiel et à distance</p>
+      <p class="contact-hint">📍 Brunoy, Yerres, Boussy-Saint-Antoine, Épinay-sous-Sénart (Essonne) · Interventions en présentiel et à distance dans toute la France</p>
       <p class="contact-hint" style="margin-top:.5rem;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84</p>
     </div>
 
@@ -823,7 +839,7 @@
   <div class="footer-brand">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></div>
   <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en transformation digitale &amp; Product Builder no-code · Brunoy, Île-de-France</p>
   <p style="margin-top:.35rem;">contact.chicouf@free.fr · 07 56 92 59 84 · chicouf2.vercel.app</p>
-  <p style="margin-top:.5rem;"><a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a> · <a href="#audit">Audit de site gratuit</a> · <a href="https://www.linkedin.com/company/chic-ouf2/" target="_blank" rel="noopener">LinkedIn</a></p>
+  <p style="margin-top:.5rem;"><a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a> · <a href="#audit">Audit de site gratuit</a> · <a href="https://www.linkedin.com/company/chic-ouf2/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://g.page/r/Cbc8yUVNiILQEAE/review" target="_blank" rel="noopener">⭐ Laisser un avis Google</a></p>
   <p style="margin-top:.5rem;"><a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
 </footer>
 
