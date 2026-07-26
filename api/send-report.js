@@ -175,6 +175,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'CHIC OUF <audit@chicouf.edukia.site>',
         to: [email],
+        cc: [OWNER_EMAIL],
         reply_to: OWNER_EMAIL,
         subject: `Audit de présence en ligne — ${url}`,
         html
