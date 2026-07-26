@@ -270,9 +270,6 @@
     /* ── AUDIT SECTION ─────────────────────────────── */
     #audit { padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
     .audit-inner { max-width: 760px; margin: 0 auto; }
-    .audit-toggle { display:flex; max-width:320px; margin:0 auto 2rem; background:#F0EDE8; border-radius:999px; padding:4px; }
-    .audit-mode-btn { flex:1; padding:.5rem 1rem; border:none; border-radius:999px; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:500; cursor:pointer; transition:background .2s,color .2s; background:transparent; color:var(--muted); }
-    .audit-mode-btn.active { background:var(--ouf); color:var(--white); }
     .audit-input-card { background:var(--cream); border-radius:16px; padding:2rem; border:1px solid #E8E6E1; margin-bottom:1.5rem; }
     .audit-input-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--chic); margin-bottom:.3rem; }
     .audit-input-card p { font-size:.85rem; color:var(--muted); margin-bottom:1.1rem; }
@@ -324,8 +321,6 @@
     .audit-section-body.open { max-height:500px; padding:0 1.25rem 1.25rem; }
     .audit-section-body p { font-size:.875rem; color:var(--body); line-height:1.7; margin-bottom:.65rem; }
     .audit-section-body p:last-child { margin-bottom:0; }
-    .audit-pro-block { display:none; background:rgba(123,92,240,.06); border-left:3px solid var(--ouf); padding:.85rem 1rem; margin-top:.65rem; border-radius:0 8px 8px 0; }
-    .audit-pro-block.visible { display:block; }
     .audit-pro-label { font-size:.7rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ouf); margin-bottom:.35rem; }
     .audit-reco-list { list-style:none; display:flex; flex-direction:column; gap:.5rem; margin-top:.4rem; }
     .audit-reco-list li { display:flex; gap:.55rem; align-items:flex-start; font-size:.85rem; }
@@ -485,21 +480,12 @@
 <!-- AUDIT -->
 <section id="audit">
   <div class="audit-inner">
-    <div class="audit-toggle">
-      <button class="audit-mode-btn active" id="aBtnClient" onclick="setAuditMode('client')">👤 Mon site</button>
-      <button class="audit-mode-btn" id="aBtnPro" onclick="setAuditMode('pro')">🔍 Mode pro</button>
-    </div>
-
     <div class="audit-input-card">
       <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
       <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
       <div class="audit-url-row">
         <input type="url" class="audit-url-input" id="auditUrl" placeholder="https://www.monsite.fr" />
         <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
-      </div>
-      <div class="audit-pro-extras" id="auditProExtras">
-        <label>Contexte (optionnel)</label>
-        <textarea id="auditContext" placeholder="Ex : restaurant familial en Normandie, cible touristes et locaux…"></textarea>
       </div>
     </div>
 
@@ -806,22 +792,11 @@
 
 <script>
 // ── AUDIT ──────────────────────────────────────────────
-let auditMode = 'client';
 const auditStepMessages = ["Lecture du site…","Analyse design & structure…","Évaluation contenu & SEO…","Génération des recommandations…"];
-
-function setAuditMode(mode) {
-  auditMode = mode;
-  document.getElementById('aBtnClient').classList.toggle('active', mode==='client');
-  document.getElementById('aBtnPro').classList.toggle('active', mode==='pro');
-  document.getElementById('auditProExtras').classList.toggle('visible', mode==='pro');
-  document.getElementById('auditInputTitle').textContent = mode==='pro' ? 'Analyser un site prospect' : 'Analysez votre site gratuitement';
-  document.getElementById('auditInputSub').textContent = mode==='pro' ? 'Entrez l\'URL du site à auditer. Ajoutez du contexte pour des recommandations commerciales précises.' : 'Entrez l\'adresse de votre site pour recevoir un audit de présence en ligne.';
-  document.querySelectorAll('.audit-pro-block').forEach(b => b.classList.toggle('visible', mode==='pro'));
-}
 
 async function lancerAudit() {
   const url = document.getElementById('auditUrl').value.trim();
-  const context = document.getElementById('auditContext').value.trim();
+  const context = '';
   if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
     showAuditError("Merci d'entrer une URL valide commençant par https://"); return;
   }
@@ -835,7 +810,7 @@ async function lancerAudit() {
   auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1800); });
 
   try {
-    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context, mode:auditMode})});
+    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context})});
     const respText = await resp.text();
     let audit;
     try {
@@ -892,14 +867,14 @@ function afficherAudit(audit, url) {
   (audit.sections||[]).forEach((s,i)=>{
     const bc=s.score==='Bon'?'abadge-good':s.score==='Urgent'?'abadge-bad':'abadge-mid';
     const div=document.createElement('div'); div.className='audit-result-section';
-    div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p>${auditMode==='pro'&&s.id==='conversion'&&audit.angle_commercial?`<div class="audit-pro-block visible"><div class="audit-pro-label">💼 Angle commercial</div><p>${audit.angle_commercial}</p></div>`:''}</div>`;
+    div.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>${s.icon}</span><span class="audit-section-title">${s.titre}</span></div><div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge ${bc}">${s.score}</span><span class="audit-chevron">▼</span></div></div><div class="audit-section-body ${i===0?'open':''}"><p>${s.analyse}</p><p><strong>→ À faire :</strong> ${s.reco}</p></div>`;
     container.appendChild(div);
   });
   if (audit.points_forts||audit.priorites) {
     const sd=document.createElement('div'); sd.className='audit-result-section';
     const pfH=(audit.points_forts||[]).map(p=>`<li>${p}</li>`).join('');
     const prH=(audit.priorites||[]).map(p=>`<li>${p}</li>`).join('');
-    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''} ${auditMode==='pro'&&audit.offre_recommandee?`<div class="audit-pro-block visible" style="margin-top:.75rem;"><div class="audit-pro-label">💼 Offre recommandée</div><p>${audit.offre_recommandee}</p></div>`:''}</div>`;
+    sd.innerHTML=`<div class="audit-section-header" onclick="toggleAuditSection(this)"><div class="audit-section-left"><span>📋</span><span class="audit-section-title">Synthèse & Priorités</span></div><span class="audit-chevron">▼</span></div><div class="audit-section-body open">${pfH?`<p><strong>Points forts :</strong></p><ul class="audit-reco-list">${pfH}</ul>`:''} ${prH?`<p style="margin-top:.75rem;"><strong>3 actions prioritaires :</strong></p><ul class="audit-reco-list">${prH}</ul>`:''}</div>`;
     container.appendChild(sd);
   }
 
@@ -909,9 +884,7 @@ function afficherAudit(audit, url) {
   document.getElementById('auditCta').style.display = 'none';
 
   // Stocker la prochaine étape pour l'email
-  const etape = auditMode==='pro'
-    ? (audit.angle_commercial || '')
-    : (audit.prochaine_etape || '');
+  const etape = audit.prochaine_etape || '';
   document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditResults').classList.add('visible');
   document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
