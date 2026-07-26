@@ -87,7 +87,11 @@ export default async function handler(req, res) {
         .trim();
 
       const textLength = text.length;
-      text = text.slice(0, 6000);
+      // Limite portée à 15000 caractères (au lieu de 6000) : le texte visible
+      // d'une page comme celle de CHIC OUF dépasse largement 6000 caractères,
+      // ce qui coupait avant la section contact et perdait des informations
+      // réelles (ex: mots-clés locaux) sans que le modèle ne le sache.
+      text = text.slice(0, 15000);
 
       siteExtract = {
         titre: titleMatch ? titleMatch[1].trim() : '',
