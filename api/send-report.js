@@ -84,8 +84,8 @@ export default async function handler(req, res) {
 
     // ── 2. EMAIL HTML ────────────────────────────────
     const sectionsHtml = (audit.sections || []).map(s => {
-      const color = s.score === 'Bon' ? '#16A34A' : s.score === 'Urgent' ? '#DC2626' : '#D97706';
-      const bg    = s.score === 'Bon' ? '#F0FDF4' : s.score === 'Urgent' ? '#FEF2F2' : '#FFFBEB';
+      const color = s.score === 'Très bon' ? '#15803D' : s.score === 'Bon' ? '#16A34A' : s.score === 'Urgent' ? '#DC2626' : '#D97706';
+      const bg    = s.score === 'Très bon' ? '#DCFCE7' : s.score === 'Bon' ? '#F0FDF4' : s.score === 'Urgent' ? '#FEF2F2' : '#FFFBEB';
       return `<tr><td style="padding:12px 16px;border-bottom:1px solid #F0EDE8;">
         <div style="margin-bottom:4px;"><span>${s.icon}</span> <strong style="color:#2D1F6E;font-size:14px;">${s.titre}</strong>
         <span style="float:right;background:${bg};color:${color};font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;">${s.score}</span></div>
@@ -103,7 +103,7 @@ export default async function handler(req, res) {
 <div style="max-width:580px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
   <div style="background:#2C2C3E;padding:28px 32px;text-align:center;">
     <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
-    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);">Rapport d'audit · Présence en ligne</p>
+    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);">Rapport d'audit · Présence en ligne</p>
   </div>
   <div style="padding:28px 32px 0;">
     <p style="font-size:15px;color:#3D3D3D;">${prenom_display},</p>
@@ -136,7 +136,8 @@ export default async function handler(req, res) {
     <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" style="display:inline-block;background:#7B5CF0;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Réserver un créneau gratuit</a>
   </div>
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
-    <p style="margin:0;font-size:11px;color:#AAAAAA;">CHIC OUF · Sandrine Darrieu · Consultante No-Code & IA · Brunoy, Île-de-France</p>
+    <p style="margin:0;font-size:11px;color:#AAAAAA;"><span style="color:#2D1F6E;font-weight:700;">CHIC</span> <span style="color:#F59E0B;">·</span> <span style="color:#7B5CF0;font-weight:700;">OUF</span> · Sandrine Darrieu · Consultante en transformation digitale & Product Builder · Brunoy, Île-de-France et à distance partout en France</p>
+    <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84</p>
   </div>
 </div></body></html>`;
 
