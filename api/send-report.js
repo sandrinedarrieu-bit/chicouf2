@@ -173,7 +173,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
       },
       body: JSON.stringify({
-        from: 'CHIC OUF <onboarding@resend.dev>',
+        from: 'CHIC OUF <audit@chicouf.edukia.site>',
         to: [email],
         reply_to: OWNER_EMAIL,
         subject: `Audit de présence en ligne — ${url}`,
