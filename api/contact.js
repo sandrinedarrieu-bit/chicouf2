@@ -71,7 +71,7 @@ export default async function handler(req, res) {
         structure: String(structure || '').slice(0, 200),
         interet: String(interet || '').slice(0, 200),
         message: String(message || '').slice(0, 3000),
-        source: 'chicouf2.vercel.app',
+        source: 'www.chicouf.pro',
         date: new Date().toISOString()
       })
     });
