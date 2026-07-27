@@ -342,7 +342,8 @@
     @keyframes auditSpin { to { transform:rotate(360deg); } }
     .audit-loading p { color:var(--muted); font-size:.88rem; }
     .audit-steps { margin-top:.75rem; display:flex; flex-direction:column; gap:.35rem; align-items:center; }
-    .audit-step { font-size:.8rem; color:var(--ouf); opacity:1; }
+    .audit-step { font-size:.8rem; color:var(--ouf); opacity:0; animation:auditFade .4s forwards; }
+    @keyframes auditFade { to { opacity:1; } }
     #auditResults { display:none; }
     #auditResults.visible { display:block; }
     .audit-score-hero { background:var(--chic); border-radius:16px; padding:1.75rem; margin-bottom:1.25rem; display:grid; grid-template-columns:auto 1fr; gap:1.25rem; align-items:center; }
@@ -547,9 +548,53 @@
       </div>
     </div>
 
+    <div class="audit-error" id="auditError"></div>
+
+    <div class="audit-loading" id="auditLoading">
+      <div class="audit-spinner"></div>
+      <p>Analyse en cours…</p>
+      <div class="audit-steps" id="auditSteps"></div>
+    </div>
+
+    <div id="auditResults">
+      <div class="audit-score-hero">
+        <div class="audit-score-circle" id="auditScoreCircle">
+          <span class="snum" id="auditScoreNum">--</span>
+          <span class="sden">/10</span>
+        </div>
+        <div class="audit-score-info">
+          <div class="audit-score-url" id="auditSiteUrl"></div>
+          <h4 id="auditScoreTitre"></h4>
+          <p class="audit-score-summary" id="auditScoreSummary"></p>
+        </div>
+      </div>
+      <div id="auditSections"></div>
+      <div class="audit-email-box" id="auditEmailBox" style="display:none;">
+        <h4>📩 Votre rapport complet vous attend</h4>
+        <p>Le détail par critère (design, contenu, SEO, conversion, mobile) et vos 3 actions prioritaires sont prêts — indiquez votre prénom et votre email pour les recevoir immédiatement, gratuitement.</p>
+        <div class="audit-email-fields">
+          <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
+          <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
+          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Recevoir mon rapport →</button>
+        </div>
+        <div class="audit-email-error" id="auditEmailError"></div>
+        <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
+      </div>
+      <div class="audit-cta" id="auditCta" style="display:none;">
+        <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
+        <p id="auditCtaSub"></p>
+        <div class="audit-cta-actions">
+          <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
+          <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
+        </div>
+        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
+      </div>
+    </div>
+
     <!-- AUDIT_EXTRACT_IGNORE_START : ce bloc est un exemple fictif de démo, il ne doit jamais être lu par l'outil d'audit lui-même -->
     <!-- Exemple statique (données fictives), pour montrer à quoi ressemble le rapport avant de le demander -->
-    <div style="margin-bottom:2rem;">
+    <div style="margin-top:2rem;">
       <p style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ouf-cta);margin-bottom:.75rem;">📋 Exemple de rapport reçu (données fictives)</p>
       <div class="audit-score-hero">
         <div class="audit-score-circle ascore-b">
@@ -594,50 +639,6 @@
       <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:.9rem;">👆 Voici le type de retour détaillé que vous recevrez sur <strong style="color:var(--chic);">votre</strong> site, gratuitement et par email.</p>
     </div>
     <!-- AUDIT_EXTRACT_IGNORE_END -->
-
-    <div class="audit-error" id="auditError"></div>
-
-    <div class="audit-loading" id="auditLoading">
-      <div class="audit-spinner"></div>
-      <p>Analyse en cours…</p>
-      <div class="audit-steps" id="auditSteps"></div>
-    </div>
-
-    <div id="auditResults">
-      <div class="audit-score-hero">
-        <div class="audit-score-circle" id="auditScoreCircle">
-          <span class="snum" id="auditScoreNum">--</span>
-          <span class="sden">/10</span>
-        </div>
-        <div class="audit-score-info">
-          <div class="audit-score-url" id="auditSiteUrl"></div>
-          <h4 id="auditScoreTitre"></h4>
-          <p class="audit-score-summary" id="auditScoreSummary"></p>
-        </div>
-      </div>
-      <div id="auditSections"></div>
-      <div class="audit-email-box" id="auditEmailBox" style="display:none;">
-        <h4>📩 Votre rapport complet vous attend</h4>
-        <p>Le détail par critère (design, contenu, SEO, conversion, mobile) et vos 3 actions prioritaires sont prêts — indiquez votre prénom et votre email pour les recevoir immédiatement, gratuitement.</p>
-        <div class="audit-email-fields">
-          <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
-          <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
-          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Recevoir mon rapport →</button>
-        </div>
-        <div class="audit-email-error" id="auditEmailError"></div>
-        <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
-        <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
-      </div>
-      <div class="audit-cta" id="auditCta" style="display:none;">
-        <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
-        <p id="auditCtaSub"></p>
-        <div class="audit-cta-actions">
-          <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
-          <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
-        </div>
-        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -941,6 +942,7 @@ async function lancerAudit() {
   document.getElementById('auditSections').innerHTML='';
   document.getElementById('auditCta').style.display='none';
   document.getElementById('auditLoading').classList.add('visible');
+  document.getElementById('auditLoading').scrollIntoView({behavior:'smooth',block:'center'});
   document.getElementById('btnAudit').disabled=true;
   const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
   auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*3000); });
