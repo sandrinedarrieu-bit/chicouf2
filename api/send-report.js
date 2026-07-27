@@ -112,7 +112,7 @@ export default async function handler(req, res) {
 <body style="margin:0;padding:0;background:#F8F7F4;font-family:'Helvetica Neue',Arial,sans-serif;">
 <div style="max-width:580px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
   <div style="background:#2C2C3E;padding:28px 32px;text-align:center;">
-    <a href="https://chicouf2.vercel.app/" style="text-decoration:none;">
+    <a href="https://www.chicouf.pro/" style="text-decoration:none;">
       <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
     </a>
     <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#CACACF;">Rapport d'audit · Présence en ligne</p>
@@ -150,8 +150,8 @@ export default async function handler(req, res) {
   </div>
   <div style="padding:16px 32px;border-top:1px solid #F0EDE8;text-align:center;">
     <p style="margin:0;font-size:11px;color:#AAAAAA;"><span style="color:#2D1F6E;font-weight:700;">CHIC</span> <span style="color:#F59E0B;">·</span> <span style="color:#7B5CF0;font-weight:700;">OUF</span> · Sandrine Darrieu · Consultante en transformation digitale & Product Builder · Brunoy, Île-de-France et à distance partout en France</p>
-    <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact.chicouf@free.fr · 📞 07 56 92 59 84 · 🌐 <a href="https://chicouf2.vercel.app/" style="color:#7B5CF0;text-decoration:none;">chicouf2.vercel.app</a></p>
-    <p style="margin:8px 0 0;font-size:10px;color:#BBBBBB;line-height:1.5;">Vous recevez cet email suite à votre demande d'audit sur chicouf2.vercel.app. Vous ne souhaitez pas être recontacté(e) ou plus recevoir d'emails de notre part ? Répondez simplement "STOP" à cet email, ou consultez notre <a href="https://chicouf2.vercel.app/politique-confidentialite.html" style="color:#8A8A8A;">politique de confidentialité</a>.</p>
+    <p style="margin:4px 0 0;font-size:11px;color:#AAAAAA;">📧 contact@chicouf.pro · 📞 07 56 92 59 84 · 🌐 <a href="https://www.chicouf.pro/" style="color:#7B5CF0;text-decoration:none;">www.chicouf.pro</a></p>
+    <p style="margin:8px 0 0;font-size:10px;color:#BBBBBB;line-height:1.5;">Vous recevez cet email suite à votre demande d'audit sur www.chicouf.pro. Vous ne souhaitez pas être recontacté(e) ou plus recevoir d'emails de notre part ? Répondez simplement "STOP" à cet email, ou consultez notre <a href="https://www.chicouf.pro/politique-confidentialite.html" style="color:#8A8A8A;">politique de confidentialité</a>.</p>
   </div>
 </div></body></html>`;
 
@@ -166,7 +166,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, warning: 'Email non envoyé : clé Resend manquante' });
     }
 
-    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'contact.chicouf@free.fr';
+    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'contact@chicouf.pro';
 
     // 3a. Email au visiteur : son rapport d'audit complet et personnalisé
     const resendResp = await fetch('https://api.resend.com/emails', {
