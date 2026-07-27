@@ -923,7 +923,7 @@
 
 <script>
 // ── AUDIT ──────────────────────────────────────────────
-const auditStepMessages = ["Lecture du site…","Analyse design & structure…","Évaluation contenu & SEO…","Génération des recommandations…"];
+const auditStepMessages = ["Lecture du site…","Vérification des pages liées (contact, services)…","Analyse design & structure…","Évaluation contenu & SEO…","Vérification du référencement…","Génération des recommandations…","Finalisation du rapport…"];
 
 async function lancerAudit() {
   let url = document.getElementById('auditUrl').value.trim();
@@ -944,7 +944,17 @@ async function lancerAudit() {
   document.getElementById('auditLoading').classList.add('visible');
   document.getElementById('btnAudit').disabled=true;
   const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
-  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1800); });
+  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*3000); });
+  // Si l'analyse dépasse la durée des messages ci-dessus (site avec plusieurs pages
+  // annexes à vérifier), on affiche un message rassurant qui reste visible plutôt
+  // que de laisser l'écran de chargement figé sans rien de nouveau.
+  setTimeout(()=>{
+    if (document.getElementById('auditLoading').classList.contains('visible')) {
+      const el=document.createElement('div'); el.className='audit-step'; el.id='auditStepStillWorking';
+      el.textContent='Toujours en cours, certains sites prennent un peu plus de temps…';
+      stepsEl.appendChild(el);
+    }
+  }, auditStepMessages.length*3000 + 1000);
 
   try {
     const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context})});
