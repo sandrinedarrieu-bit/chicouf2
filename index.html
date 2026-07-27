@@ -107,6 +107,7 @@
     }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 90px !important; }
+    html, body { overflow-x: hidden; max-width: 100%; }
     body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
 
     /* NAV */
@@ -538,6 +539,15 @@
 <section id="audit">
   <div class="audit-inner">
 
+    <div class="audit-input-card">
+      <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
+      <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
+      <div class="audit-url-row">
+        <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
+        <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
+      </div>
+    </div>
+
     <!-- AUDIT_EXTRACT_IGNORE_START : ce bloc est un exemple fictif de démo, il ne doit jamais être lu par l'outil d'audit lui-même -->
     <!-- Exemple statique (données fictives), pour montrer à quoi ressemble le rapport avant de le demander -->
     <div style="margin-bottom:2rem;">
@@ -585,15 +595,6 @@
       <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:.9rem;">👆 Voici le type de retour détaillé que vous recevrez sur <strong style="color:var(--chic);">votre</strong> site, gratuitement et par email.</p>
     </div>
     <!-- AUDIT_EXTRACT_IGNORE_END -->
-
-    <div class="audit-input-card">
-      <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
-      <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
-      <div class="audit-url-row">
-        <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
-        <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
-      </div>
-    </div>
 
     <div class="audit-error" id="auditError"></div>
 
@@ -1006,10 +1007,29 @@ function afficherAudit(audit, url) {
   // force une vraie capture de contact plutôt qu'une simple option facultative.
   document.getElementById('auditSections').innerHTML = '';
 
+  // Réinitialisation complète du bloc email : si un audit précédent a déjà été
+  // envoyé par email (état "succès" affiché, champs cachés), un nouvel audit doit
+  // repartir de zéro et redemander prénom + email, pas réutiliser silencieusement
+  // l'ancien état.
+  document.getElementById('auditEmailSuccess').style.display = 'none';
+  document.querySelector('.audit-email-fields').style.display = 'flex';
+  document.querySelector('#auditEmailBox p').style.display = 'block';
+  document.getElementById('auditPrenom').value = '';
+  document.getElementById('auditEmail').value = '';
+  document.getElementById('auditEmailError').style.display = 'none';
+  const sendBtn = document.getElementById('btnSendReport');
+  sendBtn.disabled = false;
+  sendBtn.textContent = 'Recevoir mon rapport →';
+
   document.getElementById('auditEmailBox').style.display = 'block';
   document.getElementById('auditCta').style.display = 'none';
   document.getElementById('auditResults').classList.add('visible');
   document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // On vide le champ de recherche : une fois le résultat affiché, l'URL analysée
+  // reste visible dans l'aperçu du score (auditSiteUrl) — inutile de la laisser
+  // dans le champ de saisie, qui doit être prêt pour un éventuel deuxième test.
+  document.getElementById('auditUrl').value = '';
 }
 
 let lastAudit = null;
@@ -1031,13 +1051,14 @@ async function envoyerRapport() {
     });
     const result = await resp.json();
     if (result.error) throw new Error(result.error);
+    document.getElementById('auditEmailSuccess').innerHTML = `✅ Rapport envoyé à <strong>${email}</strong> ! Vérifiez votre boîte mail (et vos spams) dans quelques instants.`;
     document.getElementById('auditEmailSuccess').style.display = 'block';
     document.querySelector('.audit-email-fields').style.display = 'none';
     document.querySelector('#auditEmailBox p').style.display = 'none';
   } catch(err) {
     errEl.textContent = 'Erreur d\'envoi : ' + err.message;
     errEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Envoyer →';
+    btn.disabled = false; btn.textContent = 'Recevoir mon rapport →';
   }
 }
 
