@@ -107,8 +107,8 @@
     }
     html { scroll-behavior: smooth; }
     section[id] { scroll-margin-top: 90px !important; }
-    html, body { overflow-x: hidden; max-width: 100%; }
-    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
+    html { overflow-x: hidden; }
+    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; max-width: 100%; overflow-x: clip; }
 
     /* NAV */
     nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
