@@ -248,8 +248,8 @@ IMPORTANT sur le score_global : le format JSON demande maintenant d'ecrire "sect
 - Exactement 1 section "A ameliorer", le reste Tres bon/Bon : score_global = 8
 - Exactement 1 section "Urgent", le reste Tres bon/Bon : score_global = 6 a 7
 - Exactement 2 sections "A ameliorer" (aucune Urgent) : score_global = 6 a 7
-- 2 sections faibles dont au moins 1 "Urgent" : score_global = 4 a 5
-- 3 sections faibles ou plus (Urgent et/ou A ameliorer) : score_global = 2 a 4
+- 2 sections faibles dont au moins 1 "Urgent" : score_global = 5 EXACTEMENT (jamais en dessous de 5, meme principe que le palier suivant)
+- 3 sections faibles ou plus (Urgent et/ou A ameliorer) : score_global = 5 EXACTEMENT (valeur fixe, pas de fourchette, jamais plus bas ni plus haut - un site avec autant de points faibles reste diplomatiquement note a 5 pour ne pas decourager le prospect, mais jamais au-dessus)
 Respecte cette grille strictement, sans plafond artificiel par prudence et sans y deroger par reflexe de moderation.
 
 IMPORTANT sur "priorites" (action + objectif) : pour chaque priorite, le champ "action" reste la recommandation courte et actionnable comme avant (ex: "Ajoutez un schema structure JSON-LD"). Le nouveau champ "objectif" doit exprimer le BENEFICE CONCRET pour le prospect, jamais une explication technique de comment faire. Formule-le comme un resultat attendu, pas comme une methode. Exemples corrects (a suivre comme modele de ton et de longueur, une seule phrase courte) :
