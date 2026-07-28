@@ -280,14 +280,24 @@ export default async function handler(req, res) {
       return null;
     };
 
+    const CRITERE_LABELS = {
+      CONVERSION: 'Conversion',
+      SEO: 'SEO',
+      MOBILE_PERF: 'Mobile / Performance',
+      PREUVE_SOCIALE: 'Contenu (preuve sociale)',
+      CONTENU_EDITORIAL: 'Contenu (éditorial)',
+      SUIVI_RELANCE: 'Transversal (hors critères du site)'
+    };
+
     const briefRowsHtml = (audit.priorites || []).map(p => {
       const action = typeof p === 'string' ? p : (p?.action || '');
       const objectif = typeof p === 'string' ? '' : (p?.objectif || '');
       const axeId = classifyPriorite(action + ' ' + objectif);
       const axe = axeId ? AXES_CATALOGUE[axeId] : null;
+      const critereLabel = axeId ? CRITERE_LABELS[axeId] : null;
       return `<tr><td style="padding:14px 16px;border-bottom:1px solid #F0EDE8;">
         <p style="margin:0 0 6px;font-size:13px;color:#2D1F6E;font-weight:700;">${action}</p>
-        ${axe ? `<p style="margin:0 0 4px;font-size:13px;color:#3D3D3D;">🔧 <strong>${axe.nom}</strong> — <span style="color:#F59E0B;font-weight:700;">${axe.prix}</span></p>
+        ${axe ? `<p style="margin:0 0 4px;font-size:13px;color:#3D3D3D;">🔧 <strong>${axe.nom}</strong>${critereLabel ? ` <span style="color:#AAAAAA;font-weight:400;">(critère : ${critereLabel})</span>` : ''} — <span style="color:#F59E0B;font-weight:700;">${axe.prix}</span></p>
         <p style="margin:0;font-size:12px;color:#7B5CF0;">${axe.argumentaire}</p>`
         : `<p style="margin:0;font-size:12px;color:#AAAAAA;">Aucun axe du catalogue ne correspond clairement — à évaluer au cas par cas.</p>`}
       </td></tr>`;
