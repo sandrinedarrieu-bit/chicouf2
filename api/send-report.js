@@ -167,7 +167,7 @@ export default async function handler(req, res) {
   <div style="margin:0 32px 20px;background:#FFF8EC;border:1px dashed #F5C77A;border-radius:10px;padding:16px 18px;">
     <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#7A5200;">🔎 Un constat complémentaire</p>
     <p style="margin:0 0 10px;font-size:13px;color:#555;line-height:1.5;">${audit.constat_maturite_ia || 'Au-delà du site, la plupart des TPE et associations manquent d\'un suivi structuré de leurs demandes.'}</p>
-    <a href="https://tally.so/r/68PxQB" style="font-size:13px;color:#7B5CF0;font-weight:600;text-decoration:none;">Faites le diagnostic gratuit de votre maturité IA (10 min) →</a>
+    <a href="https://tally.so/r/68PxQB" style="font-size:13px;color:#7B5CF0;font-weight:600;text-decoration:none;">Évaluer gratuitement l'organisation de votre suivi commercial (10 min) →</a>
   </div>
   <div style="margin:8px 32px 32px;background:#2C2C3E;border-radius:12px;padding:24px;text-align:center;">
     <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#fff;">Parlons de votre projet</p>
