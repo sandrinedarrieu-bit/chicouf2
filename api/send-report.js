@@ -265,12 +265,18 @@ export default async function handler(req, res) {
 
     const classifyPriorite = (texte) => {
       const t = (texte || '').toLowerCase();
+      // Priorité aux verbes d'action en tout début de phrase pour distinguer
+      // "ajouter un formulaire" (Conversion) de "mettre en place un suivi
+      // centralisé" qui peut mentionner "formulaire" comme simple canal parmi
+      // d'autres (Suivi & relance) - l'ordre des tests seul ne suffit pas.
+      const debutePasAjoutFormulaire = /^(ajoutez|ajouter|ajoutons|int[eé]grez|int[eé]grer|mettre en place un formulaire|cr[eé]ez? un formulaire)/i.test(t.trim()) && /formulaire/.test(t);
+      if (debutePasAjoutFormulaire) return 'CONVERSION';
+      if (/suivi|centralis|relance|crm|tableau de bord/.test(t)) return 'SUIVI_RELANCE';
       if (/formulaire|cta|appel[s]? à l'action|capturer/.test(t)) return 'CONVERSION';
       if (/schéma|json-ld|localbusiness|meta description|référencement|seo local|h1\b/.test(t)) return 'SEO';
       if (/temps de réponse|vitesse|viewport|mobile|responsive|performance|chargement/.test(t)) return 'MOBILE_PERF';
       if (/témoignage|avis|photo|réalisation|crédibilité|preuve sociale/.test(t)) return 'PREUVE_SOCIALE';
       if (/calendrier|faq|guide|contenu éditorial|mots-clés/.test(t)) return 'CONTENU_EDITORIAL';
-      if (/suivi|centralis|relance|crm/.test(t)) return 'SUIVI_RELANCE';
       return null;
     };
 
