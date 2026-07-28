@@ -129,11 +129,11 @@ export default async function handler(req, res) {
     <a href="https://www.chicouf.pro/" style="text-decoration:none;">
       <p style="margin:0;font-size:22px;font-weight:700;letter-spacing:.06em;color:#fff;">CHIC <span style="color:#A78BFA;">OUF</span></p>
     </a>
-    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#CACACF;">Rapport d'audit · Présence en ligne</p>
+    <p style="margin:6px 0 0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#CACACF;">Rapport d'audit · Site internet</p>
   </div>
   <div style="padding:28px 32px 0;">
     <p style="font-size:15px;color:#3D3D3D;">${prenom_display},</p>
-    <p style="font-size:14px;color:#555;line-height:1.6;">Voici votre audit de présence en ligne pour <strong style="color:#2D1F6E;">${url}</strong>.</p>
+    <p style="font-size:14px;color:#555;line-height:1.6;">Voici l'audit de votre site internet pour <strong style="color:#2D1F6E;">${url}</strong>.</p>
   </div>
   <div style="margin:20px 32px;background:#F5F0FF;border-radius:12px;padding:20px;">
     <table style="width:100%;"><tr>
@@ -199,7 +199,7 @@ export default async function handler(req, res) {
         to: [email],
         cc: [OWNER_EMAIL],
         reply_to: OWNER_EMAIL,
-        subject: `Audit de présence en ligne — ${url}`,
+        subject: `Audit de votre site internet — ${url}`,
         html
       })
     });
