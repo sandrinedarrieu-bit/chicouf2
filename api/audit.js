@@ -242,7 +242,15 @@ Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par ch
 
 IMPORTANT sur la notation : "Très bon" est un score legitime et pleinement valide pour une section, a utiliser des que ce critere est reellement solide et sans point faible reel detectable dans le contenu fourni. N'evite pas ce score par reflexe pour "avoir quelque chose a dire" : il n'est pas obligatoire de trouver une critique constructive artificielle quand tout va bien. Une section peut etre "Très bon" avec un simple encouragement a maintenir en reco, sans qu'il y ait besoin d'inventer un axe d'amelioration mineur.
 
-IMPORTANT sur le score_global : ce score doit refleter fidelement la moyenne reelle des scores de sections, sans plafond artificiel par prudence. Si 4 sections sur 5 sont "Très bon" et une seule "Bon", le score_global doit etre eleve (8 a 10/10), pas rester bloque a un niveau moyen par reflexe de moderation. Un score de 8/10 avec quasiment toutes les sections excellentes est incoherent : ajuste le score_global pour qu'il corresponde reellement a la distribution des scores de sections ci-dessus.
+IMPORTANT sur le score_global : n'evalue plus ce score en pensant "combien de Tres bon vs combien de Bon", mais en comptant le nombre de criteres FAIBLES (score "Urgent" ou "A ameliorer") parmi les 5 sections, puis applique cette grille stricte :
+- 0 critere faible, les 5 sections sont "Tres bon" : score_global = 10
+- 0 critere faible, mais au moins une section est "Bon" (le reste Tres bon/Bon) : score_global = 9
+- Exactement 1 section "A ameliorer", le reste Tres bon/Bon : score_global = 8
+- Exactement 1 section "Urgent", le reste Tres bon/Bon : score_global = 6 a 7
+- Exactement 2 sections "A ameliorer" (aucune Urgent) : score_global = 6 a 7
+- 2 sections faibles dont au moins 1 "Urgent" : score_global = 4 a 5
+- 3 sections faibles ou plus (Urgent et/ou A ameliorer) : score_global = 2 a 4
+Respecte cette grille strictement, sans plafond artificiel par prudence et sans y deroger par reflexe de moderation.
 
 IMPORTANT sur le champ "constat_maturite_ia" : cette phrase introduit un constat generique (le manque frequent de suivi structure des demandes clients/adherents chez les TPE et associations), contextualise UNIQUEMENT par le secteur d'activite ou le type de structure (association/entreprise) que tu as deja identifie. Tu peux nommer le secteur ou le type d'activite (ex: "pour une agence immobiliere", "pour une association culturelle"). INTERDICTION ABSOLUE d'affirmer ou de laisser entendre un fait precis sur le fonctionnement REEL de cette structure que tu ne peux pas verifier a partir du contenu du site (ex: ne dis jamais "vous perdez X% de vos prospects", "vos demandes ne sont pas suivies", "votre delai de reponse est trop long") car tu n'as aucune donnee sur leur gestion interne reelle. Reste sur une observation generale et prudente, formulee comme un constat de secteur, jamais comme une affirmation sur cette structure precise. Exemple correct : "Pour une agence immobiliere, chaque demande de visite non suivie peut representer une vente perdue." Exemple INTERDIT : "Vos demandes de visite ne sont pas suivies actuellement."`;
 
