@@ -945,7 +945,7 @@ async function lancerAudit() {
   document.getElementById('auditLoading').scrollIntoView({behavior:'smooth',block:'center'});
   document.getElementById('btnAudit').disabled=true;
   const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
-  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*3000); });
+  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1500); });
   // Si l'analyse dépasse la durée des messages ci-dessus (site avec plusieurs pages
   // annexes à vérifier), on affiche un message rassurant qui reste visible plutôt
   // que de laisser l'écran de chargement figé sans rien de nouveau.
@@ -955,7 +955,7 @@ async function lancerAudit() {
       el.textContent='Toujours en cours, certains sites prennent un peu plus de temps…';
       stepsEl.appendChild(el);
     }
-  }, auditStepMessages.length*3000 + 1000);
+  }, auditStepMessages.length*1500 + 1000);
 
   try {
     const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context})});
