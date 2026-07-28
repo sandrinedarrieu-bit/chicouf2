@@ -66,6 +66,11 @@ export default async function handler(req, res) {
           if (!s) return '';
           return `Score: ${s.score || ''} | Analyse: ${s.analyse || ''} | Reco: ${s.reco || ''}`;
         };
+        const formatPrioriteAirtable = (p) => {
+          if (!p) return '';
+          if (typeof p === 'string') return p;
+          return p.objectif ? `${p.action} — Objectif : ${p.objectif}` : (p.action || '');
+        };
         const atResp = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/tblYndbnnzwU33sdZ`, {
           method: 'POST',
           headers: {
@@ -83,9 +88,9 @@ export default async function handler(req, res) {
                 'fldSMV28x33cEvUrU': audit.titre_diagnostic || '',
                 'fldLwVlQKDPQoy7iY': packageReco + (solIa ? ` | Solution IA suggérée : ${solIa.titre} (${solIa.prix})` : ''),
                 // Actions prioritaires
-                'fld1ZRALbf7Ph7L94': audit.priorites?.[0] || '',
-                'fldftAEyRGpwUrbb8': audit.priorites?.[1] || '',
-                'fldn3Y7PW28aZcqbA': audit.priorites?.[2] || '',
+                'fld1ZRALbf7Ph7L94': formatPrioriteAirtable(audit.priorites?.[0]),
+                'fldftAEyRGpwUrbb8': formatPrioriteAirtable(audit.priorites?.[1]),
+                'fldn3Y7PW28aZcqbA': formatPrioriteAirtable(audit.priorites?.[2]),
                 'fldfW7xcErUNiUaKD': new Date().toISOString(),
                 // Détail par critère (nouveau)
                 'fldaqJ8BBiYTMkIgj': sectionDetail('design'),
@@ -118,9 +123,11 @@ export default async function handler(req, res) {
       </td></tr>`;
     }).join('');
 
-    const prioritesHtml = (audit.priorites || []).map(p =>
-      `<li style="margin-bottom:6px;font-size:13px;color:#3D3D3D;">${p}</li>`
-    ).join('');
+    const prioritesHtml = (audit.priorites || []).map(p => {
+      const action = typeof p === 'string' ? p : (p?.action || '');
+      const objectif = typeof p === 'string' ? '' : (p?.objectif || '');
+      return `<li style="margin-bottom:10px;font-size:13px;color:#3D3D3D;">${action}${objectif ? `<br><span style="font-size:12px;color:#8A8A8A;">Objectif : ${objectif}</span>` : ''}</li>`;
+    }).join('');
 
     const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/></head>
 <body style="margin:0;padding:0;background:#F8F7F4;font-family:'Helvetica Neue',Arial,sans-serif;">
@@ -145,6 +152,7 @@ export default async function handler(req, res) {
         <div style="font-size:13px;font-weight:700;color:#7B5CF0;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">${scoreEmoji} ${audit.niveau}</div>
         <div style="font-size:14px;font-weight:700;color:#2D1F6E;margin-bottom:4px;">${audit.titre_diagnostic}</div>
         <div style="font-size:13px;color:#555;line-height:1.5;">${audit.resume}</div>
+        ${audit.score_global >= 9 ? '<div style="font-size:13px;color:#555;line-height:1.5;margin-top:6px;">Votre site inspire confiance et présente correctement votre activité. Son principal potentiel d\'amélioration concerne désormais sa capacité à générer, suivre et convertir davantage de demandes de devis.</div>' : ''}
       </td>
     </tr></table>
   </div>
