@@ -188,6 +188,15 @@
     .pkg-price-note { font-size: .78rem; color: var(--muted); }
     .pkg-cta { display: block; text-align: center; background: var(--chic); color: var(--white); padding: .9rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; text-decoration: none; transition: background .2s; }
     .pkg-cta:hover { background: var(--nuit); }
+    .axes-heading { font-size: .85rem; font-weight: 600; color: var(--chic); margin-bottom: .9rem; margin-top: .5rem; }
+    .axes-list { margin-bottom: .6rem; }
+    .axe-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: .65rem 0; border-bottom: 1px solid #EEEBE4; }
+    .axe-row:last-child { border-bottom: none; }
+    .axe-left { display: flex; flex-direction: column; gap: .15rem; }
+    .axe-label { display: flex; align-items: center; gap: .45rem; font-size: .9rem; font-weight: 500; color: var(--body); }
+    .axe-objectif { font-size: .78rem; color: var(--muted); }
+    .axe-price { font-size: .85rem; font-weight: 600; color: var(--chic); white-space: nowrap; text-align: right; flex-shrink: 0; }
+    .axes-note { font-size: .72rem; color: var(--muted); font-style: italic; margin-top: .5rem; margin-bottom: .5rem; }
 
     /* DIAGNOSTICS OVERVIEW */
     #diagnostics-overview { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); }
@@ -439,8 +448,7 @@
   <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
   <ul class="nav-links">
     <li><a href="#diagnostics-overview">Par où commencer ?</a></li>
-    <li><a href="#solutions-ia">Ce que je peux faire</a></li>
-    <li><a href="#services">Nos accompagnements</a></li>
+    <li><a href="#solutions-ia">Nos accompagnements</a></li>
     <li><a href="#cas-usage">Exemples de projets</a></li>
     <li><a href="#apropos">Pourquoi CHIC <span style="color:var(--or);">·</span> <span style="color:var(--lilas);">OUF</span> ?</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
@@ -667,6 +675,9 @@
     </div>
   </div>
   <p style="text-align:center;max-width:760px;margin:2rem auto 0;color:var(--muted);font-size:.9rem;">Les outils — automatisation, IA, CRM, formulaires ou création de site — restent des moyens. Mon rôle est de choisir ceux qui servent réellement votre objectif.</p>
+  <p style="text-align:center;margin-top:1.5rem;">
+    <a href="#services" style="color:var(--ouf);font-size:.9rem;font-weight:500;text-decoration:none;">Voir les accompagnements et tarifs ↓</a>
+  </p>
 </section>
 
 <section id="services">
@@ -705,21 +716,49 @@
       <h3 class="pkg-title">Développez votre visibilité, trouvez des clients</h3>
       <p class="pkg-desc">Je clarifie votre présence en ligne et organise les premières actions pour que vos futurs clients vous trouvent et vous contactent.</p>
       <ul class="pkg-includes">
-        <li>Diagnostic de visibilité</li>
-        <li>Plan d'action priorisé</li>
-        <li>Plan de communication</li>
-        <li>Organisation des contenus</li>
-        <li>Premières actions de prospection</li>
-        <li>Création de site pour artisan (en option)</li>
-        <li>Référencement local (Google Business Profile, SEO local)</li>
+        <li>Diagnostic de visibilité (gratuit)</li>
       </ul>
-      <p class="pkg-note">En option sur devis : création ou refonte du site, production récurrente de contenus, référencement approfondi et campagne de prospection.</p>
-      <div class="pkg-price">
-        <span class="pkg-price-from">à partir de</span>
-        <span class="pkg-price-amount">590 €</span>
-        <span class="pkg-price-note">HT · hors création de site</span>
+      <p class="axes-heading">Tarifs par axe :</p>
+      <div class="axes-list">
+        <div class="axe-row">
+          <div class="axe-left">
+            <span class="axe-label">🎨 Design</span>
+            <span class="axe-objectif">Donner confiance dès l'arrivée sur le site</span>
+          </div>
+          <span class="axe-price">à partir de 590 €</span>
+        </div>
+        <div class="axe-row">
+          <div class="axe-left">
+            <span class="axe-label">✍️ Contenu</span>
+            <span class="axe-objectif">Être compris en quelques secondes</span>
+          </div>
+          <span class="axe-price">à partir de 550 €</span>
+        </div>
+        <div class="axe-row">
+          <div class="axe-left">
+            <span class="axe-label">🔍 SEO</span>
+            <span class="axe-objectif">Être trouvé sur Google par les clients locaux</span>
+          </div>
+          <span class="axe-price">à partir de 550 €</span>
+        </div>
+        <div class="axe-row">
+          <div class="axe-left">
+            <span class="axe-label">🎯 Conversion</span>
+            <span class="axe-objectif">Transformer les visites en contacts</span>
+          </div>
+          <span class="axe-price">à partir de 390 €</span>
+        </div>
+        <div class="axe-row">
+          <div class="axe-left">
+            <span class="axe-label">📱 Mobile</span>
+            <span class="axe-objectif">Offrir une expérience fluide sur smartphone</span>
+          </div>
+          <span class="axe-price">à partir de 550 €<br>(ou sur devis)</span>
+        </div>
       </div>
-      <a href="#contact" class="pkg-cta">Développer ma visibilité →</a>
+      <p class="axes-note">Tarifs indiqués pour une prestation ponctuelle. Pour un accompagnement sur plusieurs mois, une formule d'abonnement mensuel peut être proposée séparément.</p>
+      <p class="axes-note">TVA non applicable, art. 293 B du CGI</p>
+      <a href="#audit" class="pkg-cta">Développer ma visibilité →</a>
     </div>
 
     <div class="package-card" id="offre-lancement">
