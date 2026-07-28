@@ -223,6 +223,104 @@ export default async function handler(req, res) {
     // solution IA) reste disponible dans Airtable pour le suivi CRM.
     console.log('Copie envoyée en CC à', OWNER_EMAIL, '- Score:', audit.score_global, '- Package:', packageReco);
 
+    // ── 4. BRIEF COMMERCIAL INTERNE (uniquement pour Sandrine) ──────────
+    // Associe chacune des 3 vraies priorités du rapport à l'axe du catalogue
+    // correspondant (offre + tarif + argumentaire), pour avoir immédiatement
+    // de quoi répondre si ce prospect recontacte suite à l'audit.
+    // NOTE IMPORTANT : les tarifs de l'Axe "Suivi & relance" ne sont pas
+    // encore valides — Sandrine doit les valider avec son associé avant
+    // d'utiliser cet axe commercialement. Le reste du catalogue est figé.
+    const AXES_CATALOGUE = {
+      SEO: {
+        nom: 'Optimisation SEO technique locale',
+        prix: '250 € HT',
+        argumentaire: "La plupart des TPE n'ont pas de schéma structuré ou de meta description soignée : c'est une intervention rapide, à forte valeur perçue, pour la visibilité locale. Bon point d'entrée si le prospect est sensible au référencement."
+      },
+      CONVERSION: {
+        nom: 'Refonte du parcours de contact',
+        prix: '350 € HT',
+        argumentaire: "Un formulaire absent ou mal positionné, ce sont des demandes concrètement perdues. C'est l'argument le plus facile à chiffrer en \"manque à gagner\" direct pour le prospect."
+      },
+      MOBILE_PERF: {
+        nom: 'Audit technique et optimisation de performance',
+        prix: '350 € HT (ou sur devis si migration d\'hébergement)',
+        argumentaire: "Un temps de réponse lent pénalise à la fois le référencement et l'expérience utilisateur. Bon argument si le prospect a un site ancien, ou un hébergement peu performant."
+      },
+      PREUVE_SOCIALE: {
+        nom: 'Collecte et intégration de preuve sociale',
+        prix: '250 € HT',
+        argumentaire: "Les visiteurs se décident souvent sur la confiance visuelle (avis, réalisations). C'est concret, rapide à montrer en exemple, et facile à justifier auprès du prospect."
+      },
+      CONTENU_EDITORIAL: {
+        nom: 'Création de contenu IA',
+        prix: '350 € HT',
+        argumentaire: "Utile si le prospect veut construire une présence dans la durée (actualités, FAQ, blog). Bon complément à proposer en 2e temps, moins urgent qu'un point technique bloquant."
+      },
+      SUIVI_RELANCE: {
+        nom: 'Accompagnement suivi & relance (offre "maturité IA", tarif à valider avec votre associé)',
+        prix: 'À définir',
+        argumentaire: "C'est l'axe le plus fréquent détecté sur l'ensemble du corpus testé, mais volontairement pas encore chiffré. À mentionner à l'oral comme complément naturel, sans prix ferme pour l'instant."
+      }
+    };
+
+    const classifyPriorite = (texte) => {
+      const t = (texte || '').toLowerCase();
+      if (/formulaire|cta|appel[s]? à l'action|capturer/.test(t)) return 'CONVERSION';
+      if (/schéma|json-ld|localbusiness|meta description|référencement|seo local|h1\b/.test(t)) return 'SEO';
+      if (/temps de réponse|vitesse|viewport|mobile|responsive|performance|chargement/.test(t)) return 'MOBILE_PERF';
+      if (/témoignage|avis|photo|réalisation|crédibilité|preuve sociale/.test(t)) return 'PREUVE_SOCIALE';
+      if (/calendrier|faq|guide|contenu éditorial|mots-clés/.test(t)) return 'CONTENU_EDITORIAL';
+      if (/suivi|centralis|relance|crm/.test(t)) return 'SUIVI_RELANCE';
+      return null;
+    };
+
+    const briefRowsHtml = (audit.priorites || []).map(p => {
+      const action = typeof p === 'string' ? p : (p?.action || '');
+      const objectif = typeof p === 'string' ? '' : (p?.objectif || '');
+      const axeId = classifyPriorite(action + ' ' + objectif);
+      const axe = axeId ? AXES_CATALOGUE[axeId] : null;
+      return `<tr><td style="padding:14px 16px;border-bottom:1px solid #F0EDE8;">
+        <p style="margin:0 0 6px;font-size:13px;color:#2D1F6E;font-weight:700;">${action}</p>
+        ${axe ? `<p style="margin:0 0 4px;font-size:13px;color:#3D3D3D;">🔧 <strong>${axe.nom}</strong> — <span style="color:#F59E0B;font-weight:700;">${axe.prix}</span></p>
+        <p style="margin:0;font-size:12px;color:#7B5CF0;">${axe.argumentaire}</p>`
+        : `<p style="margin:0;font-size:12px;color:#AAAAAA;">Aucun axe du catalogue ne correspond clairement — à évaluer au cas par cas.</p>`}
+      </td></tr>`;
+    }).join('');
+
+    const briefHtml = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/></head>
+<body style="margin:0;padding:0;background:#F8F7F4;font-family:'Helvetica Neue',Arial,sans-serif;">
+<div style="max-width:580px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+  <div style="background:#2C2C3E;padding:24px 32px;text-align:center;">
+    <p style="margin:0;font-size:16px;font-weight:700;color:#fff;">Brief commercial — usage interne</p>
+    <p style="margin:6px 0 0;font-size:12px;color:#CACACF;">${prenom_display !== 'Bonjour' ? prenom_display : ''} · ${url}</p>
+  </div>
+  <div style="padding:20px 32px;">
+    <p style="font-size:13px;color:#555;">Score : <strong>${audit.score_global}/10</strong> (${audit.niveau})</p>
+    <table style="width:100%;border-collapse:collapse;border:1px solid #F0EDE8;margin-top:8px;">${briefRowsHtml}</table>
+    <p style="margin-top:16px;font-size:11px;color:#AAAAAA;">Ce brief n'est jamais envoyé au prospect — il ne sert qu'à préparer ta réponse s'il te recontacte.</p>
+  </div>
+</div></body></html>`;
+
+    try {
+      const briefResp = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        },
+        body: JSON.stringify({
+          from: 'CHIC OUF <audit@chicouf.edukia.site>',
+          to: [OWNER_EMAIL],
+          subject: `Brief commercial — ${url}`,
+          html: briefHtml
+        })
+      });
+      const briefResult = await briefResp.json();
+      console.log('Brief commercial envoyé:', JSON.stringify(briefResult));
+    } catch (e) {
+      console.error('Erreur envoi brief commercial (non bloquant):', e.message);
+    }
+
     return res.status(200).json({ success: true });
 
   } catch (err) {
