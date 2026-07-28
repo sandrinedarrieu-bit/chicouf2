@@ -58,6 +58,14 @@ export default async function handler(req, res) {
 
     if (process.env.AIRTABLE_BASE_ID && process.env.AIRTABLE_API_KEY) {
       try {
+        // Détail par critère (Design/Contenu/SEO/Conversion/Mobile), pour alimenter
+        // l'analyse du corpus Airtable — jusqu'ici seules les 3 priorités globales
+        // étaient stockées, sans le détail par critère individuel.
+        const sectionDetail = (id) => {
+          const s = (audit.sections || []).find(x => x.id === id);
+          if (!s) return '';
+          return `Score: ${s.score || ''} | Analyse: ${s.analyse || ''} | Reco: ${s.reco || ''}`;
+        };
         const atResp = await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/tblYndbnnzwU33sdZ`, {
           method: 'POST',
           headers: {
@@ -78,7 +86,13 @@ export default async function handler(req, res) {
                 'fld1ZRALbf7Ph7L94': audit.priorites?.[0] || '',
                 'fldftAEyRGpwUrbb8': audit.priorites?.[1] || '',
                 'fldn3Y7PW28aZcqbA': audit.priorites?.[2] || '',
-                'fldfW7xcErUNiUaKD': new Date().toISOString()
+                'fldfW7xcErUNiUaKD': new Date().toISOString(),
+                // Détail par critère (nouveau)
+                'fldaqJ8BBiYTMkIgj': sectionDetail('design'),
+                'fld1jtYAoh9UJfYww': sectionDetail('contenu'),
+                'fldifAGbvXAKlpk8j': sectionDetail('seo'),
+                'fldoVLPTDuMn766Lq': sectionDetail('conversion'),
+                'fldme04yXWOlojHQG': sectionDetail('mobile')
               }
             }]
           })
