@@ -339,6 +339,35 @@ IMPORTANT anti-redondance : si la priorite 1 des "priorites" parle deja du suivi
       }
     }
 
+    // ── Recalcul deterministe du score_global (fiable a 100%, pas laisse a l'IA) ──
+    // L'IA reste responsable d'evaluer le score qualitatif de chaque section
+    // (Tres bon/Bon/A ameliorer/Urgent), ce qu'elle fait bien. Mais le score_global
+    // qu'elle proposait elle-meme etait parfois incoherent avec sa propre grille
+    // (probleme recurrent, confirme sur plusieurs tests) : une IA ne suit jamais
+    // une regle numerique avec 100% de fiabilite, meme bien formulee dans le prompt.
+    // On calcule donc ce score nous-memes, en JS, a partir des 5 scores de section
+    // que l'IA vient de renvoyer - un calcul deterministe ne peut pas devier.
+    const calculerScoreGlobal = (sections) => {
+      const liste = sections || [];
+      let urgent = 0, ameliorer = 0, tresBon = 0;
+      liste.forEach(s => {
+        if (s.score === 'Urgent') urgent++;
+        else if (s.score === 'À améliorer') ameliorer++;
+        else if (s.score === 'Très bon') tresBon++;
+      });
+      const faibles = urgent + ameliorer;
+      if (faibles === 0) return tresBon === liste.length ? 10 : 9;
+      if (faibles === 1 && ameliorer === 1) return 8;
+      if (faibles === 1 && urgent === 1) return 7;
+      if (faibles === 2 && urgent === 0) return 7;
+      if (faibles === 2 && urgent >= 1) return 5;
+      return 5; // 3 sections faibles ou plus
+    };
+    if (Array.isArray(audit.sections) && audit.sections.length === 5) {
+      audit.score_global = calculerScoreGlobal(audit.sections);
+      audit.niveau = audit.score_global >= 9 ? 'Très bon' : audit.score_global >= 7 ? 'Bon' : audit.score_global >= 5 ? 'Moyen' : 'Faible';
+    }
+
     // Calcul automatique du package recommande a partir des scores (fiable, pas demande a Claude)
     // Cet audit ne mesure que le site (design/seo/contenu/conversion/mobile) : il n'evalue rien
     // qui releve du CRM/suivi client, donc il recommande toujours le Package 2 (Communication &
