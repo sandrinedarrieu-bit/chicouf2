@@ -447,7 +447,7 @@
     </svg>
     <span class="nav-logo-stack" style="display:flex;flex-direction:column;line-height:1.1;">
       <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
-      <span class="nav-logo-tagline">Agence digitale et IA</span>
+      <span class="nav-logo-tagline">Accompagnement en IA</span>
     </span>
   </a>
   <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
@@ -457,6 +457,7 @@
     <!-- <li><a href="#solutions-ia">Nos accompagnements</a></li> -->
     <li><a href="#cas-usage">Exemples de projets</a></li>
     <li><a href="#apropos">Pourquoi CHIC <span style="color:var(--or);">·</span> <span style="color:var(--lilas);">OUF</span> ?</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
 </nav>
@@ -470,7 +471,7 @@
       <p class="hero-sub" style="font-weight:700;color:var(--chic);">Vous souhaitez gagner du temps, développer votre visibilité ou préparer le lancement d'une activité ? Je construis avec vous une solution simple, concrète et adaptée à votre situation — en Essonne, en Île-de-France, et à distance partout en France. J'accompagne les TPE, artisans, associations et porteurs de projet, avec un interlocuteur unique et un réseau d'experts mobilisés selon votre projet.</p>
       <div class="hero-actions">
         <a href="#diagnostics-overview" class="btn-primary">Découvrir mon besoin prioritaire</a>
-        <a href="#contact" class="btn-ghost">Nous contacter</a>
+        <a href="#audit" class="btn-ghost">Analyser mon site →</a>
       </div>
       <p style="margin-top:1.4rem;">
         <a href="#contact" style="color:var(--muted);font-size:.85rem;text-decoration:none;">Déjà une idée précise ? Réserver un échange de 30 min →</a>
@@ -478,13 +479,13 @@
       <p style="margin-top:.4rem;color:var(--muted);font-size:.78rem;font-style:italic;">Chic qu'ils soient là. Ouf que ça tourne tout seul.</p>
     </div>
     <div class="hero-doors">
-      <a class="door-link door-temps" href="#offre-temps">
+      <a class="door-link door-temps" href="#diagnostics-overview">
         <div class="door-shape"><span class="door-label">Comprendre</span></div>
       </a>
-      <a class="door-link door-visibilite" href="#offre-visibilite">
+      <a class="door-link door-visibilite" href="#diagnostics-overview">
         <div class="door-shape"><span class="door-label">Implémenter</span></div>
       </a>
-      <a class="door-link door-lancement" href="#offre-lancement">
+      <a class="door-link door-lancement" href="#diagnostics-overview">
         <div class="door-shape"><span class="door-label">Vendre</span></div>
       </a>
     </div>
@@ -506,7 +507,7 @@
       <div class="diag-icon">⏱️</div>
       <h3>Je veux gagner du temps</h3>
       <p>Comprendre l'IA, gagner du temps au quotidien et valoriser mon profil professionnel.</p>
-      <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" rel="noopener">Rejoindre le programme Incubateur →</a>
+      <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le programme Incubateur →</a>
     </div>
     <div class="diag-card">
       <div class="diag-icon">🚀</div>
@@ -518,7 +519,7 @@
       <div class="diag-icon">💼</div>
       <h3>Je veux apprendre à vendre et à livrer</h3>
       <p>Via un parcours mentoré pour monétiser mes compétences IA et décrocher mes premières missions.</p>
-      <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" rel="noopener">Rejoindre le parcours Consultant IA →</a>
+      <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le parcours Consultant IA →</a>
     </div>
   </div>
 </section>
@@ -548,7 +549,7 @@
 
     <div class="audit-input-card">
       <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
-      <p id="auditInputSub">Entrez l'adresse de votre site pour recevoir un audit de présence en ligne.</p>
+      <p id="auditInputSub">Entrez l'adresse du site internet pour recevoir un audit de votre site internet.</p>
       <div class="audit-url-row">
         <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
         <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
@@ -592,7 +593,7 @@
         <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
         <p id="auditCtaSub"></p>
         <div class="audit-cta-actions">
-          <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
+          <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
           <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
         </div>
         <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
@@ -757,24 +758,28 @@
   </div>
   <div class="faq-wrap">
     <div class="faq-item">
-      <p class="faq-q">Dois-je déjà utiliser des outils numériques ?</p>
-      <p class="faq-a">Non. Je pars de votre organisation actuelle et je vous propose uniquement les outils réellement utiles pour votre activité.</p>
+      <p class="faq-q">Dois-je avoir des compétences techniques pour commencer ?</p>
+      <p class="faq-a">Non. On part de votre niveau actuel — aucun prérequis technique n'est demandé.</p>
     </div>
     <div class="faq-item">
       <p class="faq-q">Dois-je savoir utiliser l'intelligence artificielle ?</p>
-      <p class="faq-a">Non. La solution vous est livrée prête à l'emploi, avec une documentation claire pour que vous puissiez l'utiliser sans compétence technique préalable.</p>
+      <p class="faq-a">Non. On vous accompagne depuis les bases, même si vous partez de zéro.</p>
     </div>
     <div class="faq-item">
-      <p class="faq-q">Vais-je dépendre de CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> après la livraison ?</p>
-      <p class="faq-a">Non. L'objectif est que vous restiez autonome. Un accompagnement complémentaire peut être proposé si vous le souhaitez, mais rien ne vous y oblige.</p>
+      <p class="faq-q">Suis-je obligé(e) de choisir un parcours dès le premier échange ?</p>
+      <p class="faq-a">Non. Le premier échange sert à clarifier votre besoin, sans engagement.</p>
     </div>
     <div class="faq-item">
-      <p class="faq-q">Combien de temps faut-il pour mettre en place une solution ?</p>
-      <p class="faq-a">Le délai dépend du périmètre de votre projet. Il est défini clairement après le diagnostic et avant le démarrage de la mission.</p>
+      <p class="faq-q">Combien de temps dure un parcours ?</p>
+      <p class="faq-a">Ça dépend du parcours choisi (Incubateur, Accélérateur, Consultant) — on précise la durée avec vous selon votre objectif.</p>
     </div>
     <div class="faq-item">
       <p class="faq-q">Mes données sont-elles protégées ?</p>
       <p class="faq-a">La protection de vos données est prise en compte dès la conception de la solution. Les outils, les accès et les données nécessaires sont examinés selon votre activité, et ces points sont précisés avant le démarrage de la mission.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Existe-t-il un financement pour ce parcours ?</p>
+      <p class="faq-a">Selon les cas, différentes options existent (formation, autofinancement, autre) — on en parle une fois votre besoin clarifié.</p>
     </div>
   </div>
 </section>
@@ -787,7 +792,7 @@
       <p>Remplissez le formulaire ou réservez directement un créneau de 30 min. C'est gratuit et sans engagement.</p>
       <div class="rdv-box">
         <p>📅 Vous préférez choisir un créneau directement ?</p>
-        <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" class="btn-calendly">
+        <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" class="btn-calendly">
           <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Réserver un créneau
         </a>
@@ -814,10 +819,10 @@
         <label for="interet">Je m'intéresse à…</label>
         <select id="interet">
           <option value="">— Choisir —</option>
-          <option>Accompagnement 1 · Gagnez du temps au quotidien</option>
-          <option>Accompagnement 2 · Visibilité &amp; trouver des clients</option>
+          <option>Incubateur IA</option>
+          <option>Accélérateur IA</option>
           <option>Option · Visibilité dans ChatGPT et les IA</option>
-          <option>Accompagnement 3 · Lancer mon entreprise / étude de marché</option>
+          <option>Consultant IA</option>
           <option>Plusieurs accompagnements</option>
           <option>Audit de site gratuit</option>
           <option>Diagnostic CAPE</option>
