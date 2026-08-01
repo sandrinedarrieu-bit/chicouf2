@@ -24,29 +24,17 @@ export default async function handler(req, res) {
     };
     const prenom_display = prenom ? formatPrenom(prenom) : 'Bonjour';
 
-    const etape = audit.prochaine_etape || audit.offre_recommandee || '';
-    let packageReco = 'À définir';
-    const etapeLower = etape.toLowerCase();
-    if (etapeLower.includes('p1') || etapeLower.includes('package 1') || etapeLower.includes('relation client')) {
-      packageReco = 'Package 1 · Relation client';
-    } else if (etapeLower.includes('p2') || etapeLower.includes('package 2') || etapeLower.includes('communication') || etapeLower.includes('prospection')) {
-      packageReco = 'Package 2 · Communication';
-    } else if (etapeLower.includes('p1+p2') || etapeLower.includes('les deux')) {
-      packageReco = 'Package 1 + Package 2';
-    }
+    // Ce rapport s'adresse a un profil dirigeant/chef d'entreprise : la seule
+    // recommandation pertinente est donc toujours le parcours "Accelerateur IA",
+    // jamais un package tarife issu de l'ancienne offre (desormais supprimee du site).
+    const parcoursReco = 'Accélérateur IA';
 
-    // Solution IA precise recommandee par audit.js (avec tarif), independante du package ci-dessus
+    // Solution IA precise recommandee par audit.js, independante du parcours ci-dessus.
+    // Jamais de tarif ici : le prix se discute a l'oral, jamais affiche au prospect.
     const solIa = audit.solution_ia_recommandee;
-    const solutionIaHtml = solIa ? `<div style="margin:0 32px 8px;background:#FFF8EC;border:1px dashed #F5C77A;border-radius:10px;padding:14px 18px;">
-      <table style="width:100%;"><tr>
-        <td style="vertical-align:top;">
-          <p style="margin:0;font-size:13px;color:#7A5200;font-weight:700;">🔧 Solution suggérée : ${solIa.titre}</p>
-          <p style="margin:4px 0 0;font-size:13px;color:#555;">${solIa.description}</p>
-        </td>
-        <td style="vertical-align:top;text-align:right;white-space:nowrap;padding-left:12px;">
-          <span style="display:inline-block;background:#F59E0B;color:#2C2C3E;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;">${solIa.prix}</span>
-        </td>
-      </tr></table>
+    const solutionIaHtml = solIa ? `<div style="margin:0 32px 20px;background:#FFF8EC;border:1px dashed #F5C77A;border-radius:10px;padding:16px 18px;">
+      <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#7A5200;">🔧 Suggestion d'outil IA : ${solIa.titre}</p>
+      <p style="margin:0;font-size:13px;color:#555;line-height:1.5;">${solIa.description}</p>
     </div>` : '';
 
     // ── 1. AIRTABLE ──────────────────────────────────
@@ -86,7 +74,7 @@ export default async function handler(req, res) {
                 'fldJLI4dys1YxMU7L': audit.score_global || 0,
                 'fldHRtR1PkT3xmUcW': audit.niveau || '',
                 'fldSMV28x33cEvUrU': audit.titre_diagnostic || '',
-                'fldLwVlQKDPQoy7iY': packageReco + (solIa ? ` | Solution IA suggérée : ${solIa.titre} (${solIa.prix})` : ''),
+                'fldLwVlQKDPQoy7iY': parcoursReco + (solIa ? ` | Outil IA suggéré : ${solIa.titre}` : ''),
                 // Actions prioritaires
                 'fld1ZRALbf7Ph7L94': formatPrioriteAirtable(audit.priorites?.[0]),
                 'fldftAEyRGpwUrbb8': formatPrioriteAirtable(audit.priorites?.[1]),
@@ -164,6 +152,7 @@ export default async function handler(req, res) {
     <p style="font-size:13px;font-weight:700;color:#2D1F6E;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">3 actions prioritaires</p>
     <ul style="margin:0;padding-left:18px;">${prioritesHtml}</ul>
   </div>
+  ${solutionIaHtml}
   <div style="margin:0 32px 20px;background:#FFF8EC;border:1px dashed #F5C77A;border-radius:10px;padding:16px 18px;">
     <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#7A5200;">🔎 Un constat complémentaire</p>
     <p style="margin:0 0 10px;font-size:13px;color:#555;line-height:1.5;">${audit.constat_maturite_ia || 'Au-delà du site, la plupart des TPE et associations manquent d\'un suivi structuré de leurs demandes.'}</p>
@@ -221,45 +210,36 @@ export default async function handler(req, res) {
     // directement sur l'envoi ci-dessus (même email, un seul envoi, donc pas de
     // second point de défaillance possible). Le résumé (score, package recommandé,
     // solution IA) reste disponible dans Airtable pour le suivi CRM.
-    console.log('Copie envoyée en CC à', OWNER_EMAIL, '- Score:', audit.score_global, '- Package:', packageReco);
+    console.log('Copie envoyée en CC à', OWNER_EMAIL, '- Score:', audit.score_global, '- Parcours:', parcoursReco);
 
     // ── 4. BRIEF COMMERCIAL INTERNE (uniquement pour Sandrine) ──────────
     // Associe chacune des 3 vraies priorités du rapport à l'axe du catalogue
     // correspondant (offre + tarif + argumentaire), pour avoir immédiatement
     // de quoi répondre si ce prospect recontacte suite à l'audit.
-    // NOTE IMPORTANT : les tarifs de l'Axe "Suivi & relance" ne sont pas
-    // encore valides — Sandrine doit les valider avec son associé avant
-    // d'utiliser cet axe commercialement. Le reste du catalogue est figé.
     const AXES_CATALOGUE = {
       SEO: {
         nom: 'Optimisation SEO technique locale',
-        prix: '250 € HT',
-        argumentaire: "La plupart des TPE n'ont pas de schéma structuré ou de meta description soignée : c'est une intervention rapide, à forte valeur perçue, pour la visibilité locale. Bon point d'entrée si le prospect est sensible au référencement."
+        argumentaire: "La plupart des TPE n'ont pas de schéma structuré ou de meta description soignée : bon point d'entrée si le prospect est sensible au référencement, à intégrer dans le parcours Accélérateur IA."
       },
       CONVERSION: {
         nom: 'Refonte du parcours de contact',
-        prix: '350 € HT',
         argumentaire: "Un formulaire absent ou mal positionné, ce sont des demandes concrètement perdues. C'est l'argument le plus facile à chiffrer en \"manque à gagner\" direct pour le prospect."
       },
       MOBILE_PERF: {
         nom: 'Audit technique et optimisation de performance',
-        prix: '350 € HT (ou sur devis si migration d\'hébergement)',
         argumentaire: "Un temps de réponse lent pénalise à la fois le référencement et l'expérience utilisateur. Bon argument si le prospect a un site ancien, ou un hébergement peu performant."
       },
       PREUVE_SOCIALE: {
         nom: 'Collecte et intégration de preuve sociale',
-        prix: '250 € HT',
         argumentaire: "Les visiteurs se décident souvent sur la confiance visuelle (avis, réalisations). C'est concret, rapide à montrer en exemple, et facile à justifier auprès du prospect."
       },
       CONTENU_EDITORIAL: {
-        nom: 'Création de contenu IA',
-        prix: '350 € HT',
+        nom: 'Agent IA de création de contenu',
         argumentaire: "Utile si le prospect veut construire une présence dans la durée (actualités, FAQ, blog). Bon complément à proposer en 2e temps, moins urgent qu'un point technique bloquant."
       },
       SUIVI_RELANCE: {
-        nom: 'Accompagnement suivi & relance (offre "maturité IA", tarif à valider avec votre associé)',
-        prix: 'À définir',
-        argumentaire: "C'est l'axe le plus fréquent détecté sur l'ensemble du corpus testé, mais volontairement pas encore chiffré. À mentionner à l'oral comme complément naturel, sans prix ferme pour l'instant."
+        nom: 'Suivi et relance automatisés (agent IA)',
+        argumentaire: "C'est l'axe le plus fréquent détecté sur l'ensemble du corpus testé. À mentionner à l'oral comme complément naturel du parcours Accélérateur IA."
       }
     };
 
@@ -297,7 +277,7 @@ export default async function handler(req, res) {
       const critereLabel = axeId ? CRITERE_LABELS[axeId] : null;
       return `<tr><td style="padding:14px 16px;border-bottom:1px solid #F0EDE8;">
         <p style="margin:0 0 6px;font-size:13px;color:#2D1F6E;font-weight:700;">${action}</p>
-        ${axe ? `<p style="margin:0 0 4px;font-size:13px;color:#3D3D3D;">🔧 <strong>${axe.nom}</strong>${critereLabel ? ` <span style="color:#AAAAAA;font-weight:400;">(critère : ${critereLabel})</span>` : ''} — <span style="color:#F59E0B;font-weight:700;">${axe.prix}</span></p>
+        ${axe ? `<p style="margin:0 0 4px;font-size:13px;color:#3D3D3D;">🔧 <strong>${axe.nom}</strong>${critereLabel ? ` <span style="color:#AAAAAA;font-weight:400;">(critère : ${critereLabel})</span>` : ''}</p>
         <p style="margin:0;font-size:12px;color:#7B5CF0;">${axe.argumentaire}</p>`
         : `<p style="margin:0;font-size:12px;color:#AAAAAA;">Aucun axe du catalogue ne correspond clairement — à évaluer au cas par cas.</p>`}
       </td></tr>`;
