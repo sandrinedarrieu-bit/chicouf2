@@ -136,17 +136,17 @@
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     /* DOORS — signature visual: 3 entry points */
-    .hero-doors { display: flex; align-items: flex-end; justify-content: center; gap: 1.1rem; }
+    .hero-doors { display: flex; align-items: flex-end; justify-content: center; gap: 0.8rem; }
     .door-link { text-decoration:none; display:flex; flex-direction:column; align-items:center; transition:transform .25s ease; }
     .door-link:hover { transform:translateY(-6px); }
-    .door-shape { width:78px; border-radius:16px; position:relative; box-shadow:0 14px 28px rgba(44,44,62,.22); display:flex; align-items:flex-end; justify-content:center; padding-bottom:14px; }
+    .door-shape { width:112px; border-radius:16px; position:relative; box-shadow:0 14px 28px rgba(44,44,62,.22); display:flex; align-items:flex-end; justify-content:center; padding-bottom:14px; }
     .door-shape::after { content:''; position:absolute; right:11px; top:16px; width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.6); }
     .door-temps .door-shape { height:230px; background:linear-gradient(160deg,#44445c,var(--nuit)); }
     .door-visibilite .door-shape { height:272px; background:linear-gradient(160deg,var(--lilas),var(--ouf)); }
     .door-lancement .door-shape { height:206px; background:linear-gradient(160deg,#eab24a,var(--or)); }
-    .door-label { font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--white); }
+    .door-label { font-size:.68rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--white); width:100%; box-sizing:border-box; padding:0 8px; text-align:center; line-height:1.15; white-space:nowrap; }
     @media (max-width:900px){ .hero-inner{grid-template-columns:1fr;} .hero-doors{margin-top:1rem;} }
-    @media (max-width:560px){ .door-shape{width:64px;} .door-temps .door-shape{height:184px;} .door-visibilite .door-shape{height:216px;} .door-lancement .door-shape{height:164px;} }
+    @media (max-width:560px){ .door-shape{width:88px;} .door-label{font-size:.6rem;} .door-temps .door-shape{height:184px;} .door-visibilite .door-shape{height:216px;} .door-lancement .door-shape{height:164px;} }
 
     .btn-primary { background: var(--nuit); color: var(--white); padding: .85rem 1.8rem; border-radius: 999px; font-size: .95rem; font-weight: 600; text-decoration: none; box-shadow: 0 6px 18px rgba(44,44,62,.18); transition: transform .15s, box-shadow .15s; }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(44,44,62,.24); }
@@ -468,7 +468,6 @@
         Trouvez plus de clients. 
         Lancez votre projet sur de bonnes bases.</h1>
       <p class="hero-sub" style="font-weight:700;color:var(--chic);">Vous souhaitez gagner du temps, développer votre visibilité ou préparer le lancement d'une activité ? Je construis avec vous une solution simple, concrète et adaptée à votre situation — en Essonne, en Île-de-France, et à distance partout en France. J'accompagne les TPE, artisans, associations et porteurs de projet, avec un interlocuteur unique et un réseau d'experts mobilisés selon votre projet.</p>
-      <p style="margin:-1rem 0 2rem;font-size:.85rem;font-weight:600;letter-spacing:.04em;color:var(--ouf);">Automatisation · Communication · Étude de marché</p>
       <div class="hero-actions">
         <a href="#diagnostics-overview" class="btn-primary">Découvrir mon besoin prioritaire</a>
         <a href="#contact" class="btn-ghost">Nous contacter</a>
@@ -480,13 +479,13 @@
     </div>
     <div class="hero-doors">
       <a class="door-link door-temps" href="#offre-temps">
-        <div class="door-shape"><span class="door-label">Temps</span></div>
+        <div class="door-shape"><span class="door-label">Comprendre</span></div>
       </a>
       <a class="door-link door-visibilite" href="#offre-visibilite">
-        <div class="door-shape"><span class="door-label">Visibilité</span></div>
+        <div class="door-shape"><span class="door-label">Implémenter</span></div>
       </a>
       <a class="door-link door-lancement" href="#offre-lancement">
-        <div class="door-shape"><span class="door-label">Lancement</span></div>
+        <div class="door-shape"><span class="door-label">Vendre</span></div>
       </a>
     </div>
   </div>
@@ -506,20 +505,20 @@
     <div class="diag-card">
       <div class="diag-icon">⏱️</div>
       <h3>Je veux gagner du temps</h3>
-      <p>Identifiez les tâches répétitives, les relances et les suivis qui peuvent être simplifiés dans votre activité.</p>
-      <a href="#cape">Faire le diagnostic CAPE →</a>
-    </div>
-    <div class="diag-card">
-      <div class="diag-icon">📣</div>
-      <h3>Je veux être plus visible</h3>
-      <p>Obtenez un score et des recommandations concrètes sur votre site, sa création ou refonte, son contenu, son référencement et sa conversion.</p>
-      <a href="#audit">Analyser mon site →</a>
+      <p>Comprendre l'IA, gagner du temps au quotidien et valoriser mon profil professionnel.</p>
+      <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" rel="noopener">Rejoindre le programme Incubateur →</a>
     </div>
     <div class="diag-card">
       <div class="diag-icon">🚀</div>
-      <h3>Je prépare un lancement</h3>
-      <p>Clarifions votre idée, votre marché, votre cible et les questions auxquelles votre étude devra répondre.</p>
-      <a href="#contact">Cadrer mon projet →</a>
+      <h3>Je veux implémenter l'IA dans mon entreprise</h3>
+      <p>Grâce à un accompagnement stratégique et opérationnel pour structurer, automatiser et scaler mon business.</p>
+      <a href="https://tally.so/r/68PxQB" target="_blank" rel="noopener">Rejoindre l'Accélérateur IA →</a>
+    </div>
+    <div class="diag-card">
+      <div class="diag-icon">💼</div>
+      <h3>Je veux apprendre à vendre et à livrer</h3>
+      <p>Via un parcours mentoré pour monétiser mes compétences IA et décrocher mes premières missions.</p>
+      <a href="https://calendly.com/sandrine-darrieu/meeting-chic-ouf" target="_blank" rel="noopener">Rejoindre le parcours Consultant IA →</a>
     </div>
   </div>
 </section>
@@ -661,23 +660,23 @@
     <div class="solution-card">
       <div class="solution-icon">⏱️</div>
       <h3>Gagner du temps</h3>
-      <p>Suivi client, relances, documents, échéances, prise de rendez-vous ou assistant administratif : j'organise et automatise les tâches qui ralentissent votre quotidien.</p>
+      <p>Valoriser son profil professionnel : organiser et automatiser les tâches qui ralentissent votre quotidien grâce à un accompagnement d'experts métier et l'obtention d'une certification reconnue.</p>
     </div>
     <div class="solution-card">
       <div class="solution-icon">📣</div>
-      <h3>Développer votre visibilité</h3>
-      <p>Site internet, communication, contenus, prospection et référencement : je construis un parcours cohérent pour que vos futurs clients vous trouvent et vous contactent.</p>
+      <h3>Développer votre business</h3>
+      <p>Suivi client, relances, documents, échéances, prise de rendez-vous, assistant administratif, site internet, communication, contenus, prospection et référencement : mettre en place des agents IA orientés ROI, coaching et formation.</p>
     </div>
     <div class="solution-card">
       <div class="solution-icon">🚀</div>
       <h3>Lancer votre activité</h3>
-      <p>Étude de marché, concurrence, positionnement, argumentaire et site de lancement : je vous aide à valider les bases avant d'investir davantage.</p>
+      <p>Structurer une offre de consultant IA, maîtriser prompts et agents : bénéficier d'un coaching particulier et d'une formation Qualiopi « Expert en transformation digitale et technologie no-code » reconnue.</p>
     </div>
   </div>
   <p style="text-align:center;max-width:760px;margin:2rem auto 0;color:var(--muted);font-size:.9rem;">Les outils — automatisation, IA, CRM, formulaires ou création de site — restent des moyens. Mon rôle est de choisir ceux qui servent réellement votre objectif.</p>
-  <p style="text-align:center;margin-top:1.5rem;">
+  <!-- <p style="text-align:center;margin-top:1.5rem;">
     <a href="#services" style="color:var(--ouf);font-size:.9rem;font-weight:500;text-decoration:none;">Voir les accompagnements et tarifs ↓</a>
-  </p>
+  </p> -->
 </section>
 
 <section id="services">
