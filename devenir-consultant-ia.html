@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Devenir consultant IA — Parcours mentoré | CHIC · OUF</title>
+<meta name="description" content="Structurez une offre de consultant IA, maîtrisez prompts et agents, et décrochez vos premières missions. Un parcours mentoré avec CHIC · OUF." />
+<link rel="canonical" href="https://www.chicouf.pro/devenir-consultant-ia.html" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nuit:     #2C2C3E;
+    --chic:     #2D1F6E;
+    --ouf:      #7B5CF0;
+    --ouf-cta:  #5F3AE0;
+    --ouf-cta-hover: #522FC7;
+    --lilas:    #A78BFA;
+    --lilas-l:  #F5F0FF;
+    --or:       #F59E0B;
+    --cream:    #F8F7F4;
+    --body:     #3D3D3D;
+    --muted:    #6B6B6B;
+    --white:    #FFFFFF;
+    --radius:   12px;
+    --max:      900px;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+  .nav-logo-text span { color: var(--lilas); }
+  .nav-back { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; }
+  .nav-back:hover { color: var(--white); }
+
+  section { padding: clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem); max-width: var(--max); margin: 0 auto; }
+  .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
+  .section-title { text-align: center; font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 800; color: var(--chic); line-height: 1.2; margin: 0 auto 1rem; }
+  .section-sub { text-align: center; color: var(--muted); margin: 0 auto; }
+
+  .hero-cta { background: var(--nuit); }
+  .hero-cta .section-title,.hero-cta .section-eyebrow { color: var(--white); }
+  .hero-cta .section-sub { color: rgba(255,255,255,.65); }
+  .btn-primary { display:inline-block; background: var(--ouf-cta); color: var(--white); padding: .85rem 1.8rem; border-radius: 999px; font-size: .95rem; font-weight: 600; text-decoration: none; margin-top: 1.5rem; }
+  .btn-primary:hover { background: var(--ouf-cta-hover); }
+  .hero-cta-wrap { text-align:center; }
+
+  .desc-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 2rem; margin-top: 2rem; }
+  .desc-card .icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
+  .desc-card p { font-size: .95rem; color: var(--body); }
+
+  .proof-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.8rem; margin-top: 2rem; }
+  .proof-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: 1rem; text-align:center; }
+  .proof-row { display: flex; gap: .6rem; margin-bottom: .65rem; font-size: .88rem; line-height: 1.55; }
+  .proof-row .proof-label { flex-shrink: 0; font-weight: 700; color: var(--ouf); min-width: 90px; }
+
+  .faq-wrap { margin-top: 1rem; }
+  .faq-item { border-top: 1px solid #E8E6E1; padding: 1.1rem 0; }
+  .faq-item:last-child { border-bottom: 1px solid #E8E6E1; }
+  .faq-q { font-weight: 700; color: var(--chic); font-size: .95rem; margin-bottom: .4rem; }
+  .faq-a { font-size: .88rem; color: var(--muted); }
+
+  .note-box { margin-top: 1.5rem; background: var(--lilas-l); border: 1px dashed var(--ouf); border-radius: 12px; padding: 1.2rem 1.5rem; text-align:center; font-size: .88rem; color: var(--body); }
+
+  footer { text-align:center; padding: 2rem clamp(1.25rem,5vw,3rem); font-size: .8rem; color: var(--muted); border-top: 1px solid #E8E6E1; }
+  footer a { color: var(--ouf); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="nav-logo-text">CHIC <span>·</span> OUF</span>
+  </a>
+  <a class="nav-back" href="index.html">← Retour au site</a>
+</nav>
+
+<section class="hero-cta">
+  <p class="section-eyebrow">Un parcours à part, pensé pour vous</p>
+  <h1 class="section-title">Devenir consultant IA</h1>
+  <p class="section-sub">Un parcours mentoré pour monétiser vos compétences IA et décrocher vos premières missions.</p>
+  <div class="hero-cta-wrap">
+    <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le parcours →</a>
+  </div>
+</section>
+
+<section>
+  <div class="desc-card">
+    <div class="icon">💼</div>
+    <p>Via un parcours mentoré, vous structurez une offre professionnelle, vous maîtrisez prompts et agents IA, et vous bénéficiez d'un coaching particulier ainsi que d'une formation Qualiopi « Expert en transformation digitale et technologie no-code » reconnue — pour décrocher vos premières missions de consultant IA.</p>
+  </div>
+  <div class="note-box">Le format et le financement (selon les cas : autofinancement, formation, autre) se calculent ensemble une fois votre besoin clarifié.</div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Un exemple concret</p>
+  <h2 class="section-title">Ce que ça change</h2>
+  <div class="proof-card">
+    <h3>Devenir consultant IA — structurer une offre vendable</h3>
+    <div class="proof-row"><span class="proof-label">Avant</span><p>Une envie de reconversion vers les métiers de l'IA, mais aucune méthode pour structurer une offre professionnelle et crédible.</p></div>
+    <div class="proof-row"><span class="proof-label">Intervention</span><p>Coaching individuel sur la structuration de l'offre, maîtrise des prompts et agents IA, formation certifiante Qualiopi.</p></div>
+    <div class="proof-row"><span class="proof-label">Résultat</span><p>Une offre structurée, une certification reconnue à mettre en avant, et les bases pour décrocher ses premières missions.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Questions fréquentes</p>
+  <h2 class="section-title">Vos hésitations, à plat</h2>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <p class="faq-q">Dois-je avoir des compétences techniques pour commencer ?</p>
+      <p class="faq-a">Non. On part de votre niveau actuel — aucun prérequis technique n'est demandé.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Dois-je savoir utiliser l'intelligence artificielle ?</p>
+      <p class="faq-a">Non. On vous accompagne depuis les bases, même si vous partez de zéro.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Suis-je obligé(e) de m'engager dès le premier échange ?</p>
+      <p class="faq-a">Non. Le premier échange sert à clarifier votre besoin, sans engagement.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Combien de temps dure le parcours ?</p>
+      <p class="faq-a">On précise la durée avec vous selon votre objectif et votre disponibilité.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Existe-t-il un financement pour ce parcours ?</p>
+      <p class="faq-a">Selon les cas, différentes options existent (formation, autofinancement, autre) — on en parle une fois votre besoin clarifié.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hero-cta">
+  <h2 class="section-title">Parlons de votre projet</h2>
+  <p class="section-sub">20 minutes suffisent pour clarifier votre situation.</p>
+  <div class="hero-cta-wrap">
+    <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Réserver un échange →</a>
+  </div>
+</section>
+
+<footer>
+  CHIC · OUF · Sandrine Darrieu · <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a> · 07 56 92 59 84 · <a href="index.html">Retour au site principal</a>
+</footer>
+
+</body>
+</html>
