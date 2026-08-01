@@ -201,7 +201,7 @@
 
     /* DIAGNOSTICS OVERVIEW */
     #diagnostics-overview { max-width: var(--max); margin: 3rem auto 0; padding: 0 clamp(1.25rem,5vw,3rem); }
-    .diag-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .diag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
     .diag-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; text-align: center; }
     .diag-card .diag-icon { font-size: 1.6rem; margin-bottom: .75rem; }
     .diag-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
@@ -457,6 +457,7 @@
     <li><a href="#cas-usage">Exemples de projets</a></li>
     <li><a href="#apropos">Pourquoi CHIC <span style="color:var(--or);">·</span> <span style="color:var(--lilas);">OUF</span> ?</a></li>
     <li><a href="#faq">FAQ</a></li>
+    <li><a href="devenir-consultant-ia.html" style="color:rgba(255,255,255,.45);font-size:.8rem;">Devenir consultant IA</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
 </nav>
@@ -484,7 +485,7 @@
       <a class="door-link door-visibilite" href="#diagnostics-overview">
         <div class="door-shape"><span class="door-label">Implémenter</span></div>
       </a>
-      <a class="door-link door-lancement" href="#diagnostics-overview">
+      <a class="door-link door-lancement" href="devenir-consultant-ia.html">
         <div class="door-shape"><span class="door-label">Vendre</span></div>
       </a>
     </div>
@@ -513,12 +514,6 @@
       <h3>Je veux implémenter l'IA dans mon entreprise</h3>
       <p>Grâce à un accompagnement stratégique et opérationnel pour structurer, automatiser et scaler mon business.</p>
       <a href="https://tally.so/r/68PxQB" target="_blank" rel="noopener">Rejoindre l'Accélérateur IA →</a>
-    </div>
-    <div class="diag-card">
-      <div class="diag-icon">💼</div>
-      <h3>Je veux apprendre à vendre et à livrer</h3>
-      <p>Via un parcours mentoré pour monétiser mes compétences IA et décrocher mes premières missions.</p>
-      <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le parcours Consultant IA →</a>
     </div>
   </div>
 </section>
@@ -667,11 +662,6 @@
       <h3>Développer votre business</h3>
       <p>Suivi client, relances, documents, échéances, prise de rendez-vous, assistant administratif, site internet, communication, contenus, prospection et référencement : mettre en place des agents IA orientés ROI, coaching et formation.</p>
     </div>
-    <div class="solution-card">
-      <div class="solution-icon">🚀</div>
-      <h3>Lancer votre activité</h3>
-      <p>Structurer une offre de consultant IA, maîtriser prompts et agents : bénéficier d'un coaching particulier et d'une formation Qualiopi « Expert en transformation digitale et technologie no-code » reconnue.</p>
-    </div>
   </div>
   <p style="text-align:center;max-width:760px;margin:2rem auto 0;color:var(--muted);font-size:.9rem;">Les outils — automatisation, IA, CRM, formulaires ou création de site — restent des moyens. Mon rôle est de choisir ceux qui servent réellement votre objectif.</p>
   <!-- <p style="text-align:center;margin-top:1.5rem;">
@@ -698,12 +688,6 @@
       <div class="proof-row"><span class="proof-label">Avant</span><p>Une disponibilité vérifiée manuellement selon le service, la date et le créneau.</p></div>
       <div class="proof-row"><span class="proof-label">Intervention</span><p>Création d'un parcours en ligne relié aux disponibilités réelles.</p></div>
       <div class="proof-row"><span class="proof-label">Résultat</span><p>Une démarche simplifiée pour le client et une demande mieux qualifiée pour le gestionnaire.</p></div>
-    </div>
-    <div class="proof-card">
-      <h3>Devenir consultant IA — structurer une offre vendable</h3>
-      <div class="proof-row"><span class="proof-label">Avant</span><p>Une envie de reconversion vers les métiers de l'IA, mais aucune méthode pour structurer une offre professionnelle et crédible.</p></div>
-      <div class="proof-row"><span class="proof-label">Intervention</span><p>Coaching individuel sur la structuration de l'offre, maîtrise des prompts et agents IA, formation certifiante Qualiopi.</p></div>
-      <div class="proof-row"><span class="proof-label">Résultat</span><p>Une offre structurée, une certification reconnue à mettre en avant, et les bases pour décrocher ses premières missions.</p></div>
     </div>
   </div>
 
@@ -820,7 +804,6 @@
           <option value="">— Choisir —</option>
           <option>Incubateur IA</option>
           <option>Accélérateur IA</option>
-          <option>Consultant IA</option>
         </select>
       </div>
       <div class="form-group"><label for="message">Votre message</label><textarea id="message" placeholder="Décrivez brièvement votre situation ou votre besoin…"></textarea></div>
