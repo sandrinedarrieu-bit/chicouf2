@@ -12,14 +12,17 @@ export default async function handler(req, res) {
 
   const contextBlock = context ? ` Contexte: ${context}` : '';
 
-  // Catalogue des Solutions IA proposées sur le site, avec leur tarif affiché,
-  // pour recommander la solution la plus pertinente selon le point faible détecté.
+  // Catalogue de suggestions d'outils IA par problématique détectée.
+  // Ce rapport ne s'adresse qu'à des dirigeants d'entreprise (profil "mode: pro"
+  // ou audit standard côté entreprise) : la seule recommandation pertinente est
+  // donc toujours le parcours "Accélérateur IA", jamais un tarif ferme ni un
+  // package figé — le tarif se discute à l'oral selon la situation du prospect.
   const SOLUTIONS_IA = {
-    design:     { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site professionnel, rapide à déployer et pensé pour convertir." },
-    seo:        { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site conçu pour être visible sur les moteurs de recherche." },
-    mobile:     { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site optimisé pour l'expérience mobile de vos visiteurs." },
-    contenu:    { nom: 'Création de contenu IA',    prix: 'à partir de 250 €', pitch: "rédaction et publication automatisées, sans y consacrer vos journées." },
-    conversion: { nom: 'Création de site internet', prix: 'à partir de 590 €', pitch: "un site restructuré autour de CTAs clairs et d'un parcours de conversion optimisé." }
+    design:     { nom: 'Agent IA de refonte visuelle', pitch: "un outil IA capable de générer rapidement des maquettes et propositions visuelles cohérentes avec votre image de marque." },
+    seo:        { nom: 'Agent IA de veille et d\'optimisation SEO', pitch: "un outil IA qui identifie les mots-clés locaux pertinents et propose du contenu optimisé en continu." },
+    mobile:     { nom: 'Agent IA d\'audit d\'expérience mobile', pitch: "un outil IA qui détecte automatiquement les frictions rencontrées par vos visiteurs sur mobile." },
+    contenu:    { nom: 'Agent IA de rédaction et de publication', pitch: "un outil IA qui rédige et planifie vos contenus (site, réseaux, newsletter) sans y consacrer vos journées." },
+    conversion: { nom: 'Agent IA de suivi et de relance', pitch: "un outil IA qui détecte les demandes reçues et relance automatiquement les prospects avant qu'ils ne soient perdus." }
   };
 
   // ── Récupération réelle du contenu du site ─────────────────────────────
@@ -226,15 +229,13 @@ RÈGLE IMPÉRATIVE : base ton analyse UNIQUEMENT sur ce contenu réel ci-dessus.
 ATTENTION : le contenu du site n'a pas pu être récupéré automatiquement (${fetchError || 'raison inconnue'}). N'invente aucun constat détaillé sur le design, le contenu ou la conversion : dans le champ "analyse" de chaque section, indique que ce point n'a pas pu être vérifié automatiquement, et mets un score "À améliorer" neutre partout plutôt que "Urgent". Le "resume" doit mentionner que l'analyse automatique n'a pas pu accéder au site.`;
 
   const prompt = `Analyse ce site: ${url}${contextBlock}
-Tu representes CHIC OUF, une consultante qui propose 2 services pour TPE, artisans ET associations :
-- Package 1 "Relation client/adherents" : CRM no-code, automatisation des relances, formulaires, tableau de bord, onboarding
-- Package 2 "Communication & Visibilite" : audit presence en ligne, calendrier editorial, automatisation diffusion, sequence de contact, landing page
+Tu representes CHIC OUF, une consultante qui accompagne des dirigeants d'entreprise dans l'implementation de l'IA (parcours "Accelerateur IA" : structurer, automatiser et faire evoluer l'activite grace a des agents IA).
 
 IMPORTANT - Adapte ton vocabulaire au type de structure que tu detectes :
-- Si c'est une ASSOCIATION (mots-cles: association, adherents, benevoles, lien social, gratuit, don, cotisation) : utilise "adherents", "benevoles", "participants", "activites", JAMAIS "clients", "leads", "offres commerciales", "conversion de prospects". Le Package 1 sert a suivre adherents/benevoles, le Package 2 sert a communiquer sur les evenements et activites.
+- Si c'est une ASSOCIATION (mots-cles: association, adherents, benevoles, lien social, gratuit, don, cotisation) : utilise "adherents", "benevoles", "participants", "activites", JAMAIS "clients", "leads", "offres commerciales", "conversion de prospects".
 - Si c'est une ENTREPRISE/TPE/artisan : tu peux utiliser "clients", "prospects", "conversion" normalement.
 
-INTERDICTION ABSOLUE : ne mentionne JAMAIS "Package 1", "Package 2", ni aucun nom d'offre commerciale dans les champs "analyse", "reco", "points_forts" ou "priorites". Ces deux packages sont uniquement un contexte interne pour toi, jamais a citer nommement dans le rapport. Chaque "reco" doit rester une recommandation d'action generale et actionnable (ex: "centralisez vos demandes pour ne rien oublier"), jamais un pitch commercial vers une offre nommee.
+INTERDICTION ABSOLUE : ne mentionne JAMAIS de nom d'offre commerciale ni de tarif dans les champs "analyse", "reco", "points_forts" ou "priorites". Chaque "reco" doit rester une recommandation d'action generale et actionnable (ex: "centralisez vos demandes pour ne rien oublier"), jamais un pitch commercial vers une offre nommee.
 ${siteContentBlock}
 
 Reponds en JSON strict, textes courts et bienveillants (max 80 caracteres par champ) :
@@ -368,10 +369,9 @@ IMPORTANT anti-redondance : si la priorite 1 des "priorites" parle deja du suivi
       audit.niveau = audit.score_global >= 9 ? 'Très bon' : audit.score_global >= 7 ? 'Bon' : audit.score_global >= 5 ? 'Moyen' : 'Faible';
     }
 
-    // Calcul automatique du package recommande a partir des scores (fiable, pas demande a Claude)
-    // Cet audit ne mesure que le site (design/seo/contenu/conversion/mobile) : il n'evalue rien
-    // qui releve du CRM/suivi client, donc il recommande toujours le Package 2 (Communication &
-    // Visibilite), coherent avec ce qu'il mesure reellement.
+    // Recommandation unique : ce rapport s'adresse à un profil dirigeant/chef
+    // d'entreprise, donc la seule préconisation pertinente est le parcours
+    // "Accélérateur IA" — jamais un package tarifé, jamais figé à l'avance.
     if (mode !== 'pro') {
       const sections = audit.sections || [];
       const getSection = (id) => sections.find(x => x.id === id);
@@ -388,11 +388,7 @@ IMPORTANT anti-redondance : si la priorite 1 des "priorites" parle deja du suivi
       const top = candidats[0];
       const labels = { seo: 'votre referencement', design: 'votre design', contenu: 'votre contenu', mobile: 'votre experience mobile', conversion: 'vos parcours de conversion' };
       const detail = top.s ? top.s.analyse.toLowerCase() : '';
-      if (audit.type_structure === 'association') {
-        audit.prochaine_etape = `Le Package 2 ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite aupres de nouveaux benevoles et participants.`;
-      } else {
-        audit.prochaine_etape = `Le Package 2 Communication ciblerait en priorite ${labels[top.id]} : ${detail} Vous gagneriez en visibilite rapidement.`;
-      }
+      audit.prochaine_etape = `L'Accélérateur IA ciblerait en priorite ${labels[top.id]} : ${detail} Un échange permet de clarifier comment l'intégrer concrètement à votre activité.`;
     }
 
     // Recommandation d'une Solution IA precise (avec tarif), en complement du package ci-dessus.
@@ -416,7 +412,6 @@ IMPORTANT anti-redondance : si la priorite 1 des "priorites" parle deja du suivi
         const detail = top.s ? top.s.analyse : '';
         audit.solution_ia_recommandee = {
           titre: sol.nom,
-          prix: sol.prix,
           description: detail ? `${sol.pitch} (${detail})` : sol.pitch
         };
       }
