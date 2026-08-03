@@ -29,10 +29,32 @@
 
   nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
   .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .nav-logo-badge { flex-shrink: 0; }
   .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
   .nav-logo-text span { color: var(--lilas); }
+  .nav-logo-tagline { font-size: .6rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: 2px; }
   .nav-back { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; }
   .nav-back:hover { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
+  .nav-cta:hover { background: var(--ouf-cta-hover); }
+  .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .5rem; }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: .5rem; background: var(--nuit); min-width: 210px; padding: .5rem 0; border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,.28); list-style: none; z-index: 200; }
+  .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu li { width: 100%; }
+  .nav-dropdown-menu a { display: block; padding: .55rem 1.1rem; white-space: nowrap; font-size: .85rem; }
+  .nav-current { color: var(--white) !important; font-weight: 700; }
+  @media (max-width: 768px) {
+    .nav-toggle { display: block; }
+    .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--nuit); flex-direction: column; gap: 1.1rem; align-items: flex-start; padding: 1.25rem clamp(1.25rem,5vw,3rem) 1.5rem; box-shadow: 0 8px 16px rgba(0,0,0,.15); }
+    .nav-links.open { display: flex; }
+    .nav-links .nav-cta { display: inline-block; width: fit-content; }
+    .nav-dropdown-menu { display: block; position: static; margin: .4rem 0 0; padding: 0 0 0 1rem; box-shadow: none; background: transparent; }
+    .nav-dropdown-menu a { padding: .35rem 0; color: rgba(255,255,255,.45); }
+  }
 
   section { padding: clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem); max-width: var(--max); margin: 0 auto; }
   .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
@@ -71,9 +93,41 @@
 
 <nav>
   <a class="nav-logo" href="index.html">
-    <span class="nav-logo-text">CHIC <span>·</span> OUF</span>
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    <span class="nav-logo-stack" style="display:flex;flex-direction:column;line-height:1.1;">
+      <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
+      <span class="nav-logo-tagline">Accompagnement en IA</span>
+      <span class="nav-logo-tagline" style="font-style:italic;font-size:.52rem;text-transform:none;letter-spacing:.02em;">pour les salariés, dirigeants et consultants</span>
+    </span>
   </a>
-  <a class="nav-back" href="index.html">← Retour au site</a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+  <ul class="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html">Accueil ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#solutions-ia">Ma philosophie</a></li>
+        <li><a href="index.html#diagnostics-overview">Par où commencer ?</a></li>
+        <li><a href="index.html#cas-usage">Exemples de projets</a></li>
+        <li><a href="index.html#apropos">Pourquoi CHIC · OUF ?</a></li>
+      </ul>
+    </li>
+    <li><a href="incubateur-ia.html">Incubateur IA</a></li>
+    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
+    <li><a href="devenir-consultant-ia.html" class="nav-current">Devenir consultant IA</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Outils gratuits ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="diagnostic-cape.html">Diagnostic d'organisation et de maturité</a></li>
+        <li><a href="audit-site.html">Analyse du site internet</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Prendre contact</a></li>
+  </ul>
 </nav>
 
 <section class="hero-cta">
