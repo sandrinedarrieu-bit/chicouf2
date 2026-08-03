@@ -85,6 +85,24 @@
 
   .note-box { margin-top: 1.5rem; background: var(--lilas-l); border: 1px dashed var(--ouf); border-radius: 12px; padding: 1.2rem 1.5rem; text-align:center; font-size: .88rem; color: var(--body); }
 
+  .two-col { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .col-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; }
+  .col-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: 1.1rem; }
+  .col-card ul { list-style: none; padding: 0; }
+  .col-card li { display: flex; align-items: flex-start; gap: .6rem; margin-bottom: .8rem; font-size: .9rem; color: var(--body); line-height: 1.55; }
+  .col-card li::before { content: "✓"; color: var(--ouf); font-weight: 700; flex-shrink: 0; }
+  .col-card .note { margin-top: 1rem; font-size: .82rem; color: var(--muted); font-style: italic; }
+
+  .piliers-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .pilier-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 1.8rem; }
+  .pilier-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
+  .pilier-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
+  .pilier-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+  @media (max-width: 860px) {
+    .two-col, .piliers-grid { grid-template-columns: 1fr; }
+  }
+
   footer { text-align:center; padding: 2rem clamp(1.25rem,5vw,3rem); font-size: .8rem; color: var(--muted); border-top: 1px solid #E8E6E1; }
   footer a { color: var(--ouf); text-decoration: none; }
 </style>
@@ -147,6 +165,53 @@
   <div class="note-box">Parcours construit selon votre niveau et vos objectifs. Le format, la durée et le tarif sont définis après un échange préalable — y compris les options de financement (autofinancement, formation, autre).<br><strong style="color:var(--chic)">Exemple de format :</strong> 12 semaines, 3 ateliers collectifs par semaine et 7h30 de cours collectifs.</div>
 </section>
 
+<section id="objectifs">
+  <div class="two-col">
+    <div class="col-card">
+      <h3>Ce que vous en retirez</h3>
+      <ul>
+        <li>Un diagnostic de votre profil et de vos objectifs pour démarrer sur des bases claires</li>
+        <li>Une offre de consultant IA structurée, chiffrée et prête à être présentée à un client</li>
+        <li>La maîtrise des outils no-code, des prompts et des agents IA appliqués à votre futur métier</li>
+        <li>Des supports et gabarits prêts à l'emploi pour vos premières missions</li>
+        <li>L'accès à une communauté active pour continuer à progresser après le parcours</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h3>Pour qui</h3>
+      <ul>
+        <li>Salariés en reconversion vers les métiers du conseil en IA</li>
+        <li>Formateurs, coachs ou consultants qui veulent intégrer l'IA à leur offre existante</li>
+        <li>Entrepreneurs qui veulent construire une activité autour de l'IA et du no-code</li>
+        <li>Toute personne motivée à se lancer, sans prérequis technique</li>
+      </ul>
+      <p class="note">Le parcours s'adapte à votre point de départ, quel qu'il soit.</p>
+    </div>
+  </div>
+</section>
+
+<section id="piliers" style="background:var(--white);border-top:1px solid #E8E6E1;border-bottom:1px solid #E8E6E1;">
+  <p class="section-eyebrow">Comment se déroule l'accompagnement</p>
+  <h2 class="section-title">Un diagnostic, un accompagnement sur mesure, des outils pour durer</h2>
+  <div class="piliers-grid" style="margin-top:2.5rem;">
+    <div class="pilier-card">
+      <div class="pilier-icon">🧭</div>
+      <h3>Le diagnostic et la feuille de route</h3>
+      <p>Un audit personnalisé de votre profil et de vos objectifs, pour construire une feuille de route claire, une cartographie de vos futures missions et un plan d'action concret dès le démarrage.</p>
+    </div>
+    <div class="pilier-card">
+      <div class="pilier-icon">🎯</div>
+      <h3>Le coaching individuel et collectif</h3>
+      <p>Des séances individuelles pour avancer sur la structuration de votre offre, complétées par des ateliers collectifs réguliers pour progresser en groupe et rester à jour sur l'actualité de l'IA.</p>
+    </div>
+    <div class="pilier-card">
+      <div class="pilier-icon">🤝</div>
+      <h3>Les outils, la certification et la communauté</h3>
+      <p>Des agents IA prêts à personnaliser, une formation certifiante reconnue, et l'accès à une communauté active pour continuer à progresser et échanger sur vos premières missions après le parcours.</p>
+    </div>
+  </div>
+</section>
+
 <section>
   <p class="section-eyebrow">Un exemple concret</p>
   <h2 class="section-title">Ce que ça change</h2>
@@ -184,7 +249,7 @@
     </div>
     <div class="faq-item">
       <p class="faq-q">La formation Consultant IA délivre-t-elle une certification ?</p>
-      <p class="faq-a">Le parcours s'appuie sur une méthodologie professionnelle et des compétences concrètes à valoriser. Si une certification officielle est visée, on en discute ensemble selon votre projet.</p>
+      <p class="faq-a">Oui. Le parcours vise le titre à finalité professionnelle « Expert en transformation digitale et technologie no-code », reconnu et validé par des cas pratiques et une soutenance orale.</p>
     </div>
     <div class="faq-item">
       <p class="faq-q">Les outils restent-ils accessibles après l'accompagnement ?</p>
