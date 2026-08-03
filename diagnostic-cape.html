@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diagnostic CAPE — Votre maturité IA en 10 minutes | CHIC · OUF</title>
+  <meta name="description" content="Évaluez gratuitement votre niveau de maturité IA avec la méthode CAPE (Connaissance, Adoption, Processus, Engagement) : un questionnaire de 16 questions et un rapport personnalisé par email." />
+  <link rel="canonical" href="https://www.chicouf.pro/diagnostic-cape.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CHIC · OUF" />
+  <meta property="og:title" content="Diagnostic CAPE — Votre maturité IA en 10 minutes | CHIC · OUF" />
+  <meta property="og:description" content="Évaluez gratuitement votre niveau de maturité IA avec la méthode CAPE : un questionnaire de 16 questions et un rapport personnalisé par email." />
+  <meta property="og:url" content="https://www.chicouf.pro/diagnostic-cape.html" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:image" content="https://www.chicouf.pro/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://www.chicouf.pro/og-image.png" />
+  <meta name="twitter:title" content="Diagnostic CAPE — Votre maturité IA en 10 minutes | CHIC · OUF" />
+  <meta name="twitter:description" content="Évaluez gratuitement votre niveau de maturité IA avec la méthode CAPE : un questionnaire de 16 questions et un rapport personnalisé par email." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --nuit:     #2C2C3E;
+      --chic:     #2D1F6E;
+      --ouf:      #7B5CF0;
+      --ouf-cta:  #5F3AE0;
+      --ouf-cta-hover: #522FC7;
+      --lilas:    #A78BFA;
+      --lilas-l:  #F5F0FF;
+      --or:       #F59E0B;
+      --cream:    #F8F7F4;
+      --body:     #3D3D3D;
+      --muted:    #6B6B6B;
+      --white:    #FFFFFF;
+      --radius:   12px;
+      --max:      1080px;
+      --max-wide: 1320px;
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 90px !important; }
+    html { overflow-x: hidden; }
+    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; max-width: 100%; overflow-x: clip; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-badge { flex-shrink: 0; }
+    .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+    .nav-logo-text span { color: var(--lilas); }
+    .nav-logo-tagline { font-size: .6rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
+    .nav-cta:hover { background: var(--ouf-cta-hover); }
+    .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .5rem; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: .5rem; background: var(--nuit); min-width: 210px; padding: .5rem 0; border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,.28); list-style: none; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
+    .nav-dropdown-menu li { width: 100%; }
+    .nav-dropdown-menu a { display: block; padding: .55rem 1.1rem; white-space: nowrap; font-size: .85rem; }
+    .nav-current { color: var(--white) !important; font-weight: 700; }
+
+    .hero { background: var(--cream); padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem) clamp(2.5rem,5vw,3.5rem); }
+    .hero-inner { max-width: var(--max); margin: 0 auto; text-align: center; }
+    .hero-eyebrow { font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); margin-bottom: 1rem; }
+    .hero-claim { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(2rem,4.5vw,3.1rem); color: var(--chic); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 1.4rem; }
+    .hero-sub { font-size: 1.05rem; font-weight: 500; color: var(--body); max-width: 640px; margin: 0 auto 2rem; line-height: 1.65; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn-primary { background: var(--nuit); color: var(--white); padding: .85rem 1.8rem; border-radius: 999px; font-size: .95rem; font-weight: 600; text-decoration: none; box-shadow: 0 6px 18px rgba(44,44,62,.18); transition: transform .15s, box-shadow .15s; display: inline-block; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(44,44,62,.24); }
+    .btn-ghost { border: 1.5px solid #D8D5CF; color: var(--nuit); padding: .85rem 1.8rem; border-radius: 999px; font-size: .95rem; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s; }
+    .btn-ghost:hover { border-color: var(--nuit); background: rgba(44,44,62,.04); }
+
+    .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
+    .section-title { text-align: center; font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 800; color: var(--chic); line-height: 1.2; max-width: 640px; margin: 0 auto 1rem; }
+    .section-sub { text-align: center; font-size: 1rem; color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+    #cape { background: var(--white); color: var(--body); padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem); }
+    .cape-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .cape-text p { color: var(--body); font-size: .975rem; margin-bottom: 1.5rem; }
+    .cape-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cape-pillar { background: var(--lilas-l); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 1.25rem; }
+    .cape-letter { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--ouf); line-height: 1; margin-bottom: .35rem; }
+    .cape-pillar strong { display: block; color: var(--chic); font-size: .88rem; margin-bottom: .2rem; }
+    .cape-pillar span { color: var(--muted); font-size: .8rem; }
+
+    #exemple-rapport { padding: clamp(2rem,5vw,3rem) clamp(1.25rem,5vw,3rem); }
+    .rapport-box { max-width: 600px; margin: 0 auto; background: var(--white); border: 1px solid #E8E6E1; border-left: 4px solid var(--chic); border-radius: 12px; padding: 1.75rem; }
+
+    #cta-final { background: var(--white); border-top: 1px solid #E8E6E1; border-bottom: 1px solid #E8E6E1; }
+    .cta-box { max-width: 760px; margin: 0 auto; background: var(--chic); border-radius: 18px; padding: 2.5rem; text-align: center; }
+    .cta-box h2 { font-family: 'Syne', sans-serif; color: var(--white); font-size: 1.4rem; font-weight: 800; margin-bottom: .75rem; }
+    .cta-box p { color: rgba(255,255,255,.75); font-size: .95rem; margin-bottom: 1.5rem; }
+    .cta-box a { display: inline-block; background: var(--ouf-cta); color: var(--white); padding: .9rem 2rem; border-radius: var(--radius); font-size: .95rem; font-weight: 500; text-decoration: none; transition: background .2s; }
+    .cta-box a:hover { background: var(--ouf-cta-hover); }
+
+    footer { background: #262636; color: rgba(255,255,255,.35); text-align: center; font-size: .8rem; padding: 2rem; }
+    footer .footer-brand { font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.7); margin-bottom: .5rem; }
+    footer .footer-brand span { color: var(--lilas); }
+    footer a { color: var(--ouf); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--nuit); flex-direction: column; gap: 1.1rem; padding: 1.25rem clamp(1.25rem,5vw,3rem) 1.5rem; box-shadow: 0 8px 16px rgba(0,0,0,.15); }
+      .nav-links.open { display: flex; }
+      .nav-links .nav-cta { display: inline-block; width: fit-content; }
+      .nav-dropdown-menu { display: block; position: static; margin: .4rem 0 0; padding: 0 0 0 1rem; box-shadow: none; background: transparent; }
+      .nav-dropdown-menu a { padding: .35rem 0; color: rgba(255,255,255,.45); }
+      .cape-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    <span class="nav-logo-stack" style="display:flex;flex-direction:column;line-height:1.1;">
+      <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
+      <span class="nav-logo-tagline">Accompagnement en IA</span>
+      <span class="nav-logo-tagline" style="font-style:italic;font-size:.52rem;text-transform:none;letter-spacing:.02em;">pour les salariés, dirigeants et consultants</span>
+    </span>
+  </a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+  <ul class="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html">Accueil ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#solutions-ia">Ma philosophie</a></li>
+        <li><a href="index.html#diagnostics-overview">Par où commencer ?</a></li>
+        <li><a href="index.html#cas-usage">Exemples de projets</a></li>
+        <li><a href="index.html#apropos">Pourquoi CHIC · OUF ?</a></li>
+      </ul>
+    </li>
+    <li><a href="incubateur-ia.html">Incubateur IA</a></li>
+    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
+    <li><a href="devenir-consultant-ia.html">Devenir consultant IA</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Outils gratuits ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="diagnostic-cape.html" class="nav-current">Diagnostic d'organisation et de maturité</a></li>
+        <li><a href="audit-site.html">Analyse du site internet</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Prendre contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Pour gagner du temps</p>
+    <h1 class="hero-claim">Diagnostic CAPE</h1>
+    <p class="hero-sub">Votre diagnostic d'organisation et de maturité IA — un questionnaire de 16 questions, gratuit et en moins de 10 minutes, pour révéler vos forces et vos angles morts avant de choisir un outil.</p>
+    <div class="hero-actions">
+      <a href="https://tally.so/r/68PxQB" target="_blank" rel="noopener" class="btn-primary">Faire le diagnostic →</a>
+    </div>
+    <p style="margin-top:1.1rem;">
+      <a href="index.html" style="color:var(--muted);font-size:.85rem;text-decoration:none;">← Retour à l'accueil</a>
+    </p>
+  </div>
+</section>
+
+<section id="cape">
+  <div style="text-align:center;max-width:var(--max);margin:0 auto 3rem;">
+    <p class="section-eyebrow">La méthode</p>
+    <h2 class="section-title">Comprendre votre point de départ avant d'agir</h2>
+  </div>
+  <div class="cape-inner">
+    <div class="cape-text">
+      <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:var(--chic)">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
+      <p>Ce diagnostic est <strong style="color:var(--chic)">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
+      <a href="https://tally.so/r/68PxQB" target="_blank" rel="noopener" class="btn-primary">Faire le diagnostic →</a>
+      <p style="margin-top:.85rem;font-size:.85rem;color:var(--muted);">Vous avez un site ? <a href="audit-site.html" style="color:var(--ouf);">Faites aussi l'audit gratuit</a> (30 sec).</p>
+    </div>
+    <div class="cape-pillars">
+      <div class="cape-pillar"><div class="cape-letter">C</div><strong>Connaissance</strong><span>Ce que vous savez déjà sur l'IA</span></div>
+      <div class="cape-pillar"><div class="cape-letter">A</div><strong>Adoption</strong><span>Vos outils actuellement en usage</span></div>
+      <div class="cape-pillar"><div class="cape-letter">P</div><strong>Processus</strong><span>Vos flux de travail automatisables</span></div>
+      <div class="cape-pillar"><div class="cape-letter">E</div><strong>Engagement</strong><span>Votre posture face au changement</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="exemple-rapport">
+  <p style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ouf-cta);margin-bottom:1rem;">📧 Exemple de rapport reçu par email</p>
+  <div class="rapport-box">
+    <p style="font-size:.9rem;color:var(--body);line-height:1.6;margin-bottom:1.1rem;">Merci d'avoir complété le diagnostic CAPE.<br>Votre rapport IA sur mesure est prêt — il analyse votre maturité, évalue vos outils et vous propose un plan d'action personnalisé.</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:1.25rem;">
+      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;width:40%;">Score global</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">5 / 48</td></tr>
+      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;">Niveau</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">🔴 Découverte</td></tr>
+      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;">Prochaine étape</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">Audit IA complet — priorité haute</td></tr>
+    </table>
+    <span style="display:block;text-align:center;background:var(--chic);color:#fff;padding:.85rem;border-radius:8px;font-size:.9rem;font-weight:600;">→ Consulter votre rapport complet</span>
+    <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:1rem;">👆 Exemple réel d'un rapport CAPE — le vôtre sera généré sur la base de vos propres réponses.</p>
+  </div>
+</section>
+
+<section id="cta-final">
+  <div class="cta-box">
+    <h2>Prêt(e) à faire le point ?</h2>
+    <p>10 minutes suffisent pour recevoir votre rapport personnalisé et savoir par où commencer.</p>
+    <a href="https://tally.so/r/68PxQB" target="_blank" rel="noopener">Faire le diagnostic CAPE →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">CHIC <span>·</span> <span>OUF</span></div>
+  <p>Par <a href="index.html">Sandrine Darrieu</a> · Consultante en transformation digitale &amp; Product Builder no-code · Brunoy, Île-de-France</p>
+  <p style="margin-top:.35rem;">contact@chicouf.pro · 07 56 92 59 84 · www.chicouf.pro</p>
+  <p style="margin-top:.5rem;"><a href="index.html">Retour à l'accueil</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
+</footer>
+
+</body>
+</html>

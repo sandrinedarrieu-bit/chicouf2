@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Audit de site gratuit — Design, SEO, conversion | CHIC · OUF</title>
+  <meta name="description" content="Analysez gratuitement la visibilité de votre site internet : design, contenu, SEO, conversion et mobile. Rapport personnalisé envoyé par email en quelques minutes." />
+  <link rel="canonical" href="https://www.chicouf.pro/audit-site.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CHIC · OUF" />
+  <meta property="og:title" content="Audit de site gratuit — Design, SEO, conversion | CHIC · OUF" />
+  <meta property="og:description" content="Analysez gratuitement la visibilité de votre site internet : design, contenu, SEO, conversion et mobile." />
+  <meta property="og:url" content="https://www.chicouf.pro/audit-site.html" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:image" content="https://www.chicouf.pro/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://www.chicouf.pro/og-image.png" />
+  <meta name="twitter:title" content="Audit de site gratuit — Design, SEO, conversion | CHIC · OUF" />
+  <meta name="twitter:description" content="Analysez gratuitement la visibilité de votre site internet : design, contenu, SEO, conversion et mobile." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --nuit:     #2C2C3E;
+      --chic:     #2D1F6E;
+      --ouf:      #7B5CF0;
+      --ouf-cta:  #5F3AE0;
+      --ouf-cta-hover: #522FC7;
+      --lilas:    #A78BFA;
+      --lilas-l:  #F5F0FF;
+      --or:       #F59E0B;
+      --cream:    #F8F7F4;
+      --body:     #3D3D3D;
+      --muted:    #6B6B6B;
+      --white:    #FFFFFF;
+      --radius:   12px;
+      --max:      1080px;
+      --max-wide: 1320px;
+    }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 90px !important; }
+    html { overflow-x: hidden; }
+    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; max-width: 100%; overflow-x: clip; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo-badge { flex-shrink: 0; }
+    .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+    .nav-logo-text span { color: var(--lilas); }
+    .nav-logo-tagline { font-size: .6rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
+    .nav-cta:hover { background: var(--ouf-cta-hover); }
+    .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .5rem; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: .5rem; background: var(--nuit); min-width: 210px; padding: .5rem 0; border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,.28); list-style: none; z-index: 200; }
+    .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
+    .nav-dropdown-menu li { width: 100%; }
+    .nav-dropdown-menu a { display: block; padding: .55rem 1.1rem; white-space: nowrap; font-size: .85rem; }
+    .nav-current { color: var(--white) !important; font-weight: 700; }
+
+    .hero { background: var(--cream); padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem) clamp(2rem,4vw,2.5rem); }
+    .hero-inner { max-width: var(--max); margin: 0 auto; text-align: center; }
+    .hero-eyebrow { font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); margin-bottom: 1rem; }
+    .hero-claim { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(2rem,4.5vw,3.1rem); color: var(--chic); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 1.4rem; }
+    .hero-sub { font-size: 1.05rem; font-weight: 500; color: var(--body); max-width: 640px; margin: 0 auto 1.5rem; line-height: 1.65; }
+
+    .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
+    .section-title { text-align: center; font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 800; color: var(--chic); line-height: 1.2; max-width: 640px; margin: 0 auto 1rem; }
+
+    /* ── AUDIT SECTION ─────────────────────────────── */
+    #audit { padding: clamp(2rem,5vw,3rem) clamp(1.25rem,5vw,3rem) clamp(3rem,7vw,5rem); background: var(--cream); }
+    .audit-inner { max-width: 760px; margin: 0 auto; }
+    .audit-input-card { background:var(--white); border-radius:16px; padding:2rem; border:1px solid #E8E6E1; margin-bottom:1.5rem; }
+    .audit-input-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--chic); margin-bottom:.3rem; }
+    .audit-input-card p { font-size:.85rem; color:var(--muted); margin-bottom:1.1rem; }
+    .audit-url-row { display:flex; gap:.75rem; }
+    .audit-url-input { flex:1; border:1.5px solid #E0DDD8; border-radius:10px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--body); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; }
+    .audit-url-input:focus { border-color:var(--ouf); box-shadow:0 0 0 3px rgba(123,92,240,.12); }
+    .audit-url-input::placeholder { color:#C5C2BD; }
+    .btn-audit { background:var(--ouf-cta); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:background .2s,transform .15s; }
+    .btn-audit:hover { background:var(--ouf-cta-hover); transform:translateY(-1px); }
+    .btn-audit:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .audit-error { display:none; background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem; color:#B91C1C; font-size:.88rem; }
+    .audit-error.visible { display:block; }
+    .audit-loading { display:none; text-align:center; padding:2.5rem 1rem; }
+    .audit-loading.visible { display:block; }
+    .audit-spinner { width:40px; height:40px; border:3px solid var(--lilas-l); border-top-color:var(--ouf); border-radius:50%; animation:auditSpin .8s linear infinite; margin:0 auto 1rem; }
+    @keyframes auditSpin { to { transform:rotate(360deg); } }
+    .audit-loading p { color:var(--muted); font-size:.88rem; }
+    .audit-steps { margin-top:.75rem; display:flex; flex-direction:column; gap:.35rem; align-items:center; }
+    .audit-step { font-size:.8rem; color:var(--ouf); opacity:0; animation:auditFade .4s forwards; }
+    @keyframes auditFade { to { opacity:1; } }
+    #auditResults { display:none; }
+    #auditResults.visible { display:block; }
+    .audit-score-hero { background:var(--chic); border-radius:16px; padding:1.75rem; margin-bottom:1.25rem; display:grid; grid-template-columns:auto 1fr; gap:1.25rem; align-items:center; }
+    .audit-score-circle { width:80px; height:80px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Syne',sans-serif; flex-shrink:0; }
+    .audit-score-circle .snum { font-size:1.8rem; font-weight:800; line-height:1; }
+    .audit-score-circle .sden { font-size:.7rem; color:rgba(255,255,255,.45); }
+    .ascore-a { background:rgba(34,197,94,.2); border:2px solid #22C55E; color:#22C55E; }
+    .ascore-b { background:rgba(245,158,11,.2); border:2px solid #F59E0B; color:#F59E0B; }
+    .ascore-c { background:rgba(239,68,68,.2); border:2px solid #EF4444; color:#EF4444; }
+    .audit-score-info h4 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
+    .audit-score-url { font-size:.78rem; color:rgba(255,255,255,.4); margin-bottom:.5rem; word-break:break-all; }
+    .audit-score-summary { font-size:.875rem; color:rgba(255,255,255,.72); line-height:1.6; }
+    .audit-result-section { background:var(--white); border-radius:12px; border:1px solid #E8E6E1; margin-bottom:.75rem; overflow:hidden; }
+    .audit-section-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; cursor:pointer; user-select:none; transition:background .15s; }
+    .audit-section-header:hover { background:var(--cream); }
+    .audit-section-left { display:flex; align-items:center; gap:.65rem; }
+    .audit-section-title { font-family:'Syne',sans-serif; font-size:.9rem; font-weight:700; color:var(--chic); }
+    .audit-score-badge { font-size:.8rem; font-weight:700; padding:.2rem .6rem; border-radius:999px; }
+    .abadge-good { background:rgba(34,197,94,.12); color:#16A34A; }
+    .abadge-excellent { background:rgba(21,128,61,.14); color:#15803D; font-weight:800; }
+    .abadge-mid  { background:rgba(245,158,11,.12); color:#D97706; }
+    .abadge-bad  { background:rgba(239,68,68,.12); color:#DC2626; }
+    .audit-chevron { color:var(--muted); font-size:.8rem; transition:transform .25s; }
+    .audit-section-body { padding:0 1.25rem; max-height:0; overflow:hidden; transition:max-height .35s ease,padding .25s; }
+    .audit-section-body.open { max-height:500px; padding:0 1.25rem 1.25rem; }
+    .audit-section-body p { font-size:.875rem; color:var(--body); line-height:1.7; margin-bottom:.65rem; }
+    .audit-section-body p:last-child { margin-bottom:0; }
+    .audit-email-box { background:var(--chic); border-radius:16px; padding:2rem; margin-top:1.25rem; text-align:center; }
+    .audit-email-box h4 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
+    .audit-email-box p { font-size:.88rem; color:rgba(255,255,255,.65); margin-bottom:1.25rem; }
+    .audit-email-fields { display:flex; gap:.65rem; max-width:520px; margin:0 auto; }
+    .audit-email-input { flex:1; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; }
+    .audit-email-input::placeholder { color:rgba(255,255,255,.4); }
+    .audit-email-input:focus { border-color:var(--lilas); }
+    .audit-prenom-input { width:130px; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; flex-shrink:0; }
+    .audit-prenom-input::placeholder { color:rgba(255,255,255,.4); }
+    .audit-prenom-input:focus { border-color:var(--lilas); }
+    .btn-send-report { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
+    .btn-send-report:hover { opacity:.88; transform:translateY(-1px); }
+    .btn-send-report:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .audit-email-success { display:none; text-align:center; padding:.75rem; font-size:.9rem; color:#A7F3D0; font-weight:500; margin-top:.5rem; }
+    .audit-email-error { display:none; font-size:.82rem; color:#FCA5A5; margin-top:.5rem; text-align:center; }
+    @media(max-width:600px) { .audit-email-fields { flex-direction:column; } .audit-prenom-input { width:100%; } }
+    .audit-cta { background:var(--chic); border-radius:16px; padding:1.75rem; text-align:center; margin-top:1.25rem; }
+    .audit-cta h4 { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
+    .audit-cta p { color:rgba(255,255,255,.6); font-size:.85rem; margin-bottom:1.1rem; }
+    .audit-cta-actions { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
+    .btn-acta { background:var(--ouf); color:var(--white); padding:.7rem 1.5rem; border-radius:var(--radius); font-size:.88rem; font-weight:500; text-decoration:none; transition:opacity .2s; }
+    .btn-acta:hover { opacity:.85; }
+    .btn-acta-ghost { border:1px solid rgba(255,255,255,.3); color:var(--white); padding:.7rem 1.5rem; border-radius:var(--radius); font-size:.88rem; text-decoration:none; }
+    .btn-acta-ghost:hover { border-color:rgba(255,255,255,.7); }
+
+    footer { background: #262636; color: rgba(255,255,255,.35); text-align: center; font-size: .8rem; padding: 2rem; }
+    footer .footer-brand { font-family: 'Georgia', serif; font-size: 1rem; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.7); margin-bottom: .5rem; }
+    footer .footer-brand span { color: var(--lilas); }
+    footer a { color: var(--ouf); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--nuit); flex-direction: column; gap: 1.1rem; padding: 1.25rem clamp(1.25rem,5vw,3rem) 1.5rem; box-shadow: 0 8px 16px rgba(0,0,0,.15); }
+      .nav-links.open { display: flex; }
+      .nav-links .nav-cta { display: inline-block; width: fit-content; }
+      .nav-dropdown-menu { display: block; position: static; margin: .4rem 0 0; padding: 0 0 0 1rem; box-shadow: none; background: transparent; }
+      .nav-dropdown-menu a { padding: .35rem 0; color: rgba(255,255,255,.45); }
+      .audit-url-row { flex-direction:column; }
+      .audit-score-hero { grid-template-columns:1fr; text-align:center; }
+      .audit-score-circle { margin:0 auto; }
+    }
+    @media (max-width: 380px) {
+      .audit-input-card { padding: 1.25rem; }
+      .audit-url-row .btn-audit, .audit-url-row .audit-url-input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    <span class="nav-logo-stack" style="display:flex;flex-direction:column;line-height:1.1;">
+      <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
+      <span class="nav-logo-tagline">Accompagnement en IA</span>
+      <span class="nav-logo-tagline" style="font-style:italic;font-size:.52rem;text-transform:none;letter-spacing:.02em;">pour les salariés, dirigeants et consultants</span>
+    </span>
+  </a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+  <ul class="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html">Accueil ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#solutions-ia">Ma philosophie</a></li>
+        <li><a href="index.html#diagnostics-overview">Par où commencer ?</a></li>
+        <li><a href="index.html#cas-usage">Exemples de projets</a></li>
+        <li><a href="index.html#apropos">Pourquoi CHIC · OUF ?</a></li>
+      </ul>
+    </li>
+    <li><a href="incubateur-ia.html">Incubateur IA</a></li>
+    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
+    <li><a href="devenir-consultant-ia.html">Devenir consultant IA</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Outils gratuits ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="diagnostic-cape.html">Diagnostic d'organisation et de maturité</a></li>
+        <li><a href="audit-site.html" class="nav-current">Analyse du site internet</a></li>
+      </ul>
+    </li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Prendre contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Gratuit, en 30 secondes</p>
+    <h1 class="hero-claim">Analyse de site internet</h1>
+    <p class="hero-sub">Entrez l'adresse de votre site pour recevoir un audit gratuit : design, contenu, SEO, conversion et mobile — avec un rapport personnalisé envoyé par email.</p>
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit">
+  <div class="audit-inner">
+
+    <div class="audit-input-card">
+      <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
+      <p id="auditInputSub">Entrez l'adresse du site internet pour recevoir un audit de votre site internet.</p>
+      <div class="audit-url-row">
+        <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
+        <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
+      </div>
+    </div>
+
+    <div class="audit-error" id="auditError"></div>
+
+    <div class="audit-loading" id="auditLoading">
+      <div class="audit-spinner"></div>
+      <p>Analyse en cours…</p>
+      <div class="audit-steps" id="auditSteps"></div>
+    </div>
+
+    <div id="auditResults">
+      <div class="audit-score-hero">
+        <div class="audit-score-circle" id="auditScoreCircle">
+          <span class="snum" id="auditScoreNum">--</span>
+          <span class="sden">/10</span>
+        </div>
+        <div class="audit-score-info">
+          <div class="audit-score-url" id="auditSiteUrl"></div>
+          <h4 id="auditScoreTitre"></h4>
+          <p class="audit-score-summary" id="auditScoreSummary"></p>
+        </div>
+      </div>
+      <div id="auditSections"></div>
+      <div class="audit-email-box" id="auditEmailBox" style="display:none;">
+        <h4>📩 Votre rapport complet vous attend</h4>
+        <p>Le détail par critère (design, contenu, SEO, conversion, mobile) et vos 3 actions prioritaires sont prêts — indiquez votre prénom et votre email pour les recevoir immédiatement, gratuitement.</p>
+        <div class="audit-email-fields">
+          <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
+          <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
+          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Recevoir mon rapport →</button>
+        </div>
+        <div class="audit-email-error" id="auditEmailError"></div>
+        <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
+      </div>
+      <div class="audit-cta" id="auditCta" style="display:none;">
+        <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
+        <p id="auditCtaSub"></p>
+        <div class="audit-cta-actions">
+          <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
+          <a href="index.html#contact" class="btn-acta-ghost">Nous contacter →</a>
+        </div>
+        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="diagnostic-cape.html" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
+      </div>
+    </div>
+
+    <!-- AUDIT_EXTRACT_IGNORE_START : ce bloc est un exemple fictif de démo, il ne doit jamais être lu par l'outil d'audit lui-même -->
+    <div style="margin-top:2rem;">
+      <p style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ouf-cta);margin-bottom:.75rem;">📋 Exemple de rapport reçu (données fictives)</p>
+      <div class="audit-score-hero">
+        <div class="audit-score-circle ascore-b">
+          <span class="snum">6</span><span class="sden">/10</span>
+        </div>
+        <div class="audit-score-info">
+          <div class="audit-score-url">www.exemple-artisan.fr</div>
+          <h4>Un site qui a de bonnes bases, avec des points à consolider</h4>
+          <p class="audit-score-summary">Le design est agréable et cohérent, mais certains parcours de contact restent peu visibles pour vos visiteurs.</p>
+        </div>
+      </div>
+      <div class="audit-result-section">
+        <div class="audit-section-header" onclick="toggleAuditSection(this)">
+          <div class="audit-section-left"><span>🎨</span><span class="audit-section-title">Design</span></div>
+          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-good">Bon</span><span class="audit-chevron">▼</span></div>
+        </div>
+        <div class="audit-section-body open">
+          <p>L'identité visuelle est cohérente et agréable à parcourir.</p>
+          <p><strong>→ À faire :</strong> Ajoutez des visuels ou témoignages pour renforcer la confiance.</p>
+        </div>
+      </div>
+      <div class="audit-result-section">
+        <div class="audit-section-header" onclick="toggleAuditSection(this)">
+          <div class="audit-section-left"><span>🔍</span><span class="audit-section-title">SEO</span></div>
+          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-mid">À améliorer</span><span class="audit-chevron">▼</span></div>
+        </div>
+        <div class="audit-section-body">
+          <p>Meta description présente, mais peu de mots-clés locaux détectés.</p>
+          <p><strong>→ À faire :</strong> Enrichissez le contenu avec des mots-clés géographiques ciblés.</p>
+        </div>
+      </div>
+      <div class="audit-result-section">
+        <div class="audit-section-header" onclick="toggleAuditSection(this)">
+          <div class="audit-section-left"><span>🎯</span><span class="audit-section-title">Conversion</span></div>
+          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-bad">Urgent</span><span class="audit-chevron">▼</span></div>
+        </div>
+        <div class="audit-section-body">
+          <p>Aucun moyen de contact clair n'est visible dès l'arrivée sur le site.</p>
+          <p><strong>→ À faire :</strong> Ajoutez un bouton d'appel à l'action dès la première section.</p>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:.9rem;">👆 Voici le type de retour détaillé que vous recevrez sur <strong style="color:var(--chic);">votre</strong> site, gratuitement et par email.</p>
+    </div>
+    <!-- AUDIT_EXTRACT_IGNORE_END -->
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">CHIC <span>·</span> <span>OUF</span></div>
+  <p>Par <a href="index.html">Sandrine Darrieu</a> · Consultante en transformation digitale &amp; Product Builder no-code · Brunoy, Île-de-France</p>
+  <p style="margin-top:.35rem;">contact@chicouf.pro · 07 56 92 59 84 · www.chicouf.pro</p>
+  <p style="margin-top:.5rem;"><a href="index.html">Retour à l'accueil</a> · <a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
+</footer>
+
+<script>
+// ── AUDIT ──────────────────────────────────────────────
+const auditStepMessages = ["Lecture du site…","Vérification des pages liées (contact, services)…","Analyse design & structure…","Évaluation contenu & SEO…","Vérification du référencement…","Génération des recommandations…","Finalisation du rapport…"];
+
+async function lancerAudit() {
+  let url = document.getElementById('auditUrl').value.trim();
+  const context = '';
+  if (!url) {
+    showAuditError("Merci d'entrer l'adresse de votre site."); return;
+  }
+  if (!/^https?:\/\//i.test(url)) {
+    url = 'https://' + url;
+  }
+  document.getElementById('auditUrl').value = url;
+  hideAuditError();
+  document.getElementById('auditResults').classList.remove('visible');
+  document.getElementById('auditSections').innerHTML='';
+  document.getElementById('auditCta').style.display='none';
+  document.getElementById('auditLoading').classList.add('visible');
+  document.getElementById('auditLoading').scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('btnAudit').disabled=true;
+  const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
+  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1500); });
+  setTimeout(()=>{
+    if (document.getElementById('auditLoading').classList.contains('visible')) {
+      const el=document.createElement('div'); el.className='audit-step'; el.id='auditStepStillWorking';
+      el.textContent='Toujours en cours, certains sites prennent un peu plus de temps…';
+      stepsEl.appendChild(el);
+    }
+  }, auditStepMessages.length*1500 + 1000);
+
+  try {
+    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context})});
+    const respText = await resp.text();
+    let audit;
+    try {
+      audit = JSON.parse(respText);
+    } catch(e) {
+      try {
+        const start = respText.indexOf('{');
+        const end = respText.lastIndexOf('}');
+        if (start !== -1 && end !== -1) {
+          audit = JSON.parse(respText.substring(start, end + 1));
+        } else throw new Error('JSON introuvable');
+      } catch(e2) {
+        audit = {
+          score_global: 5, niveau: 'Analyse partielle',
+          titre_diagnostic: 'Votre site a du potentiel à révéler',
+          resume: 'Nous avons parcouru votre site. Contactez-nous pour recevoir votre rapport complet personnalisé.',
+          sections: [
+            {id:'design',icon:'🎨',titre:'Design',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'contenu',icon:'✍️',titre:'Contenu',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'seo',icon:'🔍',titre:'SEO',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'conversion',icon:'🎯',titre:'Conversion',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
+            {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
+          ],
+          points_forts: ['Votre site est en ligne et accessible'],
+          priorites: ['Contactez CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> pour un audit approfondi','Réservez un échange gratuit de 30 min'],
+          prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
+        };
+      }
+    }
+    if (audit.error) throw new Error(audit.error);
+    document.getElementById('auditLoading').classList.remove('visible');
+    document.getElementById('btnAudit').disabled=false;
+    afficherAudit(audit, url);
+    lastAudit = audit;
+    lastUrl = url;
+  } catch(err) {
+    document.getElementById('auditLoading').classList.remove('visible');
+    document.getElementById('btnAudit').disabled=false;
+    showAuditError("Erreur lors de l'analyse. Vérifiez l'URL et réessayez. ("+err.message+")");
+  }
+}
+
+function afficherAudit(audit, url) {
+  const score = audit.score_global||5;
+  const sc = document.getElementById('auditScoreCircle');
+  sc.className='audit-score-circle '+(score>=7?'ascore-a':score>=5?'ascore-b':'ascore-c');
+  document.getElementById('auditScoreNum').textContent=score;
+  document.getElementById('auditSiteUrl').textContent=url;
+  document.getElementById('auditScoreTitre').textContent=audit.titre_diagnostic||'';
+  document.getElementById('auditScoreSummary').textContent=audit.resume||'';
+  document.getElementById('auditSections').innerHTML = '';
+  document.getElementById('auditEmailSuccess').style.display = 'none';
+  document.querySelector('.audit-email-fields').style.display = 'flex';
+  document.querySelector('#auditEmailBox p').style.display = 'block';
+  document.getElementById('auditPrenom').value = '';
+  document.getElementById('auditEmail').value = '';
+  document.getElementById('auditEmailError').style.display = 'none';
+  const sendBtn = document.getElementById('btnSendReport');
+  sendBtn.disabled = false;
+  sendBtn.textContent = 'Recevoir mon rapport →';
+  document.getElementById('auditEmailBox').style.display = 'block';
+  document.getElementById('auditCta').style.display = 'none';
+  document.getElementById('auditResults').classList.add('visible');
+  document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('auditUrl').value = '';
+}
+
+let lastAudit = null;
+let lastUrl = '';
+
+async function envoyerRapport() {
+  const email = document.getElementById('auditEmail').value.trim();
+  const prenom = document.getElementById('auditPrenom').value.trim();
+  const errEl = document.getElementById('auditEmailError');
+  errEl.style.display = 'none';
+  if (!email || !email.includes('@')) { errEl.textContent = 'Merci d\'entrer un email valide.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('btnSendReport');
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    const resp = await fetch('/api/send-report', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email, prenom, url: lastUrl, audit: lastAudit })
+    });
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+    document.getElementById('auditEmailSuccess').innerHTML = `✅ Rapport envoyé à <strong>${email}</strong> ! Vérifiez votre boîte mail (et vos spams) dans quelques instants.`;
+    document.getElementById('auditEmailSuccess').style.display = 'block';
+    document.querySelector('.audit-email-fields').style.display = 'none';
+    document.querySelector('#auditEmailBox p').style.display = 'none';
+  } catch(err) {
+    errEl.textContent = 'Erreur d\'envoi : ' + err.message;
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Recevoir mon rapport →';
+  }
+}
+
+function toggleAuditSection(header) {
+  const body=header.nextElementSibling; const chevron=header.querySelector('.audit-chevron');
+  body.classList.toggle('open'); chevron.style.transform=body.classList.contains('open')?'rotate(180deg)':'';
+}
+function showAuditError(msg){const el=document.getElementById('auditError');el.textContent=msg;el.classList.add('visible');}
+function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
+document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
+</script>
+</body>
+</html>
