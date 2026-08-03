@@ -270,16 +270,6 @@
     .tarif-btn-dark:hover { opacity: .85; }
 
     /* CAPE */
-    #cape { background: var(--white); color: var(--body); padding: clamp(4rem,8vw,6rem) clamp(1.25rem,5vw,3rem); border-top: 1px solid #E8E6E1; border-bottom: 1px solid #E8E6E1; }
-    .cape-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-    .cape-text .section-eyebrow,.cape-text .section-title { text-align: left; }
-    .cape-text .section-title { color: var(--chic); margin: 0 0 1rem; }
-    .cape-text p { color: var(--body); font-size: .975rem; margin-bottom: 1.5rem; }
-    .cape-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .cape-pillar { background: var(--lilas-l); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 1.25rem; }
-    .cape-letter { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--ouf); line-height: 1; margin-bottom: .35rem; }
-    .cape-pillar strong { display: block; color: var(--chic); font-size: .88rem; margin-bottom: .2rem; }
-    .cape-pillar span { color: var(--muted); font-size: .8rem; }
 
     /* APROPOS */
     #apropos { padding: clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,3rem); }
@@ -331,91 +321,6 @@
     footer .footer-brand span { color: var(--lilas); }
     footer a { color: var(--ouf); text-decoration: none; }
 
-    /* ── AUDIT SECTION ─────────────────────────────── */
-    #audit { padding: clamp(3rem,7vw,5rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
-    .audit-inner { max-width: 760px; margin: 0 auto; }
-    .audit-input-card { background:var(--cream); border-radius:16px; padding:2rem; border:1px solid #E8E6E1; margin-bottom:1.5rem; }
-    .audit-input-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--chic); margin-bottom:.3rem; }
-    .audit-input-card p { font-size:.85rem; color:var(--muted); margin-bottom:1.1rem; }
-    .audit-url-row { display:flex; gap:.75rem; }
-    .audit-url-input { flex:1; border:1.5px solid #E0DDD8; border-radius:10px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--body); background:var(--white); outline:none; transition:border-color .2s,box-shadow .2s; }
-    .audit-url-input:focus { border-color:var(--ouf); box-shadow:0 0 0 3px rgba(123,92,240,.12); }
-    .audit-url-input::placeholder { color:#C5C2BD; }
-    .btn-audit { background:var(--ouf-cta); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; cursor:pointer; white-space:nowrap; transition:background .2s,transform .15s; }
-    .btn-audit:hover { background:var(--ouf-cta-hover); transform:translateY(-1px); }
-    .btn-audit:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .audit-pro-extras { display:none; margin-top:1rem; border-top:1px solid #E8E6E1; padding-top:1rem; }
-    .audit-pro-extras.visible { display:block; }
-    .audit-pro-extras label { font-size:.8rem; font-weight:500; color:var(--chic); display:block; margin-bottom:.35rem; }
-    .audit-pro-extras textarea { width:100%; border:1.5px solid #E0DDD8; border-radius:10px; padding:.65rem 1rem; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--body); background:var(--white); resize:vertical; min-height:65px; outline:none; transition:border-color .2s; }
-    .audit-pro-extras textarea:focus { border-color:var(--ouf); }
-    .audit-error { display:none; background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.25); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem; color:#B91C1C; font-size:.88rem; }
-    .audit-error.visible { display:block; }
-    .audit-loading { display:none; text-align:center; padding:2.5rem 1rem; }
-    .audit-loading.visible { display:block; }
-    .audit-spinner { width:40px; height:40px; border:3px solid var(--lilas-l); border-top-color:var(--ouf); border-radius:50%; animation:auditSpin .8s linear infinite; margin:0 auto 1rem; }
-    @keyframes auditSpin { to { transform:rotate(360deg); } }
-    .audit-loading p { color:var(--muted); font-size:.88rem; }
-    .audit-steps { margin-top:.75rem; display:flex; flex-direction:column; gap:.35rem; align-items:center; }
-    .audit-step { font-size:.8rem; color:var(--ouf); opacity:0; animation:auditFade .4s forwards; }
-    @keyframes auditFade { to { opacity:1; } }
-    #auditResults { display:none; }
-    #auditResults.visible { display:block; }
-    .audit-score-hero { background:var(--chic); border-radius:16px; padding:1.75rem; margin-bottom:1.25rem; display:grid; grid-template-columns:auto 1fr; gap:1.25rem; align-items:center; }
-    .audit-score-circle { width:80px; height:80px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Syne',sans-serif; flex-shrink:0; }
-    .audit-score-circle .snum { font-size:1.8rem; font-weight:800; line-height:1; }
-    .audit-score-circle .sden { font-size:.7rem; color:rgba(255,255,255,.45); }
-    .ascore-a { background:rgba(34,197,94,.2); border:2px solid #22C55E; color:#22C55E; }
-    .ascore-b { background:rgba(245,158,11,.2); border:2px solid #F59E0B; color:#F59E0B; }
-    .ascore-c { background:rgba(239,68,68,.2); border:2px solid #EF4444; color:#EF4444; }
-    .audit-score-info h4 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
-    .audit-score-url { font-size:.78rem; color:rgba(255,255,255,.4); margin-bottom:.5rem; word-break:break-all; }
-    .audit-score-summary { font-size:.875rem; color:rgba(255,255,255,.72); line-height:1.6; }
-    .audit-result-section { background:var(--white); border-radius:12px; border:1px solid #E8E6E1; margin-bottom:.75rem; overflow:hidden; }
-    .audit-section-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; cursor:pointer; user-select:none; transition:background .15s; }
-    .audit-section-header:hover { background:var(--cream); }
-    .audit-section-left { display:flex; align-items:center; gap:.65rem; }
-    .audit-section-title { font-family:'Syne',sans-serif; font-size:.9rem; font-weight:700; color:var(--chic); }
-    .audit-score-badge { font-size:.8rem; font-weight:700; padding:.2rem .6rem; border-radius:999px; }
-    .abadge-good { background:rgba(34,197,94,.12); color:#16A34A; }
-    .abadge-excellent { background:rgba(21,128,61,.14); color:#15803D; font-weight:800; }
-    .abadge-mid  { background:rgba(245,158,11,.12); color:#D97706; }
-    .abadge-bad  { background:rgba(239,68,68,.12); color:#DC2626; }
-    .audit-chevron { color:var(--muted); font-size:.8rem; transition:transform .25s; }
-    .audit-section-body { padding:0 1.25rem; max-height:0; overflow:hidden; transition:max-height .35s ease,padding .25s; }
-    .audit-section-body.open { max-height:500px; padding:0 1.25rem 1.25rem; }
-    .audit-section-body p { font-size:.875rem; color:var(--body); line-height:1.7; margin-bottom:.65rem; }
-    .audit-section-body p:last-child { margin-bottom:0; }
-    .audit-pro-label { font-size:.7rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ouf); margin-bottom:.35rem; }
-    .audit-reco-list { list-style:none; display:flex; flex-direction:column; gap:.5rem; margin-top:.4rem; }
-    .audit-reco-list li { display:flex; gap:.55rem; align-items:flex-start; font-size:.85rem; }
-    .audit-reco-list li::before { content:'→'; color:var(--ouf); font-weight:700; flex-shrink:0; }
-    /* Email capture — CTA principal */
-    .audit-email-box { background:var(--chic); border-radius:16px; padding:2rem; margin-top:1.25rem; text-align:center; }
-    .audit-email-box h4 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
-    .audit-email-box p { font-size:.88rem; color:rgba(255,255,255,.65); margin-bottom:1.25rem; }
-    .audit-email-fields { display:flex; gap:.65rem; max-width:520px; margin:0 auto; }
-    .audit-email-input { flex:1; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; }
-    .audit-email-input::placeholder { color:rgba(255,255,255,.4); }
-    .audit-email-input:focus { border-color:var(--lilas); }
-    .audit-prenom-input { width:130px; border:1.5px solid rgba(255,255,255,.2); border-radius:8px; padding:.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--white); background:rgba(255,255,255,.1); outline:none; transition:border-color .2s; flex-shrink:0; }
-    .audit-prenom-input::placeholder { color:rgba(255,255,255,.4); }
-    .audit-prenom-input:focus { border-color:var(--lilas); }
-    .btn-send-report { background:var(--ouf); color:var(--white); border:none; padding:.75rem 1.5rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:opacity .2s,transform .15s; }
-    .btn-send-report:hover { opacity:.88; transform:translateY(-1px); }
-    .btn-send-report:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .audit-email-success { display:none; text-align:center; padding:.75rem; font-size:.9rem; color:#A7F3D0; font-weight:500; margin-top:.5rem; }
-    .audit-email-error { display:none; font-size:.82rem; color:#FCA5A5; margin-top:.5rem; text-align:center; }
-    @media(max-width:600px) { .audit-email-fields { flex-direction:column; } .audit-prenom-input { width:100%; } }
-
-    .audit-cta { background:var(--chic); border-radius:16px; padding:1.75rem; text-align:center; margin-top:1.25rem; }
-    .audit-cta h4 { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:800; color:var(--white); margin-bottom:.4rem; }
-    .audit-cta p { color:rgba(255,255,255,.6); font-size:.85rem; margin-bottom:1.1rem; }
-    .audit-cta-actions { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
-    .btn-acta { background:var(--ouf); color:var(--white); padding:.7rem 1.5rem; border-radius:var(--radius); font-size:.88rem; font-weight:500; text-decoration:none; transition:opacity .2s; }
-    .btn-acta:hover { opacity:.85; }
-    .btn-acta-ghost { border:1px solid rgba(255,255,255,.3); color:var(--white); padding:.7rem 1.5rem; border-radius:var(--radius); font-size:.88rem; text-decoration:none; }
-    .btn-acta-ghost:hover { border-color:rgba(255,255,255,.7); }
 
     @media (max-width: 768px) {
       .nav-toggle { display: block; }
@@ -424,20 +329,15 @@
       .nav-links .nav-cta { display: inline-block; width: fit-content; }
       .nav-dropdown-menu { display: block; position: static; margin: .4rem 0 0; padding: 0 0 0 1rem; box-shadow: none; background: transparent; }
       .nav-dropdown-menu a { padding: .35rem 0; color: rgba(255,255,255,.45); }
-      .intro-band,.packages-grid,.cape-inner,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid,.proof-grid { grid-template-columns: 1fr; }
-      .cape-inner,.contact-inner { gap: 2.5rem; }
-      .audit-url-row { flex-direction:column; }
-      .audit-score-hero { grid-template-columns:1fr; text-align:center; }
-      .audit-score-circle { margin:0 auto; }
+      .intro-band,.packages-grid,.apropos-grid,.tarifs-grid,.tarifs-grid-2,.contact-inner,.form-row,.usecases-grid,.diag-grid,.solutions-grid,.proof-grid { grid-template-columns: 1fr; }
+      .contact-inner { gap: 2.5rem; }
     }
 
     /* Petits écrans (ex. iPhone SE, 375px et moins) : on resserre les paddings
-       pour que les formulaires (contact + audit) gardent une zone de saisie
-       confortable au lieu d'être écrasés par des marges pensées pour desktop. */
+       pour que le formulaire de contact garde une zone de saisie
+       confortable au lieu d'être écrasé par des marges pensées pour desktop. */
     @media (max-width: 380px) {
       .contact-form { padding: 1.5rem 1.25rem; }
-      .audit-input-card { padding: 1.25rem; }
-      .audit-url-row .btn-audit, .audit-url-row .audit-url-input { width: 100%; }
       .form-row { gap: .75rem; }
     }
   </style>
@@ -468,9 +368,16 @@
         <li><a href="#apropos">Pourquoi CHIC <span style="color:var(--or);">·</span> <span style="color:var(--lilas);">OUF</span> ?</a></li>
       </ul>
     </li>
-    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
     <li><a href="incubateur-ia.html">Incubateur IA</a></li>
+    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
     <li><a href="devenir-consultant-ia.html">Devenir consultant IA</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Outils gratuits ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="diagnostic-cape.html">Diagnostic d'organisation et de maturité</a></li>
+        <li><a href="audit-site.html">Analyse du site internet</a></li>
+      </ul>
+    </li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact" class="nav-cta">Prendre contact</a></li>
   </ul>
@@ -483,10 +390,6 @@
         Développez votre activité. 
         Faites évoluer votre carrière.</h1>
       <p class="hero-sub" style="font-weight:700;color:var(--chic);">Que vous soyez salarié, dirigeant d'une TPE ou en reconversion professionnelle, CHIC · OUF vous aide à utiliser concrètement l'intelligence artificielle pour gagner du temps, développer votre activité ou construire un nouveau projet professionnel. Vous bénéficiez d'un accompagnement humain, progressif et adapté à votre niveau.</p>
-      <div class="hero-actions">
-        <a href="#diagnostics-overview" class="btn-primary">Découvrir mon besoin prioritaire</a>
-        <a href="#audit" class="btn-ghost">Analyser mon site →</a>
-      </div>
       <p style="margin-top:1.4rem;">
         <a href="#contact" style="color:var(--muted);font-size:.85rem;text-decoration:none;">Déjà une idée précise ? Réserver un échange de 30 min →</a>
       </p>
@@ -550,112 +453,6 @@
 </section>
 
 
-<!-- AUDIT -->
-<section id="audit">
-  <div class="audit-inner">
-
-    <div class="audit-input-card">
-      <h3 id="auditInputTitle">Analysez votre site gratuitement</h3>
-      <p id="auditInputSub">Entrez l'adresse du site internet pour recevoir un audit de votre site internet.</p>
-      <div class="audit-url-row">
-        <input type="text" class="audit-url-input" id="auditUrl" placeholder="www.monsite.fr" />
-        <button class="btn-audit" id="btnAudit" onclick="lancerAudit()">Analyser →</button>
-      </div>
-    </div>
-
-    <div class="audit-error" id="auditError"></div>
-
-    <div class="audit-loading" id="auditLoading">
-      <div class="audit-spinner"></div>
-      <p>Analyse en cours…</p>
-      <div class="audit-steps" id="auditSteps"></div>
-    </div>
-
-    <div id="auditResults">
-      <div class="audit-score-hero">
-        <div class="audit-score-circle" id="auditScoreCircle">
-          <span class="snum" id="auditScoreNum">--</span>
-          <span class="sden">/10</span>
-        </div>
-        <div class="audit-score-info">
-          <div class="audit-score-url" id="auditSiteUrl"></div>
-          <h4 id="auditScoreTitre"></h4>
-          <p class="audit-score-summary" id="auditScoreSummary"></p>
-        </div>
-      </div>
-      <div id="auditSections"></div>
-      <div class="audit-email-box" id="auditEmailBox" style="display:none;">
-        <h4>📩 Votre rapport complet vous attend</h4>
-        <p>Le détail par critère (design, contenu, SEO, conversion, mobile) et vos 3 actions prioritaires sont prêts — indiquez votre prénom et votre email pour les recevoir immédiatement, gratuitement.</p>
-        <div class="audit-email-fields">
-          <input type="text" class="audit-prenom-input" id="auditPrenom" placeholder="Prénom" />
-          <input type="email" class="audit-email-input" id="auditEmail" placeholder="votre@email.fr" />
-          <button class="btn-send-report" id="btnSendReport" onclick="envoyerRapport()">Recevoir mon rapport →</button>
-        </div>
-        <div class="audit-email-error" id="auditEmailError"></div>
-        <div class="audit-email-success" id="auditEmailSuccess">✅ Rapport envoyé ! Vérifiez votre boîte mail dans quelques instants.</div>
-        <p style="font-size:.72rem;color:var(--muted);margin-top:.6rem;">Vos informations sont utilisées uniquement pour vous envoyer ce rapport. Voir notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
-      </div>
-      <div class="audit-cta" id="auditCta" style="display:none;">
-        <h4 id="auditCtaTitle">Vous voulez aller plus loin ?</h4>
-        <p id="auditCtaSub"></p>
-        <div class="audit-cta-actions">
-          <a href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" class="btn-acta">📅 Réserver un échange gratuit</a>
-          <a href="#contact" class="btn-acta-ghost">Nous contacter →</a>
-        </div>
-        <p style="margin-top:1rem;font-size:.82rem;color:rgba(255,255,255,.5);">Envie d'aller plus loin ? <a href="#cape" style="color:var(--lilas);">Faites aussi le diagnostic CAPE</a> (10 min, gratuit).</p>
-      </div>
-    </div>
-
-    <!-- AUDIT_EXTRACT_IGNORE_START : ce bloc est un exemple fictif de démo, il ne doit jamais être lu par l'outil d'audit lui-même -->
-    <!-- Exemple statique (données fictives), pour montrer à quoi ressemble le rapport avant de le demander -->
-    <div style="margin-top:2rem;">
-      <p style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ouf-cta);margin-bottom:.75rem;">📋 Exemple de rapport reçu (données fictives)</p>
-      <div class="audit-score-hero">
-        <div class="audit-score-circle ascore-b">
-          <span class="snum">6</span><span class="sden">/10</span>
-        </div>
-        <div class="audit-score-info">
-          <div class="audit-score-url">www.exemple-artisan.fr</div>
-          <h4>Un site qui a de bonnes bases, avec des points à consolider</h4>
-          <p class="audit-score-summary">Le design est agréable et cohérent, mais certains parcours de contact restent peu visibles pour vos visiteurs.</p>
-        </div>
-      </div>
-      <div class="audit-result-section">
-        <div class="audit-section-header" onclick="toggleAuditSection(this)">
-          <div class="audit-section-left"><span>🎨</span><span class="audit-section-title">Design</span></div>
-          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-good">Bon</span><span class="audit-chevron">▼</span></div>
-        </div>
-        <div class="audit-section-body open">
-          <p>L'identité visuelle est cohérente et agréable à parcourir.</p>
-          <p><strong>→ À faire :</strong> Ajoutez des visuels ou témoignages pour renforcer la confiance.</p>
-        </div>
-      </div>
-      <div class="audit-result-section">
-        <div class="audit-section-header" onclick="toggleAuditSection(this)">
-          <div class="audit-section-left"><span>🔍</span><span class="audit-section-title">SEO</span></div>
-          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-mid">À améliorer</span><span class="audit-chevron">▼</span></div>
-        </div>
-        <div class="audit-section-body">
-          <p>Meta description présente, mais peu de mots-clés locaux détectés.</p>
-          <p><strong>→ À faire :</strong> Enrichissez le contenu avec des mots-clés géographiques ciblés.</p>
-        </div>
-      </div>
-      <div class="audit-result-section">
-        <div class="audit-section-header" onclick="toggleAuditSection(this)">
-          <div class="audit-section-left"><span>🎯</span><span class="audit-section-title">Conversion</span></div>
-          <div style="display:flex;align-items:center;gap:.6rem;"><span class="audit-score-badge abadge-bad">Urgent</span><span class="audit-chevron">▼</span></div>
-        </div>
-        <div class="audit-section-body">
-          <p>Aucun moyen de contact clair n'est visible dès l'arrivée sur le site.</p>
-          <p><strong>→ À faire :</strong> Ajoutez un bouton d'appel à l'action dès la première section.</p>
-        </div>
-      </div>
-      <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:.9rem;">👆 Voici le type de retour détaillé que vous recevrez sur <strong style="color:var(--chic);">votre</strong> site, gratuitement et par email.</p>
-    </div>
-    <!-- AUDIT_EXTRACT_IGNORE_END -->
-  </div>
-</section>
 
 <section id="solutions-ia">
   <div class="packages-header">
@@ -723,41 +520,6 @@
 
 </section>
 
-<section id="cape">
-  <div style="text-align:center;max-width:var(--max);margin:0 auto 3rem;">
-    <p class="section-eyebrow">Pour gagner du temps</p>
-    <h2 class="section-title">Votre diagnostic d'organisation et de maturité IA</h2>
-  </div>
-  <div class="cape-inner">
-    <div class="cape-text">
-      <p>Avant de proposer un outil ou une automatisation, j'évalue votre niveau de maturité IA avec la <strong style="color:var(--chic)">Méthode CAPE</strong> — un questionnaire de 16 questions qui révèle vos forces et vos angles morts.</p>
-      <p>Ce diagnostic est <strong style="color:var(--chic)">gratuit</strong>. Il prend moins de 10 minutes et vous recevez un rapport personnalisé par email.</p>
-      <a href="https://tally.so/r/68PxQB" target="_blank" class="btn-primary" style="display:inline-block;margin-top:.5rem;">Faire le diagnostic →</a>
-      <p style="margin-top:.85rem;font-size:.85rem;color:var(--muted);">Vous avez un site ? <a href="#audit" style="color:var(--ouf);">Faites aussi l'audit gratuit</a> (30 sec).</p>
-    </div>
-    <div class="cape-pillars">
-      <div class="cape-pillar"><div class="cape-letter">C</div><strong>Connaissance</strong><span>Ce que vous savez déjà sur l'IA</span></div>
-      <div class="cape-pillar"><div class="cape-letter">A</div><strong>Adoption</strong><span>Vos outils actuellement en usage</span></div>
-      <div class="cape-pillar"><div class="cape-letter">P</div><strong>Processus</strong><span>Vos flux de travail automatisables</span></div>
-      <div class="cape-pillar"><div class="cape-letter">E</div><strong>Engagement</strong><span>Votre posture face au changement</span></div>
-    </div>
-  </div>
-
-  <!-- AUDIT_EXTRACT_IGNORE_START : exemple de démo, ne pas lire lors de l'audit du site lui-même -->
-  <!-- Exemple réel (test personnel de l'outil), pour montrer le rapport reçu par email -->
-  <div style="max-width:600px;margin:2.5rem auto 0;background:var(--white);border:1px solid #E8E6E1;border-left:4px solid var(--chic);border-radius:12px;padding:1.75rem;">
-    <p style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ouf-cta);margin-bottom:1rem;">📧 Exemple de rapport reçu par email</p>
-    <p style="font-size:.9rem;color:var(--body);line-height:1.6;margin-bottom:1.1rem;">Merci d'avoir complété le diagnostic CAPE.<br>Votre rapport IA sur mesure est prêt — il analyse votre maturité, évalue vos outils et vous propose un plan d'action personnalisé.</p>
-    <table style="width:100%;border-collapse:collapse;margin-bottom:1.25rem;">
-      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;width:40%;">Score global</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">5 / 48</td></tr>
-      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;">Niveau</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">🔴 Découverte</td></tr>
-      <tr><td style="padding:.4rem 0;color:var(--chic);font-weight:700;font-size:.85rem;">Prochaine étape</td><td style="padding:.4rem 0;font-size:.9rem;color:var(--body);">Audit IA complet — priorité haute</td></tr>
-    </table>
-    <span style="display:block;text-align:center;background:var(--chic);color:#fff;padding:.85rem;border-radius:8px;font-size:.9rem;font-weight:600;">→ Consulter votre rapport complet</span>
-    <p style="text-align:center;font-size:.8rem;color:var(--muted);margin-top:1rem;">👆 Exemple réel d'un rapport CAPE — le vôtre sera généré sur la base de vos propres réponses.</p>
-  </div>
-  <!-- AUDIT_EXTRACT_IGNORE_END -->
-</section>
 
 <section id="faq">
   <div class="usecases-header">
@@ -853,169 +615,11 @@
   <div class="footer-brand">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></div>
   <p>Par <a href="#">Sandrine Darrieu</a> · Consultante en transformation digitale &amp; Product Builder no-code · Brunoy, Île-de-France</p>
   <p style="margin-top:.35rem;">contact@chicouf.pro · 07 56 92 59 84 · www.chicouf.pro</p>
-  <p style="margin-top:.5rem;"><a href="https://tally.so/r/68PxQB">Diagnostic CAPE gratuit</a> · <a href="#audit">Audit de site gratuit</a> · <a href="https://www.linkedin.com/company/chic-ouf2/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://g.page/r/Cbc8yUVNiILQEAE/review" target="_blank" rel="noopener">⭐ Laisser un avis Google</a></p>
+  <p style="margin-top:.5rem;"><a href="diagnostic-cape.html">Diagnostic CAPE gratuit</a> · <a href="audit-site.html">Audit de site gratuit</a> · <a href="https://www.linkedin.com/company/chic-ouf2/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://g.page/r/Cbc8yUVNiILQEAE/review" target="_blank" rel="noopener">⭐ Laisser un avis Google</a></p>
   <p style="margin-top:.5rem;"><a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
 </footer>
 
 <script>
-// ── AUDIT ──────────────────────────────────────────────
-const auditStepMessages = ["Lecture du site…","Vérification des pages liées (contact, services)…","Analyse design & structure…","Évaluation contenu & SEO…","Vérification du référencement…","Génération des recommandations…","Finalisation du rapport…"];
-
-async function lancerAudit() {
-  let url = document.getElementById('auditUrl').value.trim();
-  const context = '';
-  if (!url) {
-    showAuditError("Merci d'entrer l'adresse de votre site."); return;
-  }
-  // On accepte que le prospect tape juste "monsite.fr" ou "www.monsite.fr" sans protocole :
-  // on ajoute https:// automatiquement plutôt que de bloquer avec un message technique.
-  if (!/^https?:\/\//i.test(url)) {
-    url = 'https://' + url;
-  }
-  document.getElementById('auditUrl').value = url;
-  hideAuditError();
-  document.getElementById('auditResults').classList.remove('visible');
-  document.getElementById('auditSections').innerHTML='';
-  document.getElementById('auditCta').style.display='none';
-  document.getElementById('auditLoading').classList.add('visible');
-  document.getElementById('auditLoading').scrollIntoView({behavior:'smooth',block:'center'});
-  document.getElementById('btnAudit').disabled=true;
-  const stepsEl=document.getElementById('auditSteps'); stepsEl.innerHTML='';
-  auditStepMessages.forEach((msg,i)=>{ setTimeout(()=>{ const el=document.createElement('div'); el.className='audit-step'; el.textContent=msg; stepsEl.appendChild(el); },i*1500); });
-  // Si l'analyse dépasse la durée des messages ci-dessus (site avec plusieurs pages
-  // annexes à vérifier), on affiche un message rassurant qui reste visible plutôt
-  // que de laisser l'écran de chargement figé sans rien de nouveau.
-  setTimeout(()=>{
-    if (document.getElementById('auditLoading').classList.contains('visible')) {
-      const el=document.createElement('div'); el.className='audit-step'; el.id='auditStepStillWorking';
-      el.textContent='Toujours en cours, certains sites prennent un peu plus de temps…';
-      stepsEl.appendChild(el);
-    }
-  }, auditStepMessages.length*1500 + 1000);
-
-  try {
-    const resp = await fetch('/api/audit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, context})});
-    const respText = await resp.text();
-    let audit;
-    try {
-      audit = JSON.parse(respText);
-    } catch(e) {
-      // Tenter d'extraire le JSON entre { et }
-      try {
-        const start = respText.indexOf('{');
-        const end = respText.lastIndexOf('}');
-        if (start !== -1 && end !== -1) {
-          audit = JSON.parse(respText.substring(start, end + 1));
-        } else throw new Error('JSON introuvable');
-      } catch(e2) {
-        // Fallback visuel
-        audit = {
-          score_global: 5, niveau: 'Analyse partielle',
-          titre_diagnostic: 'Votre site a du potentiel à révéler',
-          resume: 'Nous avons parcouru votre site. Contactez-nous pour recevoir votre rapport complet personnalisé.',
-          sections: [
-            {id:'design',icon:'🎨',titre:'Design',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
-            {id:'contenu',icon:'✍️',titre:'Contenu',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
-            {id:'seo',icon:'🔍',titre:'SEO',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
-            {id:'conversion',icon:'🎯',titre:'Conversion',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'},
-            {id:'mobile',icon:'📱',titre:'Mobile',score:'À améliorer',analyse:'Un retour détaillé vous attend.',reco:'Échangeons 30 min pour en discuter.'}
-          ],
-          points_forts: ['Votre site est en ligne et accessible'],
-          priorites: ['Contactez CHIC <span style="color:var(--or);">·</span> <span style="color:var(--ouf);">OUF</span> pour un audit approfondi','Réservez un échange gratuit de 30 min'],
-          prochaine_etape: 'Réservez un échange gratuit pour recevoir votre rapport complet.'
-        };
-      }
-    }
-    if (audit.error) throw new Error(audit.error);
-    document.getElementById('auditLoading').classList.remove('visible');
-    document.getElementById('btnAudit').disabled=false;
-    afficherAudit(audit, url);
-    lastAudit = audit;
-    lastUrl = url;
-  } catch(err) {
-    document.getElementById('auditLoading').classList.remove('visible');
-    document.getElementById('btnAudit').disabled=false;
-    showAuditError("Erreur lors de l'analyse. Vérifiez l'URL et réessayez. ("+err.message+")");
-  }
-}
-
-function afficherAudit(audit, url) {
-  const score = audit.score_global||5;
-  const sc = document.getElementById('auditScoreCircle');
-  sc.className='audit-score-circle '+(score>=7?'ascore-a':score>=5?'ascore-b':'ascore-c');
-  document.getElementById('auditScoreNum').textContent=score;
-  document.getElementById('auditSiteUrl').textContent=url;
-  document.getElementById('auditScoreTitre').textContent=audit.titre_diagnostic||'';
-  document.getElementById('auditScoreSummary').textContent=audit.resume||'';
-
-  // Le détail (sections, points forts, priorités) n'est volontairement PAS affiché ici :
-  // seul l'aperçu (score + titre + résumé) est visible sur la page. Le rapport complet
-  // n'est envoyé que par email, une fois le prénom et l'email renseignés — c'est ce qui
-  // force une vraie capture de contact plutôt qu'une simple option facultative.
-  document.getElementById('auditSections').innerHTML = '';
-
-  // Réinitialisation complète du bloc email : si un audit précédent a déjà été
-  // envoyé par email (état "succès" affiché, champs cachés), un nouvel audit doit
-  // repartir de zéro et redemander prénom + email, pas réutiliser silencieusement
-  // l'ancien état.
-  document.getElementById('auditEmailSuccess').style.display = 'none';
-  document.querySelector('.audit-email-fields').style.display = 'flex';
-  document.querySelector('#auditEmailBox p').style.display = 'block';
-  document.getElementById('auditPrenom').value = '';
-  document.getElementById('auditEmail').value = '';
-  document.getElementById('auditEmailError').style.display = 'none';
-  const sendBtn = document.getElementById('btnSendReport');
-  sendBtn.disabled = false;
-  sendBtn.textContent = 'Recevoir mon rapport →';
-
-  document.getElementById('auditEmailBox').style.display = 'block';
-  document.getElementById('auditCta').style.display = 'none';
-  document.getElementById('auditResults').classList.add('visible');
-  document.getElementById('auditResults').scrollIntoView({behavior:'smooth',block:'start'});
-
-  // On vide le champ de recherche : une fois le résultat affiché, l'URL analysée
-  // reste visible dans l'aperçu du score (auditSiteUrl) — inutile de la laisser
-  // dans le champ de saisie, qui doit être prêt pour un éventuel deuxième test.
-  document.getElementById('auditUrl').value = '';
-}
-
-let lastAudit = null;
-let lastUrl = '';
-
-async function envoyerRapport() {
-  const email = document.getElementById('auditEmail').value.trim();
-  const prenom = document.getElementById('auditPrenom').value.trim();
-  const errEl = document.getElementById('auditEmailError');
-  errEl.style.display = 'none';
-  if (!email || !email.includes('@')) { errEl.textContent = 'Merci d\'entrer un email valide.'; errEl.style.display = 'block'; return; }
-  const btn = document.getElementById('btnSendReport');
-  btn.disabled = true; btn.textContent = 'Envoi…';
-  try {
-    const resp = await fetch('/api/send-report', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ email, prenom, url: lastUrl, audit: lastAudit })
-    });
-    const result = await resp.json();
-    if (result.error) throw new Error(result.error);
-    document.getElementById('auditEmailSuccess').innerHTML = `✅ Rapport envoyé à <strong>${email}</strong> ! Vérifiez votre boîte mail (et vos spams) dans quelques instants.`;
-    document.getElementById('auditEmailSuccess').style.display = 'block';
-    document.querySelector('.audit-email-fields').style.display = 'none';
-    document.querySelector('#auditEmailBox p').style.display = 'none';
-  } catch(err) {
-    errEl.textContent = 'Erreur d\'envoi : ' + err.message;
-    errEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Recevoir mon rapport →';
-  }
-}
-
-function toggleAuditSection(header) {
-  const body=header.nextElementSibling; const chevron=header.querySelector('.audit-chevron');
-  body.classList.toggle('open'); chevron.style.transform=body.classList.contains('open')?'rotate(180deg)':'';
-}
-function showAuditError(msg){const el=document.getElementById('auditError');el.textContent=msg;el.classList.add('visible');}
-function hideAuditError(){document.getElementById('auditError').classList.remove('visible');}
-document.getElementById('auditUrl').addEventListener('keydown',e=>{if(e.key==='Enter')lancerAudit();});
 
 async function handleSubmit() {
   const prenom = document.getElementById('prenom').value.trim();
