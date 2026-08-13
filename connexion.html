@@ -63,6 +63,13 @@
 
   .login-note { text-align:center; margin-top: 1.5rem; font-size: .76rem; color: var(--muted); }
 
+  .login-choice { display:flex; gap:.6rem; margin-bottom: 1.75rem; }
+  .login-choice a { flex:1; text-align:center; padding: .65rem; border-radius: 10px; font-size: .84rem; font-weight:600; text-decoration:none; transition: all .2s; }
+  .login-choice .choice-demo { background: var(--lilas-l); color: var(--chic); }
+  .login-choice .choice-demo:hover { background: #EAE1FC; }
+  .login-choice .choice-login { background: var(--ouf-cta); color: #fff; }
+  .login-choice .choice-login:hover { background: var(--ouf-cta-hover); }
+
   footer { text-align:center; padding: 1.5rem; font-size: .78rem; color: var(--muted); }
   footer a { color: var(--ouf); text-decoration: none; }
 </style>
@@ -80,9 +87,16 @@
   <div class="login-card">
     <span class="login-badge">Espace commerci'al</span>
     <h1 class="login-title">Connexion</h1>
-    <p class="login-sub">Accédez à votre catalogue, vos outils de diagnostic et le suivi de vos ventes.</p>
+    <p class="login-sub">Prospect ou commerci'al ? Choisissez votre entrée.</p>
 
-    <form onsubmit="event.preventDefault();">
+    <div class="login-choice">
+      <a href="espace-commercial.html?demo=1" class="choice-demo">🎬 Voir la démo</a>
+      <a href="#form-connexion" class="choice-login">🔑 Connexion</a>
+    </div>
+
+    <div class="login-divider" style="margin:0 0 1.5rem;"><span>Espace membre</span></div>
+
+    <form id="form-connexion" onsubmit="event.preventDefault(); window.location.href='espace-commercial.html';">
       <div class="form-group">
         <label for="email">Adresse email</label>
         <input type="email" id="email" placeholder="prenom@exemple.fr" required />
@@ -104,7 +118,7 @@
   </div>
 </div>
 
-<p class="login-note">🔒 Espace réservé aux membres du réseau CommercI.A.l.</p>
+<p class="login-note">🔒 Espace réservé aux membres du réseau CommercI.A.l. En vous connectant, vous acceptez notre <a href="politique-confidentialite.html" style="color:var(--ouf);">politique de confidentialité</a>.</p>
 
 <footer>
   CHIC · OUF · <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a> · 07 56 92 59 84
