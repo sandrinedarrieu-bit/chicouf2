@@ -100,8 +100,8 @@
   .pilier-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; }
 
   /* SÉLECTEUR DE PARCOURS : Consultant IA / CommercI.A.l */
-  .path-intro { text-align:center; max-width: var(--max); margin: 0 auto 2rem; }
-  .path-tabs { max-width: var(--max); margin: 0 auto 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .path-intro { text-align:center; max-width: var(--max); margin: 0 auto 1.25rem; }
+  .path-tabs { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .path-tab { text-align:left; cursor:pointer; background: var(--white); border: 1.5px solid #E8E6E1; border-radius: 16px; padding: 1.5rem 1.6rem; font-family: 'DM Sans', sans-serif; transition: border-color .2s, box-shadow .2s; }
   .path-tab:hover { border-color: var(--lilas); }
   .path-tab .path-tab-icon { font-size: 1.3rem; margin-bottom: .5rem; }
@@ -182,16 +182,16 @@
   <p class="section-sub">Deux façons de vivre de l'IA : devenir l'expert qui forme et conseille, ou devenir le lien de confiance qui vend des solutions concrètes. Choisissez la voie qui vous ressemble.</p>
 </section>
 
-<section style="padding-top:0;">
+<section style="padding-top:0;padding-bottom:0;">
   <p class="path-intro" style="color:var(--muted);font-size:.92rem;">Tu veux transmettre ton expertise, ou connecter un besoin à la bonne solution sans devenir toi-même expert technique ?</p>
   <div class="path-tabs">
-    <div class="path-tab path-tab-consultant active" id="tab-consultant" onclick="showPath('consultant')">
+    <div class="path-tab path-tab-consultant active" id="tab-consultant" onclick="showPath('consultant')" style="border-color:var(--ouf);background:var(--lilas-l);box-shadow:0 8px 24px rgba(123,92,240,.14);">
       <span class="path-tab-badge">Vendre et former</span>
       <div class="path-tab-icon">🎯</div>
       <div class="path-tab-title">Consultant IA</div>
       <div class="path-tab-sub">Structurez une offre de formation et d'accompagnement IA. Vous devenez l'expert reconnu de vos clients.</div>
     </div>
-    <div class="path-tab path-tab-commercial" id="tab-commercial" onclick="showPath('commercial')">
+    <div class="path-tab path-tab-commercial" id="tab-commercial" onclick="showPath('commercial')" style="border-color:#E8E6E1;background:var(--white);box-shadow:none;">
       <span class="path-tab-badge">Vendre</span>
       <div class="path-tab-icon">🤝</div>
       <div class="path-tab-title">CommercI.A.l</div>
@@ -200,7 +200,7 @@
   </div>
 </section>
 
-<div class="tab-panel active" id="panel-consultant">
+<div class="tab-panel active" id="panel-consultant" style="display:block;">
 
 <section style="padding-top:0;">
   <div class="desc-card">
@@ -274,7 +274,7 @@
 
 </div>
 
-<div class="tab-panel" id="panel-commercial">
+<div class="tab-panel" id="panel-commercial" style="display:none;">
 
 <section style="padding-top:0;">
   <div class="desc-card">
@@ -428,10 +428,19 @@
 
 <script>
 function showPath(path){
-  document.getElementById('tab-consultant').classList.toggle('active', path === 'consultant');
-  document.getElementById('tab-commercial').classList.toggle('active', path === 'commercial');
-  document.getElementById('panel-consultant').classList.toggle('active', path === 'consultant');
-  document.getElementById('panel-commercial').classList.toggle('active', path === 'commercial');
+  var tabC = document.getElementById('tab-consultant');
+  var tabM = document.getElementById('tab-commercial');
+  var isConsultant = (path === 'consultant');
+  tabC.classList.toggle('active', isConsultant);
+  tabM.classList.toggle('active', !isConsultant);
+  tabC.style.borderColor = isConsultant ? 'var(--ouf)' : '#E8E6E1';
+  tabC.style.background  = isConsultant ? 'var(--lilas-l)' : 'var(--white)';
+  tabC.style.boxShadow   = isConsultant ? '0 8px 24px rgba(123,92,240,.14)' : 'none';
+  tabM.style.borderColor = !isConsultant ? 'var(--or)' : '#E8E6E1';
+  tabM.style.background  = !isConsultant ? '#FFF7E9' : 'var(--white)';
+  tabM.style.boxShadow   = !isConsultant ? '0 8px 24px rgba(245,158,11,.16)' : 'none';
+  document.getElementById('panel-consultant').style.display = isConsultant ? 'block' : 'none';
+  document.getElementById('panel-commercial').style.display = isConsultant ? 'none' : 'block';
 }
 </script>
 </body>
