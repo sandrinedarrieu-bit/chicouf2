@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Connexion — Espace commerci'al | CHIC · OUF</title>
+<meta name="description" content="Connectez-vous à votre espace commerci'al CommercI.A.l : catalogue, outils de diagnostic, formation et suivi de vos ventes." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nuit:     #2C2C3E;
+    --chic:     #2D1F6E;
+    --ouf:      #7B5CF0;
+    --ouf-cta:  #5F3AE0;
+    --ouf-cta-hover: #522FC7;
+    --lilas:    #A78BFA;
+    --lilas-l:  #F5F0FF;
+    --or:       #F59E0B;
+    --cream:    #F8F7F4;
+    --body:     #3D3D3D;
+    --muted:    #6B6B6B;
+    --white:    #FFFFFF;
+    --radius:   12px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+  .nav-logo-text span { color: var(--lilas); }
+  .nav-back { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; }
+  .nav-back:hover { color: var(--white); }
+
+  .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.25rem; }
+  .login-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 20px; padding: 2.75rem 2.5rem; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(44,44,62,.08); }
+  .login-badge { display:inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ouf); background: var(--lilas-l); padding: .3rem .7rem; border-radius: 999px; margin-bottom: 1rem; }
+  .login-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--chic); margin-bottom: .4rem; }
+  .login-sub { font-size: .88rem; color: var(--muted); margin-bottom: 1.75rem; }
+
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display:block; font-size: .82rem; font-weight: 500; color: var(--body); margin-bottom: .4rem; }
+  .form-group input { width: 100%; padding: .75rem .9rem; border: 1.5px solid #E0DDD5; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: .92rem; background: var(--cream); transition: border-color .2s, box-shadow .2s; }
+  .form-group input:focus { outline: none; border-color: var(--ouf); box-shadow: 0 0 0 3px rgba(123,92,240,.12); background: var(--white); }
+
+  .login-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: .82rem; }
+  .login-row a { color: var(--ouf); text-decoration: none; }
+  .login-row a:hover { text-decoration: underline; }
+  .login-row label { display: flex; align-items: center; gap: .4rem; color: var(--muted); cursor: pointer; }
+
+  .btn-login { width: 100%; background: var(--ouf-cta); color: var(--white); border: none; padding: .9rem; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .2s, transform .15s; }
+  .btn-login:hover { background: var(--ouf-cta-hover); transform: translateY(-1px); }
+
+  .login-divider { display: flex; align-items: center; gap: .75rem; margin: 1.75rem 0; }
+  .login-divider::before, .login-divider::after { content:''; flex:1; height:1px; background:#E8E6E1; }
+  .login-divider span { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  .login-join { text-align:center; font-size: .88rem; color: var(--muted); }
+  .login-join a { color: var(--chic); font-weight: 600; text-decoration: none; }
+  .login-join a:hover { text-decoration: underline; }
+
+  .login-note { text-align:center; margin-top: 1.5rem; font-size: .76rem; color: var(--muted); }
+
+  footer { text-align:center; padding: 1.5rem; font-size: .78rem; color: var(--muted); }
+  footer a { color: var(--ouf); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
+  </a>
+  <a class="nav-back" href="devenir-consultant-ia.html">← Retour au site</a>
+</nav>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <span class="login-badge">Espace commerci'al</span>
+    <h1 class="login-title">Connexion</h1>
+    <p class="login-sub">Accédez à votre catalogue, vos outils de diagnostic et le suivi de vos ventes.</p>
+
+    <form onsubmit="event.preventDefault();">
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input type="email" id="email" placeholder="prenom@exemple.fr" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="••••••••" required />
+      </div>
+      <div class="login-row">
+        <label><input type="checkbox" style="width:auto;" /> Rester connecté</label>
+        <a href="#">Mot de passe oublié ?</a>
+      </div>
+      <button type="submit" class="btn-login">Se connecter →</button>
+    </form>
+
+    <div class="login-divider"><span>ou</span></div>
+
+    <p class="login-join">Pas encore commerci'al ?<br><a href="rejoindre-commercial.html">Rejoindre le réseau CommercI.A.l →</a></p>
+  </div>
+</div>
+
+<p class="login-note">🔒 Espace réservé aux membres du réseau CommercI.A.l.</p>
+
+<footer>
+  CHIC · OUF · <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a> · 07 56 92 59 84
+</footer>
+
+</body>
+</html>
