@@ -100,6 +100,10 @@
   .sub-row strong { color:#fff; }
   .sub-btn { display:block; text-align:center; margin-top: 1.1rem; background: var(--or); color: #402A04; padding: .65rem; border-radius: 10px; font-size: .84rem; font-weight:700; text-decoration:none; }
 
+  .demo-banner { display:none; background: var(--or); color: #402A04; text-align:center; padding: .7rem 1rem; font-size: .85rem; font-weight:600; }
+  .demo-banner a { color: #402A04; text-decoration: underline; margin-left: .4rem; }
+  body.demo-mode .demo-banner { display:block; }
+
   @media (max-width: 900px) {
     .stats-grid { grid-template-columns: repeat(2,1fr); }
     .catalog-grid { grid-template-columns: 1fr; }
@@ -108,6 +112,8 @@
 </style>
 </head>
 <body>
+
+<div class="demo-banner" id="demoBanner">🎬 Vous visualisez une démo de l'espace commerci'al — les données sont fictives.<a href="devenir-consultant-ia.html">Rejoindre le réseau CommercI.A.l →</a></div>
 
 <nav>
   <a class="nav-logo" href="index.html">
@@ -243,6 +249,16 @@
   </div>
 
 </div>
+
+<script>
+  if (new URLSearchParams(window.location.search).get('demo') === '1') {
+    document.body.classList.add('demo-mode');
+    var logout = document.querySelector('.nav-logout');
+    if (logout) { logout.textContent = 'Quitter la démo'; logout.href = 'connexion.html'; }
+    var userName = document.querySelector('.nav-user-name');
+    if (userName) { userName.textContent = 'Démo'; }
+  }
+</script>
 
 </body>
 </html>
