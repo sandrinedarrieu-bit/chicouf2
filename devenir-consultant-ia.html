@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Devenir consultant IA — Parcours mentoré | CHIC · OUF</title>
-<meta name="description" content="Structurez une offre de consultant IA, maîtrisez prompts et agents, et décrochez vos premières missions. Un parcours mentoré avec CHIC · OUF." />
+<title>Apprendre à vendre l'IA — Consultant IA ou CommercI.A.l | CHIC · OUF</title>
+<meta name="description" content="Deux façons de vivre de l'IA avec CHIC · OUF : devenir consultant IA (former et conseiller) ou rejoindre CommercI.A.l (vendre des agents IA à des entreprises, sans bagage technique)." />
 <link rel="canonical" href="https://www.chicouf.pro/devenir-consultant-ia.html" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,8 +99,36 @@
   .pilier-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
   .pilier-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; }
 
+  /* SÉLECTEUR DE PARCOURS : Consultant IA / CommercI.A.l */
+  .path-intro { text-align:center; max-width: var(--max); margin: 0 auto 2rem; }
+  .path-tabs { max-width: var(--max); margin: 0 auto 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .path-tab { text-align:left; cursor:pointer; background: var(--white); border: 1.5px solid #E8E6E1; border-radius: 16px; padding: 1.5rem 1.6rem; font-family: 'DM Sans', sans-serif; transition: border-color .2s, box-shadow .2s; }
+  .path-tab:hover { border-color: var(--lilas); }
+  .path-tab .path-tab-icon { font-size: 1.3rem; margin-bottom: .5rem; }
+  .path-tab .path-tab-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; color: var(--chic); margin-bottom: .25rem; }
+  .path-tab .path-tab-sub { font-size: .82rem; color: var(--muted); }
+  .path-tab.active { border-color: var(--ouf); box-shadow: 0 8px 24px rgba(123,92,240,.14); background: var(--lilas-l); }
+  .path-tab.path-tab-commercial.active { border-color: var(--or); box-shadow: 0 8px 24px rgba(245,158,11,.16); background: #FFF7E9; }
+  .path-tab-badge { display:inline-block; font-size: .65rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 999px; margin-bottom: .6rem; }
+  .path-tab-consultant .path-tab-badge { color: var(--ouf); background: var(--lilas-l); }
+  .path-tab-commercial .path-tab-badge { color: #92620A; background: #FFF1D6; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* COMPARATIF */
+  .compare-table-wrap { max-width: var(--max); margin: 0 auto; overflow-x: auto; }
+  table.compare-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; border: 1px solid #E8E6E1; }
+  table.compare-table th, table.compare-table td { padding: .9rem 1.1rem; text-align: left; font-size: .88rem; border-bottom: 1px solid #EEEBE4; }
+  table.compare-table th { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--white); background: var(--nuit); }
+  table.compare-table td:first-child { color: var(--muted); font-weight: 500; width: 26%; }
+  table.compare-table tr:last-child td { border-bottom: none; }
+  table.compare-table td.consultant-col { color: var(--chic); }
+  table.compare-table td.commercial-col { color: #92620A; }
+
   @media (max-width: 860px) {
     .two-col, .piliers-grid { grid-template-columns: 1fr; }
+    .path-tabs { grid-template-columns: 1fr; }
   }
 
   footer { text-align:center; padding: 2rem clamp(1.25rem,5vw,3rem); font-size: .8rem; color: var(--muted); border-top: 1px solid #E8E6E1; }
@@ -135,7 +163,7 @@
     </li>
     <li><a href="incubateur-ia.html">Incubateur IA</a></li>
     <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
-    <li><a href="devenir-consultant-ia.html" class="nav-current">Devenir consultant IA</a></li>
+    <li><a href="devenir-consultant-ia.html" class="nav-current">Apprendre à vendre l'IA</a></li>
     <li class="nav-dropdown">
       <a href="#">Outils gratuits ▾</a>
       <ul class="nav-dropdown-menu">
@@ -150,14 +178,31 @@
 
 <section class="hero-cta">
   <p class="section-eyebrow">Un parcours à part, pensé pour vous</p>
-  <h1 class="section-title">Devenir consultant IA</h1>
-  <p class="section-sub">Un parcours mentoré pour monétiser vos compétences IA et décrocher vos premières missions.</p>
-  <div class="hero-cta-wrap">
-    <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le parcours →</a>
+  <h1 class="section-title">Apprendre à vendre l'IA</h1>
+  <p class="section-sub">Deux façons de vivre de l'IA : devenir l'expert qui forme et conseille, ou devenir le lien de confiance qui vend des solutions concrètes. Choisissez la voie qui vous ressemble.</p>
+</section>
+
+<section style="padding-top:0;">
+  <p class="path-intro" style="color:var(--muted);font-size:.92rem;">Tu veux transmettre ton expertise, ou connecter un besoin à la bonne solution sans devenir toi-même expert technique ?</p>
+  <div class="path-tabs">
+    <div class="path-tab path-tab-consultant active" id="tab-consultant" onclick="showPath('consultant')">
+      <span class="path-tab-badge">Vendre et former</span>
+      <div class="path-tab-icon">🎯</div>
+      <div class="path-tab-title">Consultant IA</div>
+      <div class="path-tab-sub">Structurez une offre de formation et d'accompagnement IA. Vous devenez l'expert reconnu de vos clients.</div>
+    </div>
+    <div class="path-tab path-tab-commercial" id="tab-commercial" onclick="showPath('commercial')">
+      <span class="path-tab-badge">Vendre</span>
+      <div class="path-tab-icon">🤝</div>
+      <div class="path-tab-title">CommercI.A.l</div>
+      <div class="path-tab-sub">Vendez des agents IA concrets à des entreprises. Nos partenaires assurent la réalisation technique.</div>
+    </div>
   </div>
 </section>
 
-<section>
+<div class="tab-panel active" id="panel-consultant">
+
+<section style="padding-top:0;">
   <div class="desc-card">
     <div class="icon">💼</div>
     <p>Via un parcours mentoré, vous structurez une offre professionnelle, vous maîtrisez prompts et agents IA, et vous bénéficiez d'un coaching particulier ainsi que d'une formation Qualiopi « Expert en transformation digitale et technologie no-code » reconnue — pour décrocher vos premières missions de consultant IA.</p>
@@ -223,6 +268,101 @@
   </div>
 </section>
 
+<section style="text-align:center;padding-top:0;">
+  <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le parcours Consultant IA →</a>
+</section>
+
+</div>
+
+<div class="tab-panel" id="panel-commercial">
+
+<section style="padding-top:0;">
+  <div class="desc-card">
+    <div class="icon">🤝</div>
+    <p>CommercI.A.l est le réseau de commerci'aux qui aident les petites entreprises à adopter l'intelligence artificielle — sans coder une ligne, sans certification technique. Vous diagnostiquez les frictions d'un client, vous lui proposez l'agent IA adapté depuis notre catalogue, et notre partenaire technologique assure la réalisation. Vous restez l'interlocuteur de confiance du premier échange jusqu'au suivi.</p>
+  </div>
+  <div class="note-box">Accès au kit commercial par <strong style="color:var(--chic)">abonnement mensuel, 100 à 200 €</strong> selon la formule — sans droit d'entrée ni engagement long, et sans certification préalable requise. Une commission s'ajoute sur chaque vente réalisée, en plus de votre propre marge commerciale.</div>
+</section>
+
+<section id="objectifs-commercial">
+  <div class="two-col">
+    <div class="col-card">
+      <h3>Ce que vous en retirez</h3>
+      <ul>
+        <li>Un site pour prospecter et présenter votre activité</li>
+        <li>Un catalogue d'agents IA déjà cadré, avec des tarifs clairs</li>
+        <li>Des outils de diagnostic basés sur la méthode CAPE</li>
+        <li>Des documents de formation pour comprendre ce que vous vendez</li>
+        <li>L'accès à une communauté de commerci'aux du réseau</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h3>Pour qui</h3>
+      <ul>
+        <li>Commerciaux en poste qui cherchent un secteur porteur</li>
+        <li>Personnes en reconversion, sans bagage technique</li>
+        <li>Indépendants qui veulent élargir leur offre existante</li>
+        <li>Toute personne avec le sens du contact, prête à démarrer vite</li>
+      </ul>
+      <p class="note">Aucun prérequis technique : la réalisation est assurée par notre partenaire.</p>
+    </div>
+  </div>
+</section>
+
+<section id="piliers-commercial" style="background:var(--white);border-top:1px solid #E8E6E1;border-bottom:1px solid #E8E6E1;">
+  <p class="section-eyebrow">Comment ça marche</p>
+  <h2 class="section-title">Un diagnostic, une vente, une réalisation par nos partenaires</h2>
+  <div class="piliers-grid" style="margin-top:2.5rem;">
+    <div class="pilier-card">
+      <div class="pilier-icon">🧭</div>
+      <h3>1. Vous diagnostiquez</h3>
+      <p>Grâce à nos outils basés sur la méthode CAPE, vous identifiez en quelques minutes les frictions concrètes d'un client : où il perd du temps, où il perd de l'argent.</p>
+    </div>
+    <div class="pilier-card">
+      <div class="pilier-icon">💬</div>
+      <h3>2. Vous vendez</h3>
+      <p>Notre catalogue de produits vous permet de proposer l'agent IA adapté à chaque friction identifiée, avec un devis clair, sans improvisation.</p>
+    </div>
+    <div class="pilier-card">
+      <div class="pilier-icon">⚙️</div>
+      <h3>3. Nos partenaires réalisent</h3>
+      <p>La réalisation technique de l'agent est assurée par notre partenaire technologique. Vous restez l'interlocuteur du client, du diagnostic jusqu'au suivi.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Un exemple concret</p>
+  <h2 class="section-title">Ce que ça change</h2>
+  <div class="proof-card">
+    <h3>CommercI.A.l — vendre son premier agent IA</h3>
+    <div class="proof-row"><span class="proof-label">Avant</span><p>Le sens du contact et l'envie de se positionner sur l'IA, mais aucun outil pour diagnostiquer un besoin ni de solution technique à proposer.</p></div>
+    <div class="proof-row"><span class="proof-label">Intervention</span><p>Diagnostic CAPE chez un artisan client, identification d'une friction sur les relances de devis, proposition d'un agent du catalogue.</p></div>
+    <div class="proof-row"><span class="proof-label">Résultat</span><p>Une vente conclue, un agent réalisé par notre partenaire technologique, et une commission perçue sans avoir eu à coder quoi que ce soit.</p></div>
+  </div>
+</section>
+
+<section style="text-align:center;padding-top:0;">
+  <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Rejoindre le réseau CommercI.A.l →</a>
+</section>
+
+</div>
+
+<section id="comparatif">
+  <p class="section-eyebrow">Lequel choisir ?</p>
+  <h2 class="section-title">Consultant IA ou CommercI.A.l, en un coup d'œil</h2>
+  <div class="compare-table-wrap" style="margin-top:2rem;">
+    <table class="compare-table">
+      <tr><th>&nbsp;</th><th>Consultant IA</th><th>CommercI.A.l</th></tr>
+      <tr><td>Rôle</td><td class="consultant-col">Expert qui forme et conseille</td><td class="commercial-col">Lien qui vend et connecte</td></tr>
+      <tr><td>Ce que vous vendez</td><td class="consultant-col">Des prestations de formation et d'accompagnement IA</td><td class="commercial-col">Des agents IA concrets, déjà cadrés</td></tr>
+      <tr><td>Investissement</td><td class="consultant-col">Ticket unique, parcours de plusieurs mois</td><td class="commercial-col">Abonnement mensuel léger, 100 à 200 €</td></tr>
+      <tr><td>Certification</td><td class="consultant-col">Oui, incluse (titre reconnu)</td><td class="commercial-col">Non nécessaire</td></tr>
+      <tr><td>Point de départ</td><td class="consultant-col">Expertise à construire</td><td class="commercial-col">Sens commercial déjà là</td></tr>
+    </table>
+  </div>
+</section>
+
 <section id="faq" style="scroll-margin-top:90px;">
   <p class="section-eyebrow">Questions fréquentes</p>
   <h2 class="section-title">Vos hésitations, à plat</h2>
@@ -263,12 +403,20 @@
       <p class="faq-q">Quel est le prix de chaque parcours ?</p>
       <p class="faq-a">Les tarifs dépendent de votre situation et du périmètre du parcours choisi. Ils sont communiqués lors du premier échange, avant tout engagement.</p>
     </div>
+    <div class="faq-item">
+      <p class="faq-q">CommercI.A.l délivre-t-il une certification comme le parcours Consultant IA ?</p>
+      <p class="faq-a">Non. CommercI.A.l ne vise pas la certification : c'est un kit opérationnel pour vendre des agents IA, pas un parcours de formation. Si vous voulez aussi vous former et obtenir un titre reconnu, le parcours Consultant IA reste la voie adaptée.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Comment fonctionne la tarification de CommercI.A.l ?</p>
+      <p class="faq-a">Un abonnement mensuel de 100 à 200 € selon la formule vous donne accès au kit commercial complet (site, catalogue, diagnostic, formation, communauté), sans droit d'entrée ni engagement long. Une commission s'ajoute ensuite sur chaque vente réalisée.</p>
+    </div>
   </div>
 </section>
 
 <section class="hero-cta">
   <h2 class="section-title">Parlons de votre projet</h2>
-  <p class="section-sub">20 minutes suffisent pour clarifier votre situation.</p>
+  <p class="section-sub">20 minutes suffisent pour clarifier votre situation — Consultant IA ou CommercI.A.l, on en parle ensemble.</p>
   <div class="hero-cta-wrap">
     <a class="btn-primary" href="https://calendly.com/sandrine-darrieu/rendez-vous-atelier-ia" target="_blank" rel="noopener">Réserver un échange →</a>
   </div>
@@ -278,5 +426,13 @@
   CHIC · OUF · Sandrine Darrieu · <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a> · 07 56 92 59 84 · <a href="index.html">Retour au site principal</a>
 </footer>
 
+<script>
+function showPath(path){
+  document.getElementById('tab-consultant').classList.toggle('active', path === 'consultant');
+  document.getElementById('tab-commercial').classList.toggle('active', path === 'commercial');
+  document.getElementById('panel-consultant').classList.toggle('active', path === 'consultant');
+  document.getElementById('panel-commercial').classList.toggle('active', path === 'commercial');
+}
+</script>
 </body>
 </html>
