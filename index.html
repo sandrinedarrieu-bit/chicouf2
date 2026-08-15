@@ -212,8 +212,13 @@
     .diag-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
     .diag-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; min-height: 3.2rem; }
     .diag-card a { display: block; background: var(--ouf-cta); color: var(--white); padding: .75rem; border-radius: 10px; font-size: .88rem; font-weight: 500; text-decoration: none; transition: background .2s; }
-    .diag-card a:hover { background: var(--ouf-cta-hover); }
     .diag-card a:hover { opacity: .88; }
+    .diag-card--incubateur a { background: var(--nuit); }
+    .diag-card--incubateur a:hover { background: #44445c; }
+    .diag-card--accelerateur a { background: var(--ouf-cta); }
+    .diag-card--accelerateur a:hover { background: var(--ouf-cta-hover); }
+    .diag-card--vendre a { background: var(--or); }
+    .diag-card--vendre a:hover { background: #d98207; }
 
     /* CAS D'USAGE */
     #cas-usage { padding: clamp(3.5rem,7vw,6rem) clamp(1.25rem,5vw,3rem); background: var(--white); }
@@ -418,19 +423,19 @@
   <h2 class="section-title">Quelle est votre priorité aujourd'hui ?</h2>
   <p class="section-sub" style="margin-bottom:2rem;">Choisissez la situation qui vous ressemble. Je vous dirige vers la première étape la plus utile, sans vous demander de choisir un outil.</p>
   <div class="diag-grid">
-    <div class="diag-card">
+    <div class="diag-card diag-card--incubateur">
       <div class="diag-icon">⏱️</div>
       <h3>Je suis salarié(e)</h3>
       <p>Je veux utiliser l'IA pour gagner du temps, développer mes compétences et faire évoluer ma carrière.</p>
       <a href="incubateur-ia.html">Découvrir l'Incubateur IA →</a>
     </div>
-    <div class="diag-card">
+    <div class="diag-card diag-card--accelerateur">
       <div class="diag-icon">🚀</div>
       <h3>Je dirige une activité</h3>
       <p>Je veux structurer, automatiser et développer mon entreprise grâce à des solutions concrètes adaptées à mon organisation.</p>
       <a href="accelerateur-ia.html">Découvrir l'Accélérateur IA →</a>
     </div>
-    <div class="diag-card">
+    <div class="diag-card diag-card--vendre">
       <div class="diag-icon">🎯</div>
       <h3>Je veux vivre de l'IA</h3>
       <p>Former, accompagner ou vendre des solutions concrètes à d'autres : deux voies possibles selon le rôle que je veux jouer.</p>
