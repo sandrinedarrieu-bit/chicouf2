@@ -174,11 +174,11 @@
             <p class="texte-niveau" id="texte-niveau"></p>
           </div>
         </div>
-        <div class="cta-box" id="home-cta" data-goto="annexes" style="cursor:pointer;">
+        <a href="#" id="home-cta" class="cta-box" style="cursor:pointer;text-decoration:none;display:block;" target="_blank" rel="noopener">
           <div class="eyebrow" style="color:rgba(255,255,255,.75);margin-bottom:.4rem;">🎯 Votre prochaine étape</div>
           <div class="offre" id="home-cta-titre"></div>
-          <p style="opacity:.85;font-size:.9rem;margin-top:.6rem;">Voir le détail et réserver un échange →</p>
-        </div>
+          <p style="opacity:.85;font-size:.9rem;margin-top:.6rem;">Découvrir l'offre →</p>
+        </a>
       </section>
 
       <!-- 2. État des lieux -->
@@ -214,14 +214,11 @@
 
       <!-- 5. Annexes -->
       <section class="section" id="section-annexes">
-        <div class="eyebrow">Prochaine étape</div>
-        <h2 id="cta-titre"></h2>
-        <div class="cta-box">
-          <div class="offre" id="offre-nom"></div>
-          <p id="cta-detail"></p>
-          <a href="#" id="cta-btn" class="btn-cta" target="_blank" rel="noopener"></a>
+        <div class="eyebrow">Annexes</div>
+        <h2>ROI</h2>
+        <div class="roi-placeholder" style="background:var(--white);border-radius:var(--radius);padding:2.5rem 2rem;box-shadow:0 4px 20px rgba(44,44,62,.06);color:var(--muted);text-align:center;">
+          Calculatrice de ROI — bientôt disponible.
         </div>
-        <p class="accroche" id="accroche"></p>
       </section>
     </main>
   </div>
@@ -323,8 +320,9 @@
       }));
       document.getElementById('radar-svg').innerHTML = buildRadarSVG(radarValues, 320, true);
 
-      // Aperçu "prochaine étape" sur la page d'accueil (synthèse) — teaser compact, le détail complet est en Annexes
+      // Aperçu "prochaine étape" sur la page d'accueil (synthèse) — clique direct vers la page de l'offre
       document.getElementById('home-cta-titre').textContent = data.annexesROI.offreNom;
+      document.getElementById('home-cta').href = data.annexesROI.offreLien;
 
       // Cartes dimensions
       const dimGrid = document.getElementById('dim-grid');
@@ -384,21 +382,6 @@
         exUl.appendChild(li);
       });
 
-      // Annexes / ROI
-      document.getElementById('cta-titre').textContent = data.annexesROI.ctaTitre;
-      document.getElementById('offre-nom').textContent = data.annexesROI.offreNom;
-      document.getElementById('cta-detail').textContent = data.annexesROI.ctaDetail;
-      const ctaBtn = document.getElementById('cta-btn');
-      ctaBtn.textContent = data.annexesROI.ctaAction;
-      ctaBtn.href = data.annexesROI.offreLien;
-      document.getElementById('accroche').textContent = `Vous êtes actuellement à ${pct}% de votre potentiel IA.`;
-
-      document.querySelectorAll('[data-goto]').forEach(el => {
-        el.addEventListener('click', (e) => {
-          if (e.target.closest('a')) return; // laisser le lien CTA s'ouvrir normalement
-          showSection(el.dataset.goto);
-        });
-      });
       document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
         btn.addEventListener('click', () => showSection(btn.dataset.section));
       });
