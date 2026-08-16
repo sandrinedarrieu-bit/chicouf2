@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Accès commerciaux | CHIC · OUF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nuit: #2C2C3E; --chic: #2D1F6E; --ouf-cta: #5F3AE0; --ouf-cta-hover: #522FC7;
+    --cream: #F8F7F4; --body: #3D3D3D; --muted: #6B6B6B; --white: #FFFFFF; --radius: 12px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--body); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+  .card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 20px; padding: 2.5rem; max-width: 420px; width: 100%; }
+  h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--chic); margin-bottom: .4rem; }
+  p.sub { font-size: .85rem; color: var(--muted); margin-bottom: 1.75rem; }
+  label { display: block; font-size: .82rem; font-weight: 500; margin-bottom: .4rem; }
+  input { width: 100%; padding: .7rem .9rem; border: 1.5px solid #E0DDD5; border-radius: 10px; font-family: inherit; font-size: .9rem; background: var(--cream); margin-bottom: 1.1rem; }
+  input:focus { outline: none; border-color: var(--ouf-cta); background: var(--white); }
+  button { width: 100%; background: var(--ouf-cta); color: #fff; border: none; padding: .85rem; border-radius: var(--radius); font-weight: 600; font-size: .92rem; cursor: pointer; }
+  button:hover { background: var(--ouf-cta-hover); }
+  #msg { margin-top: 1rem; font-size: .85rem; text-align: center; }
+  #msg.ok { color: #1a7f4f; }
+  #msg.err { color: #b3261e; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Accès commerciaux</h1>
+    <p class="sub">Crée ou réinitialise le mot de passe d'un membre du réseau CommercI.A.l.</p>
+    <form id="f">
+      <label for="adminSecret">Clé admin</label>
+      <input type="password" id="adminSecret" required />
+      <label for="email">Email du commercial (tel qu'enregistré dans Airtable)</label>
+      <input type="email" id="email" required />
+      <label for="newPassword">Nouveau mot de passe (8 caractères min.)</label>
+      <input type="password" id="newPassword" minlength="8" required />
+      <button type="submit">Enregistrer</button>
+    </form>
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    document.getElementById('f').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      msg.textContent = '';
+      msg.className = '';
+
+      const adminSecret = document.getElementById('adminSecret').value;
+      const email = document.getElementById('email').value;
+      const newPassword = document.getElementById('newPassword').value;
+
+      try {
+        const res = await fetch('/api/admin/set-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminSecret, email, newPassword })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Erreur');
+        msg.textContent = `Mot de passe mis à jour pour ${data.nom || email}.`;
+        msg.className = 'ok';
+        document.getElementById('newPassword').value = '';
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = 'err';
+      }
+    });
+  </script>
+</body>
+</html>
