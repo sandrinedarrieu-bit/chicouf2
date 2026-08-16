@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Votre rapport IA sur mesure | CHIC · OUF</title>
+  <meta name="description" content="Votre rapport de maturité IA personnalisé — méthode CAPE, CHIC · OUF." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --nuit:     #2C2C3E;
+      --chic:     #2D1F6E;
+      --ouf:      #7B5CF0;
+      --ouf-cta:  #5F3AE0;
+      --ouf-cta-hover: #522FC7;
+      --lilas:    #A78BFA;
+      --lilas-l:  #F5F0FF;
+      --or:       #F59E0B;
+      --cream:    #F8F7F4;
+      --body:     #3D3D3D;
+      --muted:    #6B6B6B;
+      --white:    #FFFFFF;
+      --radius:   12px;
+      --dim-c: #2D1F6E;
+      --dim-a: #7B5CF0;
+      --dim-p: #F59E0B;
+      --dim-e: #5F3AE0;
+    }
+    html { overflow-x: hidden; }
+    body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
+    h1, h2, h3 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); }
+
+    /* ---------- Layout ---------- */
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 260px; flex-shrink: 0; background: var(--nuit); color: rgba(255,255,255,.75);
+      display: flex; flex-direction: column; padding: 1.5rem 1rem; position: sticky; top: 0; height: 100vh;
+    }
+    .sidebar-brand { font-family: 'Georgia', serif; font-size: .95rem; letter-spacing: .06em; color: var(--white); padding: 0 .5rem 1.5rem; opacity: .85; }
+    .sidebar-brand span { color: var(--lilas); }
+    .nav-item {
+      display: flex; align-items: center; gap: .7rem; padding: .75rem .9rem; border-radius: 10px;
+      text-decoration: none; color: rgba(255,255,255,.65); font-size: .9rem; font-weight: 500; cursor: pointer;
+      margin-bottom: .3rem; transition: background .15s, color .15s; border: none; background: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: var(--white); }
+    .nav-item.active { background: linear-gradient(135deg, var(--ouf), var(--ouf-cta)); color: var(--white); }
+    .nav-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .sidebar-footer { margin-top: auto; padding: 1rem .5rem 0; font-size: .72rem; color: rgba(255,255,255,.35); border-top: 1px solid rgba(255,255,255,.08); }
+
+    .main { flex: 1; padding: clamp(1.5rem,4vw,3rem); max-width: 900px; }
+    .section { display: none; animation: fadeIn .35s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ouf); margin-bottom: .5rem; }
+    .section h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1.5rem; }
+
+    /* ---------- État de chargement / erreur ---------- */
+    #loading, #error { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--lilas-l); border-top-color: var(--ouf); border-radius: 50%; animation: spin .8s linear infinite; margin-bottom: 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #error h2 { color: var(--chic); margin-bottom: .5rem; }
+    #error p { color: var(--muted); }
+
+    /* ---------- Synthèse ---------- */
+    .score-card { background: var(--white); border-radius: var(--radius); padding: 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: 1.5rem; }
+    .score-ring-wrap { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+    .score-ring-wrap svg { transform: rotate(-90deg); }
+    .score-ring-bg { fill: none; stroke: #EFEBFF; stroke-width: 12; }
+    .score-ring-fg { fill: none; stroke: var(--ouf); stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+    .score-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .score-ring-text strong { font-family: 'Syne', sans-serif; font-size: 1.6rem; color: var(--chic); }
+    .score-ring-text span { font-size: .75rem; color: var(--muted); }
+    .score-info { flex: 1; min-width: 220px; }
+    .niveau-badge { display: inline-block; background: var(--lilas-l); color: var(--chic); font-weight: 700; padding: .35rem .9rem; border-radius: 999px; font-size: .9rem; margin-bottom: .7rem; }
+    .texte-niveau { color: var(--body); }
+
+
+    /* ---------- Radar + cartes dimensions ---------- */
+    .radar-wrap { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: 1.5rem; display: flex; justify-content: center; }
+    .dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .dim-card { background: var(--white); border-radius: var(--radius); padding: 1.2rem 1.4rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); cursor: pointer; border-left: 5px solid var(--dim-color, var(--ouf)); }
+    .dim-card-head { display: flex; justify-content: space-between; align-items: center; }
+    .dim-card-head h4 { font-family: 'Syne', sans-serif; font-size: .95rem; color: var(--chic); }
+    .dim-card-pct { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--dim-color, var(--ouf)); }
+    .dim-card-niveau { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+    .dim-card-reco { max-height: 0; overflow: hidden; transition: max-height .3s ease, margin-top .3s ease; font-size: .9rem; color: var(--body); }
+    .dim-card.open .dim-card-reco { max-height: 300px; margin-top: .8rem; }
+
+    /* ---------- Diagnostic risques ---------- */
+    .risk-banner { background: var(--white); border-radius: var(--radius); padding: 1.5rem 1.8rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: 1.2rem; }
+    .risk-banner .famille { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--chic); margin-bottom: .5rem; }
+    .bandit-alert { background: #FFF7E6; border: 1.5px solid var(--or); border-radius: var(--radius); padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; display: flex; gap: .8rem; align-items: flex-start; }
+    .bandit-alert .icon { font-size: 1.3rem; }
+    .bandit-alert strong { color: #92610a; }
+    .angle-mort-card { background: var(--white); border-radius: var(--radius); padding: 1rem 1.3rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: .8rem; display: flex; gap: .7rem; align-items: flex-start; }
+
+    /* ---------- Feuille de route ---------- */
+    .timeline { position: relative; padding-left: 2.2rem; margin-bottom: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: .85rem; top: .5rem; bottom: .5rem; width: 2px; background: var(--lilas-l); }
+    .timeline-item { position: relative; padding-bottom: 1.8rem; }
+    .timeline-num { position: absolute; left: -2.2rem; top: 0; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--ouf); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 800; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+    .timeline-item h4 { font-family: 'Syne', sans-serif; color: var(--chic); margin-bottom: .3rem; }
+    .secteur-box { background: var(--white); border-radius: var(--radius); padding: 1.5rem 1.8rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); }
+    .secteur-box h3 { font-size: 1rem; margin-bottom: .8rem; }
+    .secteur-box ul { list-style: none; }
+    .secteur-box li { padding: .4rem 0; padding-left: 1.4rem; position: relative; }
+    .secteur-box li::before { content: '›'; position: absolute; left: 0; color: var(--ouf); font-weight: 700; }
+
+    /* ---------- Annexes / CTA ---------- */
+    .cta-box { background: linear-gradient(135deg, var(--chic), var(--ouf-cta)); color: var(--white); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.2rem; }
+    .cta-box .offre { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: .6rem; }
+    .cta-box p { opacity: .92; }
+    .btn-cta { display: inline-block; margin-top: 1.3rem; background: var(--white); color: var(--ouf-cta); font-weight: 700; padding: .85rem 1.8rem; border-radius: 999px; text-decoration: none; transition: transform .15s; }
+    .btn-cta:hover { transform: translateY(-2px); }
+    .accroche { color: var(--muted); font-size: .9rem; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 780px) {
+      .app { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: sticky; top: 0; flex-direction: row; overflow-x: auto; padding: .7rem; z-index: 50; }
+      .sidebar-brand, .sidebar-footer { display: none; }
+      .nav-item { flex-direction: column; gap: .2rem; font-size: .68rem; padding: .5rem .6rem; white-space: nowrap; margin-bottom: 0; }
+      .main { padding: 1.2rem; }
+      .score-card { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Chargement de votre rapport…</p>
+  </div>
+
+  <div id="error" style="display:none;">
+    <h2>Rapport introuvable</h2>
+    <p>Vérifiez le lien reçu par email, ou contactez-nous à <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a>.</p>
+  </div>
+
+  <div class="app" id="app" style="display:none;">
+    <aside class="sidebar">
+      <div class="sidebar-brand">CHIC <span>·</span> OUF</div>
+      <button class="nav-item active" data-section="synthese"><span class="nav-icon">📄</span> Synthèse Exécutive</button>
+      <button class="nav-item" data-section="etat"><span class="nav-icon">📊</span> État des Lieux</button>
+      <button class="nav-item" data-section="risques"><span class="nav-icon">⚠️</span> Diagnostic des Risques</button>
+      <button class="nav-item" data-section="route"><span class="nav-icon">🗺️</span> Feuille de Route</button>
+      <button class="nav-item" data-section="annexes"><span class="nav-icon">➕</span> Annexes &amp; ROI</button>
+      <div class="sidebar-footer">Rapport généré par la méthode CAPE — CHIC · OUF</div>
+    </aside>
+
+    <main class="main">
+      <!-- 1. Synthèse -->
+      <section class="section active" id="section-synthese">
+        <div class="eyebrow" id="entreprise-nom"></div>
+        <h2>Synthèse exécutive</h2>
+        <div class="score-card">
+          <div class="score-ring-wrap">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle class="score-ring-bg" cx="70" cy="70" r="60"></circle>
+              <circle class="score-ring-fg" id="score-ring" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+            </svg>
+            <div class="score-ring-text"><strong id="score-txt">0/48</strong><span>score global</span></div>
+          </div>
+          <div class="score-info">
+            <div class="niveau-badge" id="niveau-badge"></div>
+            <p class="texte-niveau" id="texte-niveau"></p>
+          </div>
+        </div>
+        <div class="cta-box" id="home-cta" data-goto="annexes" style="cursor:pointer;">
+          <div class="offre" id="home-cta-titre"></div>
+          <p id="home-cta-detail"></p>
+          <a href="#" id="home-cta-btn" class="btn-cta" target="_blank" rel="noopener"></a>
+        </div>
+      </section>
+
+      <!-- 2. État des lieux -->
+      <section class="section" id="section-etat">
+        <div class="eyebrow">État des lieux</div>
+        <h2>Votre maturité, dimension par dimension</h2>
+        <div class="radar-wrap"><div id="radar-svg"></div></div>
+        <div class="dim-grid" id="dim-grid"></div>
+      </section>
+
+      <!-- 3. Diagnostic des risques -->
+      <section class="section" id="section-risques">
+        <div class="eyebrow">Diagnostic</div>
+        <h2>Points de vigilance</h2>
+        <div id="bandit-zone"></div>
+        <div class="risk-banner">
+          <div class="famille" id="famille-4ai"></div>
+          <p id="explication-famille"></p>
+        </div>
+        <div id="angles-morts"></div>
+      </section>
+
+      <!-- 4. Feuille de route -->
+      <section class="section" id="section-route">
+        <div class="eyebrow">Plan d'action</div>
+        <h2>Votre feuille de route</h2>
+        <div class="timeline" id="timeline"></div>
+        <div class="secteur-box">
+          <h3>Concrètement, dans votre secteur</h3>
+          <ul id="exemples-secteur"></ul>
+        </div>
+      </section>
+
+      <!-- 5. Annexes -->
+      <section class="section" id="section-annexes">
+        <div class="eyebrow">Prochaine étape</div>
+        <h2 id="cta-titre"></h2>
+        <div class="cta-box">
+          <div class="offre" id="offre-nom"></div>
+          <p id="cta-detail"></p>
+          <a href="#" id="cta-btn" class="btn-cta" target="_blank" rel="noopener"></a>
+        </div>
+        <p class="accroche" id="accroche"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const DIM_COLORS = { connaissance: '#2D1F6E', adoption: '#7B5CF0', processus: '#F59E0B', engagement: '#5F3AE0' };
+    const DIM_ORDER = ['connaissance', 'adoption', 'processus', 'engagement'];
+
+    function getReportId() {
+      const pathMatch = window.location.pathname.match(/rec[a-zA-Z0-9]{14}/);
+      if (pathMatch) return pathMatch[0];
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    function polarPoint(cx, cy, r, angleDeg) {
+      const rad = (angleDeg - 90) * Math.PI / 180;
+      return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+    }
+
+    function buildRadarSVG(values, size, showLabels) {
+      // values: [{label, pct, color}]
+      const n = values.length;
+      const cx = size / 2, cy = size / 2, maxR = size * 0.36;
+      const gridLevels = [0.25, 0.5, 0.75, 1];
+      let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+
+      gridLevels.forEach(level => {
+        let pts = [];
+        for (let i = 0; i < n; i++) {
+          const angle = (360 / n) * i;
+          const [x, y] = polarPoint(cx, cy, maxR * level, angle);
+          pts.push(`${x},${y}`);
+        }
+        svg += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E9E4FB" stroke-width="1"/>`;
+      });
+
+      for (let i = 0; i < n; i++) {
+        const angle = (360 / n) * i;
+        const [x, y] = polarPoint(cx, cy, maxR, angle);
+        svg += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E9E4FB" stroke-width="1"/>`;
+        if (showLabels) {
+          const [lx, ly] = polarPoint(cx, cy, maxR + 22, angle);
+          svg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-family="DM Sans" fill="#3D3D3D" font-weight="600">${values[i].label}</text>`;
+        }
+      }
+
+      let dataPts = [];
+      values.forEach((v, i) => {
+        const angle = (360 / n) * i;
+        const r = maxR * (v.pct / 100);
+        const [x, y] = polarPoint(cx, cy, r, angle);
+        dataPts.push(`${x},${y}`);
+      });
+      svg += `<polygon points="${dataPts.join(' ')}" fill="rgba(123,92,240,.28)" stroke="#7B5CF0" stroke-width="2"/>`;
+      values.forEach((v, i) => {
+        const angle = (360 / n) * i;
+        const r = maxR * (v.pct / 100);
+        const [x, y] = polarPoint(cx, cy, r, angle);
+        svg += `<circle cx="${x}" cy="${y}" r="4" fill="${v.color}"/>`;
+      });
+
+      svg += `</svg>`;
+      return svg;
+    }
+
+    function parseExemples(text) {
+      if (!text) return [];
+      return text.split('\n').map(l => l.replace(/^›\s*/, '').trim()).filter(Boolean);
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('section-' + id).classList.add('active');
+      document.querySelectorAll('.nav-item[data-section]').forEach(b => b.classList.toggle('active', b.dataset.section === id));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function render(data) {
+      document.getElementById('entreprise-nom').textContent = data.entreprise;
+      document.title = `Rapport IA — ${data.entreprise} | CHIC · OUF`;
+
+      // Synthèse
+      const pct = data.synthese.scoreGlobalPct;
+      const circumference = 2 * Math.PI * 60;
+      const ring = document.getElementById('score-ring');
+      ring.setAttribute('stroke-dasharray', circumference);
+      requestAnimationFrame(() => {
+        ring.style.strokeDashoffset = circumference - (circumference * pct / 100);
+      });
+      document.getElementById('score-txt').textContent = `${data.synthese.scoreGlobal}/${data.synthese.scoreGlobalMax}`;
+      document.getElementById('niveau-badge').textContent = data.synthese.niveauGlobal;
+      document.getElementById('texte-niveau').textContent = data.synthese.texteNiveau;
+
+      const radarValues = DIM_ORDER.map(k => ({
+        label: data.etatDesLieux[k].label,
+        pct: data.etatDesLieux[k].pct,
+        color: DIM_COLORS[k]
+      }));
+      document.getElementById('radar-svg').innerHTML = buildRadarSVG(radarValues, 320, true);
+
+      // Aperçu "prochaine étape" sur la page d'accueil (synthèse)
+      document.getElementById('home-cta-titre').textContent = data.annexesROI.ctaTitre;
+      document.getElementById('home-cta-detail').textContent = data.annexesROI.ctaDetail;
+      const homeBtn = document.getElementById('home-cta-btn');
+      homeBtn.textContent = data.annexesROI.ctaAction;
+      homeBtn.href = data.annexesROI.offreLien;
+
+      // Cartes dimensions
+      const dimGrid = document.getElementById('dim-grid');
+      dimGrid.innerHTML = '';
+      DIM_ORDER.forEach(key => {
+        const d = data.etatDesLieux[key];
+        const card = document.createElement('div');
+        card.className = 'dim-card';
+        card.style.setProperty('--dim-color', DIM_COLORS[key]);
+        card.innerHTML = `
+          <div class="dim-card-head">
+            <h4>${d.label}</h4>
+            <span class="dim-card-pct">${d.pct}%</span>
+          </div>
+          <div class="dim-card-niveau">${d.niveau}</div>
+          <div class="dim-card-reco">${d.reco}</div>
+        `;
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.dim-card').forEach(c => { if (c !== card) c.classList.remove('open'); });
+          card.classList.toggle('open');
+        });
+        dimGrid.appendChild(card);
+      });
+
+      // Diagnostic risques
+      document.getElementById('famille-4ai').textContent = data.diagnosticRisques.famille4AI;
+      document.getElementById('explication-famille').textContent = data.diagnosticRisques.explicationFamille;
+      const banditZone = document.getElementById('bandit-zone');
+      banditZone.innerHTML = '';
+      if (data.diagnosticRisques.signalBandit) {
+        banditZone.innerHTML = `<div class="bandit-alert"><span class="icon">⚠️</span><div><strong>Point de vigilance identifié</strong><br>Un signal mérite votre attention — voir le détail ci-dessous et dans nos recommandations.</div></div>`;
+      }
+      const anglesEl = document.getElementById('angles-morts');
+      anglesEl.innerHTML = '';
+      data.diagnosticRisques.anglesMorts.forEach(a => {
+        const el = document.createElement('div');
+        el.className = 'angle-mort-card';
+        el.innerHTML = `<span>🔍</span><span>${a}</span>`;
+        anglesEl.appendChild(el);
+      });
+
+      // Feuille de route
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+      data.feuilleDeRoute.priorites.forEach((p, i) => {
+        if (!p.titre) return;
+        const el = document.createElement('div');
+        el.className = 'timeline-item';
+        el.innerHTML = `<div class="timeline-num">${i + 1}</div><h4>${p.titre}</h4><p>${p.detail}</p>`;
+        timeline.appendChild(el);
+      });
+      const exUl = document.getElementById('exemples-secteur');
+      exUl.innerHTML = '';
+      parseExemples(data.feuilleDeRoute.exemplesSecteur).forEach(line => {
+        const li = document.createElement('li');
+        li.textContent = line;
+        exUl.appendChild(li);
+      });
+
+      // Annexes / ROI
+      document.getElementById('cta-titre').textContent = data.annexesROI.ctaTitre;
+      document.getElementById('offre-nom').textContent = data.annexesROI.offreNom;
+      document.getElementById('cta-detail').textContent = data.annexesROI.ctaDetail;
+      const ctaBtn = document.getElementById('cta-btn');
+      ctaBtn.textContent = data.annexesROI.ctaAction;
+      ctaBtn.href = data.annexesROI.offreLien;
+      document.getElementById('accroche').textContent = `Vous êtes actuellement à ${pct}% de votre potentiel IA.`;
+
+      document.querySelectorAll('[data-goto]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (e.target.closest('a')) return; // laisser le lien CTA s'ouvrir normalement
+          showSection(el.dataset.goto);
+        });
+      });
+      document.querySelectorAll('.nav-item[data-section]').forEach(btn => {
+        btn.addEventListener('click', () => showSection(btn.dataset.section));
+      });
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+    }
+
+    async function init() {
+      const id = getReportId();
+      if (!id) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'flex';
+        return;
+      }
+      try {
+        const res = await fetch(`/api/rapport-data?id=${encodeURIComponent(id)}`);
+        if (!res.ok) throw new Error('not ok');
+        const data = await res.json();
+        render(data);
+      } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'flex';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
