@@ -104,6 +104,37 @@
   .demo-banner a { color: #402A04; text-decoration: underline; margin-left: .4rem; }
   body.demo-mode .demo-banner { display:block; }
 
+  /* pipeline devis */
+  .pipeline-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: .9rem; }
+  .pipeline-col-label { font-size: .78rem; color: var(--muted); margin-bottom: .5rem; font-weight:600; }
+  .pipeline-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 12px; padding: .75rem .9rem; margin-bottom: .5rem; }
+  .pipeline-card .pc-nom { font-size: .85rem; font-weight:600; color: var(--body); }
+  .pipeline-card .pc-montant { font-size: .78rem; color: var(--muted); margin-top:.15rem; }
+  .pipeline-card.signe { background: #EAF6EF; border-color: #CFE9D9; }
+  .pipeline-card.signe .pc-nom, .pipeline-card.signe .pc-montant { color: #1A7F4F; }
+  .pipeline-card.perdu { opacity:.65; }
+  .pipeline-empty { font-size: .8rem; color: var(--muted); font-style: italic; padding: .5rem 0; }
+
+  /* liste clients */
+  .clients-table { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; overflow: hidden; }
+  .clients-row { display:flex; align-items:center; padding: .85rem 1.4rem; border-bottom: 1px solid #EEEBE4; font-size: .87rem; }
+  .clients-row:last-child { border-bottom: none; }
+  .clients-row.head { background: var(--cream); font-size: .76rem; color: var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; }
+  .clients-row .c-entreprise { flex: 2; font-weight:600; color: var(--body); }
+  .clients-row .c-secteur { flex: 1; color: var(--muted); }
+  .clients-row .c-statut { flex: 1; }
+  .badge { display:inline-block; font-size: .74rem; font-weight:600; padding: .25rem .7rem; border-radius: 999px; }
+  .badge.attente { background:#FFF3D6; color:#8A5A00; }
+  .badge.envoye { background:#E6F0FE; color:#1B4FA0; }
+  .badge.signe { background:#DFF3E6; color:#1A7F4F; }
+  .badge.perdu { background:#F1EFE8; color:#6B6B6B; }
+  .badge.aucun { background:#F1EFE8; color:#6B6B6B; }
+  .empty-state { text-align:center; padding: 2rem; color: var(--muted); font-size: .88rem; }
+
+  @media (max-width: 900px) {
+    .pipeline-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
   @media (max-width: 900px) {
     .stats-grid { grid-template-columns: repeat(2,1fr); }
     .catalog-grid { grid-template-columns: 1fr; }
@@ -132,29 +163,52 @@
 
   <div class="greet">
     <p class="greet-eyebrow">Espace commerci'al</p>
-    <h1>Bonjour Sandrine 👋</h1>
+    <h1>Bonjour <span id="greetName">…</span> 👋</h1>
   </div>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Ventes ce mois-ci</div>
-      <div class="stat-value">3</div>
-      <div class="stat-sub">2 agents devis · 1 agent relances</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Commissions ce mois-ci</div>
-      <div class="stat-value accent-or">480 €</div>
-      <div class="stat-sub">Versées le 5 du mois suivant</div>
-    </div>
-    <div class="stat-card">
       <div class="stat-label">Clients actifs</div>
-      <div class="stat-value">7</div>
-      <div class="stat-sub">Dont 2 en cours de réalisation</div>
+      <div class="stat-value" id="statClients">—</div>
+      <div class="stat-sub">Suivis dans votre portefeuille</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Abonnement</div>
-      <div class="stat-value" style="font-size:1.15rem;">Formule Standard</div>
-      <div class="stat-sub">100 €/mois · actif</div>
+      <div class="stat-label">Devis en cours</div>
+      <div class="stat-value" id="statDevisEnCours">—</div>
+      <div class="stat-sub">En attente ou envoyés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Taux de signature</div>
+      <div class="stat-value" id="statTaux">—</div>
+      <div class="stat-sub">Devis signés / total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">CA généré</div>
+      <div class="stat-value accent-or" id="statCA">—</div>
+      <div class="stat-sub">Total des devis signés</div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Pipeline des devis</h2>
+    </div>
+    <div class="pipeline-grid" id="pipelineGrid">
+      <div class="pipeline-empty">Chargement…</div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Mes clients</h2>
+    </div>
+    <div class="clients-table" id="clientsTable">
+      <div class="clients-row head">
+        <span class="c-entreprise">Entreprise</span>
+        <span class="c-secteur">Secteur</span>
+        <span class="c-statut">Statut</span>
+      </div>
+      <div class="empty-state" id="clientsLoading">Chargement…</div>
     </div>
   </div>
 
@@ -251,12 +305,123 @@
 </div>
 
 <script>
+  const STATUT_CLASS = {
+    'En attente': 'attente',
+    'Envoyé': 'envoye',
+    'Signé': 'signe',
+    'Perdu': 'perdu',
+    'Aucun devis': 'aucun'
+  };
+  const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Perdu'];
+
+  function euros(n) {
+    return Math.round(n || 0).toLocaleString('fr-FR') + ' €';
+  }
+
+  function renderPipeline(pipeline) {
+    const grid = document.getElementById('pipelineGrid');
+    grid.innerHTML = '';
+    PIPELINE_ORDER.forEach(statut => {
+      const items = pipeline[statut] || [];
+      const col = document.createElement('div');
+      let html = `<div class="pipeline-col-label">${statut} · ${items.length}</div>`;
+      if (items.length === 0) {
+        html += `<div class="pipeline-empty">Aucun</div>`;
+      } else {
+        items.forEach(it => {
+          const cls = statut === 'Signé' ? 'signe' : (statut === 'Perdu' ? 'perdu' : '');
+          html += `<div class="pipeline-card ${cls}">
+            <div class="pc-nom">${it.entreprise || 'Client'}</div>
+            <div class="pc-montant">${euros(it.montant)}</div>
+          </div>`;
+        });
+      }
+      col.innerHTML = html;
+      grid.appendChild(col);
+    });
+  }
+
+  function renderClients(clients) {
+    const table = document.getElementById('clientsTable');
+    const rows = clients.map(c => {
+      const badgeClass = STATUT_CLASS[c.statut] || 'aucun';
+      return `<div class="clients-row">
+        <span class="c-entreprise">${c.entreprise || '—'}</span>
+        <span class="c-secteur">${c.secteur || '—'}</span>
+        <span class="c-statut"><span class="badge ${badgeClass}">${c.statut}</span></span>
+      </div>`;
+    }).join('');
+
+    table.innerHTML = `
+      <div class="clients-row head">
+        <span class="c-entreprise">Entreprise</span>
+        <span class="c-secteur">Secteur</span>
+        <span class="c-statut">Statut</span>
+      </div>
+      ${clients.length ? rows : '<div class="empty-state">Aucun client pour le moment.</div>'}
+    `;
+  }
+
+  async function loadDashboard() {
+    try {
+      const res = await fetch('/api/dashboard-data');
+      if (res.status === 401) {
+        window.location.href = 'connexion.html';
+        return;
+      }
+      if (!res.ok) throw new Error('Erreur de chargement');
+      const data = await res.json();
+
+      document.getElementById('greetName').textContent = data.nom || '';
+      document.querySelector('.nav-user-name').textContent = data.nom || '';
+      document.querySelector('.nav-avatar').textContent = (data.nom || '?')
+        .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+      document.getElementById('statClients').textContent = data.kpis.nbClients;
+      document.getElementById('statDevisEnCours').textContent = data.kpis.devisEnCours;
+      document.getElementById('statTaux').textContent = data.kpis.tauxSignature + '%';
+      document.getElementById('statCA').textContent = euros(data.kpis.caGenere);
+
+      renderPipeline(data.pipeline);
+      renderClients(data.clients);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('pipelineGrid').innerHTML = '<div class="pipeline-empty">Erreur de chargement.</div>';
+      document.getElementById('clientsTable').innerHTML = '<div class="empty-state">Erreur de chargement.</div>';
+    }
+  }
+
+  document.querySelector('.nav-logout').addEventListener('click', async (e) => {
+    if (document.body.classList.contains('demo-mode')) return; // en démo, laisse le lien normal
+    e.preventDefault();
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'connexion.html';
+  });
+
   if (new URLSearchParams(window.location.search).get('demo') === '1') {
     document.body.classList.add('demo-mode');
     var logout = document.querySelector('.nav-logout');
     if (logout) { logout.textContent = 'Quitter la démo'; logout.href = 'connexion.html'; }
     var userName = document.querySelector('.nav-user-name');
     if (userName) { userName.textContent = 'Démo'; }
+    document.getElementById('greetName').textContent = 'Démo';
+    renderPipeline({
+      'En attente': [{ entreprise: 'Atelier Dubois', montant: 1800 }],
+      'Envoyé': [{ entreprise: 'Boulangerie Léa', montant: 950 }],
+      'Signé': [{ entreprise: 'Cabinet Roux', montant: 3200 }],
+      'Perdu': [{ entreprise: 'Garage Petit', montant: 1100 }]
+    });
+    renderClients([
+      { entreprise: 'Atelier Dubois', secteur: 'Artisanat', statut: 'En attente' },
+      { entreprise: 'Cabinet Roux', secteur: 'Conseil', statut: 'Signé' },
+      { entreprise: 'Boulangerie Léa', secteur: 'Commerce', statut: 'Envoyé' }
+    ]);
+    document.getElementById('statClients').textContent = '3';
+    document.getElementById('statDevisEnCours').textContent = '2';
+    document.getElementById('statTaux').textContent = '25%';
+    document.getElementById('statCA').textContent = '3 200 €';
+  } else {
+    loadDashboard();
   }
 </script>
 
