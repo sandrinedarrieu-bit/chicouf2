@@ -96,7 +96,7 @@
 
     <div class="login-divider" style="margin:0 0 1.5rem;"><span>Espace membre</span></div>
 
-    <form id="form-connexion" onsubmit="event.preventDefault(); window.location.href='espace-commercial.html';">
+    <form id="form-connexion">
       <div class="form-group">
         <label for="email">Adresse email</label>
         <input type="email" id="email" placeholder="prenom@exemple.fr" required />
@@ -110,7 +110,36 @@
         <a href="#">Mot de passe oublié ?</a>
       </div>
       <button type="submit" class="btn-login">Se connecter →</button>
+      <p id="login-error" style="color:#B3261E;font-size:.82rem;margin-top:.8rem;display:none;"></p>
     </form>
+
+    <script>
+      document.getElementById('form-connexion').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById('login-error');
+        errorEl.style.display = 'none';
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = e.target.querySelector('.btn-login');
+        btn.disabled = true;
+        btn.textContent = 'Connexion…';
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Erreur de connexion.');
+          window.location.href = 'espace-commercial.html';
+        } catch (err) {
+          errorEl.textContent = err.message;
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Se connecter →';
+        }
+      });
+    </script>
 
     <div class="login-divider"><span>ou</span></div>
 
