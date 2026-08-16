@@ -175,9 +175,9 @@
           </div>
         </div>
         <div class="cta-box" id="home-cta" data-goto="annexes" style="cursor:pointer;">
+          <div class="eyebrow" style="color:rgba(255,255,255,.75);margin-bottom:.4rem;">🎯 Votre prochaine étape</div>
           <div class="offre" id="home-cta-titre"></div>
-          <p id="home-cta-detail"></p>
-          <a href="#" id="home-cta-btn" class="btn-cta" target="_blank" rel="noopener"></a>
+          <p style="opacity:.85;font-size:.9rem;margin-top:.6rem;">Voir le détail et réserver un échange →</p>
         </div>
       </section>
 
@@ -323,12 +323,8 @@
       }));
       document.getElementById('radar-svg').innerHTML = buildRadarSVG(radarValues, 320, true);
 
-      // Aperçu "prochaine étape" sur la page d'accueil (synthèse)
-      document.getElementById('home-cta-titre').textContent = data.annexesROI.ctaTitre;
-      document.getElementById('home-cta-detail').textContent = data.annexesROI.ctaDetail;
-      const homeBtn = document.getElementById('home-cta-btn');
-      homeBtn.textContent = data.annexesROI.ctaAction;
-      homeBtn.href = data.annexesROI.offreLien;
+      // Aperçu "prochaine étape" sur la page d'accueil (synthèse) — teaser compact, le détail complet est en Annexes
+      document.getElementById('home-cta-titre').textContent = data.annexesROI.offreNom;
 
       // Cartes dimensions
       const dimGrid = document.getElementById('dim-grid');
