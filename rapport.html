@@ -85,14 +85,17 @@
 
     /* ---------- Radar + cartes dimensions ---------- */
     .radar-wrap { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: 1.5rem; display: flex; justify-content: center; }
-    .dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-    .dim-card { background: var(--white); border-radius: var(--radius); padding: 1.2rem 1.4rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); cursor: pointer; border-left: 5px solid var(--dim-color, var(--ouf)); }
-    .dim-card-head { display: flex; justify-content: space-between; align-items: center; }
-    .dim-card-head h4 { font-family: 'Syne', sans-serif; font-size: .95rem; color: var(--chic); }
-    .dim-card-pct { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--dim-color, var(--ouf)); }
-    .dim-card-niveau { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+    .dim-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; max-width: 640px; margin: 0 auto; }
+    .dim-card { background: var(--white); border-radius: var(--radius); padding: 1.4rem 1.6rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); cursor: pointer; border-left: 5px solid var(--dim-color, var(--ouf)); min-width: 0; }
+    .dim-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+    .dim-card-head h4 { font-family: 'Syne', sans-serif; font-size: .95rem; color: var(--chic); white-space: normal; overflow-wrap: break-word; line-height: 1.25; }
+    .dim-card-pct { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--dim-color, var(--ouf)); flex-shrink: 0; }
+    .dim-card-niveau { font-size: .82rem; color: var(--muted); margin-top: .4rem; }
     .dim-card-reco { max-height: 0; overflow: hidden; transition: max-height .3s ease, margin-top .3s ease; font-size: .9rem; color: var(--body); }
     .dim-card.open .dim-card-reco { max-height: 300px; margin-top: .8rem; }
+    @media (max-width: 560px) {
+      .dim-grid { grid-template-columns: 1fr; max-width: 420px; }
+    }
 
     /* ---------- Diagnostic risques ---------- */
     .risk-banner { background: var(--white); border-radius: var(--radius); padding: 1.5rem 1.8rem; box-shadow: 0 4px 20px rgba(44,44,62,.06); margin-bottom: 1.2rem; }
@@ -242,7 +245,7 @@
     function buildRadarSVG(values, size, showLabels) {
       // values: [{label, pct, color}]
       const n = values.length;
-      const cx = size / 2, cy = size / 2, maxR = size * 0.36;
+      const cx = size / 2, cy = size / 2, maxR = size * 0.33;
       const gridLevels = [0.25, 0.5, 0.75, 1];
       let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
 
@@ -261,8 +264,10 @@
         const [x, y] = polarPoint(cx, cy, maxR, angle);
         svg += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E9E4FB" stroke-width="1"/>`;
         if (showLabels) {
-          const [lx, ly] = polarPoint(cx, cy, maxR + 22, angle);
-          svg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-family="DM Sans" fill="#3D3D3D" font-weight="600">${values[i].label}</text>`;
+          const [lx, ly] = polarPoint(cx, cy, maxR + 24, angle);
+          const dx = lx - cx;
+          const anchor = dx > 5 ? 'end' : dx < -5 ? 'start' : 'middle';
+          svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" font-size="12" font-family="DM Sans" fill="#3D3D3D" font-weight="600">${values[i].label}</text>`;
         }
       }
 
