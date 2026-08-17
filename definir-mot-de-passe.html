@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Définir votre mot de passe | CHIC · OUF</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --nuit: #2C2C3E; --chic: #2D1F6E; --ouf: #7B5CF0; --ouf-cta: #5F3AE0; --ouf-cta-hover: #522FC7;
+      --cream: #F8F7F4; --body: #3D3D3D; --muted: #6B6B6B; --white: #FFFFFF; --radius: 12px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--body); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+    .card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 20px; padding: 2.5rem; max-width: 420px; width: 100%; }
+    .brand { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; }
+    .brand span.name { font-family: 'Georgia', serif; font-weight: 700; letter-spacing: .06em; color: var(--chic); font-size: 1rem; }
+    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--chic); margin-bottom: .4rem; }
+    p.sub { font-size: .85rem; color: var(--muted); margin-bottom: 1.75rem; }
+    label { display: block; font-size: .82rem; font-weight: 500; margin-bottom: .4rem; }
+    input { width: 100%; padding: .7rem .9rem; border: 1.5px solid #E0DDD5; border-radius: 10px; font-family: inherit; font-size: .9rem; background: var(--cream); margin-bottom: 1.1rem; }
+    input:focus { outline: none; border-color: var(--ouf-cta); background: var(--white); }
+    button { width: 100%; background: var(--ouf-cta); color: #fff; border: none; padding: .85rem; border-radius: var(--radius); font-weight: 600; font-size: .92rem; cursor: pointer; }
+    button:hover { background: var(--ouf-cta-hover); }
+    button:disabled { opacity: .6; cursor: default; }
+    #msg { margin-top: 1rem; font-size: .85rem; text-align: center; }
+    #msg.ok { color: #1a7f4f; }
+    #msg.err { color: #b3261e; }
+    #invalid { display: none; text-align: center; }
+    #invalid a { color: var(--ouf-cta); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+        <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+      </svg>
+      <span class="name">CHIC · OUF</span>
+    </div>
+
+    <div id="form-zone">
+      <h1>Bienvenue dans le réseau 🎉</h1>
+      <p class="sub">Définissez votre mot de passe pour accéder à votre espace commercial.</p>
+      <form id="f">
+        <label for="password">Mot de passe (8 caractères min.)</label>
+        <input type="password" id="password" minlength="8" required />
+        <label for="password2">Confirmez le mot de passe</label>
+        <input type="password" id="password2" minlength="8" required />
+        <button type="submit">Créer mon accès →</button>
+      </form>
+      <p id="msg"></p>
+    </div>
+
+    <div id="invalid">
+      <h1>Lien invalide ou expiré</h1>
+      <p class="sub">Ce lien d'invitation n'est plus valide. Contactez-nous pour en recevoir un nouveau : <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a></p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    if (!token) {
+      document.getElementById('form-zone').style.display = 'none';
+      document.getElementById('invalid').style.display = 'block';
+    }
+
+    document.getElementById('f').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      msg.textContent = '';
+      msg.className = '';
+
+      const password = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+
+      if (password !== password2) {
+        msg.textContent = 'Les deux mots de passe ne correspondent pas.';
+        msg.className = 'err';
+        return;
+      }
+
+      const btn = e.target.querySelector('button');
+      btn.disabled = true;
+      btn.textContent = 'Création en cours…';
+
+      try {
+        const res = await fetch('/api/auth/set-password-with-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Erreur');
+        msg.textContent = 'Accès créé ! Redirection…';
+        msg.className = 'ok';
+        setTimeout(() => { window.location.href = 'espace-commercial.html'; }, 1000);
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = 'err';
+        btn.disabled = false;
+        btn.textContent = 'Créer mon accès →';
+      }
+    });
+  </script>
+</body>
+</html>
