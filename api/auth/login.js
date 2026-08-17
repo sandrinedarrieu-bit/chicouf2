@@ -66,6 +66,7 @@ export default async function handler(req, res) {
     if (!valid) return genericError();
 
     const session = {
+      purpose: 'session',
       sub: record.id,
       name: record.fields.Nom || '',
       exp: Date.now() + 1000 * 60 * 60 * 24 * 7 // 7 jours
