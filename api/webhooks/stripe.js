@@ -12,7 +12,7 @@
 //   de ce webhook — voir instructions)
 
 import crypto from 'crypto';
-import { signSession } from '../_session.js';
+import { signSession, guessPrenom } from '../_session.js';
 
 export const config = {
   api: {
@@ -123,7 +123,7 @@ export default async function handler(req, res) {
             Authorization: `Bearer ${AIRTABLE_API_KEY}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ fields: { Nom: nom, Email: email }, typecast: true })
+          body: JSON.stringify({ fields: { Nom: nom, Prenom: guessPrenom(nom), Email: email }, typecast: true })
         }
       );
       if (!createRes.ok) throw new Error(`Airtable création ${createRes.status}`);
