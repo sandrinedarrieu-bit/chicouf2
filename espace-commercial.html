@@ -50,6 +50,29 @@
   .admin-box a { display: inline-flex; align-items: center; gap: .4rem; background: rgba(255,255,255,.08); color: #fff; text-decoration: none; padding: .6rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 600; }
   .admin-box a:hover { background: rgba(255,255,255,.16); }
 
+  .reseau-table { background: var(--white); border-radius: 16px; overflow-x: auto; border: 1px solid #E8E6E1; }
+  .reseau-row { display: flex; align-items: center; padding: .85rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .85rem; gap: .5rem; min-width: 700px; }
+  .reseau-row:last-child { border-bottom: none; }
+  .reseau-row.head { background: var(--cream); font-size: .72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+  .reseau-row .r-nom { flex: 1.4; font-weight: 600; color: var(--body); }
+  .reseau-row .r-email { flex: 1.6; color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .reseau-row .r-statut { flex: .9; }
+  .reseau-row .r-ca { flex: 1; font-weight: 600; color: var(--chic); font-size: .85rem; }
+  .reseau-row .r-histo { flex: .6; text-align: right; }
+  .histo-toggle { background: none; border: 1px solid #E0DDD5; border-radius: 8px; padding: .3rem .6rem; font-size: .78rem; color: var(--ouf-cta); cursor: pointer; font-weight: 600; }
+  .histo-toggle:hover { background: var(--cream); }
+  .histo-panel { display: none; background: var(--cream); padding: .9rem 1.2rem; border-bottom: 1px solid #EEEBE4; min-width: 700px; }
+  .histo-panel.open { display: block; }
+  .histo-entry { background: var(--white); border: 1px solid #E8E6E1; border-radius: 10px; padding: .7rem .9rem; margin-bottom: .6rem; font-size: .82rem; }
+  .histo-entry:last-child { margin-bottom: 0; }
+  .histo-entry .histo-date { font-weight: 700; color: var(--chic); margin-bottom: .25rem; }
+  .histo-entry .histo-solution { color: var(--ouf); font-size: .76rem; font-weight: 600; margin-bottom: .3rem; }
+  .histo-entry .histo-resume { color: var(--muted); white-space: pre-wrap; }
+  .badge-reseau { display: inline-block; font-size: .74rem; font-weight: 600; padding: .25rem .7rem; border-radius: 999px; }
+  .badge-reseau.signe { background: #DFF3E6; color: #1A7F4F; }
+  .badge-reseau.rdv { background: #E6F0FE; color: #1B4FA0; }
+  .badge-reseau.contact { background: #F1EFE8; color: #6B6B6B; }
+
   /* modale demande de devis */
   .modal-overlay { display:none; position:fixed; inset:0; background:rgba(44,44,62,.55); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
   .modal-overlay.open { display:flex; }
@@ -199,6 +222,24 @@
     <div class="admin-links">
       <a href="https://tally.so/r/D4OlX5" target="_blank" rel="noopener">📋 Remplir le récap post-appel</a>
       <a href="admin-commerciaux.html">👥 Gérer les accès commerciaux</a>
+    </div>
+  </div>
+
+  <div class="section-block admin-box" id="reseauBox" style="background:transparent;padding:0;">
+    <div class="section-block-head">
+      <h2>Réseau CommercI.A.l</h2>
+    </div>
+    <div class="reseau-table" id="reseauTable">
+      <div class="reseau-row head">
+        <span class="r-nom">Nom</span>
+        <span class="r-email">Email</span>
+        <span class="r-statut">Statut</span>
+        <span class="r-ca">CA réseau</span>
+        <span class="r-ca">CA clients</span>
+        <span class="r-ca">Commission (5%)</span>
+        <span class="r-histo"></span>
+      </div>
+      <div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
     </div>
   </div>
 
@@ -422,6 +463,71 @@
     `;
   }
 
+  const RESEAU_BADGE_CLASS = { 'Signé': 'signe', 'RDV pris': 'rdv', 'Contact': 'contact' };
+
+  function renderHistoriqueEntries(historique) {
+    if (!historique || historique.length === 0) {
+      return '<p style="color:var(--muted);font-style:italic;font-size:.82rem;">Aucun échange enregistré.</p>';
+    }
+    return historique.map(h => {
+      const dateStr = h.date ? new Date(h.date).toLocaleDateString('fr-FR') : 'Date inconnue';
+      const solutionStr = (h.solution || []).join(', ');
+      return `<div class="histo-entry">
+        <div class="histo-date">${dateStr}</div>
+        ${solutionStr ? `<div class="histo-solution">${solutionStr}</div>` : ''}
+        <div class="histo-resume">${h.resume || '(pas de résumé)'}</div>
+      </div>`;
+    }).join('');
+  }
+
+  async function loadReseau() {
+    const table = document.getElementById('reseauTable');
+    try {
+      const res = await fetch('/api/admin/commerciaux-list');
+      if (!res.ok) throw new Error('Erreur de chargement');
+      const data = await res.json();
+      const commerciaux = data.commerciaux || [];
+
+      const rows = commerciaux.map((c, i) => {
+        const badgeClass = RESEAU_BADGE_CLASS[c.statut] || 'contact';
+        const caReseauStr = c.caReseau === null ? '—' : euros(c.caReseau);
+        const histoCount = (c.historique || []).length;
+        return `<div class="reseau-row">
+          <span class="r-nom">${c.nom}</span>
+          <span class="r-email">${c.email || '—'}</span>
+          <span class="r-statut"><span class="badge-reseau ${badgeClass}">${c.statut}</span></span>
+          <span class="r-ca">${caReseauStr}</span>
+          <span class="r-ca">${euros(c.caClients)}</span>
+          <span class="r-ca" style="color:var(--or);">${euros(c.commission)}</span>
+          <span class="r-histo"><button class="histo-toggle" data-idx="${i}">Historique (${histoCount})</button></span>
+        </div>
+        <div class="histo-panel" id="histoPanel${i}">${renderHistoriqueEntries(c.historique)}</div>`;
+      }).join('');
+
+      table.innerHTML = `
+        <div class="reseau-row head">
+          <span class="r-nom">Nom</span>
+          <span class="r-email">Email</span>
+          <span class="r-statut">Statut</span>
+          <span class="r-ca">CA réseau</span>
+          <span class="r-ca">CA clients</span>
+          <span class="r-ca">Commission (5%)</span>
+          <span class="r-histo"></span>
+        </div>
+        ${commerciaux.length ? rows : '<div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Personne pour le moment.</span></div>'}
+      `;
+
+      table.querySelectorAll('.histo-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = document.getElementById('histoPanel' + btn.dataset.idx);
+          panel.classList.toggle('open');
+        });
+      });
+    } catch (err) {
+      table.innerHTML = '<div class="reseau-row"><span style="color:var(--muted);">Erreur de chargement.</span></div>';
+    }
+  }
+
   async function loadDashboard() {
     try {
       const res = await fetch('/api/dashboard-data');
@@ -439,6 +545,8 @@
 
       if (data.isAdmin) {
         document.getElementById('adminBox').classList.add('visible');
+        document.getElementById('reseauBox').classList.add('visible');
+        loadReseau();
       }
 
       document.getElementById('statClients').textContent = data.kpis.nbClients;
