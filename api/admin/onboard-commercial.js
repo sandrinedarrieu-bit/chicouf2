@@ -76,7 +76,7 @@ export default async function handler(req, res) {
       exp: Date.now() + INVITE_VALIDITY_MS
     };
     const token = signSession(invitePayload, SESSION_SECRET);
-    const inviteUrl = `https://chicouf.pro/definir-mot-de-passe.html?token=${encodeURIComponent(token)}`;
+    const inviteUrl = `https://www.chicouf.pro/definir-mot-de-passe.html?token=${encodeURIComponent(token)}`;
 
     return res.status(200).json({
       ok: true,
