@@ -432,7 +432,7 @@
       if (!res.ok) throw new Error('Erreur de chargement');
       const data = await res.json();
 
-      document.getElementById('greetName').textContent = data.nom || '';
+      document.getElementById('greetName').textContent = data.prenom || data.nom || '';
       document.querySelector('.nav-user-name').textContent = data.nom || '';
       document.querySelector('.nav-avatar').textContent = (data.nom || '?')
         .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
