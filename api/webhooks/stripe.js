@@ -138,7 +138,7 @@ export default async function handler(req, res) {
       exp: Date.now() + INVITE_VALIDITY_MS
     };
     const token = signSession(invitePayload, SESSION_SECRET);
-    const inviteUrl = `https://chicouf.pro/definir-mot-de-passe.html?token=${encodeURIComponent(token)}`;
+    const inviteUrl = `https://www.chicouf.pro/definir-mot-de-passe.html?token=${encodeURIComponent(token)}`;
 
     // 4. Déclencher l'envoi de l'email via Make (appel SORTANT, jamais bloqué par le firewall)
     await fetch(MAKE_EMAIL_WEBHOOK, {
