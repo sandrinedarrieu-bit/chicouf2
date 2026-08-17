@@ -89,6 +89,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'private, no-store');
     return res.status(200).json({
       nom: session.name,
+      isAdmin: (consultant.fields.Email || '').trim().toLowerCase() === 'contact@chicouf.pro',
       kpis: {
         nbClients: clients.length,
         devisEnCours,
