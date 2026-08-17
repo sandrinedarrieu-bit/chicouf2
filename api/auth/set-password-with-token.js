@@ -50,6 +50,7 @@ export default async function handler(req, res) {
       purpose: 'session',
       sub: invite.sub,
       name: updated.fields?.Nom || '',
+      prenom: updated.fields?.Prenom || '',
       exp: Date.now() + 1000 * 60 * 60 * 24 * 7
     };
     const sessionToken = signSession(session, SESSION_SECRET);
