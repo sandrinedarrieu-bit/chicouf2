@@ -127,6 +127,7 @@
   .badge.attente { background:#FFF3D6; color:#8A5A00; }
   .badge.envoye { background:#E6F0FE; color:#1B4FA0; }
   .badge.signe { background:#DFF3E6; color:#1A7F4F; }
+  .badge.paye { background:#D6EFE0; color:#0F6B3A; font-weight:700; }
   .badge.perdu { background:#F1EFE8; color:#6B6B6B; }
   .badge.aucun { background:#F1EFE8; color:#6B6B6B; }
   .empty-state { text-align:center; padding: 2rem; color: var(--muted); font-size: .88rem; }
@@ -309,10 +310,11 @@
     'En attente': 'attente',
     'Envoyé': 'envoye',
     'Signé': 'signe',
+    'Payé': 'paye',
     'Perdu': 'perdu',
     'Aucun devis': 'aucun'
   };
-  const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Perdu'];
+  const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Payé', 'Perdu'];
 
   function euros(n) {
     return Math.round(n || 0).toLocaleString('fr-FR') + ' €';
@@ -329,7 +331,7 @@
         html += `<div class="pipeline-empty">Aucun</div>`;
       } else {
         items.forEach(it => {
-          const cls = statut === 'Signé' ? 'signe' : (statut === 'Perdu' ? 'perdu' : '');
+          const cls = (statut === 'Signé' || statut === 'Payé') ? 'signe' : (statut === 'Perdu' ? 'perdu' : '');
           html += `<div class="pipeline-card ${cls}">
             <div class="pc-nom">${it.entreprise || 'Client'}</div>
             <div class="pc-montant">${euros(it.montant)}</div>
@@ -408,7 +410,8 @@
     renderPipeline({
       'En attente': [{ entreprise: 'Atelier Dubois', montant: 1800 }],
       'Envoyé': [{ entreprise: 'Boulangerie Léa', montant: 950 }],
-      'Signé': [{ entreprise: 'Cabinet Roux', montant: 3200 }],
+      'Signé': [{ entreprise: 'Boucherie Nguyen', montant: 1400 }],
+      'Payé': [{ entreprise: 'Cabinet Roux', montant: 3200 }],
       'Perdu': [{ entreprise: 'Garage Petit', montant: 1100 }]
     });
     renderClients([
