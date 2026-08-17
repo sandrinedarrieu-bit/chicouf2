@@ -74,3 +74,11 @@ export function verifyPassword(password, stored) {
     return false;
   }
 }
+
+// Déduit un prénom à partir d'un nom complet tapé librement (ex. sur Stripe Checkout).
+// "Jean-Baptiste Dupont" → "Jean-Baptiste". Approximatif par nature (pas de vrai champ
+// prénom/nom séparé côté Stripe), sert uniquement de valeur de départ modifiable ensuite.
+export function guessPrenom(fullName) {
+  if (!fullName) return '';
+  return fullName.trim().split(/\s+/)[0] || '';
+}
