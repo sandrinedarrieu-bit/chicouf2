@@ -8,7 +8,7 @@
 // Variables d'environnement Vercel requises (déjà en place) :
 //   AIRTABLE_API_KEY, SESSION_SECRET, ADMIN_SECRET
 
-import { signSession } from '../_session.js';
+import { signSession, guessPrenom } from '../_session.js';
 
 const AIRTABLE_BASE_ID = 'appPbx0vHGCSTE9wR';
 const CONSULTANTS_TABLE = 'tblZe72whfqw8IPAx';
@@ -57,6 +57,7 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             fields: {
               Nom: nom || '',
+              Prenom: guessPrenom(nom),
               Email: email
             },
             typecast: true
