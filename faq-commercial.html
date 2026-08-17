@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FAQ CommercI.A.l | CHIC · OUF</title>
+<meta name="description" content="Toutes les questions fréquentes sur le réseau de commerciaux CommercI.A.l chez CHIC · OUF." />
+<link rel="canonical" href="https://www.chicouf.pro/faq-commercial.html" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nuit:     #2C2C3E;
+    --chic:     #2D1F6E;
+    --ouf:      #7B5CF0;
+    --ouf-cta:  #5F3AE0;
+    --ouf-cta-hover: #522FC7;
+    --lilas:    #A78BFA;
+    --lilas-l:  #F5F0FF;
+    --or:       #F59E0B;
+    --cream:    #F8F7F4;
+    --body:     #3D3D3D;
+    --muted:    #6B6B6B;
+    --white:    #FFFFFF;
+    --radius:   12px;
+    --max:      900px;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.65; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .nav-logo-badge { flex-shrink: 0; }
+  .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
+  .nav-logo-text span { color: var(--lilas); }
+  .nav-logo-tagline { font-size: .6rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: 2px; }
+  .nav-back { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; }
+  .nav-back:hover { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; transition: color .2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--ouf-cta); color: var(--white) !important; padding: .4rem 1.1rem; border-radius: 6px; font-weight: 500; transition: background .2s !important; }
+  .nav-cta:hover { background: var(--ouf-cta-hover); }
+  .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .5rem; }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: .5rem; background: var(--nuit); min-width: 210px; padding: .5rem 0; border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,.28); list-style: none; z-index: 200; }
+  .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { display: block; }
+  .nav-dropdown-menu li { width: 100%; }
+  .nav-dropdown-menu a { display: block; padding: .55rem 1.1rem; white-space: nowrap; font-size: .85rem; }
+  .nav-current { color: var(--white) !important; font-weight: 700; }
+  @media (max-width: 768px) {
+    .nav-toggle { display: block; }
+    .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--nuit); flex-direction: column; gap: 1.1rem; align-items: flex-start; padding: 1.25rem clamp(1.25rem,5vw,3rem) 1.5rem; box-shadow: 0 8px 16px rgba(0,0,0,.15); }
+    .nav-links.open { display: flex; }
+    .nav-links .nav-cta { display: inline-block; width: fit-content; }
+    .nav-dropdown-menu { display: block; position: static; margin: .4rem 0 0; padding: 0 0 0 1rem; box-shadow: none; background: transparent; }
+    .nav-dropdown-menu a { padding: .35rem 0; color: rgba(255,255,255,.45); }
+  }
+
+  section { padding: clamp(3rem,6vw,5rem) clamp(1.25rem,5vw,3rem); max-width: var(--max); margin: 0 auto; }
+  .section-eyebrow { text-align: center; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ouf); margin-bottom: .75rem; }
+  .section-title { text-align: center; font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 800; color: var(--chic); line-height: 1.2; margin: 0 auto 1rem; }
+  .section-sub { text-align: center; color: var(--muted); margin: 0 auto; }
+
+  .hero-cta { background: var(--nuit); }
+  .hero-cta .section-title,.hero-cta .section-eyebrow { color: var(--white); }
+  .hero-cta .section-sub { color: rgba(255,255,255,.65); }
+  .btn-primary { display:inline-block; background: var(--ouf-cta); color: var(--white); padding: .85rem 1.8rem; border-radius: 999px; font-size: .95rem; font-weight: 600; text-decoration: none; margin-top: 1.5rem; }
+  .btn-primary:hover { background: var(--ouf-cta-hover); }
+  .hero-cta-wrap { text-align:center; }
+
+  .desc-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: var(--radius); padding: 2rem; margin-top: 2rem; }
+  .desc-card .icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
+  .desc-card p { font-size: .95rem; color: var(--body); }
+
+  .proof-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1.8rem; margin-top: 2rem; }
+  .proof-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: 1rem; text-align:center; }
+  .proof-row { display: flex; gap: .6rem; margin-bottom: .65rem; font-size: .88rem; line-height: 1.55; }
+  .proof-row .proof-label { flex-shrink: 0; font-weight: 700; color: var(--ouf); min-width: 90px; }
+
+  .faq-wrap { margin-top: 1rem; }
+  .faq-item { border-top: 1px solid #E8E6E1; padding: 1.1rem 0; }
+  .faq-item:last-child { border-bottom: 1px solid #E8E6E1; }
+  .faq-q { font-weight: 700; color: var(--chic); font-size: .95rem; margin-bottom: .4rem; }
+  .faq-a { font-size: .88rem; color: var(--muted); }
+
+  .note-box { margin-top: 1.5rem; background: var(--lilas-l); border: 1px dashed var(--ouf); border-radius: 12px; padding: 1.2rem 1.5rem; text-align:center; font-size: .88rem; color: var(--body); }
+
+  .two-col { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .col-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 2rem; }
+  .col-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: 1.1rem; }
+  .col-card ul { list-style: none; padding: 0; }
+  .col-card li { display: flex; align-items: flex-start; gap: .6rem; margin-bottom: .8rem; font-size: .9rem; color: var(--body); line-height: 1.55; }
+  .col-card li::before { content: "✓"; color: var(--ouf); font-weight: 700; flex-shrink: 0; }
+  .col-card .note { margin-top: 1rem; font-size: .82rem; color: var(--muted); font-style: italic; }
+
+  .piliers-grid { max-width: var(--max-wide); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .pilier-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 18px; padding: 1.8rem; }
+  .pilier-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--lilas-l); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.1rem; }
+  .pilier-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--chic); margin-bottom: .6rem; }
+  .pilier-card p { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+  /* SÉLECTEUR DE PARCOURS : Consultant IA / CommercI.A.l */
+  .path-intro { text-align:center; max-width: var(--max); margin: 0 auto 1.25rem; }
+  .path-tabs { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .path-tab { text-align:left; cursor:pointer; background: var(--white); border: 1.5px solid #E8E6E1; border-radius: 16px; padding: 1.5rem 1.6rem; font-family: 'DM Sans', sans-serif; transition: border-color .2s, box-shadow .2s; }
+  .path-tab:hover { border-color: var(--lilas); }
+  .path-tab .path-tab-icon { font-size: 1.3rem; margin-bottom: .5rem; }
+  .path-tab .path-tab-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem; color: var(--chic); margin-bottom: .25rem; }
+  .path-tab .path-tab-sub { font-size: .82rem; color: var(--muted); }
+  .path-tab.active { border-color: var(--ouf); box-shadow: 0 8px 24px rgba(123,92,240,.14); background: var(--lilas-l); }
+  .path-tab.path-tab-commercial.active { border-color: var(--or); box-shadow: 0 8px 24px rgba(245,158,11,.16); background: #FFF7E9; }
+  .path-tab-badge { display:inline-block; font-size: .65rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 999px; margin-bottom: .6rem; }
+  .path-tab-consultant .path-tab-badge { color: var(--ouf); background: var(--lilas-l); }
+  .path-tab-commercial .path-tab-badge { color: #92620A; background: #FFF1D6; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* COMPARATIF */
+  .compare-table-wrap { max-width: var(--max); margin: 0 auto; overflow-x: auto; }
+  table.compare-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; border: 1px solid #E8E6E1; }
+  table.compare-table th, table.compare-table td { padding: .9rem 1.1rem; text-align: left; font-size: .88rem; border-bottom: 1px solid #EEEBE4; }
+  table.compare-table th { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--white); background: var(--nuit); }
+  table.compare-table td:first-child { color: var(--muted); font-weight: 500; width: 26%; }
+  table.compare-table tr:last-child td { border-bottom: none; }
+  table.compare-table td.consultant-col { color: var(--chic); }
+  table.compare-table td.commercial-col { color: #92620A; }
+
+  @media (max-width: 860px) {
+    .two-col, .piliers-grid { grid-template-columns: 1fr; }
+    .path-tabs { grid-template-columns: 1fr; }
+  }
+
+  footer { text-align:center; padding: 2rem clamp(1.25rem,5vw,3rem); font-size: .8rem; color: var(--muted); border-top: 1px solid #E8E6E1; }
+  footer a { color: var(--ouf); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <svg class="nav-logo-badge" width="30" height="30" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="10" y="10" width="240" height="240" rx="56" fill="#7B5CF0"/>
+      <path d="M75 135 L112 172 L185 90" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="192" cy="60" r="14" fill="#F59E0B"/>
+    </svg>
+    <span class="nav-logo-stack" style="display:flex;flex-direction:column;line-height:1.1;">
+      <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
+      <span class="nav-logo-tagline">Accompagnement en IA</span>
+      <span class="nav-logo-tagline" style="font-style:italic;font-size:.52rem;text-transform:none;letter-spacing:.02em;">pour les salariés, dirigeants et consultants</span>
+    </span>
+  </a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+  <ul class="nav-links">
+    <li class="nav-dropdown">
+      <a href="index.html">Accueil ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="index.html#solutions-ia">Ma philosophie</a></li>
+        <li><a href="index.html#diagnostics-overview">Par où commencer ?</a></li>
+        <li><a href="index.html#cas-usage">Exemples de projets</a></li>
+        <li><a href="index.html#apropos">Pourquoi CHIC · OUF ?</a></li>
+      </ul>
+    </li>
+    <li><a href="incubateur-ia.html">Incubateur IA</a></li>
+    <li><a href="accelerateur-ia.html">Accélérateur IA</a></li>
+    <li><a href="devenir-consultant-ia.html" class="nav-current">Apprendre à vendre l'IA</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Outils gratuits ▾</a>
+      <ul class="nav-dropdown-menu">
+        <li><a href="diagnostic-cape.html">Diagnostic d'organisation et de maturité</a></li>
+        <li><a href="audit-site.html">Analyse du site internet</a></li>
+      </ul>
+    </li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Prendre contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<section id="faq" style="scroll-margin-top:90px;">
+  <p class="section-eyebrow">Questions fréquentes</p>
+  <h2 class="section-title">FAQ — Rejoindre CommercI.A.l</h2>
+  <p style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:2rem;">
+    <a href="devenir-consultant-ia.html" style="color:var(--ouf-cta);">← Retour à la page Consultant IA / CommercI.A.l</a>
+    &nbsp;·&nbsp;
+    <a href="faq-consultant-ia.html" style="color:var(--ouf-cta);">Voir la FAQ Consultant IA →</a>
+  </p>
+  <div class="faq-wrap">
+    <div class="faq-item">
+      <p class="faq-q">Dois-je avoir des compétences techniques pour rejoindre CommercI.A.l ?</p>
+      <p class="faq-a">Non, et ça ne change pas dans le temps : vous diagnostiquez et vous vendez. Notre partenaire technologique réalise la prestation. Aucune compétence technique n'est nécessaire, ni pour commencer ni pour durer dans l'activité.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Dois-je savoir utiliser l'intelligence artificielle avant de commencer ?</p>
+      <p class="faq-a">Non. Vous n'avez pas besoin de savoir utiliser les outils IA vous-même : votre rôle est de diagnostiquer les besoins d'un client et de proposer la solution adaptée depuis le catalogue, pas de la mettre en œuvre. En revanche, il est nécessaire de comprendre l'IA, ses enjeux et ses possibilités, pour identifier les bonnes opportunités chez vos clients et en parler avec crédibilité.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Suis-je obligé(e) de m'engager dès le premier échange ?</p>
+      <p class="faq-a">Non. Vous pouvez réserver un échange pour clarifier vos questions avant de payer, ou rejoindre directement via l'offre de lancement — à vous de choisir.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">CommercI.A.l délivre-t-il une certification comme le parcours Consultant IA ?</p>
+      <p class="faq-a">Non. CommercI.A.l ne certifie pas le commercial : c'est un kit opérationnel pour vendre à vos clients, depuis notre catalogue, des agents IA ainsi que des prestations de formation — ce n'est pas un parcours qui vous forme et vous certifie vous-même. Si vous voulez vous former personnellement et obtenir un titre reconnu, le parcours Consultant IA reste la voie adaptée.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Comment fonctionne la tarification de CommercI.A.l ?</p>
+      <p class="faq-a">Offre de lancement : 500 € pour le kit de démarrage, avec le 1er mois d'abonnement offert. À partir du 2ᵉ mois, un abonnement mensuel de 200 € vous donne accès au kit commercial complet : votre espace commercial personnel (suivi de vos clients et de vos devis), le catalogue d'agents IA à tarifs fixes, les outils de diagnostic CAPE, les documents de formation, et l'accès à la communauté du réseau — sans droit d'entrée ni engagement long.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Comment fonctionne la commission ?</p>
+      <p class="faq-a">Lorsque la prestation vendue est réalisée par notre partenaire technologique, une commission de 5 % du montant HT facturé au client vous est versée, dans un délai de 30 jours suivant la réception du paiement du client. Vous restez libre de faire réaliser la prestation vous-même ou par un prestataire de votre choix — dans ce cas, aucune commission ne s'applique, mais votre abonnement reste inchangé.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Puis-je résilier mon abonnement à tout moment ?</p>
+      <p class="faq-a">Oui. L'abonnement est sans engagement de durée minimale ; vous pouvez résilier à tout moment par email, la résiliation prenant effet à la fin de la période mensuelle en cours.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Dois-je avoir un statut d'entreprise pour rejoindre le réseau ?</p>
+      <p class="faq-a">Oui. L'accès au réseau CommercI.A.l est réservé aux personnes disposant d'un numéro SIRET actif (auto-entrepreneur, micro-entreprise, ou toute autre structure juridique active), pour exercer légalement une activité commerciale indépendante en France.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  CHIC · OUF · Sandrine Darrieu · <a href="mailto:contact@chicouf.pro">contact@chicouf.pro</a> · 07 56 92 59 84 · <a href="index.html">Retour au site principal</a>
+  <p style="margin-top:.5rem;"><a href="mentions-legales.html">Mentions légales</a> · <a href="politique-confidentialite.html">Politique de confidentialité</a> · <a href="cgv.html">CGV</a></p>
+</footer>
+
+</body>
+</html>
