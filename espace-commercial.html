@@ -49,6 +49,27 @@
   .admin-box .admin-links { display: flex; gap: .8rem; flex-wrap: wrap; }
   .admin-box a { display: inline-flex; align-items: center; gap: .4rem; background: rgba(255,255,255,.08); color: #fff; text-decoration: none; padding: .6rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 600; }
   .admin-box a:hover { background: rgba(255,255,255,.16); }
+
+  /* modale demande de devis */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(44,44,62,.55); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:var(--white); border-radius:18px; padding:2rem; max-width:460px; width:100%; max-height:90vh; overflow-y:auto; }
+  .modal-box h3 { font-family:'Syne',sans-serif; color:var(--chic); font-size:1.15rem; margin-bottom:.3rem; }
+  .modal-box p.modal-sub { color:var(--muted); font-size:.85rem; margin-bottom:1.4rem; }
+  .modal-box label { display:block; font-size:.82rem; font-weight:600; color:var(--chic); margin-bottom:.35rem; margin-top:1rem; }
+  .modal-box label:first-of-type { margin-top:0; }
+  .modal-box input, .modal-box textarea { width:100%; padding:.65rem .85rem; border:1.5px solid #E0DDD5; border-radius:10px; font-family:inherit; font-size:.9rem; background:var(--cream); }
+  .modal-box input:focus, .modal-box textarea:focus { outline:none; border-color:var(--ouf-cta); background:var(--white); }
+  .modal-box textarea { resize:vertical; min-height:80px; }
+  .modal-actions { display:flex; gap:.7rem; margin-top:1.6rem; }
+  .modal-actions button { flex:1; padding:.75rem; border-radius:10px; font-weight:600; font-size:.88rem; cursor:pointer; border:none; }
+  .btn-modal-cancel { background:var(--cream); color:var(--muted); }
+  .btn-modal-submit { background:var(--ouf-cta); color:#fff; }
+  .btn-modal-submit:hover { background:var(--ouf-cta-hover); }
+  .btn-modal-submit:disabled { opacity:.6; cursor:default; }
+  #devisMsg { margin-top:.9rem; font-size:.85rem; text-align:center; }
+  #devisMsg.ok { color:#1a7f4f; }
+  #devisMsg.err { color:#b3261e; }
   .greet h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem,3vw,2rem); color: var(--chic); }
 
   .stats-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem; }
@@ -207,6 +228,7 @@
   <div class="section-block">
     <div class="section-block-head">
       <h2>Pipeline des devis</h2>
+      <a href="#" id="openDevisForm" style="font-weight:700;">+ Demander un devis</a>
     </div>
     <div class="pipeline-grid" id="pipelineGrid">
       <div class="pipeline-empty">Chargement…</div>
@@ -317,6 +339,28 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal-overlay" id="devisModal">
+  <div class="modal-box">
+    <h3>Demander un devis</h3>
+    <p class="modal-sub">Décrivez le besoin de votre client — Sandrine reçoit la demande immédiatement et prépare le chiffrage.</p>
+    <form id="devisForm">
+      <label for="devisEntreprise">Entreprise du client *</label>
+      <input type="text" id="devisEntreprise" required />
+      <label for="devisContact">Nom du contact</label>
+      <input type="text" id="devisContact" />
+      <label for="devisSecteur">Secteur d'activité</label>
+      <input type="text" id="devisSecteur" />
+      <label for="devisDescription">Besoin à chiffrer *</label>
+      <textarea id="devisDescription" required placeholder="Ex. Automatisation des relances de devis, agent IA pour la prise de rendez-vous..."></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="cancelDevisForm">Annuler</button>
+        <button type="submit" class="btn-modal-submit">Envoyer la demande →</button>
+      </div>
+      <p id="devisMsg"></p>
+    </form>
+  </div>
 </div>
 
 <script>
@@ -444,6 +488,60 @@
   } else {
     loadDashboard();
   }
+
+  // Modale "Demander un devis"
+  const devisModal = document.getElementById('devisModal');
+  document.getElementById('openDevisForm').addEventListener('click', (e) => {
+    e.preventDefault();
+    devisModal.classList.add('open');
+  });
+  document.getElementById('cancelDevisForm').addEventListener('click', () => {
+    devisModal.classList.remove('open');
+  });
+  devisModal.addEventListener('click', (e) => {
+    if (e.target === devisModal) devisModal.classList.remove('open');
+  });
+
+  document.getElementById('devisForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('devisMsg');
+    msg.textContent = '';
+    msg.className = '';
+    const btn = e.target.querySelector('.btn-modal-submit');
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    const payload = {
+      entreprise: document.getElementById('devisEntreprise').value,
+      nomContact: document.getElementById('devisContact').value,
+      secteur: document.getElementById('devisSecteur').value,
+      description: document.getElementById('devisDescription').value
+    };
+
+    try {
+      const res = await fetch('/api/request-devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur');
+      msg.textContent = 'Demande envoyée ! Le pipeline se met à jour.';
+      msg.className = 'ok';
+      e.target.reset();
+      setTimeout(() => {
+        devisModal.classList.remove('open');
+        msg.textContent = '';
+        if (!document.body.classList.contains('demo-mode')) loadDashboard();
+      }, 1200);
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'err';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer la demande →';
+    }
+  });
 </script>
 
 </body>
