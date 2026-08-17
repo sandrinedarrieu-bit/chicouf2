@@ -55,7 +55,7 @@ export default async function handler(req, res) {
 
     const clientById = Object.fromEntries(clients.map(c => [c.id, c]));
 
-    const pipeline = { 'En attente': [], 'Envoyé': [], 'Signé': [], 'Perdu': [] };
+    const pipeline = { 'En attente': [], 'Envoyé': [], 'Signé': [], 'Payé': [], 'Perdu': [] };
     let caGenere = 0;
 
     audits.forEach(a => {
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
         montant: a.fields.Montant_HT || 0
       };
       if (pipeline[statut]) pipeline[statut].push(item);
-      if (statut === 'Signé') caGenere += (a.fields.Montant_HT || 0);
+      if (statut === 'Payé') caGenere += (a.fields.Montant_HT || 0);
     });
 
     const devisEnCours = pipeline['En attente'].length + pipeline['Envoyé'].length;
