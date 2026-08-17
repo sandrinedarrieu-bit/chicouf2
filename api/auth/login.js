@@ -69,6 +69,7 @@ export default async function handler(req, res) {
       purpose: 'session',
       sub: record.id,
       name: record.fields.Nom || '',
+      prenom: record.fields.Prenom || '',
       exp: Date.now() + 1000 * 60 * 60 * 24 * 7 // 7 jours
     };
     const token = signSession(session, SESSION_SECRET);
