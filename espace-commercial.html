@@ -43,6 +43,12 @@
 
   .greet { margin-bottom: 2rem; }
   .greet-eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ouf); margin-bottom: .35rem; }
+  .admin-box { display: none; background: var(--nuit); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
+  .admin-box.visible { display: block; }
+  .admin-box .admin-label { color: rgba(255,255,255,.6); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .7rem; }
+  .admin-box .admin-links { display: flex; gap: .8rem; flex-wrap: wrap; }
+  .admin-box a { display: inline-flex; align-items: center; gap: .4rem; background: rgba(255,255,255,.08); color: #fff; text-decoration: none; padding: .6rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 600; }
+  .admin-box a:hover { background: rgba(255,255,255,.16); }
   .greet h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem,3vw,2rem); color: var(--chic); }
 
   .stats-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem; }
@@ -165,6 +171,14 @@
   <div class="greet">
     <p class="greet-eyebrow">Espace commerci'al</p>
     <h1>Bonjour <span id="greetName">…</span> 👋</h1>
+  </div>
+
+  <div class="admin-box" id="adminBox">
+    <div class="admin-label">🔐 Outils admin — visible uniquement par toi</div>
+    <div class="admin-links">
+      <a href="https://tally.so/r/D4OlX5" target="_blank" rel="noopener">📋 Remplir le récap post-appel</a>
+      <a href="admin-commerciaux.html">👥 Gérer les accès commerciaux</a>
+    </div>
   </div>
 
   <div class="stats-grid">
@@ -378,6 +392,10 @@
       document.querySelector('.nav-user-name').textContent = data.nom || '';
       document.querySelector('.nav-avatar').textContent = (data.nom || '?')
         .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+      if (data.isAdmin) {
+        document.getElementById('adminBox').classList.add('visible');
+      }
 
       document.getElementById('statClients').textContent = data.kpis.nbClients;
       document.getElementById('statDevisEnCours').textContent = data.kpis.devisEnCours;
