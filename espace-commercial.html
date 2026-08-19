@@ -1016,7 +1016,7 @@
   function renderAuditsHistory(audits) {
     const box = document.getElementById('clientAuditsHistory');
     if (!audits || audits.length === 0) {
-      box.innerHTML = '';
+      box.innerHTML = '<label>Historique des devis</label><p class="diag-empty">Aucun devis pour ce client pour le moment.</p>';
       return;
     }
     const badgeClass = { 'En attente': 'attente', 'Envoyé': 'envoye', 'Signé': 'signe', 'Payé': 'paye', 'Perdu': 'perdu' };
