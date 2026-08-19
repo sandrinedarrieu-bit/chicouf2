@@ -207,6 +207,10 @@
   .badge.perdu { background:#F1EFE8; color:#6B6B6B; }
   .badge.aucun { background:#F1EFE8; color:#6B6B6B; }
   .empty-state { text-align:center; padding: 2rem; color: var(--muted); font-size: .88rem; }
+  .people-filter { display: flex; gap: .4rem; background: var(--cream); border-radius: 10px; padding: .25rem; }
+  .people-filter-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; color: var(--muted); padding: .4rem .9rem; border-radius: 8px; cursor: pointer; }
+  .people-filter-btn.active { background: var(--white); color: var(--chic); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .people-filter-btn[hidden] { display: none; }
 
   @media (max-width: 900px) {
     .pipeline-grid { grid-template-columns: repeat(2,1fr); }
@@ -250,7 +254,6 @@
     <button class="tab-btn" data-tab="prospects"><span class="tab-icon">📋</span>Prospects &amp; devis</button>
     <button class="tab-btn" data-tab="catalogue"><span class="tab-icon">📦</span>Catalogue &amp; ressources</button>
     <button class="tab-btn" data-tab="outils"><span class="tab-icon">🛠️</span>Les outils</button>
-    <button class="tab-btn" data-tab="reseau" id="tabBtnReseau" hidden><span class="tab-icon">👥</span>Réseau</button>
     <button class="tab-btn" data-tab="compte"><span class="tab-icon">⚙️</span>Mon compte</button>
   </div>
 
@@ -341,7 +344,11 @@
 
   <div class="section-block">
     <div class="section-block-head">
-      <h2>Mes clients</h2>
+      <h2 id="peopleTableTitle">Mes clients</h2>
+      <div class="people-filter" id="peopleFilter">
+        <button class="people-filter-btn active" data-filter="clients">Clients</button>
+        <button class="people-filter-btn" data-filter="commerciaux" id="filterCommerciaux" hidden>Commerciaux</button>
+      </div>
     </div>
     <div class="clients-table" id="clientsTable">
       <div class="clients-row head">
@@ -351,25 +358,7 @@
       </div>
       <div class="empty-state" id="clientsLoading">Chargement…</div>
     </div>
-  </div>
-
-  <div class="section-block">
-    <div class="diag-cta">
-      <div class="diag-cta-text">
-        <h2>Diagnostiquer un prospect</h2>
-        <p>Utilisez l'outil de diagnostic CAPE pour identifier les frictions d'un client en quelques minutes et faire remonter automatiquement les agents les plus pertinents.</p>
-      </div>
-      <a href="#" class="diag-cta-btn">Lancer un diagnostic →</a>
-    </div>
-  </div>
-  </div>
-
-  <div class="tab-panel" data-tab="reseau">
-  <div class="section-block admin-box" id="reseauBox" style="background:transparent;padding:0;">
-    <div class="section-block-head">
-      <h2>Réseau CommercI.A.l</h2>
-    </div>
-    <div class="reseau-table" id="reseauTable">
+    <div class="reseau-table" id="reseauTable" style="display:none;">
       <div class="reseau-row head">
         <span class="r-nom">Nom</span>
         <span class="r-email">Email</span>
@@ -659,8 +648,7 @@
 
       if (data.isAdmin) {
         document.getElementById('adminBox').classList.add('visible');
-        document.getElementById('reseauBox').classList.add('visible');
-        document.getElementById('tabBtnReseau').hidden = false;
+        document.getElementById('filterCommerciaux').hidden = false;
         loadReseau();
       }
 
@@ -717,6 +705,17 @@
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === target));
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById('peopleFilter').addEventListener('click', (e) => {
+    const btn = e.target.closest('.people-filter-btn');
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+
+    document.querySelectorAll('.people-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('clientsTable').style.display = filter === 'clients' ? 'block' : 'none';
+    document.getElementById('reseauTable').style.display = filter === 'commerciaux' ? 'block' : 'none';
+    document.getElementById('peopleTableTitle').textContent = filter === 'clients' ? 'Mes clients' : 'Réseau CommercI.A.l';
   });
 
   document.querySelectorAll('.link-save').forEach(btn => {
