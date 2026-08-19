@@ -70,6 +70,7 @@ export default async function handler(req, res) {
         statut: audit.fields.Statut || 'En attente',
         montant: audit.fields.Montant_HT || 0,
         description: audit.fields.Description_besoin || '',
+        dateEnvoi: audit.fields.Date_envoi_devis || null,
         dateSignature: audit.fields.Date_Signature || null,
         transitions: ALLOWED_TRANSITIONS[audit.fields.Statut] || []
       });
@@ -112,6 +113,29 @@ export default async function handler(req, res) {
     } catch (err) {
       console.error('Erreur request-devis (update-status):', err);
       return res.status(500).json({ error: 'Erreur lors de la mise à jour du devis.' });
+    }
+  }
+
+  // --- Le commercial indique/modifie la date d'envoi du devis au prospect ---
+  if ((req.body || {}).action === 'set-date-envoi') {
+    const { id, date } = req.body;
+    if (!id || !date) return res.status(400).json({ error: 'Devis et date requis.' });
+
+    try {
+      const audit = await airtableFetch(`${AUDITS_TABLE}/${id}`, AIRTABLE_API_KEY);
+      if (!isOwnerOfAudit(audit, session.sub)) {
+        return res.status(403).json({ error: 'Ce devis ne fait pas partie de votre portefeuille.' });
+      }
+
+      const updated = await airtableFetch(`${AUDITS_TABLE}/${id}`, AIRTABLE_API_KEY, {
+        method: 'PATCH',
+        body: JSON.stringify({ fields: { Date_envoi_devis: date }, typecast: true })
+      });
+
+      return res.status(200).json({ ok: true, dateEnvoi: updated.fields.Date_envoi_devis });
+    } catch (err) {
+      console.error('Erreur request-devis (set-date-envoi):', err);
+      return res.status(500).json({ error: 'Erreur lors de la mise à jour de la date.' });
     }
   }
 
