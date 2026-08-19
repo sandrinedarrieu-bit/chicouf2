@@ -246,6 +246,7 @@
   <div class="dashboard-layout">
   <nav class="tab-nav" id="tabNav">
     <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
+    <button class="tab-btn" data-tab="liens">Mes liens</button>
     <button class="tab-btn" data-tab="prospects">Prospects &amp; devis</button>
     <button class="tab-btn" data-tab="catalogue">Catalogue &amp; ressources</button>
     <button class="tab-btn" data-tab="reseau" id="tabBtnReseau" hidden>Réseau</button>
@@ -285,6 +286,9 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="tab-panel" data-tab="liens">
   <div class="section-block">
     <div class="section-block-head">
       <h2>Mes liens</h2>
@@ -321,7 +325,6 @@
       </div>
     </div>
   </div>
-
   </div>
 
   <div class="tab-panel" data-tab="prospects">
@@ -735,7 +738,7 @@
   document.querySelector('.nav-logout').addEventListener('click', async (e) => {
     if (document.body.classList.contains('demo-mode')) return; // en démo, laisse le lien normal
     e.preventDefault();
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch('/api/auth?action=logout', { method: 'POST' });
     window.location.href = 'connexion.html';
   });
 
