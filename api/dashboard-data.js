@@ -91,6 +91,13 @@ export default async function handler(req, res) {
       nom: session.name,
       prenom: session.prenom,
       isAdmin: (consultant.fields.Email || '').trim().toLowerCase() === 'contact@chicouf.pro',
+      liens: {
+        // Le lien Tally est généré, jamais stocké : le formulaire est unique pour
+        // tout le réseau, seul le paramètre consultant_id change selon qui est connecté.
+        tally: `https://tally.so/r/D4OlX5?consultant_id=${session.sub}`,
+        calendly: consultant.fields.Lien_Calendly || '',
+        zoom: consultant.fields.Lien_Zoom || ''
+      },
       kpis: {
         nbClients: clients.length,
         devisEnCours,
