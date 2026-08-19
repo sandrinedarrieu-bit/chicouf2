@@ -95,7 +95,7 @@
   #devisMsg.err { color:#b3261e; }
   .greet h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem,3vw,2rem); color: var(--chic); }
 
-  .stats-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  .stats-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
   .stat-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; padding: 1.4rem 1.5rem; }
   .links-banner { background: var(--or-l); border: 1px solid #F5D89A; border-radius: 12px; padding: .9rem 1.2rem; margin-bottom: 1rem; font-size: .88rem; color: var(--body); display: none; }
   .links-banner.visible { display: block; }
@@ -287,6 +287,11 @@
       <div class="stat-label">CA généré</div>
       <div class="stat-value accent-or" id="statCA">—</div>
       <div class="stat-sub">Total des devis signés</div>
+    </div>
+    <div class="stat-card" id="statCommerciauxCard" hidden>
+      <div class="stat-label">Commerciaux actifs</div>
+      <div class="stat-value" id="statCommerciaux">—</div>
+      <div class="stat-sub">Réseau CommercI.A.l</div>
     </div>
   </div>
 
@@ -507,6 +512,26 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="clientModal">
+  <div class="modal-box">
+    <h3>Fiche client</h3>
+    <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
+    <form id="clientForm">
+      <label for="clientEntreprise">Entreprise *</label>
+      <input type="text" id="clientEntreprise" required />
+      <label for="clientContact">Nom du contact</label>
+      <input type="text" id="clientContact" />
+      <label for="clientSecteur">Secteur d'activité</label>
+      <input type="text" id="clientSecteur" />
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="cancelClientForm">Annuler</button>
+        <button type="submit" class="btn-modal-submit">Enregistrer →</button>
+      </div>
+      <p id="clientMsg"></p>
+    </form>
+  </div>
+</div>
+
 <script>
   const STATUT_CLASS = {
     'En attente': 'attente',
@@ -549,7 +574,7 @@
     const table = document.getElementById('clientsTable');
     const rows = clients.map(c => {
       const badgeClass = STATUT_CLASS[c.statut] || 'aucun';
-      return `<div class="clients-row">
+      return `<div class="clients-row" data-id="${c.id || ''}" style="cursor:pointer;">
         <span class="c-entreprise">${c.entreprise || '—'}</span>
         <span class="c-secteur">${c.secteur || '—'}</span>
         <span class="c-statut"><span class="badge ${badgeClass}">${c.statut}</span></span>
@@ -564,6 +589,10 @@
       </div>
       ${clients.length ? rows : '<div class="empty-state">Aucun client pour le moment.</div>'}
     `;
+
+    table.querySelectorAll('.clients-row[data-id]').forEach(row => {
+      row.addEventListener('click', () => openClientModal(row.dataset.id));
+    });
   }
 
   const RESEAU_BADGE_CLASS = { 'Signé': 'signe', 'RDV pris': 'rdv', 'Contact': 'contact' };
@@ -590,6 +619,10 @@
       if (!res.ok) throw new Error('Erreur de chargement');
       const data = await res.json();
       const commerciaux = data.commerciaux || [];
+
+      const actifs = commerciaux.filter(c => c.statut === 'Signé').length;
+      document.getElementById('statCommerciaux').textContent = actifs;
+      document.getElementById('statCommerciauxCard').hidden = false;
 
       const rows = commerciaux.map((c, i) => {
         const badgeClass = RESEAU_BADGE_CLASS[c.statut] || 'contact';
@@ -842,6 +875,82 @@
     } finally {
       btn.disabled = false;
       btn.textContent = 'Envoyer la demande →';
+    }
+  });
+
+  // Modale "Fiche client"
+  const clientModal = document.getElementById('clientModal');
+  let currentClientId = null;
+
+  async function openClientModal(id) {
+    if (document.body.classList.contains('demo-mode')) return; // pas de fiche modifiable en démo
+    currentClientId = id;
+    const msg = document.getElementById('clientMsg');
+    msg.textContent = '';
+    msg.className = '';
+    document.getElementById('clientModalSub').textContent = 'Chargement…';
+    clientModal.classList.add('open');
+
+    try {
+      const res = await fetch('/api/client-detail?id=' + encodeURIComponent(id));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
+
+      document.getElementById('clientEntreprise').value = data.entreprise || '';
+      document.getElementById('clientContact').value = data.nomContact || '';
+      document.getElementById('clientSecteur').value = data.secteur || '';
+      document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
+    } catch (err) {
+      document.getElementById('clientModalSub').textContent = '';
+      msg.textContent = err.message;
+      msg.className = 'err';
+    }
+  }
+
+  document.getElementById('cancelClientForm').addEventListener('click', () => {
+    clientModal.classList.remove('open');
+  });
+  clientModal.addEventListener('click', (e) => {
+    if (e.target === clientModal) clientModal.classList.remove('open');
+  });
+
+  document.getElementById('clientForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('clientMsg');
+    msg.textContent = '';
+    msg.className = '';
+    const btn = e.target.querySelector('.btn-modal-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enregistrement…';
+
+    const payload = {
+      id: currentClientId,
+      entreprise: document.getElementById('clientEntreprise').value,
+      nomContact: document.getElementById('clientContact').value,
+      secteur: document.getElementById('clientSecteur').value
+    };
+
+    try {
+      const res = await fetch('/api/client-detail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur');
+      msg.textContent = 'Fiche mise à jour.';
+      msg.className = 'ok';
+      setTimeout(() => {
+        clientModal.classList.remove('open');
+        msg.textContent = '';
+        loadDashboard();
+      }, 900);
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'err';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enregistrer →';
     }
   });
 </script>
