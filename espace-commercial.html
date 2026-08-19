@@ -211,6 +211,14 @@
   .people-filter-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; color: var(--muted); padding: .4rem .9rem; border-radius: 8px; cursor: pointer; }
   .people-filter-btn.active { background: var(--white); color: var(--chic); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
   .people-filter-btn[hidden] { display: none; }
+  .diag-list { margin-bottom: 1.2rem; }
+  .diag-card { background: var(--lilas-l); border-radius: 10px; padding: .8rem 1rem; margin-bottom: .6rem; font-size: .84rem; }
+  .diag-card .diag-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
+  .diag-card .diag-niveau { font-weight: 700; color: var(--chic); }
+  .diag-card .diag-score { color: var(--ouf-cta); font-weight: 700; }
+  .diag-card .diag-date { color: var(--muted); font-size: .78rem; }
+  .diag-card a { color: var(--ouf-cta); font-weight: 600; text-decoration: none; font-size: .8rem; }
+  .diag-empty { color: var(--muted); font-size: .82rem; font-style: italic; margin-bottom: 1.2rem; }
 
   @media (max-width: 900px) {
     .pipeline-grid { grid-template-columns: repeat(2,1fr); }
@@ -350,9 +358,12 @@
   <div class="section-block">
     <div class="section-block-head">
       <h2 id="peopleTableTitle">Mes clients</h2>
-      <div class="people-filter" id="peopleFilter">
-        <button class="people-filter-btn active" data-filter="clients">Clients</button>
-        <button class="people-filter-btn" data-filter="commerciaux" id="filterCommerciaux" hidden>Commerciaux</button>
+      <div style="display:flex;align-items:center;gap:.8rem;">
+        <a href="#" id="openCreateProspect" style="font-weight:700;">+ Créer un prospect</a>
+        <div class="people-filter" id="peopleFilter">
+          <button class="people-filter-btn active" data-filter="clients">Clients</button>
+          <button class="people-filter-btn" data-filter="commerciaux" id="filterCommerciaux" hidden>Commerciaux</button>
+        </div>
       </div>
     </div>
     <div class="clients-table" id="clientsTable">
@@ -514,8 +525,9 @@
 
 <div class="modal-overlay" id="clientModal">
   <div class="modal-box">
-    <h3>Fiche client</h3>
+    <h3 id="clientModalTitle">Fiche client</h3>
     <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
+    <div id="clientDiagnostics"></div>
     <form id="clientForm">
       <label for="clientEntreprise">Entreprise *</label>
       <input type="text" id="clientEntreprise" required />
@@ -525,7 +537,7 @@
       <input type="text" id="clientSecteur" />
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel" id="cancelClientForm">Annuler</button>
-        <button type="submit" class="btn-modal-submit">Enregistrer →</button>
+        <button type="submit" class="btn-modal-submit" id="clientSubmitBtn">Enregistrer →</button>
       </div>
       <p id="clientMsg"></p>
     </form>
@@ -878,9 +890,45 @@
     }
   });
 
-  // Modale "Fiche client"
+  // Modale "Fiche client" — création ET édition
   const clientModal = document.getElementById('clientModal');
   let currentClientId = null;
+
+  function renderDiagnostics(diagnostics) {
+    const box = document.getElementById('clientDiagnostics');
+    if (!diagnostics || diagnostics.length === 0) {
+      box.innerHTML = '<p class="diag-empty">Aucun diagnostic CAPE réalisé pour ce client pour le moment.</p>';
+      return;
+    }
+    box.innerHTML = '<div class="diag-list">' + diagnostics.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('fr-FR') : '';
+      const scoreStr = d.score !== null ? ` · Score ${d.score}` : '';
+      const lien = d.lienRapport ? `<a href="${d.lienRapport}" target="_blank" rel="noopener">Voir le rapport →</a>` : '';
+      return `<div class="diag-card">
+        <div class="diag-top">
+          <span class="diag-niveau">${d.niveau || 'Diagnostic CAPE'}</span>
+          <span class="diag-score">${scoreStr}</span>
+        </div>
+        <div class="diag-date">${dateStr}</div>
+        ${lien}
+      </div>`;
+    }).join('') + '</div>';
+  }
+
+  function openCreateProspectModal() {
+    if (document.body.classList.contains('demo-mode')) return;
+    currentClientId = null;
+    const msg = document.getElementById('clientMsg');
+    msg.textContent = '';
+    msg.className = '';
+    document.getElementById('clientForm').reset();
+    document.getElementById('clientModalTitle').textContent = 'Créer un prospect';
+    document.getElementById('clientModalSub').textContent = 'Ajoutez un nouveau prospect à votre portefeuille.';
+    document.getElementById('clientSubmitBtn').textContent = 'Créer →';
+    document.getElementById('clientDiagnostics').innerHTML = '';
+    clientModal.classList.add('open');
+    document.getElementById('clientEntreprise').focus();
+  }
 
   async function openClientModal(id) {
     if (document.body.classList.contains('demo-mode')) return; // pas de fiche modifiable en démo
@@ -888,7 +936,10 @@
     const msg = document.getElementById('clientMsg');
     msg.textContent = '';
     msg.className = '';
+    document.getElementById('clientModalTitle').textContent = 'Fiche client';
+    document.getElementById('clientSubmitBtn').textContent = 'Enregistrer →';
     document.getElementById('clientModalSub').textContent = 'Chargement…';
+    document.getElementById('clientDiagnostics').innerHTML = '';
     clientModal.classList.add('open');
 
     try {
@@ -900,12 +951,18 @@
       document.getElementById('clientContact').value = data.nomContact || '';
       document.getElementById('clientSecteur').value = data.secteur || '';
       document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
+      renderDiagnostics(data.diagnostics);
     } catch (err) {
       document.getElementById('clientModalSub').textContent = '';
       msg.textContent = err.message;
       msg.className = 'err';
     }
   }
+
+  document.getElementById('openCreateProspect').addEventListener('click', (e) => {
+    e.preventDefault();
+    openCreateProspectModal();
+  });
 
   document.getElementById('cancelClientForm').addEventListener('click', () => {
     clientModal.classList.remove('open');
@@ -919,16 +976,17 @@
     const msg = document.getElementById('clientMsg');
     msg.textContent = '';
     msg.className = '';
-    const btn = e.target.querySelector('.btn-modal-submit');
+    const btn = document.getElementById('clientSubmitBtn');
+    const isCreate = !currentClientId;
     btn.disabled = true;
-    btn.textContent = 'Enregistrement…';
+    btn.textContent = isCreate ? 'Création…' : 'Enregistrement…';
 
     const payload = {
-      id: currentClientId,
       entreprise: document.getElementById('clientEntreprise').value,
       nomContact: document.getElementById('clientContact').value,
       secteur: document.getElementById('clientSecteur').value
     };
+    if (currentClientId) payload.id = currentClientId;
 
     try {
       const res = await fetch('/api/client-detail', {
@@ -938,7 +996,7 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erreur');
-      msg.textContent = 'Fiche mise à jour.';
+      msg.textContent = isCreate ? 'Prospect créé.' : 'Fiche mise à jour.';
       msg.className = 'ok';
       setTimeout(() => {
         clientModal.classList.remove('open');
@@ -950,7 +1008,7 @@
       msg.className = 'err';
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Enregistrer →';
+      btn.textContent = isCreate ? 'Créer →' : 'Enregistrer →';
     }
   });
 </script>
