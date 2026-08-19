@@ -108,6 +108,21 @@
   .link-card button.link-save { background: var(--nuit); color: #fff; border: none; border-radius: 8px; padding: .45rem .9rem; font-size: .8rem; font-weight: 600; cursor: pointer; }
   .link-card button.link-save:hover { background: var(--ouf-cta); }
   .link-card .link-status { font-size: .78rem; margin-left: .6rem; }
+  .dashboard-layout { display: flex; gap: 2.5rem; align-items: flex-start; }
+  .tab-nav { display: flex; flex-direction: column; gap: .25rem; width: 210px; flex-shrink: 0; padding-right: 1.5rem; border-right: 1px solid #E8E6E1; position: sticky; top: 1.5rem; }
+  .tab-btn { text-align: left; background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .92rem; font-weight: 600; color: var(--muted); padding: .75rem 1rem; cursor: pointer; border-radius: 10px; border-left: 3px solid transparent; }
+  .tab-btn:hover { color: var(--chic); background: var(--cream); }
+  .tab-btn.active { color: var(--chic); background: var(--lilas-l); border-left-color: var(--ouf-cta); }
+  .tab-btn[hidden] { display: none; }
+  .dashboard-content { flex: 1; min-width: 0; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  @media (max-width: 780px) {
+    .dashboard-layout { flex-direction: column; gap: 1rem; }
+    .tab-nav { flex-direction: row; width: 100%; overflow-x: auto; border-right: none; border-bottom: 1px solid #E8E6E1; padding-right: 0; padding-bottom: .5rem; position: static; }
+    .tab-btn { border-left: none; border-bottom: 3px solid transparent; border-radius: 10px 10px 0 0; white-space: nowrap; }
+    .tab-btn.active { border-left-color: transparent; border-bottom-color: var(--ouf-cta); }
+  }
   .stat-label { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
   .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--chic); }
   .stat-value.accent-or { color: #B87507; }
@@ -228,6 +243,17 @@
     <h1>Bonjour <span id="greetName">…</span> 👋</h1>
   </div>
 
+  <div class="dashboard-layout">
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
+    <button class="tab-btn" data-tab="prospects">Prospects &amp; devis</button>
+    <button class="tab-btn" data-tab="catalogue">Catalogue &amp; ressources</button>
+    <button class="tab-btn" data-tab="reseau" id="tabBtnReseau" hidden>Réseau</button>
+    <button class="tab-btn" data-tab="compte">Mon compte</button>
+  </nav>
+
+  <div class="dashboard-content">
+  <div class="tab-panel active" data-tab="overview">
   <div class="admin-box" id="adminBox">
     <div class="admin-label">🔐 Outils admin — visible uniquement par toi</div>
     <div class="admin-links">
@@ -296,6 +322,9 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="tab-panel" data-tab="prospects">
   <div class="section-block">
     <div class="section-block-head">
       <h2>Pipeline des devis</h2>
@@ -306,6 +335,34 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Mes clients</h2>
+    </div>
+    <div class="clients-table" id="clientsTable">
+      <div class="clients-row head">
+        <span class="c-entreprise">Entreprise</span>
+        <span class="c-secteur">Secteur</span>
+        <span class="c-statut">Statut</span>
+      </div>
+      <div class="empty-state" id="clientsLoading">Chargement…</div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="diag-cta">
+      <div class="diag-cta-text">
+        <h2>Diagnostiquer un prospect</h2>
+        <p>Utilisez l'outil de diagnostic CAPE pour identifier les frictions d'un client en quelques minutes et faire remonter automatiquement les agents les plus pertinents.</p>
+      </div>
+      <a href="#" class="diag-cta-btn">Lancer un diagnostic →</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="tab-panel" data-tab="reseau">
   <div class="section-block admin-box" id="reseauBox" style="background:transparent;padding:0;">
     <div class="section-block-head">
       <h2>Réseau CommercI.A.l</h2>
@@ -323,21 +380,9 @@
       <div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
     </div>
   </div>
-
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Mes clients</h2>
-    </div>
-    <div class="clients-table" id="clientsTable">
-      <div class="clients-row head">
-        <span class="c-entreprise">Entreprise</span>
-        <span class="c-secteur">Secteur</span>
-        <span class="c-statut">Statut</span>
-      </div>
-      <div class="empty-state" id="clientsLoading">Chargement…</div>
-    </div>
   </div>
 
+  <div class="tab-panel" data-tab="catalogue">
   <div class="section-block">
     <div class="section-block-head">
       <h2>Catalogue produits</h2>
@@ -365,16 +410,6 @@
         <div class="catalog-price">5 000 € <span>CPF illimité</span></div>
         <a href="#" class="catalog-cta">Proposer à un prospect →</a>
       </div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="diag-cta">
-      <div class="diag-cta-text">
-        <h2>Diagnostiquer un prospect</h2>
-        <p>Utilisez l'outil de diagnostic CAPE pour identifier les frictions d'un client en quelques minutes et faire remonter automatiquement les agents les plus pertinents.</p>
-      </div>
-      <a href="#" class="diag-cta-btn">Lancer un diagnostic →</a>
     </div>
   </div>
 
@@ -411,6 +446,9 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="tab-panel" data-tab="compte">
   <div class="section-block" style="margin-bottom:1rem;">
     <div class="two-col-bottom">
       <div class="community-card">
@@ -426,6 +464,10 @@
         <a href="#" class="sub-btn">Gérer mon abonnement</a>
       </div>
     </div>
+  </div>
+  </div>
+
+  </div>
   </div>
 
 </div>
@@ -594,6 +636,7 @@
       if (data.isAdmin) {
         document.getElementById('adminBox').classList.add('visible');
         document.getElementById('reseauBox').classList.add('visible');
+        document.getElementById('tabBtnReseau').hidden = false;
         loadReseau();
       }
 
@@ -641,6 +684,16 @@
     }
     input.value = value || '';
   }
+
+  document.getElementById('tabNav').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    const target = btn.dataset.tab;
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === target));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   document.querySelectorAll('.link-save').forEach(btn => {
     btn.addEventListener('click', async () => {
