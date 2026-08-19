@@ -97,6 +97,17 @@
 
   .stats-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem; }
   .stat-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; padding: 1.4rem 1.5rem; }
+  .links-banner { background: var(--or-l); border: 1px solid #F5D89A; border-radius: 12px; padding: .9rem 1.2rem; margin-bottom: 1rem; font-size: .88rem; color: var(--body); display: none; }
+  .links-banner.visible { display: block; }
+  .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .link-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 14px; padding: 1.1rem 1.3rem; }
+  .link-card .link-label { font-size: .78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
+  .link-card .link-value { display: flex; align-items: center; gap: .5rem; }
+  .link-card a.link-open { font-weight: 600; color: var(--ouf-cta); text-decoration: none; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .link-card input.link-input { width: 100%; border: 1px solid #E8E6E1; border-radius: 8px; padding: .5rem .7rem; font-size: .85rem; font-family: inherit; margin-bottom: .5rem; }
+  .link-card button.link-save { background: var(--nuit); color: #fff; border: none; border-radius: 8px; padding: .45rem .9rem; font-size: .8rem; font-weight: 600; cursor: pointer; }
+  .link-card button.link-save:hover { background: var(--ouf-cta); }
+  .link-card .link-status { font-size: .78rem; margin-left: .6rem; }
   .stat-label { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
   .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--chic); }
   .stat-value.accent-or { color: #B87507; }
@@ -245,6 +256,43 @@
       <div class="stat-label">CA généré</div>
       <div class="stat-value accent-or" id="statCA">—</div>
       <div class="stat-sub">Total des devis signés</div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Mes liens</h2>
+    </div>
+    <div class="links-banner" id="linksBanner">👋 Complète tes liens Calendly et Zoom pour que tes prospects puissent prendre rendez-vous avec toi.</div>
+    <div class="links-grid">
+      <div class="link-card">
+        <div class="link-label">Formulaire récap (Tally)</div>
+        <div class="link-value"><a class="link-open" id="linkTally" href="#" target="_blank" rel="noopener">Ouvrir →</a></div>
+      </div>
+      <div class="link-card">
+        <div class="link-label">Calendly</div>
+        <div id="calendlyDisplay" class="link-value" style="display:none;">
+          <a class="link-open" id="linkCalendly" href="#" target="_blank" rel="noopener"></a>
+          <a href="#" id="editCalendly" style="font-size:.78rem;color:var(--muted);">modifier</a>
+        </div>
+        <div id="calendlyEdit">
+          <input type="url" class="link-input" id="inputCalendly" placeholder="https://calendly.com/votre-nom" />
+          <button class="link-save" data-target="calendly">Enregistrer</button>
+          <span class="link-status" id="statusCalendly"></span>
+        </div>
+      </div>
+      <div class="link-card">
+        <div class="link-label">Zoom</div>
+        <div id="zoomDisplay" class="link-value" style="display:none;">
+          <a class="link-open" id="linkZoom" href="#" target="_blank" rel="noopener"></a>
+          <a href="#" id="editZoom" style="font-size:.78rem;color:var(--muted);">modifier</a>
+        </div>
+        <div id="zoomEdit">
+          <input type="url" class="link-input" id="inputZoom" placeholder="https://zoom.us/j/votre-id" />
+          <button class="link-save" data-target="zoom">Enregistrer</button>
+          <span class="link-status" id="statusZoom"></span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -556,12 +604,82 @@
 
       renderPipeline(data.pipeline);
       renderClients(data.clients);
+      renderLinks(data.liens);
     } catch (err) {
       console.error(err);
       document.getElementById('pipelineGrid').innerHTML = '<div class="pipeline-empty">Erreur de chargement.</div>';
       document.getElementById('clientsTable').innerHTML = '<div class="empty-state">Erreur de chargement.</div>';
     }
   }
+
+  function renderLinks(liens) {
+    if (!liens) return;
+
+    document.getElementById('linkTally').href = liens.tally;
+
+    setupLinkField('calendly', liens.calendly);
+    setupLinkField('zoom', liens.zoom);
+
+    const missing = !liens.calendly || !liens.zoom;
+    document.getElementById('linksBanner').classList.toggle('visible', missing);
+  }
+
+  function setupLinkField(key, value) {
+    const display = document.getElementById(key + 'Display');
+    const edit = document.getElementById(key + 'Edit');
+    const link = document.getElementById('link' + key.charAt(0).toUpperCase() + key.slice(1));
+    const input = document.getElementById('input' + key.charAt(0).toUpperCase() + key.slice(1));
+
+    if (value) {
+      link.href = value;
+      link.textContent = value.replace(/^https?:\/\//, '');
+      display.style.display = 'flex';
+      edit.style.display = 'none';
+    } else {
+      display.style.display = 'none';
+      edit.style.display = 'block';
+    }
+    input.value = value || '';
+  }
+
+  document.querySelectorAll('.link-save').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const key = btn.dataset.target;
+      const input = document.getElementById('input' + key.charAt(0).toUpperCase() + key.slice(1));
+      const status = document.getElementById('status' + key.charAt(0).toUpperCase() + key.slice(1));
+      const value = input.value.trim();
+
+      status.textContent = 'Enregistrement…';
+      status.style.color = 'var(--muted)';
+
+      try {
+        const res = await fetch('/api/update-links', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [key]: value })
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Erreur');
+
+        status.textContent = '✓ Enregistré';
+        status.style.color = 'var(--chic)';
+        setupLinkField(key, value);
+        setTimeout(() => loadDashboard(), 600);
+      } catch (err) {
+        status.textContent = err.message || 'Erreur';
+        status.style.color = '#c0392b';
+      }
+    });
+  });
+
+  document.querySelectorAll('[id^="edit"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const key = a.id.replace('edit', '').toLowerCase();
+      document.getElementById(key + 'Display').style.display = 'none';
+      document.getElementById(key + 'Edit').style.display = 'block';
+    });
+  });
 
   document.querySelector('.nav-logout').addEventListener('click', async (e) => {
     if (document.body.classList.contains('demo-mode')) return; // en démo, laisse le lien normal
