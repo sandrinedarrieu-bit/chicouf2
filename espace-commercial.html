@@ -220,6 +220,12 @@
   .diag-card .diag-date { color: var(--muted); font-size: .78rem; }
   .diag-card a { color: var(--ouf-cta); font-weight: 600; text-decoration: none; font-size: .8rem; }
   .diag-empty { color: var(--muted); font-size: .82rem; font-style: italic; margin-bottom: 1.2rem; }
+  .diag-reco { margin-top: .4rem; font-size: .8rem; color: var(--chic); }
+  .audit-history-list { margin-bottom: 1.2rem; }
+  .audit-history-card { background: var(--cream); border-radius: 10px; padding: .7rem .9rem; margin-bottom: .5rem; font-size: .83rem; }
+  .audit-history-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .2rem; }
+  .audit-history-montant { font-weight: 700; color: var(--chic); }
+  .audit-history-desc { color: var(--muted); font-size: .78rem; }
 
   @media (max-width: 900px) {
     .pipeline-grid { grid-template-columns: repeat(2,1fr); }
@@ -544,11 +550,20 @@
     <h3 id="clientModalTitle">Fiche client</h3>
     <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
     <div id="clientDiagnostics"></div>
+    <div id="clientAuditsHistory"></div>
     <form id="clientForm">
       <label for="clientEntreprise">Entreprise *</label>
       <input type="text" id="clientEntreprise" required />
       <label for="clientContact">Nom du contact</label>
       <input type="text" id="clientContact" />
+      <label for="clientEmail">Email</label>
+      <input type="email" id="clientEmail" />
+      <label for="clientTelephone">Téléphone</label>
+      <input type="tel" id="clientTelephone" />
+      <label for="clientAdresse">Adresse</label>
+      <input type="text" id="clientAdresse" />
+      <label for="clientSiteWeb">Site web</label>
+      <input type="url" id="clientSiteWeb" placeholder="https://..." />
       <label for="clientSecteur">Secteur d'activité</label>
       <input type="text" id="clientSecteur" />
       <label id="clientExterneRow" style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;cursor:pointer;">
@@ -985,15 +1000,34 @@
       const dateStr = d.date ? new Date(d.date).toLocaleDateString('fr-FR') : '';
       const scoreStr = d.score !== null ? ` · Score ${d.score}` : '';
       const lien = d.lienRapport ? `<a href="${d.lienRapport}" target="_blank" rel="noopener">Voir le rapport →</a>` : '';
+      const reco = d.offreRecommandee ? `<div class="diag-reco">💡 Recommandé par CAPE : <strong>${d.offreRecommandee}</strong></div>` : '';
       return `<div class="diag-card">
         <div class="diag-top">
           <span class="diag-niveau">${d.niveau || 'Diagnostic CAPE'}</span>
           <span class="diag-score">${scoreStr}</span>
         </div>
         <div class="diag-date">${dateStr}</div>
+        ${reco}
         ${lien}
       </div>`;
     }).join('') + '</div>';
+  }
+
+  function renderAuditsHistory(audits) {
+    const box = document.getElementById('clientAuditsHistory');
+    if (!audits || audits.length === 0) {
+      box.innerHTML = '';
+      return;
+    }
+    const badgeClass = { 'En attente': 'attente', 'Envoyé': 'envoye', 'Signé': 'signe', 'Payé': 'paye', 'Perdu': 'perdu' };
+    box.innerHTML = '<label>Historique des devis</label><div class="audit-history-list">' + audits.map(a => `
+      <div class="audit-history-card">
+        <div class="audit-history-top">
+          <span class="badge ${badgeClass[a.statut] || 'aucun'}">${a.statut}</span>
+          <span class="audit-history-montant">${euros(a.montant)}</span>
+        </div>
+        <div class="audit-history-desc">${a.description || '—'}</div>
+      </div>`).join('') + '</div>';
   }
 
   function openCreateProspectModal() {
@@ -1007,6 +1041,7 @@
     document.getElementById('clientModalSub').textContent = 'Ajoutez un nouveau prospect à votre portefeuille.';
     document.getElementById('clientSubmitBtn').textContent = 'Créer →';
     document.getElementById('clientDiagnostics').innerHTML = '';
+    document.getElementById('clientAuditsHistory').innerHTML = '';
     document.getElementById('deleteClientLink').style.display = 'none';
     document.getElementById('clientExterneRow').style.display = 'none';
     clientModal.classList.add('open');
@@ -1023,6 +1058,7 @@
     document.getElementById('clientSubmitBtn').textContent = 'Enregistrer →';
     document.getElementById('clientModalSub').textContent = 'Chargement…';
     document.getElementById('clientDiagnostics').innerHTML = '';
+    document.getElementById('clientAuditsHistory').innerHTML = '';
     clientModal.classList.add('open');
 
     try {
@@ -1032,12 +1068,17 @@
 
       document.getElementById('clientEntreprise').value = data.entreprise || '';
       document.getElementById('clientContact').value = data.nomContact || '';
+      document.getElementById('clientEmail').value = data.email || '';
+      document.getElementById('clientTelephone').value = data.telephone || '';
+      document.getElementById('clientAdresse').value = data.adresse || '';
+      document.getElementById('clientSiteWeb').value = data.siteWeb || '';
       document.getElementById('clientSecteur').value = data.secteur || '';
       document.getElementById('clientExterne').checked = !!data.signeExterne;
       document.getElementById('clientExterneRow').style.display = 'flex';
       document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
       document.getElementById('deleteClientLink').style.display = 'block';
       renderDiagnostics(data.diagnostics);
+      renderAuditsHistory(data.audits);
     } catch (err) {
       document.getElementById('clientModalSub').textContent = '';
       msg.textContent = err.message;
@@ -1070,6 +1111,10 @@
     const payload = {
       entreprise: document.getElementById('clientEntreprise').value,
       nomContact: document.getElementById('clientContact').value,
+      email: document.getElementById('clientEmail').value,
+      telephone: document.getElementById('clientTelephone').value,
+      adresse: document.getElementById('clientAdresse').value,
+      siteWeb: document.getElementById('clientSiteWeb').value,
       secteur: document.getElementById('clientSecteur').value,
       signeExterne: document.getElementById('clientExterne').checked
     };
