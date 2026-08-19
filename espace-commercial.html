@@ -206,6 +206,7 @@
   .badge.paye { background:#D6EFE0; color:#0F6B3A; font-weight:700; }
   .badge.perdu { background:#F1EFE8; color:#6B6B6B; }
   .badge.aucun { background:#F1EFE8; color:#6B6B6B; }
+  .badge.externe { background:#EDE4FB; color:#5B2D8E; }
   .empty-state { text-align:center; padding: 2rem; color: var(--muted); font-size: .88rem; }
   .people-filter { display: flex; gap: .4rem; background: var(--cream); border-radius: 10px; padding: .25rem; }
   .people-filter-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; color: var(--muted); padding: .4rem .9rem; border-radius: 8px; cursor: pointer; }
@@ -478,6 +479,21 @@
   </div>
 
   <div class="tab-panel" data-tab="compte">
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Mes commissions à facturer</h2>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">CommercI.A.l ne gère pas la facturation elle-même — cette liste vous aide juste à suivre ce qu'il vous reste à facturer à Studeria sur vos ventes payées (commission à 5%).</p>
+    <div class="clients-table" id="commissionsTable">
+      <div class="clients-row head">
+        <span class="c-entreprise">Client</span>
+        <span class="c-secteur">Commission</span>
+        <span class="c-statut">Facturée</span>
+      </div>
+      <div class="empty-state" id="commissionsLoading">Chargement…</div>
+    </div>
+  </div>
+
   <div class="section-block" style="margin-bottom:1rem;">
     <div class="two-col-bottom">
       <div class="community-card">
@@ -535,12 +551,29 @@
       <input type="text" id="clientContact" />
       <label for="clientSecteur">Secteur d'activité</label>
       <input type="text" id="clientSecteur" />
+      <label id="clientExterneRow" style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;cursor:pointer;">
+        <input type="checkbox" id="clientExterne" style="width:auto;" />
+        <span>Ce client a été signé en externe (hors Studeria)</span>
+      </label>
       <div class="modal-actions">
         <button type="button" class="btn-modal-cancel" id="cancelClientForm">Annuler</button>
         <button type="submit" class="btn-modal-submit" id="clientSubmitBtn">Enregistrer →</button>
       </div>
       <p id="clientMsg"></p>
     </form>
+    <a href="#" id="deleteClientLink" style="display:none;margin-top:1rem;text-align:center;color:#b3261e;font-size:.82rem;font-weight:600;text-decoration:none;">Supprimer ce prospect</a>
+  </div>
+</div>
+
+<div class="modal-overlay" id="devisDetailModal">
+  <div class="modal-box">
+    <h3>Détail du devis</h3>
+    <p class="modal-sub" id="devisDetailSub"></p>
+    <div id="devisDetailBody"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal-cancel" id="closeDevisDetail">Fermer</button>
+    </div>
+    <p id="devisDetailMsg"></p>
   </div>
 </div>
 
@@ -551,7 +584,8 @@
     'Signé': 'signe',
     'Payé': 'paye',
     'Perdu': 'perdu',
-    'Aucun devis': 'aucun'
+    'Aucun devis': 'aucun',
+    'Externe': 'externe'
   };
   const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Payé', 'Perdu'];
 
@@ -571,7 +605,7 @@
       } else {
         items.forEach(it => {
           const cls = (statut === 'Signé' || statut === 'Payé') ? 'signe' : (statut === 'Perdu' ? 'perdu' : '');
-          html += `<div class="pipeline-card ${cls}">
+          html += `<div class="pipeline-card ${cls}" data-audit-id="${it.id}" style="cursor:pointer;">
             <div class="pc-nom">${it.entreprise || 'Client'}</div>
             <div class="pc-montant">${euros(it.montant)}</div>
           </div>`;
@@ -579,6 +613,9 @@
       }
       col.innerHTML = html;
       grid.appendChild(col);
+    });
+    grid.querySelectorAll('.pipeline-card[data-audit-id]').forEach(card => {
+      card.addEventListener('click', () => openDevisDetailModal(card.dataset.auditId));
     });
   }
 
@@ -604,6 +641,49 @@
 
     table.querySelectorAll('.clients-row[data-id]').forEach(row => {
       row.addEventListener('click', () => openClientModal(row.dataset.id));
+    });
+  }
+
+  function renderCommissions(commissions) {
+    const table = document.getElementById('commissionsTable');
+    if (!table) return;
+    const list = commissions || [];
+    const rows = list.map(c => `
+      <div class="clients-row">
+        <span class="c-entreprise">${c.entreprise || '—'}</span>
+        <span class="c-secteur">${euros(c.commission)}</span>
+        <span class="c-statut">
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;">
+            <input type="checkbox" class="commission-check" data-id="${c.id}" style="width:auto;" ${c.facturee ? 'checked' : ''} />
+            ${c.facturee ? 'Facturée' : 'À facturer'}
+          </label>
+        </span>
+      </div>`).join('');
+
+    table.innerHTML = `
+      <div class="clients-row head">
+        <span class="c-entreprise">Client</span>
+        <span class="c-secteur">Commission</span>
+        <span class="c-statut">Facturée</span>
+      </div>
+      ${list.length ? rows : '<div class="empty-state">Aucune commission à suivre pour le moment.</div>'}
+    `;
+
+    table.querySelectorAll('.commission-check').forEach(cb => {
+      cb.addEventListener('change', async () => {
+        cb.disabled = true;
+        try {
+          await fetch('/api/request-devis', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: cb.dataset.id, action: 'toggle-commission', facturee: cb.checked })
+          });
+          loadDashboard();
+        } catch (err) {
+          cb.checked = !cb.checked;
+          cb.disabled = false;
+        }
+      });
     });
   }
 
@@ -705,6 +785,7 @@
       renderPipeline(data.pipeline);
       renderClients(data.clients);
       renderLinks(data.liens);
+      renderCommissions(data.commissions);
     } catch (err) {
       console.error(err);
       document.getElementById('pipelineGrid').innerHTML = '<div class="pipeline-empty">Erreur de chargement.</div>';
@@ -926,6 +1007,8 @@
     document.getElementById('clientModalSub').textContent = 'Ajoutez un nouveau prospect à votre portefeuille.';
     document.getElementById('clientSubmitBtn').textContent = 'Créer →';
     document.getElementById('clientDiagnostics').innerHTML = '';
+    document.getElementById('deleteClientLink').style.display = 'none';
+    document.getElementById('clientExterneRow').style.display = 'none';
     clientModal.classList.add('open');
     document.getElementById('clientEntreprise').focus();
   }
@@ -950,7 +1033,10 @@
       document.getElementById('clientEntreprise').value = data.entreprise || '';
       document.getElementById('clientContact').value = data.nomContact || '';
       document.getElementById('clientSecteur').value = data.secteur || '';
+      document.getElementById('clientExterne').checked = !!data.signeExterne;
+      document.getElementById('clientExterneRow').style.display = 'flex';
       document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
+      document.getElementById('deleteClientLink').style.display = 'block';
       renderDiagnostics(data.diagnostics);
     } catch (err) {
       document.getElementById('clientModalSub').textContent = '';
@@ -984,7 +1070,8 @@
     const payload = {
       entreprise: document.getElementById('clientEntreprise').value,
       nomContact: document.getElementById('clientContact').value,
-      secteur: document.getElementById('clientSecteur').value
+      secteur: document.getElementById('clientSecteur').value,
+      signeExterne: document.getElementById('clientExterne').checked
     };
     if (currentClientId) payload.id = currentClientId;
 
@@ -1010,6 +1097,102 @@
       btn.disabled = false;
       btn.textContent = isCreate ? 'Créer →' : 'Enregistrer →';
     }
+  });
+
+  document.getElementById('deleteClientLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!currentClientId) return;
+    if (!confirm('Supprimer définitivement ce prospect ? Cette action est irréversible.')) return;
+
+    const msg = document.getElementById('clientMsg');
+    try {
+      const res = await fetch('/api/client-detail?id=' + encodeURIComponent(currentClientId), { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur lors de la suppression.');
+      clientModal.classList.remove('open');
+      loadDashboard();
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'err';
+    }
+  });
+
+  // Modale "Détail du devis"
+  const devisDetailModal = document.getElementById('devisDetailModal');
+  const DEVIS_STATUT_LABEL = { 'Signé': 'Marquer comme signé', 'Perdu': 'Marquer comme perdu' };
+
+  async function openDevisDetailModal(id) {
+    if (document.body.classList.contains('demo-mode')) return;
+    const body = document.getElementById('devisDetailBody');
+    const msg = document.getElementById('devisDetailMsg');
+    msg.textContent = '';
+    msg.className = '';
+    document.getElementById('devisDetailSub').textContent = 'Chargement…';
+    body.innerHTML = '';
+    devisDetailModal.classList.add('open');
+
+    try {
+      const res = await fetch('/api/request-devis?id=' + encodeURIComponent(id));
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
+
+      document.getElementById('devisDetailSub').textContent = data.entreprise || '';
+
+      const badgeClass = STATUT_CLASS[data.statut] || 'aucun';
+      const actionsHtml = (data.transitions || []).map(s =>
+        `<button type="button" class="btn-modal-submit devis-transition-btn" data-statut="${s}" data-audit-id="${id}" style="margin-top:.6rem;width:100%;">${DEVIS_STATUT_LABEL[s] || s}</button>`
+      ).join('');
+
+      body.innerHTML = `
+        <label>Statut actuel</label>
+        <p style="margin-bottom:1rem;"><span class="badge ${badgeClass}">${data.statut}</span></p>
+        <label>Montant</label>
+        <p style="margin-bottom:1rem;font-weight:700;color:var(--chic);">${euros(data.montant)}</p>
+        <label>Besoin décrit</label>
+        <p style="margin-bottom:1rem;white-space:pre-wrap;color:var(--muted);">${data.description || '—'}</p>
+        ${actionsHtml}
+      `;
+
+      body.querySelectorAll('.devis-transition-btn').forEach(btn => {
+        btn.addEventListener('click', () => updateDevisStatus(btn.dataset.auditId, btn.dataset.statut));
+      });
+    } catch (err) {
+      document.getElementById('devisDetailSub').textContent = '';
+      msg.textContent = err.message;
+      msg.className = 'err';
+    }
+  }
+
+  async function updateDevisStatus(id, statut) {
+    const msg = document.getElementById('devisDetailMsg');
+    msg.textContent = 'Mise à jour…';
+    msg.className = '';
+    try {
+      const res = await fetch('/api/request-devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, action: 'update-status', statut })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur');
+      msg.textContent = 'Statut mis à jour.';
+      msg.className = 'ok';
+      setTimeout(() => {
+        devisDetailModal.classList.remove('open');
+        msg.textContent = '';
+        loadDashboard();
+      }, 800);
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'err';
+    }
+  }
+
+  document.getElementById('closeDevisDetail').addEventListener('click', () => {
+    devisDetailModal.classList.remove('open');
+  });
+  devisDetailModal.addEventListener('click', (e) => {
+    if (e.target === devisDetailModal) devisDetailModal.classList.remove('open');
   });
 </script>
 
