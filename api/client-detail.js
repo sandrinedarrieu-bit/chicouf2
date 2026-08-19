@@ -1,1200 +1,157 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Espace commerci'al | CommercI.A.l — CHIC · OUF</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --nuit:     #2C2C3E;
-    --chic:     #2D1F6E;
-    --ouf:      #7B5CF0;
-    --ouf-cta:  #5F3AE0;
-    --ouf-cta-hover: #522FC7;
-    --lilas:    #A78BFA;
-    --lilas-l:  #F5F0FF;
-    --or:       #F59E0B;
-    --or-l:     #FFF7E9;
-    --cream:    #F8F7F4;
-    --body:     #3D3D3D;
-    --muted:    #6B6B6B;
-    --white:    #FFFFFF;
-    --radius:   12px;
-    --max-wide: 1200px;
-  }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--body); background: var(--cream); line-height: 1.6; }
+// api/client-detail.js
+//
+// Permet au commercial CONNECTÉ de :
+//  - créer un nouveau prospect (POST sans id) — automatiquement lié à lui
+//  - consulter la fiche d'un de SES clients, avec ses diagnostics CAPE liés (GET)
+//  - modifier la fiche d'un de SES clients (POST avec id)
+//
+// L'appartenance est vérifiée à chaque lecture/modification (Clients.Consultant_ID
+// doit contenir l'ID du commercial connecté) — impossible de voir ou modifier
+// la fiche d'un client qui ne lui appartient pas, même en devinant son ID.
 
-  nav { position: sticky; top:0; z-index:100; background: var(--nuit); padding: 0 clamp(1.25rem,5vw,3rem); display: flex; align-items: center; justify-content: space-between; height: 62px; }
-  .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-  .nav-logo-text { font-family: 'Georgia', serif; font-size: 1.05rem; font-weight: 700; letter-spacing: .06em; color: var(--white); }
-  .nav-logo-text span { color: var(--lilas); }
-  .nav-right { display:flex; align-items:center; gap: 1.25rem; }
-  .nav-user { display:flex; align-items:center; gap: .6rem; }
-  .nav-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--ouf); color:#fff; display:flex; align-items:center; justify-content:center; font-size: .78rem; font-weight:700; font-family:'Syne',sans-serif; }
-  .nav-user-name { color: var(--white); font-size: .85rem; }
-  .nav-logout { color: rgba(255,255,255,.55); text-decoration:none; font-size: .82rem; }
-  .nav-logout:hover { color: var(--white); }
+import { verifySession } from './_session.js';
 
-  .page { max-width: var(--max-wide); margin: 0 auto; padding: clamp(1.5rem,4vw,2.5rem) clamp(1.25rem,5vw,3rem); }
+const AIRTABLE_BASE_ID = 'appPbx0vHGCSTE9wR';
+const CLIENTS_TABLE = 'tblPhDItWoYN7jgtA';
+const DIAGNOSTICS_TABLE = 'tblTeIGD63oOOHaob';
 
-  .greet { margin-bottom: 2rem; }
-  .greet-eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ouf); margin-bottom: .35rem; }
-  .admin-box { display: none; background: var(--nuit); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
-  .admin-box.visible { display: block; }
-  .admin-box .admin-label { color: rgba(255,255,255,.6); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .7rem; }
-  .admin-box .admin-links { display: flex; gap: .8rem; flex-wrap: wrap; }
-  .admin-box a { display: inline-flex; align-items: center; gap: .4rem; background: rgba(255,255,255,.08); color: #fff; text-decoration: none; padding: .6rem 1rem; border-radius: 10px; font-size: .85rem; font-weight: 600; }
-  .admin-box a:hover { background: rgba(255,255,255,.16); }
+async function airtableFetch(path, apiKey, options = {}) {
+  const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) throw new Error(`Airtable ${res.status} sur ${path}`);
+  return res.json();
+}
 
-  .reseau-table { background: var(--white); border-radius: 16px; overflow-x: auto; border: 1px solid #E8E6E1; }
-  .reseau-row { display: flex; align-items: center; padding: .85rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .85rem; gap: .5rem; min-width: 700px; }
-  .reseau-row:last-child { border-bottom: none; }
-  .reseau-row.head { background: var(--cream); font-size: .72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
-  .reseau-row .r-nom { flex: 1.4; font-weight: 600; color: var(--body); }
-  .reseau-row .r-email { flex: 1.6; color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .reseau-row .r-statut { flex: .9; }
-  .reseau-row .r-ca { flex: 1; font-weight: 600; color: var(--chic); font-size: .85rem; }
-  .reseau-row .r-histo { flex: .6; text-align: right; }
-  .histo-toggle { background: none; border: 1px solid #E0DDD5; border-radius: 8px; padding: .3rem .6rem; font-size: .78rem; color: var(--ouf-cta); cursor: pointer; font-weight: 600; }
-  .histo-toggle:hover { background: var(--cream); }
-  .histo-panel { display: none; background: var(--cream); padding: .9rem 1.2rem; border-bottom: 1px solid #EEEBE4; min-width: 700px; }
-  .histo-panel.open { display: block; }
-  .histo-entry { background: var(--white); border: 1px solid #E8E6E1; border-radius: 10px; padding: .7rem .9rem; margin-bottom: .6rem; font-size: .82rem; }
-  .histo-entry:last-child { margin-bottom: 0; }
-  .histo-entry .histo-date { font-weight: 700; color: var(--chic); margin-bottom: .25rem; }
-  .histo-entry .histo-solution { color: var(--ouf); font-size: .76rem; font-weight: 600; margin-bottom: .3rem; }
-  .histo-entry .histo-resume { color: var(--muted); white-space: pre-wrap; }
-  .badge-reseau { display: inline-block; font-size: .74rem; font-weight: 600; padding: .25rem .7rem; border-radius: 999px; }
-  .badge-reseau.signe { background: #DFF3E6; color: #1A7F4F; }
-  .badge-reseau.rdv { background: #E6F0FE; color: #1B4FA0; }
-  .badge-reseau.contact { background: #F1EFE8; color: #6B6B6B; }
+function isOwner(record, consultantId) {
+  const owners = record.fields.Consultant_ID || [];
+  return owners.includes(consultantId);
+}
 
-  /* modale demande de devis */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(44,44,62,.55); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
-  .modal-overlay.open { display:flex; }
-  .modal-box { background:var(--white); border-radius:18px; padding:2rem; max-width:460px; width:100%; max-height:90vh; overflow-y:auto; }
-  .modal-box h3 { font-family:'Syne',sans-serif; color:var(--chic); font-size:1.15rem; margin-bottom:.3rem; }
-  .modal-box p.modal-sub { color:var(--muted); font-size:.85rem; margin-bottom:1.4rem; }
-  .modal-box label { display:block; font-size:.82rem; font-weight:600; color:var(--chic); margin-bottom:.35rem; margin-top:1rem; }
-  .modal-box label:first-of-type { margin-top:0; }
-  .modal-box input, .modal-box textarea { width:100%; padding:.65rem .85rem; border:1.5px solid #E0DDD5; border-radius:10px; font-family:inherit; font-size:.9rem; background:var(--cream); }
-  .modal-box input:focus, .modal-box textarea:focus { outline:none; border-color:var(--ouf-cta); background:var(--white); }
-  .modal-box textarea { resize:vertical; min-height:80px; }
-  .modal-actions { display:flex; gap:.7rem; margin-top:1.6rem; }
-  .modal-actions button { flex:1; padding:.75rem; border-radius:10px; font-weight:600; font-size:.88rem; cursor:pointer; border:none; }
-  .btn-modal-cancel { background:var(--cream); color:var(--muted); }
-  .btn-modal-submit { background:var(--ouf-cta); color:#fff; }
-  .btn-modal-submit:hover { background:var(--ouf-cta-hover); }
-  .btn-modal-submit:disabled { opacity:.6; cursor:default; }
-  #devisMsg { margin-top:.9rem; font-size:.85rem; text-align:center; }
-  #devisMsg.ok { color:#1a7f4f; }
-  #devisMsg.err { color:#b3261e; }
-  .greet h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem,3vw,2rem); color: var(--chic); }
+async function fetchDiagnostics(diagnosticIds, apiKey) {
+  if (!diagnosticIds || diagnosticIds.length === 0) return [];
+  const results = await Promise.all(
+    diagnosticIds.map(id =>
+      airtableFetch(`${DIAGNOSTICS_TABLE}/${id}`, apiKey).catch(() => null)
+    )
+  );
+  return results
+    .filter(Boolean)
+    .map(d => ({
+      id: d.id,
+      date: d.fields.Date_diagnostic || '',
+      niveau: d.fields.Niveau_Global || '',
+      score: d.fields.Score_Global ?? null,
+      famille: d.fields.Famille_4AI || '',
+      lienRapport: d.fields['Lien rapport'] || ''
+    }))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
 
-  .stats-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-  .stat-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; padding: 1.4rem 1.5rem; }
-  .links-banner { background: var(--or-l); border: 1px solid #F5D89A; border-radius: 12px; padding: .9rem 1.2rem; margin-bottom: 1rem; font-size: .88rem; color: var(--body); display: none; }
-  .links-banner.visible { display: block; }
-  .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-  .link-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 14px; padding: 1.1rem 1.3rem; }
-  .link-card .link-label { font-size: .78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
-  .link-card .link-value { display: flex; align-items: center; gap: .5rem; }
-  .link-card a.link-open { font-weight: 600; color: var(--ouf-cta); text-decoration: none; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .link-card input.link-input { width: 100%; border: 1px solid #E8E6E1; border-radius: 8px; padding: .5rem .7rem; font-size: .85rem; font-family: inherit; margin-bottom: .5rem; }
-  .link-card button.link-save { background: var(--nuit); color: #fff; border: none; border-radius: 8px; padding: .45rem .9rem; font-size: .8rem; font-weight: 600; cursor: pointer; }
-  .link-card button.link-save:hover { background: var(--ouf-cta); }
-  .link-card .link-status { font-size: .78rem; margin-left: .6rem; }
-  .dashboard-layout { display: flex; gap: 2rem; align-items: flex-start; }
-  .tab-nav { display: flex; flex-direction: column; gap: .35rem; width: 220px; flex-shrink: 0; background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1rem; position: sticky; top: 1.5rem; }
-  .tab-btn { display: flex; align-items: center; gap: .65rem; text-align: left; background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 600; color: var(--body); padding: .7rem .9rem; cursor: pointer; border-radius: 10px; }
-  .tab-btn .tab-icon { font-size: 1rem; flex-shrink: 0; width: 1.3rem; text-align: center; }
-  .tab-btn:hover { background: var(--cream); }
-  .tab-btn.active { color: var(--white); background: var(--chic); font-weight: 700; }
-  .tab-btn[hidden] { display: none; }
-  .dashboard-content { flex: 1; min-width: 0; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  @media (max-width: 780px) {
-    .dashboard-layout { flex-direction: column; gap: 1rem; }
-    .tab-nav { flex-direction: row; width: 100%; overflow-x: auto; padding: .6rem; position: static; }
-    .tab-btn { white-space: nowrap; }
-  }
-  .stat-label { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
-  .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--chic); }
-  .stat-value.accent-or { color: #B87507; }
-  .stat-sub { font-size: .74rem; color: var(--muted); margin-top: .25rem; }
+export default async function handler(req, res) {
+  const session = verifySession(req);
+  if (!session) return res.status(401).json({ error: 'Non authentifié.' });
 
-  .section-block { margin-bottom: 3rem; }
-  .section-block-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom: 1.25rem; flex-wrap:wrap; gap:.5rem; }
-  .section-block-head h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--chic); }
-  .section-block-head a { font-size: .84rem; color: var(--ouf); text-decoration:none; font-weight:500; }
-  .section-block-head a:hover { text-decoration: underline; }
+  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  if (!AIRTABLE_API_KEY) return res.status(500).json({ error: 'Configuration serveur incomplète.' });
 
-  /* catalogue */
-  .catalog-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem; }
-  .catalog-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; padding: 1.5rem; display:flex; flex-direction:column; }
-  .catalog-icon { width:42px; height:42px; border-radius: 12px; background: var(--lilas-l); display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom: .9rem; }
-  .catalog-card h3 { font-family:'Syne',sans-serif; font-size: 1rem; font-weight:800; color: var(--chic); margin-bottom: .4rem; }
-  .catalog-card p { font-size: .83rem; color: var(--muted); margin-bottom: 1rem; flex-grow:1; }
-  .catalog-price { font-size: .82rem; color: var(--chic); font-weight:700; margin-bottom: 1rem; }
-  .catalog-price span { font-weight:400; color: var(--muted); }
-  .catalog-cta { display:block; text-align:center; background: var(--ouf-cta); color:#fff; padding: .65rem; border-radius: 10px; font-size: .84rem; font-weight:600; text-decoration:none; transition: background .2s; }
-  .catalog-cta:hover { background: var(--ouf-cta-hover); }
+  const id = (req.method === 'GET' || req.method === 'DELETE') ? req.query.id : (req.body || {}).id;
 
-  /* diagnostic CTA */
-  .diag-cta { background: linear-gradient(120deg, var(--chic), var(--ouf)); border-radius: 20px; padding: 2rem 2.25rem; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; color:#fff; }
-  .diag-cta-text h2 { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; margin-bottom:.4rem; color:#fff; }
-  .diag-cta-text p { font-size: .88rem; color: rgba(255,255,255,.82); max-width: 480px; }
-  .diag-cta-btn { flex-shrink:0; background:#fff; color: var(--chic); padding: .8rem 1.6rem; border-radius: 999px; font-weight:700; font-size:.9rem; text-decoration:none; white-space:nowrap; }
+  try {
+    // Création d'un nouveau prospect — pas d'id fourni
+    if (req.method === 'POST' && !id) {
+      const { entreprise, nomContact, secteur } = req.body || {};
+      if (!entreprise) return res.status(400).json({ error: 'Le nom de l\'entreprise est requis.' });
 
-  /* formation docs */
-  .doc-list { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; overflow:hidden; }
-  .doc-row { display:flex; align-items:center; gap: 1rem; padding: 1rem 1.4rem; border-bottom: 1px solid #EEEBE4; }
-  .doc-row:last-child { border-bottom: none; }
-  .doc-icon { width:36px; height:36px; border-radius:10px; background: var(--or-l); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-  .doc-info { flex-grow:1; }
-  .doc-title { font-size: .9rem; font-weight:600; color: var(--body); }
-  .doc-meta { font-size: .76rem; color: var(--muted); }
-  .doc-dl { font-size: .82rem; color: var(--ouf); text-decoration:none; font-weight:600; flex-shrink:0; }
-  .doc-dl:hover { text-decoration: underline; }
+      const created = await airtableFetch(CLIENTS_TABLE, AIRTABLE_API_KEY, {
+        method: 'POST',
+        body: JSON.stringify({
+          fields: {
+            Entreprise: entreprise,
+            Nom_contact: nomContact || '',
+            Secteur: secteur || '',
+            Consultant_ID: [session.sub]
+          },
+          typecast: true
+        })
+      });
 
-  /* two col: community + subscription */
-  .two-col-bottom { display:grid; grid-template-columns: 1.3fr .9fr; gap: 1.25rem; }
-  .community-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; padding: 1.75rem; }
-  .community-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; color: var(--chic); margin-bottom:.6rem; }
-  .community-card p { font-size: .86rem; color: var(--muted); margin-bottom: 1.1rem; }
-  .community-btn { display:inline-block; background: var(--lilas-l); color: var(--chic); padding: .65rem 1.2rem; border-radius: 10px; font-size: .84rem; font-weight:600; text-decoration:none; }
+      return res.status(200).json({
+        id: created.id,
+        entreprise: created.fields.Entreprise || '',
+        nomContact: created.fields.Nom_contact || '',
+        secteur: created.fields.Secteur || '',
+        diagnostics: []
+      });
+    }
 
-  .sub-card { background: var(--nuit); border-radius: 16px; padding: 1.75rem; color:#fff; }
-  .sub-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:800; margin-bottom:.9rem; color:#fff; }
-  .sub-row { display:flex; justify-content:space-between; font-size: .84rem; padding: .5rem 0; border-bottom: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.75); }
-  .sub-row:last-of-type { border-bottom:none; }
-  .sub-row strong { color:#fff; }
-  .sub-btn { display:block; text-align:center; margin-top: 1.1rem; background: var(--or); color: #402A04; padding: .65rem; border-radius: 10px; font-size: .84rem; font-weight:700; text-decoration:none; }
+    if (!id) return res.status(400).json({ error: 'Identifiant client manquant.' });
 
-  .demo-banner { display:none; background: var(--or); color: #402A04; text-align:center; padding: .7rem 1rem; font-size: .85rem; font-weight:600; }
-  .demo-banner a { color: #402A04; text-decoration: underline; margin-left: .4rem; }
-  body.demo-mode .demo-banner { display:block; }
+    const record = await airtableFetch(`${CLIENTS_TABLE}/${id}`, AIRTABLE_API_KEY);
+    if (!isOwner(record, session.sub)) {
+      return res.status(403).json({ error: 'Ce client ne fait pas partie de votre portefeuille.' });
+    }
 
-  /* pipeline devis */
-  .pipeline-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: .9rem; }
-  .pipeline-col-label { font-size: .78rem; color: var(--muted); margin-bottom: .5rem; font-weight:600; }
-  .pipeline-card { background: var(--white); border:1px solid #E8E6E1; border-radius: 12px; padding: .75rem .9rem; margin-bottom: .5rem; }
-  .pipeline-card .pc-nom { font-size: .85rem; font-weight:600; color: var(--body); }
-  .pipeline-card .pc-montant { font-size: .78rem; color: var(--muted); margin-top:.15rem; }
-  .pipeline-card.signe { background: #EAF6EF; border-color: #CFE9D9; }
-  .pipeline-card.signe .pc-nom, .pipeline-card.signe .pc-montant { color: #1A7F4F; }
-  .pipeline-card.perdu { opacity:.65; }
-  .pipeline-empty { font-size: .8rem; color: var(--muted); font-style: italic; padding: .5rem 0; }
+    if (req.method === 'GET') {
+      const diagnostics = await fetchDiagnostics(record.fields.Diagnostics, AIRTABLE_API_KEY);
+      return res.status(200).json({
+        id: record.id,
+        entreprise: record.fields.Entreprise || '',
+        nomContact: record.fields.Nom_contact || '',
+        secteur: record.fields.Secteur || '',
+        signeExterne: !!record.fields.Signe_Externe,
+        diagnostics
+      });
+    }
 
-  /* liste clients */
-  .clients-table { background: var(--white); border:1px solid #E8E6E1; border-radius: 16px; overflow: hidden; }
-  .clients-row { display:flex; align-items:center; padding: .85rem 1.4rem; border-bottom: 1px solid #EEEBE4; font-size: .87rem; }
-  .clients-row:last-child { border-bottom: none; }
-  .clients-row.head { background: var(--cream); font-size: .76rem; color: var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; }
-  .clients-row .c-entreprise { flex: 2; font-weight:600; color: var(--body); }
-  .clients-row .c-secteur { flex: 1; color: var(--muted); }
-  .clients-row .c-statut { flex: 1; }
-  .badge { display:inline-block; font-size: .74rem; font-weight:600; padding: .25rem .7rem; border-radius: 999px; }
-  .badge.attente { background:#FFF3D6; color:#8A5A00; }
-  .badge.envoye { background:#E6F0FE; color:#1B4FA0; }
-  .badge.signe { background:#DFF3E6; color:#1A7F4F; }
-  .badge.paye { background:#D6EFE0; color:#0F6B3A; font-weight:700; }
-  .badge.perdu { background:#F1EFE8; color:#6B6B6B; }
-  .badge.aucun { background:#F1EFE8; color:#6B6B6B; }
-  .badge.externe { background:#EDE4FB; color:#5B2D8E; }
-  .empty-state { text-align:center; padding: 2rem; color: var(--muted); font-size: .88rem; }
-  .people-filter { display: flex; gap: .4rem; background: var(--cream); border-radius: 10px; padding: .25rem; }
-  .people-filter-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; color: var(--muted); padding: .4rem .9rem; border-radius: 8px; cursor: pointer; }
-  .people-filter-btn.active { background: var(--white); color: var(--chic); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-  .people-filter-btn[hidden] { display: none; }
-  .diag-list { margin-bottom: 1.2rem; }
-  .diag-card { background: var(--lilas-l); border-radius: 10px; padding: .8rem 1rem; margin-bottom: .6rem; font-size: .84rem; }
-  .diag-card .diag-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
-  .diag-card .diag-niveau { font-weight: 700; color: var(--chic); }
-  .diag-card .diag-score { color: var(--ouf-cta); font-weight: 700; }
-  .diag-card .diag-date { color: var(--muted); font-size: .78rem; }
-  .diag-card a { color: var(--ouf-cta); font-weight: 600; text-decoration: none; font-size: .8rem; }
-  .diag-empty { color: var(--muted); font-size: .82rem; font-style: italic; margin-bottom: 1.2rem; }
+    if (req.method === 'POST') {
+      const { entreprise, nomContact, secteur, signeExterne } = req.body || {};
+      if (!entreprise) return res.status(400).json({ error: 'Le nom de l\'entreprise est requis.' });
 
-  @media (max-width: 900px) {
-    .pipeline-grid { grid-template-columns: repeat(2,1fr); }
-  }
+      const updated = await airtableFetch(`${CLIENTS_TABLE}/${id}`, AIRTABLE_API_KEY, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          fields: {
+            Entreprise: entreprise,
+            Nom_contact: nomContact || '',
+            Secteur: secteur || '',
+            Signe_Externe: !!signeExterne
+          },
+          typecast: true
+        })
+      });
 
-  @media (max-width: 900px) {
-    .stats-grid { grid-template-columns: repeat(2,1fr); }
-    .catalog-grid { grid-template-columns: 1fr; }
-    .two-col-bottom { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
+      const diagnostics = await fetchDiagnostics(updated.fields.Diagnostics, AIRTABLE_API_KEY);
+      return res.status(200).json({
+        id: updated.id,
+        entreprise: updated.fields.Entreprise || '',
+        nomContact: updated.fields.Nom_contact || '',
+        secteur: updated.fields.Secteur || '',
+        signeExterne: !!updated.fields.Signe_Externe,
+        diagnostics
+      });
+    }
 
-<div class="demo-banner" id="demoBanner">🎬 Vous visualisez une démo de l'espace commerci'al — les données sont fictives.<a href="devenir-consultant-ia.html">Rejoindre le réseau CommercI.A.l →</a></div>
-
-<nav>
-  <a class="nav-logo" href="index.html">
-    <span class="nav-logo-text">CHIC <span style="color:var(--or);">·</span> <span>OUF</span></span>
-  </a>
-  <div class="nav-right">
-    <div class="nav-user">
-      <div class="nav-avatar">SD</div>
-      <span class="nav-user-name">Sandrine</span>
-    </div>
-    <a class="nav-logout" href="connexion.html">Déconnexion</a>
-  </div>
-</nav>
-
-<div class="page">
-
-  <div class="greet">
-    <p class="greet-eyebrow">Espace commerci'al</p>
-    <h1>Bonjour <span id="greetName">…</span> 👋</h1>
-  </div>
-
-  <div class="dashboard-layout">
-  <div class="tab-nav" id="tabNav" role="tablist">
-    <button class="tab-btn active" data-tab="overview"><span class="tab-icon">🏠</span>Vue d'ensemble</button>
-    <button class="tab-btn" data-tab="liens"><span class="tab-icon">🔗</span>Mes liens</button>
-    <button class="tab-btn" data-tab="prospects"><span class="tab-icon">📋</span>Prospects &amp; devis</button>
-    <button class="tab-btn" data-tab="catalogue"><span class="tab-icon">📦</span>Catalogue &amp; ressources</button>
-    <button class="tab-btn" data-tab="outils"><span class="tab-icon">🛠️</span>Les outils</button>
-    <button class="tab-btn" data-tab="compte"><span class="tab-icon">⚙️</span>Mon compte</button>
-  </div>
-
-  <div class="dashboard-content">
-  <div class="tab-panel active" data-tab="overview">
-  <div class="admin-box" id="adminBox">
-    <div class="admin-label">🔐 Outils admin — visible uniquement par toi</div>
-    <div class="admin-links">
-      <a href="https://tally.so/r/D4OlX5" target="_blank" rel="noopener">📋 Remplir le récap post-appel</a>
-      <a href="admin-commerciaux.html">👥 Gérer les accès commerciaux</a>
-    </div>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Clients actifs</div>
-      <div class="stat-value" id="statClients">—</div>
-      <div class="stat-sub">Suivis dans votre portefeuille</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Devis en cours</div>
-      <div class="stat-value" id="statDevisEnCours">—</div>
-      <div class="stat-sub">En attente ou envoyés</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Taux de signature</div>
-      <div class="stat-value" id="statTaux">—</div>
-      <div class="stat-sub">Devis signés / total</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">CA généré</div>
-      <div class="stat-value accent-or" id="statCA">—</div>
-      <div class="stat-sub">Total des devis signés</div>
-    </div>
-    <div class="stat-card" id="statCommerciauxCard" hidden>
-      <div class="stat-label">Commerciaux actifs</div>
-      <div class="stat-value" id="statCommerciaux">—</div>
-      <div class="stat-sub">Réseau CommercI.A.l</div>
-    </div>
-  </div>
-
-  </div>
-
-  <div class="tab-panel" data-tab="liens">
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Mes liens</h2>
-    </div>
-    <div class="links-banner" id="linksBanner">👋 Complète tes liens Calendly et Zoom pour que tes prospects puissent prendre rendez-vous avec toi.</div>
-    <div class="links-grid">
-      <div class="link-card">
-        <div class="link-label">Formulaire récap (Tally)</div>
-        <div class="link-value"><a class="link-open" id="linkTally" href="#" target="_blank" rel="noopener">Ouvrir →</a></div>
-      </div>
-      <div class="link-card">
-        <div class="link-label">Calendly</div>
-        <div id="calendlyDisplay" class="link-value" style="display:none;">
-          <a class="link-open" id="linkCalendly" href="#" target="_blank" rel="noopener"></a>
-          <a href="#" id="editCalendly" style="font-size:.78rem;color:var(--muted);">modifier</a>
-        </div>
-        <div id="calendlyEdit">
-          <input type="url" class="link-input" id="inputCalendly" placeholder="https://calendly.com/votre-nom" />
-          <button class="link-save" data-target="calendly">Enregistrer</button>
-          <span class="link-status" id="statusCalendly"></span>
-        </div>
-      </div>
-      <div class="link-card">
-        <div class="link-label">Zoom</div>
-        <div id="zoomDisplay" class="link-value" style="display:none;">
-          <a class="link-open" id="linkZoom" href="#" target="_blank" rel="noopener"></a>
-          <a href="#" id="editZoom" style="font-size:.78rem;color:var(--muted);">modifier</a>
-        </div>
-        <div id="zoomEdit">
-          <input type="url" class="link-input" id="inputZoom" placeholder="https://zoom.us/j/votre-id" />
-          <button class="link-save" data-target="zoom">Enregistrer</button>
-          <span class="link-status" id="statusZoom"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-
-  <div class="tab-panel" data-tab="prospects">
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Pipeline des devis</h2>
-      <a href="#" id="openDevisForm" style="font-weight:700;">+ Demander un devis</a>
-    </div>
-    <div class="pipeline-grid" id="pipelineGrid">
-      <div class="pipeline-empty">Chargement…</div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2 id="peopleTableTitle">Mes clients</h2>
-      <div style="display:flex;align-items:center;gap:.8rem;">
-        <a href="#" id="openCreateProspect" style="font-weight:700;">+ Créer un prospect</a>
-        <div class="people-filter" id="peopleFilter">
-          <button class="people-filter-btn active" data-filter="clients">Clients</button>
-          <button class="people-filter-btn" data-filter="commerciaux" id="filterCommerciaux" hidden>Commerciaux</button>
-        </div>
-      </div>
-    </div>
-    <div class="clients-table" id="clientsTable">
-      <div class="clients-row head">
-        <span class="c-entreprise">Entreprise</span>
-        <span class="c-secteur">Secteur</span>
-        <span class="c-statut">Statut</span>
-      </div>
-      <div class="empty-state" id="clientsLoading">Chargement…</div>
-    </div>
-    <div class="reseau-table" id="reseauTable" style="display:none;">
-      <div class="reseau-row head">
-        <span class="r-nom">Nom</span>
-        <span class="r-email">Email</span>
-        <span class="r-statut">Statut</span>
-        <span class="r-ca">CA réseau</span>
-        <span class="r-ca">CA clients</span>
-        <span class="r-ca">Commission (5%)</span>
-        <span class="r-histo"></span>
-      </div>
-      <div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
-    </div>
-  </div>
-  </div>
-
-  <div class="tab-panel" data-tab="catalogue">
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Catalogue produits</h2>
-      <a href="#">Voir tout le catalogue →</a>
-    </div>
-    <div class="catalog-grid">
-      <div class="catalog-card">
-        <div class="catalog-icon">🌱</div>
-        <h3>Formation Essentielle</h3>
-        <p>Découverte accompagnée de l'IA, 1 agent construit. Idéal pour un premier pas sans engagement.</p>
-        <div class="catalog-price">~1 650 € <span>éligible CPF</span></div>
-        <a href="#" class="catalog-cta">Proposer à un prospect →</a>
-      </div>
-      <div class="catalog-card">
-        <div class="catalog-icon">🚀</div>
-        <h3>Formation Incubateur</h3>
-        <p>6 mois, 8 sessions de coaching individuel (4h), 5 agents IA construits avec le client.</p>
-        <div class="catalog-price">3 000 € <span>CPF plafonné à 1 600 €</span></div>
-        <a href="#" class="catalog-cta">Proposer à un prospect →</a>
-      </div>
-      <div class="catalog-card">
-        <div class="catalog-icon">🏆</div>
-        <h3>Formation Accélérateur</h3>
-        <p>1 an, 18 sessions de coaching (9h30), kit complet : site, CRM, contenu, prospection.</p>
-        <div class="catalog-price">5 000 € <span>CPF illimité</span></div>
-        <a href="#" class="catalog-cta">Proposer à un prospect →</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Documents de formation</h2>
-      <a href="#">Tout voir →</a>
-    </div>
-    <div class="doc-list">
-      <div class="doc-row">
-        <div class="doc-icon">📄</div>
-        <div class="doc-info">
-          <div class="doc-title">Guide de vente CommercI.A.l</div>
-          <div class="doc-meta">PDF · 12 pages · mis à jour il y a 3 semaines</div>
-        </div>
-        <a href="#" class="doc-dl">Télécharger</a>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon">🎥</div>
-        <div class="doc-info">
-          <div class="doc-title">Comment mener un diagnostic CAPE</div>
-          <div class="doc-meta">Vidéo · 14 min</div>
-        </div>
-        <a href="#" class="doc-dl">Regarder</a>
-      </div>
-      <div class="doc-row">
-        <div class="doc-icon">📝</div>
-        <div class="doc-info">
-          <div class="doc-title">Gabarit de devis type</div>
-          <div class="doc-meta">Word · modifiable</div>
-        </div>
-        <a href="#" class="doc-dl">Télécharger</a>
-      </div>
-    </div>
-  </div>
-
-  </div>
-
-  <div class="tab-panel" data-tab="outils">
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Les outils</h2>
-    </div>
-    <div class="links-grid">
-      <div class="link-card">
-        <div class="link-label">Outil de diagnostic CAPE</div>
-        <div class="link-value"><a class="link-open" href="https://tally.so/r/68PxQB" target="_blank" rel="noopener">Ouvrir →</a></div>
-      </div>
-      <div class="link-card">
-        <div class="link-label">Site internet CHIC · OUF</div>
-        <div class="link-value"><a class="link-open" href="https://chicouf.pro" target="_blank" rel="noopener">Ouvrir →</a></div>
-      </div>
-      <div class="link-card">
-        <div class="link-label">Documentation de l'audit CAPE</div>
-        <div class="link-value"><a class="link-open" href="#" target="_blank" rel="noopener">À compléter</a></div>
-      </div>
-    </div>
-  </div>
-  </div>
-
-  <div class="tab-panel" data-tab="compte">
-  <div class="section-block">
-    <div class="section-block-head">
-      <h2>Mes commissions à facturer</h2>
-    </div>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">CommercI.A.l ne gère pas la facturation elle-même — cette liste vous aide juste à suivre ce qu'il vous reste à facturer à Studeria sur vos ventes payées (commission à 5%).</p>
-    <div class="clients-table" id="commissionsTable">
-      <div class="clients-row head">
-        <span class="c-entreprise">Client</span>
-        <span class="c-secteur">Commission</span>
-        <span class="c-statut">Facturée</span>
-      </div>
-      <div class="empty-state" id="commissionsLoading">Chargement…</div>
-    </div>
-  </div>
-
-  <div class="section-block" style="margin-bottom:1rem;">
-    <div class="two-col-bottom">
-      <div class="community-card">
-        <h3>Communauté CommercI.A.l</h3>
-        <p>Échangez avec les autres commerci'aux du réseau : retours terrain, questions, entraide sur vos premières ventes.</p>
-        <a href="#" class="community-btn">Rejoindre le groupe →</a>
-      </div>
-      <div class="sub-card">
-        <h3>Mon abonnement</h3>
-        <div class="sub-row"><span>Formule</span><strong>Standard</strong></div>
-        <div class="sub-row"><span>Montant</span><strong>100 €/mois</strong></div>
-        <div class="sub-row"><span>Prochain prélèvement</span><strong>1er du mois</strong></div>
-        <a href="#" class="sub-btn">Gérer mon abonnement</a>
-      </div>
-    </div>
-  </div>
-  </div>
-
-  </div>
-  </div>
-
-</div>
-
-<div class="modal-overlay" id="devisModal">
-  <div class="modal-box">
-    <h3>Demander un devis</h3>
-    <p class="modal-sub">Décrivez le besoin de votre client — Sandrine reçoit la demande immédiatement et prépare le chiffrage.</p>
-    <form id="devisForm">
-      <label for="devisEntreprise">Entreprise du client *</label>
-      <input type="text" id="devisEntreprise" required />
-      <label for="devisContact">Nom du contact</label>
-      <input type="text" id="devisContact" />
-      <label for="devisSecteur">Secteur d'activité</label>
-      <input type="text" id="devisSecteur" />
-      <label for="devisDescription">Besoin à chiffrer *</label>
-      <textarea id="devisDescription" required placeholder="Ex. Automatisation des relances de devis, agent IA pour la prise de rendez-vous..."></textarea>
-      <div class="modal-actions">
-        <button type="button" class="btn-modal-cancel" id="cancelDevisForm">Annuler</button>
-        <button type="submit" class="btn-modal-submit">Envoyer la demande →</button>
-      </div>
-      <p id="devisMsg"></p>
-    </form>
-  </div>
-</div>
-
-<div class="modal-overlay" id="clientModal">
-  <div class="modal-box">
-    <h3 id="clientModalTitle">Fiche client</h3>
-    <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
-    <div id="clientDiagnostics"></div>
-    <form id="clientForm">
-      <label for="clientEntreprise">Entreprise *</label>
-      <input type="text" id="clientEntreprise" required />
-      <label for="clientContact">Nom du contact</label>
-      <input type="text" id="clientContact" />
-      <label for="clientSecteur">Secteur d'activité</label>
-      <input type="text" id="clientSecteur" />
-      <label id="clientExterneRow" style="display:flex;align-items:center;gap:.5rem;margin-top:1rem;cursor:pointer;">
-        <input type="checkbox" id="clientExterne" style="width:auto;" />
-        <span>Ce client a été signé en externe (hors Studeria)</span>
-      </label>
-      <div class="modal-actions">
-        <button type="button" class="btn-modal-cancel" id="cancelClientForm">Annuler</button>
-        <button type="submit" class="btn-modal-submit" id="clientSubmitBtn">Enregistrer →</button>
-      </div>
-      <p id="clientMsg"></p>
-    </form>
-    <a href="#" id="deleteClientLink" style="display:none;margin-top:1rem;text-align:center;color:#b3261e;font-size:.82rem;font-weight:600;text-decoration:none;">Supprimer ce prospect</a>
-  </div>
-</div>
-
-<div class="modal-overlay" id="devisDetailModal">
-  <div class="modal-box">
-    <h3>Détail du devis</h3>
-    <p class="modal-sub" id="devisDetailSub"></p>
-    <div id="devisDetailBody"></div>
-    <div class="modal-actions">
-      <button type="button" class="btn-modal-cancel" id="closeDevisDetail">Fermer</button>
-    </div>
-    <p id="devisDetailMsg"></p>
-  </div>
-</div>
-
-<script>
-  const STATUT_CLASS = {
-    'En attente': 'attente',
-    'Envoyé': 'envoye',
-    'Signé': 'signe',
-    'Payé': 'paye',
-    'Perdu': 'perdu',
-    'Aucun devis': 'aucun',
-    'Externe': 'externe'
-  };
-  const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Payé', 'Perdu'];
-
-  function euros(n) {
-    return Math.round(n || 0).toLocaleString('fr-FR') + ' €';
-  }
-
-  function renderPipeline(pipeline) {
-    const grid = document.getElementById('pipelineGrid');
-    grid.innerHTML = '';
-    PIPELINE_ORDER.forEach(statut => {
-      const items = pipeline[statut] || [];
-      const col = document.createElement('div');
-      let html = `<div class="pipeline-col-label">${statut} · ${items.length}</div>`;
-      if (items.length === 0) {
-        html += `<div class="pipeline-empty">Aucun</div>`;
-      } else {
-        items.forEach(it => {
-          const cls = (statut === 'Signé' || statut === 'Payé') ? 'signe' : (statut === 'Perdu' ? 'perdu' : '');
-          html += `<div class="pipeline-card ${cls}" data-audit-id="${it.id}" style="cursor:pointer;">
-            <div class="pc-nom">${it.entreprise || 'Client'}</div>
-            <div class="pc-montant">${euros(it.montant)}</div>
-          </div>`;
+    if (req.method === 'DELETE') {
+      const hasAudits = (record.fields.Audits || []).length > 0;
+      if (hasAudits) {
+        return res.status(400).json({
+          error: 'Ce prospect a déjà un ou plusieurs devis liés — contactez Sandrine pour le supprimer.'
         });
       }
-      col.innerHTML = html;
-      grid.appendChild(col);
-    });
-    grid.querySelectorAll('.pipeline-card[data-audit-id]').forEach(card => {
-      card.addEventListener('click', () => openDevisDetailModal(card.dataset.auditId));
-    });
-  }
 
-  function renderClients(clients) {
-    const table = document.getElementById('clientsTable');
-    const rows = clients.map(c => {
-      const badgeClass = STATUT_CLASS[c.statut] || 'aucun';
-      return `<div class="clients-row" data-id="${c.id || ''}" style="cursor:pointer;">
-        <span class="c-entreprise">${c.entreprise || '—'}</span>
-        <span class="c-secteur">${c.secteur || '—'}</span>
-        <span class="c-statut"><span class="badge ${badgeClass}">${c.statut}</span></span>
-      </div>`;
-    }).join('');
-
-    table.innerHTML = `
-      <div class="clients-row head">
-        <span class="c-entreprise">Entreprise</span>
-        <span class="c-secteur">Secteur</span>
-        <span class="c-statut">Statut</span>
-      </div>
-      ${clients.length ? rows : '<div class="empty-state">Aucun client pour le moment.</div>'}
-    `;
-
-    table.querySelectorAll('.clients-row[data-id]').forEach(row => {
-      row.addEventListener('click', () => openClientModal(row.dataset.id));
-    });
-  }
-
-  function renderCommissions(commissions) {
-    const table = document.getElementById('commissionsTable');
-    if (!table) return;
-    const list = commissions || [];
-    const rows = list.map(c => `
-      <div class="clients-row">
-        <span class="c-entreprise">${c.entreprise || '—'}</span>
-        <span class="c-secteur">${euros(c.commission)}</span>
-        <span class="c-statut">
-          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;">
-            <input type="checkbox" class="commission-check" data-id="${c.id}" style="width:auto;" ${c.facturee ? 'checked' : ''} />
-            ${c.facturee ? 'Facturée' : 'À facturer'}
-          </label>
-        </span>
-      </div>`).join('');
-
-    table.innerHTML = `
-      <div class="clients-row head">
-        <span class="c-entreprise">Client</span>
-        <span class="c-secteur">Commission</span>
-        <span class="c-statut">Facturée</span>
-      </div>
-      ${list.length ? rows : '<div class="empty-state">Aucune commission à suivre pour le moment.</div>'}
-    `;
-
-    table.querySelectorAll('.commission-check').forEach(cb => {
-      cb.addEventListener('change', async () => {
-        cb.disabled = true;
-        try {
-          await fetch('/api/request-devis', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: cb.dataset.id, action: 'toggle-commission', facturee: cb.checked })
-          });
-          loadDashboard();
-        } catch (err) {
-          cb.checked = !cb.checked;
-          cb.disabled = false;
-        }
-      });
-    });
-  }
-
-  const RESEAU_BADGE_CLASS = { 'Signé': 'signe', 'RDV pris': 'rdv', 'Contact': 'contact' };
-
-  function renderHistoriqueEntries(historique) {
-    if (!historique || historique.length === 0) {
-      return '<p style="color:var(--muted);font-style:italic;font-size:.82rem;">Aucun échange enregistré.</p>';
+      await airtableFetch(`${CLIENTS_TABLE}/${id}`, AIRTABLE_API_KEY, { method: 'DELETE' });
+      return res.status(200).json({ ok: true });
     }
-    return historique.map(h => {
-      const dateStr = h.date ? new Date(h.date).toLocaleDateString('fr-FR') : 'Date inconnue';
-      const solutionStr = (h.solution || []).join(', ');
-      return `<div class="histo-entry">
-        <div class="histo-date">${dateStr}</div>
-        ${solutionStr ? `<div class="histo-solution">${solutionStr}</div>` : ''}
-        <div class="histo-resume">${h.resume || '(pas de résumé)'}</div>
-      </div>`;
-    }).join('');
+
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err) {
+    console.error('Erreur client-detail:', err);
+    return res.status(500).json({ error: 'Erreur serveur, réessayez.' });
   }
-
-  async function loadReseau() {
-    const table = document.getElementById('reseauTable');
-    try {
-      const res = await fetch('/api/admin/commerciaux-list');
-      if (!res.ok) throw new Error('Erreur de chargement');
-      const data = await res.json();
-      const commerciaux = data.commerciaux || [];
-
-      const actifs = commerciaux.filter(c => c.statut === 'Signé').length;
-      document.getElementById('statCommerciaux').textContent = actifs;
-      document.getElementById('statCommerciauxCard').hidden = false;
-
-      const rows = commerciaux.map((c, i) => {
-        const badgeClass = RESEAU_BADGE_CLASS[c.statut] || 'contact';
-        const caReseauStr = c.caReseau === null ? '—' : euros(c.caReseau);
-        const histoCount = (c.historique || []).length;
-        return `<div class="reseau-row">
-          <span class="r-nom">${c.nom}</span>
-          <span class="r-email">${c.email || '—'}</span>
-          <span class="r-statut"><span class="badge-reseau ${badgeClass}">${c.statut}</span></span>
-          <span class="r-ca">${caReseauStr}</span>
-          <span class="r-ca">${euros(c.caClients)}</span>
-          <span class="r-ca" style="color:var(--or);">${euros(c.commission)}</span>
-          <span class="r-histo"><button class="histo-toggle" data-idx="${i}">Historique (${histoCount})</button></span>
-        </div>
-        <div class="histo-panel" id="histoPanel${i}">${renderHistoriqueEntries(c.historique)}</div>`;
-      }).join('');
-
-      table.innerHTML = `
-        <div class="reseau-row head">
-          <span class="r-nom">Nom</span>
-          <span class="r-email">Email</span>
-          <span class="r-statut">Statut</span>
-          <span class="r-ca">CA réseau</span>
-          <span class="r-ca">CA clients</span>
-          <span class="r-ca">Commission (5%)</span>
-          <span class="r-histo"></span>
-        </div>
-        ${commerciaux.length ? rows : '<div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Personne pour le moment.</span></div>'}
-      `;
-
-      table.querySelectorAll('.histo-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const panel = document.getElementById('histoPanel' + btn.dataset.idx);
-          panel.classList.toggle('open');
-        });
-      });
-    } catch (err) {
-      table.innerHTML = '<div class="reseau-row"><span style="color:var(--muted);">Erreur de chargement.</span></div>';
-    }
-  }
-
-  async function loadDashboard() {
-    try {
-      const res = await fetch('/api/dashboard-data');
-      if (res.status === 401) {
-        window.location.href = 'connexion.html';
-        return;
-      }
-      if (!res.ok) throw new Error('Erreur de chargement');
-      const data = await res.json();
-
-      document.getElementById('greetName').textContent = data.prenom || data.nom || '';
-      document.querySelector('.nav-user-name').textContent = data.nom || '';
-      document.querySelector('.nav-avatar').textContent = (data.nom || '?')
-        .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-
-      if (data.isAdmin) {
-        document.getElementById('adminBox').classList.add('visible');
-        document.getElementById('filterCommerciaux').hidden = false;
-        loadReseau();
-      }
-
-      document.getElementById('statClients').textContent = data.kpis.nbClients;
-      document.getElementById('statDevisEnCours').textContent = data.kpis.devisEnCours;
-      document.getElementById('statTaux').textContent = data.kpis.tauxSignature + '%';
-      document.getElementById('statCA').textContent = euros(data.kpis.caGenere);
-
-      renderPipeline(data.pipeline);
-      renderClients(data.clients);
-      renderLinks(data.liens);
-      renderCommissions(data.commissions);
-    } catch (err) {
-      console.error(err);
-      document.getElementById('pipelineGrid').innerHTML = '<div class="pipeline-empty">Erreur de chargement.</div>';
-      document.getElementById('clientsTable').innerHTML = '<div class="empty-state">Erreur de chargement.</div>';
-    }
-  }
-
-  function renderLinks(liens) {
-    if (!liens) return;
-
-    document.getElementById('linkTally').href = liens.tally;
-
-    setupLinkField('calendly', liens.calendly);
-    setupLinkField('zoom', liens.zoom);
-
-    const missing = !liens.calendly || !liens.zoom;
-    document.getElementById('linksBanner').classList.toggle('visible', missing);
-  }
-
-  function setupLinkField(key, value) {
-    const display = document.getElementById(key + 'Display');
-    const edit = document.getElementById(key + 'Edit');
-    const link = document.getElementById('link' + key.charAt(0).toUpperCase() + key.slice(1));
-    const input = document.getElementById('input' + key.charAt(0).toUpperCase() + key.slice(1));
-
-    if (value) {
-      link.href = value;
-      link.textContent = value.replace(/^https?:\/\//, '');
-      display.style.display = 'flex';
-      edit.style.display = 'none';
-    } else {
-      display.style.display = 'none';
-      edit.style.display = 'block';
-    }
-    input.value = value || '';
-  }
-
-  document.getElementById('tabNav').addEventListener('click', (e) => {
-    const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    const target = btn.dataset.tab;
-
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === target));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  document.getElementById('peopleFilter').addEventListener('click', (e) => {
-    const btn = e.target.closest('.people-filter-btn');
-    if (!btn) return;
-    const filter = btn.dataset.filter;
-
-    document.querySelectorAll('.people-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.getElementById('clientsTable').style.display = filter === 'clients' ? 'block' : 'none';
-    document.getElementById('reseauTable').style.display = filter === 'commerciaux' ? 'block' : 'none';
-    document.getElementById('peopleTableTitle').textContent = filter === 'clients' ? 'Mes clients' : 'Réseau CommercI.A.l';
-  });
-
-  document.querySelectorAll('.link-save').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const key = btn.dataset.target;
-      const input = document.getElementById('input' + key.charAt(0).toUpperCase() + key.slice(1));
-      const status = document.getElementById('status' + key.charAt(0).toUpperCase() + key.slice(1));
-      const value = input.value.trim();
-
-      status.textContent = 'Enregistrement…';
-      status.style.color = 'var(--muted)';
-
-      try {
-        const res = await fetch('/api/update-links', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ [key]: value })
-        });
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.error || 'Erreur');
-
-        status.textContent = '✓ Enregistré';
-        status.style.color = 'var(--chic)';
-        setupLinkField(key, value);
-        setTimeout(() => loadDashboard(), 600);
-      } catch (err) {
-        status.textContent = err.message || 'Erreur';
-        status.style.color = '#c0392b';
-      }
-    });
-  });
-
-  document.querySelectorAll('[id^="edit"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const key = a.id.replace('edit', '').toLowerCase();
-      document.getElementById(key + 'Display').style.display = 'none';
-      document.getElementById(key + 'Edit').style.display = 'block';
-    });
-  });
-
-  document.querySelector('.nav-logout').addEventListener('click', async (e) => {
-    if (document.body.classList.contains('demo-mode')) return; // en démo, laisse le lien normal
-    e.preventDefault();
-    await fetch('/api/auth?action=logout', { method: 'POST' });
-    window.location.href = 'connexion.html';
-  });
-
-  if (new URLSearchParams(window.location.search).get('demo') === '1') {
-    document.body.classList.add('demo-mode');
-    var logout = document.querySelector('.nav-logout');
-    if (logout) { logout.textContent = 'Quitter la démo'; logout.href = 'connexion.html'; }
-    var userName = document.querySelector('.nav-user-name');
-    if (userName) { userName.textContent = 'Démo'; }
-    document.getElementById('greetName').textContent = 'Démo';
-    renderPipeline({
-      'En attente': [{ entreprise: 'Atelier Dubois', montant: 1800 }],
-      'Envoyé': [{ entreprise: 'Boulangerie Léa', montant: 950 }],
-      'Signé': [{ entreprise: 'Boucherie Nguyen', montant: 1400 }],
-      'Payé': [{ entreprise: 'Cabinet Roux', montant: 3200 }],
-      'Perdu': [{ entreprise: 'Garage Petit', montant: 1100 }]
-    });
-    renderClients([
-      { entreprise: 'Atelier Dubois', secteur: 'Artisanat', statut: 'En attente' },
-      { entreprise: 'Cabinet Roux', secteur: 'Conseil', statut: 'Signé' },
-      { entreprise: 'Boulangerie Léa', secteur: 'Commerce', statut: 'Envoyé' }
-    ]);
-    document.getElementById('statClients').textContent = '3';
-    document.getElementById('statDevisEnCours').textContent = '2';
-    document.getElementById('statTaux').textContent = '25%';
-    document.getElementById('statCA').textContent = '3 200 €';
-  } else {
-    loadDashboard();
-  }
-
-  // Modale "Demander un devis"
-  const devisModal = document.getElementById('devisModal');
-  document.getElementById('openDevisForm').addEventListener('click', (e) => {
-    e.preventDefault();
-    devisModal.classList.add('open');
-  });
-  document.getElementById('cancelDevisForm').addEventListener('click', () => {
-    devisModal.classList.remove('open');
-  });
-  devisModal.addEventListener('click', (e) => {
-    if (e.target === devisModal) devisModal.classList.remove('open');
-  });
-
-  document.getElementById('devisForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById('devisMsg');
-    msg.textContent = '';
-    msg.className = '';
-    const btn = e.target.querySelector('.btn-modal-submit');
-    btn.disabled = true;
-    btn.textContent = 'Envoi en cours…';
-
-    const payload = {
-      entreprise: document.getElementById('devisEntreprise').value,
-      nomContact: document.getElementById('devisContact').value,
-      secteur: document.getElementById('devisSecteur').value,
-      description: document.getElementById('devisDescription').value
-    };
-
-    try {
-      const res = await fetch('/api/request-devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur');
-      msg.textContent = 'Demande envoyée ! Le pipeline se met à jour.';
-      msg.className = 'ok';
-      e.target.reset();
-      setTimeout(() => {
-        devisModal.classList.remove('open');
-        msg.textContent = '';
-        if (!document.body.classList.contains('demo-mode')) loadDashboard();
-      }, 1200);
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'err';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Envoyer la demande →';
-    }
-  });
-
-  // Modale "Fiche client" — création ET édition
-  const clientModal = document.getElementById('clientModal');
-  let currentClientId = null;
-
-  function renderDiagnostics(diagnostics) {
-    const box = document.getElementById('clientDiagnostics');
-    if (!diagnostics || diagnostics.length === 0) {
-      box.innerHTML = '<p class="diag-empty">Aucun diagnostic CAPE réalisé pour ce client pour le moment.</p>';
-      return;
-    }
-    box.innerHTML = '<div class="diag-list">' + diagnostics.map(d => {
-      const dateStr = d.date ? new Date(d.date).toLocaleDateString('fr-FR') : '';
-      const scoreStr = d.score !== null ? ` · Score ${d.score}` : '';
-      const lien = d.lienRapport ? `<a href="${d.lienRapport}" target="_blank" rel="noopener">Voir le rapport →</a>` : '';
-      return `<div class="diag-card">
-        <div class="diag-top">
-          <span class="diag-niveau">${d.niveau || 'Diagnostic CAPE'}</span>
-          <span class="diag-score">${scoreStr}</span>
-        </div>
-        <div class="diag-date">${dateStr}</div>
-        ${lien}
-      </div>`;
-    }).join('') + '</div>';
-  }
-
-  function openCreateProspectModal() {
-    if (document.body.classList.contains('demo-mode')) return;
-    currentClientId = null;
-    const msg = document.getElementById('clientMsg');
-    msg.textContent = '';
-    msg.className = '';
-    document.getElementById('clientForm').reset();
-    document.getElementById('clientModalTitle').textContent = 'Créer un prospect';
-    document.getElementById('clientModalSub').textContent = 'Ajoutez un nouveau prospect à votre portefeuille.';
-    document.getElementById('clientSubmitBtn').textContent = 'Créer →';
-    document.getElementById('clientDiagnostics').innerHTML = '';
-    document.getElementById('deleteClientLink').style.display = 'none';
-    document.getElementById('clientExterneRow').style.display = 'none';
-    clientModal.classList.add('open');
-    document.getElementById('clientEntreprise').focus();
-  }
-
-  async function openClientModal(id) {
-    if (document.body.classList.contains('demo-mode')) return; // pas de fiche modifiable en démo
-    currentClientId = id;
-    const msg = document.getElementById('clientMsg');
-    msg.textContent = '';
-    msg.className = '';
-    document.getElementById('clientModalTitle').textContent = 'Fiche client';
-    document.getElementById('clientSubmitBtn').textContent = 'Enregistrer →';
-    document.getElementById('clientModalSub').textContent = 'Chargement…';
-    document.getElementById('clientDiagnostics').innerHTML = '';
-    clientModal.classList.add('open');
-
-    try {
-      const res = await fetch('/api/client-detail?id=' + encodeURIComponent(id));
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
-
-      document.getElementById('clientEntreprise').value = data.entreprise || '';
-      document.getElementById('clientContact').value = data.nomContact || '';
-      document.getElementById('clientSecteur').value = data.secteur || '';
-      document.getElementById('clientExterne').checked = !!data.signeExterne;
-      document.getElementById('clientExterneRow').style.display = 'flex';
-      document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
-      document.getElementById('deleteClientLink').style.display = 'block';
-      renderDiagnostics(data.diagnostics);
-    } catch (err) {
-      document.getElementById('clientModalSub').textContent = '';
-      msg.textContent = err.message;
-      msg.className = 'err';
-    }
-  }
-
-  document.getElementById('openCreateProspect').addEventListener('click', (e) => {
-    e.preventDefault();
-    openCreateProspectModal();
-  });
-
-  document.getElementById('cancelClientForm').addEventListener('click', () => {
-    clientModal.classList.remove('open');
-  });
-  clientModal.addEventListener('click', (e) => {
-    if (e.target === clientModal) clientModal.classList.remove('open');
-  });
-
-  document.getElementById('clientForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById('clientMsg');
-    msg.textContent = '';
-    msg.className = '';
-    const btn = document.getElementById('clientSubmitBtn');
-    const isCreate = !currentClientId;
-    btn.disabled = true;
-    btn.textContent = isCreate ? 'Création…' : 'Enregistrement…';
-
-    const payload = {
-      entreprise: document.getElementById('clientEntreprise').value,
-      nomContact: document.getElementById('clientContact').value,
-      secteur: document.getElementById('clientSecteur').value,
-      signeExterne: document.getElementById('clientExterne').checked
-    };
-    if (currentClientId) payload.id = currentClientId;
-
-    try {
-      const res = await fetch('/api/client-detail', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur');
-      msg.textContent = isCreate ? 'Prospect créé.' : 'Fiche mise à jour.';
-      msg.className = 'ok';
-      setTimeout(() => {
-        clientModal.classList.remove('open');
-        msg.textContent = '';
-        loadDashboard();
-      }, 900);
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'err';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = isCreate ? 'Créer →' : 'Enregistrer →';
-    }
-  });
-
-  document.getElementById('deleteClientLink').addEventListener('click', async (e) => {
-    e.preventDefault();
-    if (!currentClientId) return;
-    if (!confirm('Supprimer définitivement ce prospect ? Cette action est irréversible.')) return;
-
-    const msg = document.getElementById('clientMsg');
-    try {
-      const res = await fetch('/api/client-detail?id=' + encodeURIComponent(currentClientId), { method: 'DELETE' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur lors de la suppression.');
-      clientModal.classList.remove('open');
-      loadDashboard();
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'err';
-    }
-  });
-
-  // Modale "Détail du devis"
-  const devisDetailModal = document.getElementById('devisDetailModal');
-  const DEVIS_STATUT_LABEL = { 'Signé': 'Marquer comme signé', 'Perdu': 'Marquer comme perdu' };
-
-  async function openDevisDetailModal(id) {
-    if (document.body.classList.contains('demo-mode')) return;
-    const body = document.getElementById('devisDetailBody');
-    const msg = document.getElementById('devisDetailMsg');
-    msg.textContent = '';
-    msg.className = '';
-    document.getElementById('devisDetailSub').textContent = 'Chargement…';
-    body.innerHTML = '';
-    devisDetailModal.classList.add('open');
-
-    try {
-      const res = await fetch('/api/request-devis?id=' + encodeURIComponent(id));
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
-
-      document.getElementById('devisDetailSub').textContent = data.entreprise || '';
-
-      const badgeClass = STATUT_CLASS[data.statut] || 'aucun';
-      const actionsHtml = (data.transitions || []).map(s =>
-        `<button type="button" class="btn-modal-submit devis-transition-btn" data-statut="${s}" data-audit-id="${id}" style="margin-top:.6rem;width:100%;">${DEVIS_STATUT_LABEL[s] || s}</button>`
-      ).join('');
-
-      body.innerHTML = `
-        <label>Statut actuel</label>
-        <p style="margin-bottom:1rem;"><span class="badge ${badgeClass}">${data.statut}</span></p>
-        <label>Montant</label>
-        <p style="margin-bottom:1rem;font-weight:700;color:var(--chic);">${euros(data.montant)}</p>
-        <label>Besoin décrit</label>
-        <p style="margin-bottom:1rem;white-space:pre-wrap;color:var(--muted);">${data.description || '—'}</p>
-        ${actionsHtml}
-      `;
-
-      body.querySelectorAll('.devis-transition-btn').forEach(btn => {
-        btn.addEventListener('click', () => updateDevisStatus(btn.dataset.auditId, btn.dataset.statut));
-      });
-    } catch (err) {
-      document.getElementById('devisDetailSub').textContent = '';
-      msg.textContent = err.message;
-      msg.className = 'err';
-    }
-  }
-
-  async function updateDevisStatus(id, statut) {
-    const msg = document.getElementById('devisDetailMsg');
-    msg.textContent = 'Mise à jour…';
-    msg.className = '';
-    try {
-      const res = await fetch('/api/request-devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action: 'update-status', statut })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erreur');
-      msg.textContent = 'Statut mis à jour.';
-      msg.className = 'ok';
-      setTimeout(() => {
-        devisDetailModal.classList.remove('open');
-        msg.textContent = '';
-        loadDashboard();
-      }, 800);
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'err';
-    }
-  }
-
-  document.getElementById('closeDevisDetail').addEventListener('click', () => {
-    devisDetailModal.classList.remove('open');
-  });
-  devisDetailModal.addEventListener('click', (e) => {
-    if (e.target === devisDetailModal) devisDetailModal.classList.remove('open');
-  });
-</script>
-
-</body>
-</html>
+}
