@@ -91,7 +91,7 @@
       btn.textContent = 'Création en cours…';
 
       try {
-        const res = await fetch('/api/auth/set-password-with-token', {
+        const res = await fetch('/api/auth?action=set-password-with-token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token, password })
