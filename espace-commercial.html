@@ -108,20 +108,20 @@
   .link-card button.link-save { background: var(--nuit); color: #fff; border: none; border-radius: 8px; padding: .45rem .9rem; font-size: .8rem; font-weight: 600; cursor: pointer; }
   .link-card button.link-save:hover { background: var(--ouf-cta); }
   .link-card .link-status { font-size: .78rem; margin-left: .6rem; }
-  .dashboard-layout { display: flex; gap: 2.5rem; align-items: flex-start; }
-  .tab-nav { display: flex; flex-direction: column; gap: .25rem; width: 210px; flex-shrink: 0; padding-right: 1.5rem; border-right: 1px solid #E8E6E1; position: sticky; top: 1.5rem; }
-  .tab-btn { text-align: left; background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .92rem; font-weight: 600; color: var(--muted); padding: .75rem 1rem; cursor: pointer; border-radius: 10px; border-left: 3px solid transparent; }
-  .tab-btn:hover { color: var(--chic); background: var(--cream); }
-  .tab-btn.active { color: var(--chic); background: var(--lilas-l); border-left-color: var(--ouf-cta); }
+  .dashboard-layout { display: flex; gap: 2rem; align-items: flex-start; }
+  .tab-nav { display: flex; flex-direction: column; gap: .35rem; width: 220px; flex-shrink: 0; background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; padding: 1rem; position: sticky; top: 1.5rem; }
+  .tab-btn { display: flex; align-items: center; gap: .65rem; text-align: left; background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 600; color: var(--body); padding: .7rem .9rem; cursor: pointer; border-radius: 10px; }
+  .tab-btn .tab-icon { font-size: 1rem; flex-shrink: 0; width: 1.3rem; text-align: center; }
+  .tab-btn:hover { background: var(--cream); }
+  .tab-btn.active { color: var(--white); background: var(--chic); font-weight: 700; }
   .tab-btn[hidden] { display: none; }
   .dashboard-content { flex: 1; min-width: 0; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
   @media (max-width: 780px) {
     .dashboard-layout { flex-direction: column; gap: 1rem; }
-    .tab-nav { flex-direction: row; width: 100%; overflow-x: auto; border-right: none; border-bottom: 1px solid #E8E6E1; padding-right: 0; padding-bottom: .5rem; position: static; }
-    .tab-btn { border-left: none; border-bottom: 3px solid transparent; border-radius: 10px 10px 0 0; white-space: nowrap; }
-    .tab-btn.active { border-left-color: transparent; border-bottom-color: var(--ouf-cta); }
+    .tab-nav { flex-direction: row; width: 100%; overflow-x: auto; padding: .6rem; position: static; }
+    .tab-btn { white-space: nowrap; }
   }
   .stat-label { font-size: .78rem; color: var(--muted); margin-bottom: .4rem; }
   .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; color: var(--chic); }
@@ -244,14 +244,15 @@
   </div>
 
   <div class="dashboard-layout">
-  <nav class="tab-nav" id="tabNav">
-    <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
-    <button class="tab-btn" data-tab="liens">Mes liens</button>
-    <button class="tab-btn" data-tab="prospects">Prospects &amp; devis</button>
-    <button class="tab-btn" data-tab="catalogue">Catalogue &amp; ressources</button>
-    <button class="tab-btn" data-tab="reseau" id="tabBtnReseau" hidden>Réseau</button>
-    <button class="tab-btn" data-tab="compte">Mon compte</button>
-  </nav>
+  <div class="tab-nav" id="tabNav" role="tablist">
+    <button class="tab-btn active" data-tab="overview"><span class="tab-icon">🏠</span>Vue d'ensemble</button>
+    <button class="tab-btn" data-tab="liens"><span class="tab-icon">🔗</span>Mes liens</button>
+    <button class="tab-btn" data-tab="prospects"><span class="tab-icon">📋</span>Prospects &amp; devis</button>
+    <button class="tab-btn" data-tab="catalogue"><span class="tab-icon">📦</span>Catalogue &amp; ressources</button>
+    <button class="tab-btn" data-tab="outils"><span class="tab-icon">🛠️</span>Les outils</button>
+    <button class="tab-btn" data-tab="reseau" id="tabBtnReseau" hidden><span class="tab-icon">👥</span>Réseau</button>
+    <button class="tab-btn" data-tab="compte"><span class="tab-icon">⚙️</span>Mon compte</button>
+  </div>
 
   <div class="dashboard-content">
   <div class="tab-panel active" data-tab="overview">
@@ -447,6 +448,28 @@
     </div>
   </div>
 
+  </div>
+
+  <div class="tab-panel" data-tab="outils">
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Les outils</h2>
+    </div>
+    <div class="links-grid">
+      <div class="link-card">
+        <div class="link-label">Outil de diagnostic CAPE</div>
+        <div class="link-value"><a class="link-open" href="https://tally.so/r/68PxQB" target="_blank" rel="noopener">Ouvrir →</a></div>
+      </div>
+      <div class="link-card">
+        <div class="link-label">Site internet CHIC · OUF</div>
+        <div class="link-value"><a class="link-open" href="https://chicouf.pro" target="_blank" rel="noopener">Ouvrir →</a></div>
+      </div>
+      <div class="link-card">
+        <div class="link-label">Documentation de l'audit CAPE</div>
+        <div class="link-value"><a class="link-open" href="#" target="_blank" rel="noopener">À compléter</a></div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <div class="tab-panel" data-tab="compte">
