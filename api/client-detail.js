@@ -2,8 +2,10 @@
 //
 // Permet au commercial CONNECTÉ de :
 //  - créer un nouveau prospect (POST sans id) — automatiquement lié à lui
-//  - consulter la fiche d'un de SES clients, avec ses diagnostics CAPE liés (GET)
+//  - consulter la fiche d'un de SES clients : coordonnées, diagnostics CAPE liés
+//    (avec la recommandation de l'algorithme) et historique de ses devis (GET)
 //  - modifier la fiche d'un de SES clients (POST avec id)
+//  - supprimer un prospect sans devis lié (DELETE)
 //
 // L'appartenance est vérifiée à chaque lecture/modification (Clients.Consultant_ID
 // doit contenir l'ID du commercial connecté) — impossible de voir ou modifier
@@ -14,6 +16,7 @@ import { verifySession } from './_session.js';
 const AIRTABLE_BASE_ID = 'appPbx0vHGCSTE9wR';
 const CLIENTS_TABLE = 'tblPhDItWoYN7jgtA';
 const DIAGNOSTICS_TABLE = 'tblTeIGD63oOOHaob';
+const AUDITS_TABLE = 'tblrZJAmMBa2SKjSF';
 
 async function airtableFetch(path, apiKey, options = {}) {
   const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${path}`, {
@@ -48,9 +51,30 @@ async function fetchDiagnostics(diagnosticIds, apiKey) {
       niveau: d.fields.Niveau_Global || '',
       score: d.fields.Score_Global ?? null,
       famille: d.fields.Famille_4AI || '',
+      // Recommandation automatique de l'algorithme CAPE — un point de départ,
+      // pas ce qui a été réellement proposé (ça, c'est l'historique des devis).
+      offreRecommandee: d.fields['Offre proposée'] || '',
       lienRapport: d.fields['Lien rapport'] || ''
     }))
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+
+async function fetchAuditsHistory(auditIds, apiKey) {
+  if (!auditIds || auditIds.length === 0) return [];
+  const results = await Promise.all(
+    auditIds.map(id =>
+      airtableFetch(`${AUDITS_TABLE}/${id}`, apiKey).catch(() => null)
+    )
+  );
+  return results
+    .filter(Boolean)
+    .map(a => ({
+      id: a.id,
+      statut: a.fields.Statut || 'En attente',
+      montant: a.fields.Montant_HT || 0,
+      description: a.fields.Description_besoin || '',
+      dateSignature: a.fields.Date_Signature || null
+    }));
 }
 
 export default async function handler(req, res) {
@@ -65,7 +89,7 @@ export default async function handler(req, res) {
   try {
     // Création d'un nouveau prospect — pas d'id fourni
     if (req.method === 'POST' && !id) {
-      const { entreprise, nomContact, secteur } = req.body || {};
+      const { entreprise, nomContact, email, telephone, adresse, siteWeb, secteur } = req.body || {};
       if (!entreprise) return res.status(400).json({ error: 'Le nom de l\'entreprise est requis.' });
 
       const created = await airtableFetch(CLIENTS_TABLE, AIRTABLE_API_KEY, {
@@ -74,6 +98,10 @@ export default async function handler(req, res) {
           fields: {
             Entreprise: entreprise,
             Nom_contact: nomContact || '',
+            Email: email || '',
+            Telephone: telephone || '',
+            Adresse: adresse || '',
+            'Site web': siteWeb || '',
             Secteur: secteur || '',
             Consultant_ID: [session.sub]
           },
@@ -85,8 +113,13 @@ export default async function handler(req, res) {
         id: created.id,
         entreprise: created.fields.Entreprise || '',
         nomContact: created.fields.Nom_contact || '',
+        email: created.fields.Email || '',
+        telephone: created.fields.Telephone || '',
+        adresse: created.fields.Adresse || '',
+        siteWeb: created.fields['Site web'] || '',
         secteur: created.fields.Secteur || '',
-        diagnostics: []
+        diagnostics: [],
+        audits: []
       });
     }
 
@@ -98,19 +131,27 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
-      const diagnostics = await fetchDiagnostics(record.fields.Diagnostics, AIRTABLE_API_KEY);
+      const [diagnostics, audits] = await Promise.all([
+        fetchDiagnostics(record.fields.Diagnostics, AIRTABLE_API_KEY),
+        fetchAuditsHistory(record.fields.Audits, AIRTABLE_API_KEY)
+      ]);
       return res.status(200).json({
         id: record.id,
         entreprise: record.fields.Entreprise || '',
         nomContact: record.fields.Nom_contact || '',
+        email: record.fields.Email || '',
+        telephone: record.fields.Telephone || '',
+        adresse: record.fields.Adresse || '',
+        siteWeb: record.fields['Site web'] || '',
         secteur: record.fields.Secteur || '',
         signeExterne: !!record.fields.Signe_Externe,
-        diagnostics
+        diagnostics,
+        audits
       });
     }
 
     if (req.method === 'POST') {
-      const { entreprise, nomContact, secteur, signeExterne } = req.body || {};
+      const { entreprise, nomContact, email, telephone, adresse, siteWeb, secteur, signeExterne } = req.body || {};
       if (!entreprise) return res.status(400).json({ error: 'Le nom de l\'entreprise est requis.' });
 
       const updated = await airtableFetch(`${CLIENTS_TABLE}/${id}`, AIRTABLE_API_KEY, {
@@ -119,6 +160,10 @@ export default async function handler(req, res) {
           fields: {
             Entreprise: entreprise,
             Nom_contact: nomContact || '',
+            Email: email || '',
+            Telephone: telephone || '',
+            Adresse: adresse || '',
+            'Site web': siteWeb || '',
             Secteur: secteur || '',
             Signe_Externe: !!signeExterne
           },
@@ -126,14 +171,22 @@ export default async function handler(req, res) {
         })
       });
 
-      const diagnostics = await fetchDiagnostics(updated.fields.Diagnostics, AIRTABLE_API_KEY);
+      const [diagnostics, audits] = await Promise.all([
+        fetchDiagnostics(updated.fields.Diagnostics, AIRTABLE_API_KEY),
+        fetchAuditsHistory(updated.fields.Audits, AIRTABLE_API_KEY)
+      ]);
       return res.status(200).json({
         id: updated.id,
         entreprise: updated.fields.Entreprise || '',
         nomContact: updated.fields.Nom_contact || '',
+        email: updated.fields.Email || '',
+        telephone: updated.fields.Telephone || '',
+        adresse: updated.fields.Adresse || '',
+        siteWeb: updated.fields['Site web'] || '',
         secteur: updated.fields.Secteur || '',
         signeExterne: !!updated.fields.Signe_Externe,
-        diagnostics
+        diagnostics,
+        audits
       });
     }
 
