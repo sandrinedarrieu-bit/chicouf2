@@ -1195,8 +1195,15 @@
         <p style="margin-bottom:1rem;font-weight:700;color:var(--chic);">${euros(data.montant)}</p>
         <label>Besoin décrit</label>
         <p style="margin-bottom:1rem;white-space:pre-wrap;color:var(--muted);">${data.description || '—'}</p>
+        <label for="devisDateEnvoi">Date d'envoi du devis au prospect</label>
+        <div style="display:flex;gap:.5rem;margin-bottom:1rem;">
+          <input type="date" id="devisDateEnvoi" value="${data.dateEnvoi || ''}" style="flex:1;padding:.55rem .7rem;border:1.5px solid #E0DDD5;border-radius:8px;font-family:inherit;font-size:.85rem;" />
+          <button type="button" id="saveDateEnvoi" class="btn-modal-submit" style="width:auto;padding:.55rem 1rem;">Enregistrer</button>
+        </div>
         ${actionsHtml}
       `;
+
+      document.getElementById('saveDateEnvoi').addEventListener('click', () => saveDateEnvoi(id));
 
       body.querySelectorAll('.devis-transition-btn').forEach(btn => {
         btn.addEventListener('click', () => updateDevisStatus(btn.dataset.auditId, btn.dataset.statut));
@@ -1227,6 +1234,28 @@
         msg.textContent = '';
         loadDashboard();
       }, 800);
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'err';
+    }
+  }
+
+  async function saveDateEnvoi(id) {
+    const msg = document.getElementById('devisDetailMsg');
+    const date = document.getElementById('devisDateEnvoi').value;
+    if (!date) return;
+    msg.textContent = 'Enregistrement…';
+    msg.className = '';
+    try {
+      const res = await fetch('/api/request-devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, action: 'set-date-envoi', date })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erreur');
+      msg.textContent = 'Date enregistrée.';
+      msg.className = 'ok';
     } catch (err) {
       msg.textContent = err.message;
       msg.className = 'err';
