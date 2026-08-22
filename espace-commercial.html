@@ -226,6 +226,7 @@
   .audit-history-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .2rem; }
   .audit-history-montant { font-weight: 700; color: var(--chic); }
   .audit-history-desc { color: var(--muted); font-size: .78rem; }
+  .audit-history-card a { display: inline-block; margin-top: .4rem; color: var(--ouf-cta); font-weight: 600; text-decoration: none; font-size: .8rem; }
 
   @media (max-width: 900px) {
     .pipeline-grid { grid-template-columns: repeat(2,1fr); }
@@ -551,6 +552,7 @@
     <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
     <div id="clientDiagnostics"></div>
     <div id="clientAuditsHistory"></div>
+    <div id="clientCallHistory"></div>
     <div id="capeLinkSection" style="display:none;margin-bottom:1rem;">
       <button type="button" id="sendCapeBtn" class="btn-modal-submit" style="width:100%;">Envoyer le diagnostic CAPE</button>
       <div id="capeLinkResult" style="display:none;margin-top:.6rem;">
@@ -1040,6 +1042,25 @@
       </div>`).join('') + '</div>';
   }
 
+  function renderCallHistory(historiqueAppels) {
+    const box = document.getElementById('clientCallHistory');
+    if (!historiqueAppels || historiqueAppels.length === 0) {
+      box.innerHTML = '<label>Historique des appels</label><p class="diag-empty">Aucun appel enregistré pour le moment.</p>';
+      return;
+    }
+    box.innerHTML = '<label>Historique des appels</label><div class="audit-history-list">' + historiqueAppels.map(h => {
+      const dateStr = h.date ? new Date(h.date).toLocaleDateString('fr-FR') : '';
+      const lien = h.lienFathom ? `<a href="${h.lienFathom}" target="_blank" rel="noopener">Écouter l'enregistrement →</a>` : '';
+      return `<div class="audit-history-card">
+        <div class="audit-history-top">
+          <span class="audit-history-montant">${dateStr}</span>
+        </div>
+        <div class="audit-history-desc">${h.resume || '—'}</div>
+        ${lien}
+      </div>`;
+    }).join('') + '</div>';
+  }
+
   function openCreateProspectModal() {
     if (document.body.classList.contains('demo-mode')) return;
     currentClientId = null;
@@ -1052,6 +1073,7 @@
     document.getElementById('clientSubmitBtn').textContent = 'Créer →';
     document.getElementById('clientDiagnostics').innerHTML = '';
     document.getElementById('clientAuditsHistory').innerHTML = '';
+    document.getElementById('clientCallHistory').innerHTML = '';
     document.getElementById('deleteClientLink').style.display = 'none';
     document.getElementById('clientExterneRow').style.display = 'none';
     document.getElementById('capeLinkSection').style.display = 'none';
@@ -1071,6 +1093,7 @@
     document.getElementById('clientModalSub').textContent = 'Chargement…';
     document.getElementById('clientDiagnostics').innerHTML = '';
     document.getElementById('clientAuditsHistory').innerHTML = '';
+    document.getElementById('clientCallHistory').innerHTML = '';
     document.getElementById('capeLinkSection').style.display = 'none';
     document.getElementById('capeLinkResult').style.display = 'none';
     clientModal.classList.add('open');
@@ -1094,6 +1117,7 @@
       document.getElementById('capeLinkSection').style.display = 'block';
       renderDiagnostics(data.diagnostics);
       renderAuditsHistory(data.audits);
+      renderCallHistory(data.historiqueAppels);
     } catch (err) {
       document.getElementById('clientModalSub').textContent = '';
       msg.textContent = err.message;

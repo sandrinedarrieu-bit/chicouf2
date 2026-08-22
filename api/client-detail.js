@@ -17,6 +17,7 @@ const AIRTABLE_BASE_ID = 'appPbx0vHGCSTE9wR';
 const CLIENTS_TABLE = 'tblPhDItWoYN7jgtA';
 const DIAGNOSTICS_TABLE = 'tblTeIGD63oOOHaob';
 const AUDITS_TABLE = 'tblrZJAmMBa2SKjSF';
+const HISTORIQUE_TABLE = 'tbl2iu6bQ38Un4s8p';
 
 async function airtableFetch(path, apiKey, options = {}) {
   const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${path}`, {
@@ -55,6 +56,22 @@ async function fetchDiagnostics(diagnosticIds, apiKey) {
       // pas ce qui a été réellement proposé (ça, c'est l'historique des devis).
       offreRecommandee: d.fields['Offre proposée'] || '',
       lienRapport: d.fields['Lien rapport'] || ''
+    }))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+
+// Appels liés à ce client via le champ "Client" (lien vers Clients) de la table
+// Historique_appels — contrairement aux diagnostics/audits, ce lien n'est pas
+// stocké côté Clients, on interroge donc Historique_appels directement.
+async function fetchHistoriqueAppels(clientId, apiKey) {
+  const formula = encodeURIComponent(`FIND("${clientId}", ARRAYJOIN({Client}))`);
+  const data = await airtableFetch(`${HISTORIQUE_TABLE}?filterByFormula=${formula}`, apiKey);
+  return (data.records || [])
+    .map(h => ({
+      id: h.id,
+      date: h.fields.Date || '',
+      resume: h.fields.Resume || '',
+      lienFathom: h.fields.Lien_Fathom || ''
     }))
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
@@ -119,7 +136,8 @@ export default async function handler(req, res) {
         siteWeb: created.fields['Site web'] || '',
         secteur: created.fields.Secteur || '',
         diagnostics: [],
-        audits: []
+        audits: [],
+        historiqueAppels: []
       });
     }
 
@@ -131,9 +149,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
-      const [diagnostics, audits] = await Promise.all([
+      const [diagnostics, audits, historiqueAppels] = await Promise.all([
         fetchDiagnostics(record.fields.Diagnostics, AIRTABLE_API_KEY),
-        fetchAuditsHistory(record.fields.Audits, AIRTABLE_API_KEY)
+        fetchAuditsHistory(record.fields.Audits, AIRTABLE_API_KEY),
+        fetchHistoriqueAppels(record.id, AIRTABLE_API_KEY)
       ]);
       return res.status(200).json({
         id: record.id,
@@ -146,7 +165,8 @@ export default async function handler(req, res) {
         secteur: record.fields.Secteur || '',
         signeExterne: !!record.fields.Signe_Externe,
         diagnostics,
-        audits
+        audits,
+        historiqueAppels
       });
     }
 
@@ -171,9 +191,10 @@ export default async function handler(req, res) {
         })
       });
 
-      const [diagnostics, audits] = await Promise.all([
+      const [diagnostics, audits, historiqueAppels] = await Promise.all([
         fetchDiagnostics(updated.fields.Diagnostics, AIRTABLE_API_KEY),
-        fetchAuditsHistory(updated.fields.Audits, AIRTABLE_API_KEY)
+        fetchAuditsHistory(updated.fields.Audits, AIRTABLE_API_KEY),
+        fetchHistoriqueAppels(updated.id, AIRTABLE_API_KEY)
       ]);
       return res.status(200).json({
         id: updated.id,
@@ -186,7 +207,8 @@ export default async function handler(req, res) {
         secteur: updated.fields.Secteur || '',
         signeExterne: !!updated.fields.Signe_Externe,
         diagnostics,
-        audits
+        audits,
+        historiqueAppels
       });
     }
 
