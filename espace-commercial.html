@@ -551,6 +551,16 @@
     <p class="modal-sub" id="clientModalSub">Consultez et modifiez les informations de ce client.</p>
     <div id="clientDiagnostics"></div>
     <div id="clientAuditsHistory"></div>
+    <div id="capeLinkSection" style="display:none;margin-bottom:1rem;">
+      <button type="button" id="sendCapeBtn" class="btn-modal-submit" style="width:100%;">Envoyer le diagnostic CAPE</button>
+      <div id="capeLinkResult" style="display:none;margin-top:.6rem;">
+        <label for="capeLinkInput">Lien à transmettre au prospect</label>
+        <div style="display:flex;gap:.5rem;">
+          <input type="text" id="capeLinkInput" readonly style="flex:1;padding:.55rem .7rem;border:1.5px solid #E0DDD5;border-radius:8px;font-family:inherit;font-size:.8rem;" />
+          <button type="button" id="copyCapeLinkBtn" class="btn-modal-cancel" style="width:auto;padding:.55rem 1rem;">Copier le lien</button>
+        </div>
+      </div>
+    </div>
     <form id="clientForm">
       <label for="clientEntreprise">Entreprise *</label>
       <input type="text" id="clientEntreprise" required />
@@ -1044,6 +1054,8 @@
     document.getElementById('clientAuditsHistory').innerHTML = '';
     document.getElementById('deleteClientLink').style.display = 'none';
     document.getElementById('clientExterneRow').style.display = 'none';
+    document.getElementById('capeLinkSection').style.display = 'none';
+    document.getElementById('capeLinkResult').style.display = 'none';
     clientModal.classList.add('open');
     document.getElementById('clientEntreprise').focus();
   }
@@ -1059,6 +1071,8 @@
     document.getElementById('clientModalSub').textContent = 'Chargement…';
     document.getElementById('clientDiagnostics').innerHTML = '';
     document.getElementById('clientAuditsHistory').innerHTML = '';
+    document.getElementById('capeLinkSection').style.display = 'none';
+    document.getElementById('capeLinkResult').style.display = 'none';
     clientModal.classList.add('open');
 
     try {
@@ -1077,6 +1091,7 @@
       document.getElementById('clientExterneRow').style.display = 'flex';
       document.getElementById('clientModalSub').textContent = 'Consultez et modifiez les informations de ce client.';
       document.getElementById('deleteClientLink').style.display = 'block';
+      document.getElementById('capeLinkSection').style.display = 'block';
       renderDiagnostics(data.diagnostics);
       renderAuditsHistory(data.audits);
     } catch (err) {
@@ -1142,6 +1157,36 @@
       btn.disabled = false;
       btn.textContent = isCreate ? 'Créer →' : 'Enregistrer →';
     }
+  });
+
+  function buildCapeDiagnosticLink() {
+    const params = new URLSearchParams({
+      client_id: currentClientId || '',
+      entreprise: document.getElementById('clientEntreprise').value || '',
+      contact: document.getElementById('clientContact').value || '',
+      email: document.getElementById('clientEmail').value || ''
+    });
+    return `https://tally.so/r/68PxQB?${params.toString()}`;
+  }
+
+  document.getElementById('sendCapeBtn').addEventListener('click', () => {
+    if (!currentClientId) return;
+    document.getElementById('capeLinkInput').value = buildCapeDiagnosticLink();
+    document.getElementById('capeLinkResult').style.display = 'block';
+  });
+
+  document.getElementById('copyCapeLinkBtn').addEventListener('click', async () => {
+    const input = document.getElementById('capeLinkInput');
+    const btn = document.getElementById('copyCapeLinkBtn');
+    try {
+      await navigator.clipboard.writeText(input.value);
+    } catch {
+      input.select();
+      document.execCommand('copy');
+    }
+    const original = btn.textContent;
+    btn.textContent = 'Copié !';
+    setTimeout(() => { btn.textContent = original; }, 1500);
   });
 
   document.getElementById('deleteClientLink').addEventListener('click', async (e) => {
