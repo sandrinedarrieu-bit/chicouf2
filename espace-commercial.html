@@ -237,6 +237,60 @@
     .catalog-grid { grid-template-columns: 1fr; }
     .two-col-bottom { grid-template-columns: 1fr; }
   }
+
+  /* prospects commerciaux (admin) */
+  .prospects-row { display: flex; align-items: center; padding: .85rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .82rem; gap: .5rem; min-width: 1000px; }
+  .prospects-row:last-child { border-bottom: none; }
+  .prospects-row.head { background: var(--cream); font-size: .7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+  .prospects-row .p-nom { flex: 1.1; font-weight: 600; color: var(--body); }
+  .prospects-row .p-email { flex: 1.3; color: var(--muted); font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .prospects-row .p-tel { flex: .9; color: var(--muted); font-size: .78rem; }
+  .prospects-row .p-date { flex: .8; color: var(--muted); font-size: .78rem; }
+  .prospects-row .p-relances { flex: .8; display: flex; gap: .3rem; }
+  .prospects-row .p-statut { flex: 1.1; }
+  .prospects-row .p-cgv { flex: .5; text-align: center; }
+  .prospects-row .p-contrat { flex: .9; color: var(--muted); font-size: .78rem; }
+  .prospects-row .p-action { flex: 1; text-align: right; }
+  .relance-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #E0DDD5; }
+  .relance-dot.sent { background: #1A7F4F; }
+  .decision-select { border: 1.5px solid #E0DDD5; border-radius: 8px; padding: .35rem .5rem; font-family: inherit; font-size: .8rem; background: var(--white); color: var(--body); }
+  .decision-select:disabled { opacity: .6; }
+  .btn-send-link { background: var(--ouf-cta); color: #fff; border: none; border-radius: 8px; padding: .4rem .8rem; font-size: .78rem; font-weight: 600; cursor: pointer; }
+  .btn-send-link:hover { background: var(--ouf-cta-hover); }
+  .btn-send-link:disabled { opacity: .6; cursor: default; }
+
+  /* suivi CA / paiement (admin) */
+  .ca-mois-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
+  .ca-mois-card { background: var(--white); border: 1px solid #E8E6E1; border-radius: 12px; padding: 1rem 1.1rem; }
+  .ca-mois-label { font-size: .74rem; color: var(--muted); margin-bottom: .3rem; text-transform: capitalize; }
+  .ca-mois-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--chic); }
+  .paiements-row { display: flex; align-items: center; padding: .85rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .85rem; gap: .5rem; min-width: 700px; }
+  .paiements-row:last-child { border-bottom: none; }
+  .paiements-row.head { background: var(--cream); font-size: .72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+  .paiements-row .pay-nom { flex: 1.4; font-weight: 600; color: var(--body); }
+  .paiements-row .pay-origine { flex: 1; }
+  .paiements-row .pay-type { flex: 1.2; color: var(--muted); }
+  .paiements-row .pay-montant { flex: .8; font-weight: 600; color: var(--chic); }
+  .paiements-row .pay-date { flex: .9; color: var(--muted); font-size: .8rem; }
+  .paiements-row .pay-statut { flex: .8; }
+  .badge.rejete { background: #FBE4E1; color: #B3261E; }
+
+  /* bandeau actions à faire (admin) */
+  .actions-banner { background: var(--white); border: 1px solid #E8E6E1; border-radius: 14px; margin-bottom: 2rem; overflow: hidden; }
+  .actions-banner-head { background: var(--nuit); color: #fff; padding: .7rem 1.2rem; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .actions-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .87rem; cursor: pointer; }
+  .actions-row:last-child { border-bottom: none; }
+  .actions-row:hover { background: var(--cream); }
+  .actions-row .actions-arrow { color: var(--ouf-cta); font-weight: 700; flex-shrink: 0; }
+  .actions-row.empty { cursor: default; color: var(--muted); font-style: italic; }
+  .actions-row.empty:hover { background: none; }
+  .row-flash { animation: rowFlash 1.6s ease; }
+  @keyframes rowFlash { 0% { background: #FFF3D6; } 100% { background: transparent; } }
+
+  /* toast de confirmation */
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--nuit); color: #fff; padding: .8rem 1.4rem; border-radius: 10px; font-size: .87rem; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 2000; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: #B3261E; }
 </style>
 </head>
 <body>
@@ -268,6 +322,8 @@
     <button class="tab-btn active" data-tab="overview"><span class="tab-icon">🏠</span>Vue d'ensemble</button>
     <button class="tab-btn" data-tab="liens"><span class="tab-icon">🔗</span>Mes liens</button>
     <button class="tab-btn" data-tab="prospects"><span class="tab-icon">📋</span>Prospects &amp; devis</button>
+    <button class="tab-btn" data-tab="prospects-commerciaux" id="tabProspectsCommerciaux" hidden><span class="tab-icon">🧑‍💼</span>Prospects commerciaux</button>
+    <button class="tab-btn" data-tab="paiements" id="tabPaiements" hidden><span class="tab-icon">💳</span>Suivi CA / Paiement</button>
     <button class="tab-btn" data-tab="catalogue"><span class="tab-icon">📦</span>Catalogue &amp; ressources</button>
     <button class="tab-btn" data-tab="outils"><span class="tab-icon">🛠️</span>Les outils</button>
     <button class="tab-btn" data-tab="compte"><span class="tab-icon">⚙️</span>Mon compte</button>
@@ -275,6 +331,12 @@
 
   <div class="dashboard-content">
   <div class="tab-panel active" data-tab="overview">
+  <div class="actions-banner" id="actionsBanner" style="display:none;">
+    <div class="actions-banner-head">🔔 Actions à faire</div>
+    <div id="actionsBannerBody">
+      <div class="actions-row empty">Chargement…</div>
+    </div>
+  </div>
   <div class="admin-box" id="adminBox">
     <div class="admin-label">🔐 Outils admin — visible uniquement par toi</div>
     <div class="admin-links">
@@ -327,6 +389,10 @@
       <div class="link-card">
         <div class="link-label">Contrat d'adhésion</div>
         <div class="link-value"><a class="link-open" href="contrat-adhesion-commercial.html" target="_blank" rel="noopener">Ouvrir →</a></div>
+      </div>
+      <div class="link-card">
+        <div class="link-label">CGV</div>
+        <div class="link-value"><a class="link-open" href="cgv.html" target="_blank" rel="noopener">Ouvrir →</a></div>
       </div>
       <div class="link-card">
         <div class="link-label">Calendly</div>
@@ -397,6 +463,62 @@
         <span class="r-histo"></span>
       </div>
       <div class="reseau-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="tab-panel" data-tab="prospects-commerciaux">
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Prospects commerciaux</h2>
+    </div>
+    <div class="reseau-table" id="prospectsTable" style="overflow-x:auto;">
+      <div class="prospects-row head">
+        <span class="p-nom">Nom</span>
+        <span class="p-email">Email</span>
+        <span class="p-tel">Téléphone</span>
+        <span class="p-date">1er échange</span>
+        <span class="p-relances">Relances</span>
+        <span class="p-statut">Décision</span>
+        <span class="p-cgv">CGV</span>
+        <span class="p-contrat">Contrat envoyé</span>
+        <span class="p-contrat">Signature</span>
+        <span class="p-action">Dashboard</span>
+      </div>
+      <div class="prospects-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="tab-panel" data-tab="paiements">
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>CA par mois</h2>
+    </div>
+    <div class="ca-mois-grid" id="caMoisGrid">
+      <div class="ca-mois-card"><div class="ca-mois-label">Chargement…</div></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <div class="section-block-head">
+      <h2>Paiements</h2>
+      <div class="people-filter" id="paiementsFilter">
+        <button class="people-filter-btn active" data-filter="tout">Tout</button>
+        <button class="people-filter-btn" data-filter="Commercial">Commerciaux</button>
+        <button class="people-filter-btn" data-filter="Client CAPE">Clients CAPE</button>
+      </div>
+    </div>
+    <div class="reseau-table" id="paiementsTable" style="overflow-x:auto;">
+      <div class="paiements-row head">
+        <span class="pay-nom">Nom</span>
+        <span class="pay-origine">Origine</span>
+        <span class="pay-type">Type</span>
+        <span class="pay-montant">Montant</span>
+        <span class="pay-date">Date</span>
+        <span class="pay-statut">Statut</span>
+      </div>
+      <div class="paiements-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
     </div>
   </div>
   </div>
@@ -608,6 +730,8 @@
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
   const STATUT_CLASS = {
     'En attente': 'attente',
@@ -619,9 +743,23 @@
     'Externe': 'externe'
   };
   const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Payé', 'Perdu'];
+  const PROSPECT_STATUT_CLASS = { 'Nouveau candidat': 'aucun', 'RDV pris': 'envoye', 'Candidat non engagé': 'perdu', 'Actif': 'externe' };
+  const DECISION_OPTIONS = ['Accepté', 'À revoir', 'Refusé'];
+  const ORIGINE_CLASS = { 'Commercial': 'envoye', 'Client CAPE': 'externe' };
+  const PAIEMENT_STATUT_CLASS = { 'OK': 'paye', 'Rejeté': 'rejete' };
 
   function euros(n) {
     return Math.round(n || 0).toLocaleString('fr-FR') + ' €';
+  }
+
+  let toastTimer = null;
+  function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    clearTimeout(toastTimer);
+    toast.textContent = message;
+    toast.classList.toggle('error', type === 'error');
+    toast.classList.add('visible');
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 3000);
   }
 
   function renderPipeline(pipeline) {
@@ -805,7 +943,12 @@
       if (data.isAdmin) {
         document.getElementById('adminBox').classList.add('visible');
         document.getElementById('filterCommerciaux').hidden = false;
+        document.getElementById('tabProspectsCommerciaux').hidden = false;
+        document.getElementById('tabPaiements').hidden = false;
         loadReseau();
+        loadProspects();
+        loadPaiements();
+        loadActionsBanner();
       }
 
       document.getElementById('statClients').textContent = data.kpis.nbClients;
@@ -854,14 +997,240 @@
     input.value = value || '';
   }
 
+  function activateTab(target, flashIds) {
+    const btn = document.querySelector(`.tab-btn[data-tab="${target}"]`);
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === target));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (flashIds && flashIds.length) {
+      // Les tableaux se rechargent en async — on laisse le temps au rendu avant de surligner.
+      setTimeout(() => {
+        flashIds.forEach(id => {
+          const row = document.querySelector(`[data-row-id="${id}"]`);
+          if (row) row.classList.add('row-flash');
+        });
+      }, 300);
+    }
+  }
+
+  // --- Bandeau "Actions à faire" (admin) ---
+  async function loadActionsBanner() {
+    const banner = document.getElementById('actionsBanner');
+    const body = document.getElementById('actionsBannerBody');
+    banner.style.display = 'block';
+    try {
+      const res = await fetch('/api/admin/commerciaux-list?resource=actions');
+      if (!res.ok) throw new Error('Erreur de chargement');
+      const data = await res.json();
+      const actions = data.actions || [];
+
+      if (actions.length === 0) {
+        body.innerHTML = '<div class="actions-row empty">Rien ne nécessite ton attention aujourd\'hui.</div>';
+        return;
+      }
+
+      body.innerHTML = actions.map((a, i) => `
+        <div class="actions-row" data-idx="${i}">
+          <span>${a.message}</span>
+          <span class="actions-arrow">→</span>
+        </div>
+      `).join('');
+
+      body.querySelectorAll('.actions-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const action = actions[row.dataset.idx];
+          activateTab(action.targetTab, action.targetIds);
+        });
+      });
+    } catch (err) {
+      body.innerHTML = '<div class="actions-row empty">Erreur de chargement.</div>';
+    }
+  }
+
+  // --- Prospects commerciaux (admin) ---
+  function renderRelanceDots(relances) {
+    return `
+      <span class="relance-dot ${relances.h4 ? 'sent' : ''}" title="Relance 4h : ${relances.h4 ? 'envoyée' : 'non envoyée'}"></span>
+      <span class="relance-dot ${relances.h24 ? 'sent' : ''}" title="Relance 24h : ${relances.h24 ? 'envoyée' : 'non envoyée'}"></span>
+      <span class="relance-dot ${relances.j3 ? 'sent' : ''}" title="Relance 3j : ${relances.j3 ? 'envoyée' : 'non envoyée'}"></span>
+    `;
+  }
+
+  function checkOrDash(value) {
+    return value
+      ? '<span style="color:#1A7F4F;font-weight:700;">✓</span>'
+      : '<span style="color:var(--muted);">—</span>';
+  }
+
+  async function loadProspects() {
+    const table = document.getElementById('prospectsTable');
+    try {
+      const res = await fetch('/api/admin/commerciaux-list?resource=prospects');
+      if (!res.ok) throw new Error('Erreur de chargement');
+      const data = await res.json();
+      const prospects = data.prospects || [];
+
+      const rows = prospects.map(p => {
+        const dateStr = p.dateRDV ? new Date(p.dateRDV).toLocaleDateString('fr-FR') : '—';
+        const statutCell = DECISION_OPTIONS.includes(p.statut)
+          ? `<select class="decision-select" data-id="${p.id}">
+              ${DECISION_OPTIONS.map(o => `<option value="${o}" ${o === p.statut ? 'selected' : ''}>${o}</option>`).join('')}
+            </select>`
+          : `<span class="badge ${PROSPECT_STATUT_CLASS[p.statut] || 'aucun'}">${p.statut || '—'}</span>`;
+        const contratEnvoye = p.dateEnvoiContrat ? new Date(p.dateEnvoiContrat).toLocaleDateString('fr-FR') : '—';
+        const dateSignature = p.dateSignatureContrat ? new Date(p.dateSignatureContrat).toLocaleDateString('fr-FR') : '—';
+        const dashboardCell = p.dashboardEnvoye
+          ? checkOrDash(true)
+          : `<button type="button" class="btn-send-link" data-id="${p.id}">Envoyer</button>`;
+
+        return `<div class="prospects-row" data-row-id="${p.id}">
+          <span class="p-nom">${p.prenom || ''} ${p.nom || ''}</span>
+          <span class="p-email">${p.email ? `<a href="mailto:${p.email}">${p.email}</a>` : '—'}</span>
+          <span class="p-tel">${p.telephone || '—'}</span>
+          <span class="p-date">${dateStr}</span>
+          <span class="p-relances">${renderRelanceDots(p.relances)}</span>
+          <span class="p-statut">${statutCell}</span>
+          <span class="p-cgv">${checkOrDash(p.cgvAcceptees)}</span>
+          <span class="p-contrat">${contratEnvoye}</span>
+          <span class="p-contrat">${dateSignature}</span>
+          <span class="p-action">${dashboardCell}</span>
+        </div>`;
+      }).join('');
+
+      table.innerHTML = `
+        <div class="prospects-row head">
+          <span class="p-nom">Nom</span>
+          <span class="p-email">Email</span>
+          <span class="p-tel">Téléphone</span>
+          <span class="p-date">1er échange</span>
+          <span class="p-relances">Relances</span>
+          <span class="p-statut">Décision</span>
+          <span class="p-cgv">CGV</span>
+          <span class="p-contrat">Contrat envoyé</span>
+          <span class="p-contrat">Signature</span>
+          <span class="p-action">Dashboard</span>
+        </div>
+        ${prospects.length ? rows : '<div class="prospects-row"><span style="color:var(--muted);font-style:italic;">Aucun prospect pour le moment.</span></div>'}
+      `;
+
+      table.querySelectorAll('.decision-select').forEach(select => {
+        const previous = select.value;
+        select.addEventListener('change', async () => {
+          const statut = select.value;
+          select.disabled = true;
+          try {
+            const res = await fetch('/api/admin/commerciaux-list', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'update-statut', id: select.dataset.id, statut })
+            });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.error || 'Erreur');
+            showToast('Statut mis à jour');
+            loadProspects();
+            loadActionsBanner();
+          } catch (err) {
+            select.value = previous;
+            select.disabled = false;
+            showToast(err.message || 'Erreur lors de la mise à jour', 'error');
+          }
+        });
+      });
+
+      table.querySelectorAll('.btn-send-link').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          btn.textContent = 'Envoi…';
+          try {
+            const res = await fetch('/api/admin/commerciaux-list', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'send-dashboard-link', id: btn.dataset.id })
+            });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.error || 'Erreur');
+            showToast('Lien envoyé');
+            loadProspects();
+          } catch (err) {
+            btn.disabled = false;
+            btn.textContent = 'Envoyer';
+            showToast(err.message || 'Erreur lors de l\'envoi', 'error');
+          }
+        });
+      });
+    } catch (err) {
+      table.innerHTML = '<div class="prospects-row"><span style="color:var(--muted);">Erreur de chargement.</span></div>';
+    }
+  }
+
+  // --- Suivi CA / Paiement (admin) ---
+  let paiementsCache = [];
+  function renderPaiementsTable(filter) {
+    const table = document.getElementById('paiementsTable');
+    const list = filter && filter !== 'tout' ? paiementsCache.filter(p => p.origine === filter) : paiementsCache;
+
+    const rows = list.map(p => `
+      <div class="paiements-row" data-row-id="${p.id}">
+        <span class="pay-nom">${p.nomComplet || '—'}</span>
+        <span class="pay-origine"><span class="badge ${ORIGINE_CLASS[p.origine] || 'aucun'}">${p.origine || '—'}</span></span>
+        <span class="pay-type">${p.typePaiement || '—'}</span>
+        <span class="pay-montant">${euros(p.montant)}</span>
+        <span class="pay-date">${p.datePaiement ? new Date(p.datePaiement).toLocaleDateString('fr-FR') : '—'}</span>
+        <span class="pay-statut"><span class="badge ${PAIEMENT_STATUT_CLASS[p.statutPaiement] || 'aucun'}">${p.statutPaiement || '—'}</span></span>
+      </div>
+    `).join('');
+
+    table.innerHTML = `
+      <div class="paiements-row head">
+        <span class="pay-nom">Nom</span>
+        <span class="pay-origine">Origine</span>
+        <span class="pay-type">Type</span>
+        <span class="pay-montant">Montant</span>
+        <span class="pay-date">Date</span>
+        <span class="pay-statut">Statut</span>
+      </div>
+      ${list.length ? rows : '<div class="paiements-row"><span style="color:var(--muted);font-style:italic;">Aucun paiement pour le moment.</span></div>'}
+    `;
+  }
+
+  async function loadPaiements() {
+    const grid = document.getElementById('caMoisGrid');
+    const table = document.getElementById('paiementsTable');
+    try {
+      const res = await fetch('/api/admin/commerciaux-list?resource=paiements');
+      if (!res.ok) throw new Error('Erreur de chargement');
+      const data = await res.json();
+      paiementsCache = data.paiements || [];
+
+      grid.innerHTML = (data.caParMois || []).map(m => `
+        <div class="ca-mois-card">
+          <div class="ca-mois-label">${m.mois}</div>
+          <div class="ca-mois-value">${euros(m.total)}</div>
+        </div>
+      `).join('');
+
+      const activeFilter = document.querySelector('#paiementsFilter .people-filter-btn.active');
+      renderPaiementsTable(activeFilter ? activeFilter.dataset.filter : 'tout');
+    } catch (err) {
+      grid.innerHTML = '<div class="ca-mois-card"><div class="ca-mois-label">Erreur de chargement.</div></div>';
+      table.innerHTML = '<div class="paiements-row"><span style="color:var(--muted);">Erreur de chargement.</span></div>';
+    }
+  }
+
+  document.getElementById('paiementsFilter').addEventListener('click', (e) => {
+    const btn = e.target.closest('.people-filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#paiementsFilter .people-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    renderPaiementsTable(btn.dataset.filter);
+  });
+
   document.getElementById('tabNav').addEventListener('click', (e) => {
     const btn = e.target.closest('.tab-btn');
     if (!btn) return;
     const target = btn.dataset.tab;
 
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === target));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    activateTab(target);
   });
 
   document.getElementById('peopleFilter').addEventListener('click', (e) => {
