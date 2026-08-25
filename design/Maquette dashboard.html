@@ -1,0 +1,2480 @@
+
+Maquette dashboard · HTML
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maquette V4 — Espace commercial — filtres colonnes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --nuit:  #2C2C3E;
+    --chic:  #2D1F6E;
+    --ouf:   #7B5CF0;
+    --lilas: #A78BFA;
+    --or:    #F59E0B;
+    --cream: #F8F7F4;
+    --body:  #3D3D3D;
+    --muted: #8A8A8A;
+    --white: #FFFFFF;
+    --line:  #EFEDE7;
+    --ok-bg: #E3F3EA; --ok-fg: #1F7A4D; --ok-bd: #B7E2C9;
+    --warn-bg: #FEF3E2; --warn-fg: #B5720B; --warn-bd: #F7D89A;
+    --bad-bg: #FBE9E7; --bad-fg: #B4402F; --bad-bd: #F3C1BA;
+    --review-bg: #EDEBFA; --review-fg: #5B3FBF; --review-bd: #D4CCF5;
+  }
+  body { font-family: 'DM Sans', sans-serif; color: var(--body); background: var(--cream); line-height: 1.5; }
+ 
+  .mockup-bar { background: var(--nuit); color: rgba(255,255,255,.85); font-size: .78rem; padding: .6rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .mockup-bar strong { color: var(--lilas); }
+  .mockup-bar .tag { background: rgba(255,255,255,.12); padding: .2rem .6rem; border-radius: 20px; font-size: .72rem; }
+ 
+  .layout { display: flex; min-height: 100vh; }
+ 
+  aside { width: 240px; flex-shrink: 0; background: var(--white); border-right: 1px solid var(--line); padding: 2rem 1rem; }
+  .brand { display: flex; align-items: center; gap: 8px; font-family: 'Georgia', serif; font-weight: 700; letter-spacing: .06em; color: var(--chic); font-size: .95rem; padding: 0 .5rem; margin-bottom: .3rem; }
+  .brand span { color: var(--ouf); }
+  .eyebrow { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 0 .5rem; margin-bottom: 1.5rem; }
+ 
+  nav { display: flex; flex-direction: column; gap: .2rem; }
+  nav button { all: unset; cursor: pointer; display: flex; align-items: center; gap: .65rem; padding: .65rem .75rem; border-radius: 10px; font-size: .85rem; font-weight: 500; color: var(--body); }
+  nav button:hover { background: var(--cream); }
+  nav button.active { background: var(--chic); color: var(--white); }
+  nav button .ico { font-size: 1rem; width: 1.2rem; text-align: center; }
+ 
+  main { flex: 1 1 auto; min-width: 0; width: 0; padding: 2.2rem clamp(1.5rem, 4vw, 3rem); max-width: none; }
+  .greet-eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ouf); }
+  h1.page-title { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: clamp(1.6rem, 3vw, 2rem); margin-top: .3rem; }
+ 
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 2rem 0 1rem; flex-wrap: wrap; gap: .5rem; }
+  h2.section-title { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1.15rem; }
+  .section-sub { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+ 
+  .kpi-row { display: flex; gap: .8rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .kpi { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: .8rem 1.1rem; font-size: .78rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; cursor: pointer; transition: border-color .15s; }
+  .kpi:hover { border-color: var(--lilas); }
+  .kpi .n { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--chic); }
+  .kpi.alert .n { color: var(--bad-fg); }
+ 
+  .filter-row { display: flex; gap: .5rem; flex-wrap:wrap; margin-bottom:1rem; }
+  .section-head-actions { display:flex; align-items:center; gap:.6rem; }
+  .new-prospect-btn { border:0; cursor:pointer; background:var(--chic); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700; padding:.62rem .9rem; border-radius:9px; white-space:nowrap; }
+  .new-prospect-btn:hover { background:#3a2a84; }
+  .th-filter-wrap { display:flex; align-items:center; gap:.3rem; min-height:24px; position:relative; }
+  .th-filter-label { display:inline-flex; align-items:center; gap:.25rem; }
+  .th-filter-btn { all:unset; cursor:pointer; font-size:.78rem; line-height:1; color:#AAA6A0; padding:.15rem; border-radius:4px; }
+  .th-filter-btn:hover, .th-filter-btn.active { color:var(--ouf); background:var(--review-bg); }
+  .column-filter { display:none; width:112px; min-width:0; font-family:'DM Sans',sans-serif; font-size:.74rem; font-weight:500; color:var(--body); background:var(--white); border:1px solid #E4E1DA; border-radius:7px; padding:.34rem .42rem; text-transform:none; letter-spacing:0; }
+  .column-filter.email-filter { width:160px; }
+  .column-filter.tel-filter { width:120px; }
+  .column-filter.open { display:block; }
+  .column-filter::placeholder { color:#AAA6A0; }
+  .column-filter:focus { outline:2px solid var(--lilas); outline-offset:1px; border-color:transparent; }
+  .empty-row td { text-align:center; padding:2rem 1rem; color:var(--muted); cursor:default; }
+  .create-form { display:flex; flex-direction:column; gap:.8rem; margin-top:1.2rem; }
+  .create-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+  .create-form label { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); display:flex; flex-direction:column; gap:.3rem; }
+  .create-form input, .create-form select, .create-form textarea { width:100%; font-family:'DM Sans',sans-serif; font-size:.84rem; color:var(--body); background:var(--white); border:1px solid var(--line); border-radius:8px; padding:.58rem .65rem; }
+  .create-form textarea { min-height:82px; resize:vertical; }
+  .create-form input:focus, .create-form select:focus, .create-form textarea:focus { outline:2px solid var(--lilas); outline-offset:1px; }
+  .create-actions { display:flex; gap:.6rem; margin-top:.3rem; }
+  .create-save { border:0; cursor:pointer; flex:1; background:var(--chic); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.84rem; font-weight:700; padding:.72rem 1rem; border-radius:9px; }
+  .create-cancel { border:1px solid var(--line); cursor:pointer; background:var(--white); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:600; padding:.72rem .9rem; border-radius:9px; }
+  .create-help { font-size:.76rem; color:var(--muted); line-height:1.45; }
+  .filter-btn { all: unset; cursor: pointer; font-size: .8rem; font-weight: 600; padding: .5rem 1rem; border-radius: 20px; border: 1px solid var(--line); background: var(--white); color: var(--muted); }
+  .filter-btn:hover { border-color: var(--lilas); }
+  .filter-btn.active { background: var(--chic); color: var(--white); border-color: var(--chic); }
+ 
+  .reseau-tag { font-size: .66rem; font-weight: 700; padding: .15rem .5rem; border-radius: 20px; text-transform: uppercase; letter-spacing: .03em; }
+  .reseau-tag.recrutement { background: var(--review-bg); color: var(--review-fg); }
+  .reseau-tag.actif { background: var(--ok-bg); color: var(--ok-fg); }
+  .reseau-tag.sortie { background: var(--bad-bg); color: var(--bad-fg); }
+  .reseau-tag.nonengage { background: var(--warn-bg); color: var(--warn-fg); }
+  .reseau-tag.abandon { background: #F3F0FD; color: var(--review-fg); }
+ 
+  .fiche-btn { all: unset; cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--ouf); white-space: nowrap; }
+  .fiche-btn:hover { text-decoration: underline; }
+ 
+  /* Bouton strictement réservé au détail des commissions.
+     Ne partage aucune classe ni aucun handler avec « Voir la fiche ». */
+  .commission-detail-btn { all: unset; cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--ouf); white-space: nowrap; }
+  .commission-detail-btn:hover { text-decoration: underline; }
+ 
+  .subscription-status { display:inline-flex; align-items:center; gap:.35rem; font-size:.72rem; font-weight:700; padding:.28rem .55rem; border-radius:999px; white-space:nowrap; }
+  .subscription-status.ok { background:var(--ok-bg); color:var(--ok-fg); }
+  .subscription-status.bad { background:var(--bad-bg); color:var(--bad-fg); }
+  .subscription-status.blocked { background:var(--warn-bg); color:var(--warn-fg); }
+  .commission-block-alert { margin:1rem 0; padding:.9rem 1rem; border:1px solid #efb0b0; background:var(--bad-bg); color:var(--bad-fg); border-radius:12px; font-size:.8rem; line-height:1.45; }
+  .commission-block-alert strong { display:block; margin-bottom:.2rem; }
+  .commission-payout-btn { border:0; cursor:pointer; background:var(--ouf); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700; padding:.58rem .9rem; border-radius:8px; }
+  .commission-payout-btn:disabled { background:#d8d4cf; color:#8a8580; cursor:not-allowed; }
+  .commission-report-tools { margin: 1.15rem 0 1.35rem; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; }
+  .commission-report-tools label { display:block; font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:.45rem; }
+  .commission-report-row { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+  .commission-month-select { flex:1; min-width:170px; font-family:'DM Sans',sans-serif; font-size:.82rem; border:1px solid var(--line); border-radius:8px; padding:.55rem .65rem; background:var(--white); color:var(--body); }
+  .commission-pdf-btn { border:0; cursor:pointer; background:var(--chic); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700; padding:.58rem .9rem; border-radius:8px; }
+  .commission-pdf-btn:hover { opacity:.92; }
+  .commission-email-btn { border:1px solid var(--line); background:var(--cream); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:600; padding:.58rem .9rem; border-radius:8px; cursor:not-allowed; }
+  .commission-report-help { font-size:.72rem; color:var(--muted); margin-top:.55rem; }
+  .commission-month-summary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; margin:.85rem 0 1rem; }
+  .commission-month-summary .mini { background:var(--white); border:1px solid var(--line); border-radius:9px; padding:.65rem .75rem; font-size:.72rem; color:var(--muted); }
+  .commission-month-summary .mini strong { display:block; font-family:'Syne',sans-serif; color:var(--chic); font-size:.95rem; margin-bottom:.1rem; }
+ 
+  .table-wrap { background: var(--white); border: 1px solid var(--line); border-radius: 14px; overflow-x: auto; }
+  #tab-content-suivi-ca table { min-width: 1180px; }
+  .reseau-period-bar { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin: .2rem 0 1rem; }
+  .reseau-period-bar .period-copy { font-size:.78rem; color:var(--muted); }
+  .reseau-period-select { font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:600; color:var(--body); background:var(--white); border:1px solid var(--line); border-radius:9px; padding:.52rem .75rem; min-width:175px; }
+  .money-payable { color:var(--ok-fg); font-weight:700; }
+  .money-blocked { color:var(--bad-fg); font-weight:700; }
+  .money-zero { color:var(--muted); }
+  .payment-warning { display:block; margin-top:.25rem; font-size:.68rem; color:var(--warn-fg); font-weight:600; }
+ 
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  thead th { text-align: left; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: .85rem 1rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  tbody td { padding: .85rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: #FCFBF9; }
+  td.name { font-weight: 600; color: var(--nuit); }
+  td a.mail { color: var(--ouf); text-decoration: underline; font-size: .82rem; }
+  .muted-cell { color: var(--muted); }
+ 
+  .badge { font-size: .68rem; font-weight: 700; padding: .22rem .6rem; border-radius: 20px; border: 1px solid; white-space: nowrap; display: inline-block; }
+  .badge.ok { background: var(--ok-bg); color: var(--ok-fg); border-color: var(--ok-bd); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn-fg); border-color: var(--warn-bd); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad-fg); border-color: var(--bad-bd); }
+  .badge.review { background: var(--review-bg); color: var(--review-fg); border-color: var(--review-bd); }
+ 
+  select.decision-select {
+    font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 600;
+    padding: .4rem .6rem; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--white); color: var(--body); cursor: pointer;
+    min-width: 130px;
+  }
+  select.decision-select.st-accepte { border-color: var(--ok-bd); background: var(--ok-bg); color: var(--ok-fg); }
+  select.decision-select.st-revoir { border-color: var(--review-bd); background: var(--review-bg); color: var(--review-fg); }
+  select.decision-select.st-refuse { border-color: var(--bad-bd); background: var(--bad-bg); color: var(--bad-fg); }
+  select.decision-select.st-attente { border-color: var(--or); background: #FFF8ED; color: var(--warn-fg); font-weight: 700; }
+ 
+  .save-toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    background: var(--nuit); color: var(--white); font-size: .82rem;
+    padding: .7rem 1.1rem; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    opacity: 0; transform: translateY(8px); transition: opacity .25s, transform .25s; pointer-events: none;
+    display: flex; align-items: center; gap: .5rem; z-index: 200;
+  }
+  .save-toast.show { opacity: 1; transform: translateY(0); }
+  .save-toast .dotpulse { width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; }
+ 
+  .annot { margin-top: .6rem; font-size: .76rem; color: var(--muted); font-style: italic; border-left: 2px solid var(--lilas); padding-left: .6rem; }
+ 
+  .placeholder-panel { background: var(--white); border: 1px dashed #D8D5CE; border-radius: 14px; padding: 2.5rem; text-align: center; color: var(--muted); font-size: .88rem; }
+  .placeholder-panel strong { display: block; color: var(--chic); font-family: 'Syne', sans-serif; font-size: 1rem; margin-bottom: .4rem; }
+ 
+  .overlay { position: fixed; inset: 0; background: rgba(44,44,62,.45); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 100; }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+ 
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100vh; width: min(480px, 92vw);
+    background: var(--cream); box-shadow: -12px 0 32px rgba(0,0,0,.15);
+    transform: translateX(100%); transition: transform .25s ease; z-index: 101;
+    overflow-y: auto; padding: 2rem 1.6rem 3rem;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-close { all: unset; cursor: pointer; float: right; font-size: 1.3rem; color: var(--muted); line-height: 1; padding: .2rem .4rem; }
+  .drawer-close:hover { color: var(--nuit); }
+  .drawer h3 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1.3rem; margin-top: .3rem; }
+  .drawer .sub-line { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+  .drawer .sub-line a { color: var(--ouf); }
+ 
+  .info-block { margin-top: .5rem; }
+  .edit-btn { all: unset; cursor: pointer; font-size: .76rem; font-weight: 600; color: var(--ouf); margin-top: .5rem; display: inline-block; }
+  .edit-btn:hover { text-decoration: underline; }
+  .info-edit { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1rem; margin-top: .6rem; display: flex; flex-direction: column; gap: .7rem; }
+  .info-edit label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); display: flex; flex-direction: column; gap: .3rem; }
+  .info-edit input { font-family: 'DM Sans', sans-serif; font-size: .84rem; font-weight: 500; color: var(--body); padding: .5rem .6rem; border-radius: 8px; border: 1px solid var(--line); }
+  .info-edit input:focus { outline: 2px solid var(--lilas); outline-offset: 1px; }
+  .edit-actions { display: flex; gap: .6rem; margin-top: .2rem; }
+  .edit-save { all: unset; cursor: pointer; font-size: .8rem; font-weight: 700; color: var(--white); background: var(--chic); padding: .5rem 1rem; border-radius: 8px; }
+  .edit-cancel { all: unset; cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--muted); padding: .5rem .6rem; }
+  .edit-cancel:hover { color: var(--nuit); }
+ 
+  .drawer-decision { margin-top: 1.2rem; padding: 1rem; background: var(--white); border-radius: 12px; border: 1px solid var(--line); }
+  .drawer-decision label { font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: .5rem; }
+  .followup-card { margin-top:.7rem; padding:1rem; background:var(--white); border:1px solid var(--line); border-radius:12px; display:flex; flex-direction:column; gap:.85rem; }
+  .followup-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+  .followup-card label { font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); display:flex; flex-direction:column; gap:.35rem; }
+  .followup-card input, .followup-card textarea, .followup-card select { width:100%; font-family:'DM Sans',sans-serif; font-size:.84rem; color:var(--body); background:var(--white); border:1px solid var(--line); border-radius:8px; padding:.55rem .62rem; }
+  .followup-card textarea { min-height:92px; resize:vertical; line-height:1.45; }
+  .followup-card input:focus, .followup-card textarea:focus, .followup-card select:focus { outline:2px solid var(--lilas); outline-offset:1px; border-color:transparent; }
+  .followup-save { border:0; cursor:pointer; align-self:flex-start; background:var(--chic); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700; padding:.58rem .9rem; border-radius:8px; }
+  .followup-help { font-size:.74rem; color:var(--muted); margin-top:-.25rem; }
+ 
+  .drawer h4.block-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--chic); margin: 1.8rem 0 .8rem; }
+ 
+  .timeline { display: flex; flex-direction: column; }
+  .tl-step { display: flex; gap: .8rem; position: relative; padding-bottom: 1.3rem; }
+  .tl-step:last-child { padding-bottom: 0; }
+  .tl-marker { width: 22px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .68rem; font-weight: 800; border: 2px solid #D8D5CE; background: var(--white); color: transparent; z-index: 2; }
+  .tl-line { width: 2px; flex: 1; background: #E2E0DA; margin-top: 2px; }
+  .tl-step.done .tl-dot { background: var(--ok-fg); border-color: var(--ok-fg); color: var(--white); }
+  .tl-step.done .tl-line { background: var(--ok-fg); }
+  .tl-step.current .tl-dot { background: var(--or); border-color: var(--or); color: var(--white); }
+  .tl-step.blocked .tl-dot { border-color: var(--bad-fg); }
+  .tl-step.blocked .tl-title { color: var(--bad-fg); }
+  .tl-step.paused .tl-dot { background: var(--review-fg); border-color: var(--review-fg); border-style: dashed; }
+  .tl-step.paused .tl-title { color: var(--review-fg); }
+  .tl-step.paused .tl-line { background: repeating-linear-gradient(to bottom, var(--review-fg) 0 4px, transparent 4px 8px); }
+  .tl-body { flex: 1; padding-top: 1px; }
+  .tl-title { font-size: .86rem; font-weight: 600; color: var(--nuit); }
+  .tl-step.pending .tl-title { color: var(--muted); font-weight: 500; }
+  .tl-date { font-size: .74rem; color: var(--muted); margin-top: .1rem; }
+  .tl-date-row { display: flex; align-items: center; gap: .5rem; margin-top: .1rem; }
+  .tl-relances { display: flex; align-items: center; gap: 5px; margin-top: .35rem; }
+  .relance-dot { width: 8px; height: 8px; border-radius: 50%; background: #E2E0DA; flex-shrink: 0; }
+  .relance-dot.sent { background: var(--or); }
+  .tl-relances-label { font-size: .68rem; color: var(--muted); margin-left: .2rem; }
+ 
+  .tl-eval-empty { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: .3rem; }
+  .tl-eval-compact { display: flex; align-items: center; gap: .6rem; margin-top: .4rem; flex-wrap: wrap; }
+  .tl-eval-score { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--chic); }
+  .tl-eval-max { font-size: .72rem; font-weight: 500; color: var(--muted); }
+  .tl-eval-btn { all: unset; cursor: pointer; font-size: .76rem; font-weight: 600; color: var(--ouf); }
+  .tl-eval-btn:hover { text-decoration: underline; }
+  .tl-eval-detail { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: .8rem .9rem; margin-top: .5rem; }
+  .tl-eval-link { font-size: .74rem; color: var(--ouf); margin-top: .6rem; }
+  .eval-crit-row { display: flex; align-items: center; gap: .6rem; margin-top: .4rem; }
+  .eval-crit-label { font-size: .76rem; color: var(--body); width: 130px; flex-shrink: 0; }
+  .eval-crit-bar { flex: 1; height: 6px; border-radius: 4px; background: #EFEDE7; overflow: hidden; }
+  .eval-crit-fill { height: 100%; background: var(--ouf); border-radius: 4px; }
+  .eval-crit-val { font-size: .74rem; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+  .tl-eval-cr { font-size: .8rem; color: var(--body); line-height: 1.5; margin-top: .3rem; }
+ 
+  .comm-summary { display: flex; gap: .8rem; margin-top: 1.2rem; }
+  .comm-summary-item { flex: 1; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: .9rem 1rem; font-size: .78rem; color: var(--muted); }
+  .comm-summary-item .n { display: block; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--chic); }
+  .comm-summary-item.alert .n { color: var(--bad-fg); }
+  .ledger { display: flex; flex-direction: column; gap: .5rem; }
+  .ledger-row { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .9rem; display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; }
+  .ledger-main { display: flex; flex-direction: column; }
+  .ledger-client { font-size: .84rem; font-weight: 600; color: var(--nuit); }
+  .ledger-date { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+  .ledger-amounts { display: flex; align-items: center; gap: .6rem; }
+  .ledger-montant { font-size: .76rem; color: var(--muted); }
+  .tl-edit-btn { all: unset; cursor: pointer; font-size: .72rem; opacity: .55; }
+  .tl-edit-btn:hover { opacity: 1; }
+  .tl-date-edit { display: flex; align-items: center; gap: .5rem; margin-top: .2rem; }
+  .tl-date-edit input { font-family: 'DM Sans', sans-serif; font-size: .78rem; padding: .3rem .5rem; border-radius: 6px; border: 1px solid var(--line); }
+  .tl-date-edit button { all: unset; cursor: pointer; font-size: .74rem; font-weight: 700; padding: .3rem .6rem; border-radius: 6px; }
+  .tl-date-save { background: var(--chic); color: var(--white); }
+  .tl-date-cancel { color: var(--muted); }
+ 
+  .eval-card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; }
+  .eval-score-row { display: flex; align-items: center; gap: .8rem; }
+  .eval-score { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--chic); }
+  .eval-reco { font-size: .72rem; }
+  .eval-list { margin-top: .8rem; font-size: .8rem; }
+  .eval-list .lbl { font-weight: 700; font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: .6rem; }
+  .eval-list ul { margin: .3rem 0 0 1.1rem; }
+  .eval-empty { font-size: .82rem; color: var(--muted); }
+ 
+  .full-toggle { all: unset; cursor: pointer; display: block; margin-top: 1.8rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--chic); }
+  .full-toggle:hover { color: var(--ouf); }
+  .full-fields { margin-top: 1rem; }
+  .ff-group { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: .8rem 1rem; margin-bottom: .8rem; }
+  .ff-group-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: .5rem; }
+  .ff-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .4rem 0; border-bottom: 1px dashed var(--line); font-size: .8rem; }
+  .ff-row:last-child { border-bottom: none; }
+  .ff-label { color: var(--muted); flex-shrink: 0; }
+  .ff-value { color: var(--nuit); font-weight: 500; text-align: right; display: flex; align-items: center; gap: .4rem; }
+  .ff-locked { color: var(--muted); font-style: italic; cursor: help; }
+  .ff-edit-btn { all: unset; cursor: pointer; font-size: .7rem; opacity: .5; }
+  .ff-edit-btn:hover { opacity: 1; }
+  .ff-row-edit { display: flex; align-items: center; gap: .5rem; }
+  .ff-row-edit input { font-family: 'DM Sans', sans-serif; font-size: .78rem; padding: .3rem .5rem; border-radius: 6px; border: 1px solid var(--line); width: 140px; }
+  .ff-row-edit button { all: unset; cursor: pointer; font-size: .72rem; font-weight: 700; padding: .25rem .55rem; border-radius: 6px; }
+  .ff-row-save { background: var(--chic); color: var(--white); }
+  .ff-row-cancel { color: var(--muted); }
+ 
+  .kpi-title { width:100%; font-family:'Syne', sans-serif; font-weight:800; color:var(--chic); font-size:.86rem; margin-bottom:.2rem; }
+  .kpi.filter-active { outline:2px solid var(--lilas); outline-offset:2px; }
+  .next-action { font-size:.78rem; font-weight:600; color:var(--chic); white-space:nowrap; }
+  .next-action.alert { color:var(--bad-fg); }
+  .next-action { display:inline-flex; align-items:center; gap:.35rem; }
+  .next-action.action-required { color:var(--bad-fg); font-weight:700; }
+  .next-action.automation { color:var(--review-fg); }
+  .next-action.waiting { color:var(--warn-fg); }
+  .next-action.anomaly { color:var(--bad-fg); font-weight:800; }
+  .next-action.done-state { color:var(--ok-fg); }
+  .kpi.action-required .n { color:var(--bad-fg); }
+  .kpi.automation .n { color:var(--review-fg); }
+  .kpi.waiting .n { color:var(--warn-fg); }
+  .kpi.anomaly { border-color:var(--bad-bd); background:var(--bad-bg); }
+  .kpi.anomaly .n { color:var(--bad-fg); }
+  .phase-label { font-size:.66rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--ouf); margin:.2rem 0 .7rem 2.35rem; }
+  .drawer-primary-action { width:100%; border:0; cursor:pointer; margin-top:1rem; background:var(--chic); color:var(--white); font-family:'DM Sans', sans-serif; font-weight:700; font-size:.84rem; padding:.75rem 1rem; border-radius:10px; }
+  .drawer-primary-action:hover { background:#3a2a84; }
+  .drawer-secondary-actions { display:flex; gap:.6rem; margin-top:.6rem; }
+  .drawer-secondary-actions button { flex:1; border:1px solid var(--line); background:var(--white); color:var(--body); cursor:pointer; padding:.55rem .7rem; border-radius:8px; font-family:'DM Sans', sans-serif; font-size:.78rem; font-weight:600; }
+  .action-panel { margin-top:.7rem; background:var(--white); border:1px solid var(--line); border-radius:12px; padding:.9rem; }
+  .action-panel-title { font-size:.76rem; font-weight:700; color:var(--chic); margin-bottom:.6rem; }
+  .action-choice-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .action-choice { border:1px solid var(--line); background:var(--white); cursor:pointer; padding:.55rem .7rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.76rem; font-weight:700; }
+  .action-choice.ok { background:var(--ok-bg); color:var(--ok-fg); border-color:var(--ok-bd); }
+  .action-choice.review { background:var(--review-bg); color:var(--review-fg); border-color:var(--review-bd); }
+  .action-choice.bad { background:var(--bad-bg); color:var(--bad-fg); border-color:var(--bad-bd); }
+  .kpi.overdue .n { color:var(--bad-fg); }
+  .kpi.filter-active { outline:2px solid var(--ouf); outline-offset:1px; }
+ 
+ 
+  .payout-proof { margin-top:.75rem; background:var(--white); border:1px solid var(--line); border-radius:10px; padding:.8rem .9rem; font-size:.78rem; }
+  .payout-proof strong { color:var(--chic); }
+  .payout-ref-row { display:flex; gap:.55rem; align-items:center; flex-wrap:wrap; margin-top:.55rem; }
+  .payout-ref-row input { font-family:'DM Sans',sans-serif; font-size:.78rem; padding:.42rem .55rem; border:1px solid var(--line); border-radius:8px; min-width:190px; }
+ 
+ 
+  /* V6.1 — Prospects & clients */
+  #tab-content-prospects-clients table { min-width: 1180px; }
+  .client-kpi-title { width:100%; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; font-weight:800; color:var(--muted); margin-bottom:.2rem; }
+  .client-filter-row { display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0; }
+  .client-filter-btn { border:1px solid var(--line); background:var(--white); color:var(--body); padding:.45rem .75rem; border-radius:999px; cursor:pointer; font:600 .75rem 'DM Sans',sans-serif; }
+  .client-filter-btn.active { background:var(--chic); color:var(--white); border-color:var(--chic); }
+  .client-origin { display:inline-flex; align-items:center; gap:.3rem; font-size:.7rem; font-weight:700; padding:.2rem .5rem; border-radius:999px; }
+  .client-origin.direct { background:#F0EDFF; color:var(--chic); }
+  .client-origin.reseau { background:#E8F4FF; color:#175D8B; }
+  .client-route.external { background:#F3F4F6; color:#58606B; }
+  .client-route.chicouf { background:#F3F0FD; color:var(--ouf); }
+  .client-stage { font-size:.74rem; line-height:1.35; }
+  .client-stage strong { display:block; color:var(--nuit); }
+  .client-stage small { color:var(--muted); }
+  .client-alert { background:#FFF5E7; border:1px solid #F5D29A; color:#8A5A0A; border-radius:10px; padding:.75rem .85rem; margin:.8rem 0; font-size:.78rem; }
+  .client-rule { background:#F7F6FB; border-left:3px solid var(--ouf); padding:.75rem .9rem; margin:1rem 0; border-radius:0 9px 9px 0; font-size:.78rem; color:var(--body); }
+  .client-action-bar { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem; }
+  .client-primary-btn, .client-secondary-btn, .client-danger-btn { border:0; border-radius:9px; padding:.58rem .8rem; font:700 .76rem 'DM Sans',sans-serif; cursor:pointer; }
+  .client-primary-btn { background:var(--chic); color:var(--white); }
+  .client-secondary-btn { background:#F0EDFF; color:var(--chic); }
+  .client-danger-btn { background:#FCEAE7; color:#A33D30; }
+  .client-primary-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .client-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+  .client-form-grid .full { grid-column:1/-1; }
+  .client-form-grid label { display:flex; flex-direction:column; gap:.28rem; font-size:.7rem; font-weight:700; color:var(--muted); }
+  .client-form-grid input, .client-form-grid select, .client-form-grid textarea { width:100%; font-family:'DM Sans',sans-serif; font-size:.78rem; border:1px solid var(--line); border-radius:8px; padding:.48rem .55rem; background:var(--white); color:var(--body); }
+  .client-form-grid textarea { min-height:72px; resize:vertical; }
+  .quote-card { background:#FAF9FF; border:1px solid #DDD6FE; border-radius:11px; padding:.85rem; margin-top:.8rem; }
+  .quote-card .quote-title { color:var(--chic); font-weight:800; font-size:.8rem; margin-bottom:.5rem; }
+  .client-search { max-width:220px; border:1px solid var(--line); border-radius:8px; padding:.42rem .55rem; font: .75rem 'DM Sans',sans-serif; }
+ 
+ 
+  /* V6.5 — correction réelle du débordement du tableau Clients */
+  #tab-content-prospects-clients { min-width:0; max-width:100%; }
+  .client-table-wrap{
+    display:block;
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:visible;
+    position:relative;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-gutter:stable;
+  }
+  .client-table{
+    width:max-content;
+    min-width:1420px;
+    table-layout:auto;
+  }
+  .client-table th,
+  .client-table td{
+    background:var(--white);
+  }
+  .client-table th:nth-child(1){min-width:155px;}
+  .client-table th:nth-child(2){min-width:105px;}
+  .client-table th:nth-child(3){min-width:110px;}
+  .client-table th:nth-child(4){min-width:105px;}
+  .client-table th:nth-child(5){min-width:150px;}
+  .client-table th:nth-child(6){min-width:155px;}
+  .client-table th:nth-child(7){min-width:145px;}
+  .client-table th:nth-child(8){min-width:145px;}
+  .client-table th:nth-child(9){min-width:155px;}
+  .client-table .client-action-col{
+    position:sticky;
+    right:0;
+    z-index:6;
+    min-width:125px;
+    width:125px;
+    background:var(--white);
+    border-left:1px solid var(--line);
+    box-shadow:-8px 0 12px -10px rgba(44,31,110,.45);
+  }
+  .client-table thead .client-action-col{z-index:8;}
+  .client-table tbody tr:hover .client-action-col{background:#FCFBF9;}
+  .client-table .fiche-btn{white-space:nowrap;}
+  .client-table-wrap::-webkit-scrollbar{height:11px;}
+  .client-table-wrap::-webkit-scrollbar-track{background:#F0EEE8;border-radius:999px;}
+  .client-table-wrap::-webkit-scrollbar-thumb{background:#BEB7AD;border-radius:999px;border:2px solid #F0EEE8;}
+ 
+ 
+  .th-search-wrap{display:flex;align-items:center;gap:.35rem;white-space:nowrap;}
+  .th-search-btn{all:unset;cursor:pointer;font-size:.85rem;color:var(--muted);line-height:1;padding:.12rem .2rem;border-radius:4px;}
+  .th-search-btn:hover,.th-search-btn.active{color:var(--chic);background:#F1EDFF;}
+  .th-search-box{margin-top:.35rem;}
+  .th-search-box input{width:100%;min-width:115px;font-family:'DM Sans',sans-serif;font-size:.72rem;padding:.38rem .45rem;border:1px solid var(--line);border-radius:7px;background:var(--white);}
+ 
+ 
+  .ca-search-btn{font-size:.78rem!important;}
+  .ca-sort-btn{all:unset;display:inline-flex;align-items:center;gap:.3rem;cursor:pointer;font:inherit;font-weight:inherit;color:inherit;}
+  .ca-sort-btn:hover,.ca-sort-btn.active{color:var(--chic);}
+  .ca-sort-icon{font-size:.78rem;font-weight:700;}
+ 
+ 
+  .ca-filter-head{display:flex;align-items:center;gap:.35rem;position:relative;}
+  .ca-filter-btn{all:unset;cursor:pointer;font-size:.8rem;padding:.1rem .25rem;border-radius:5px;color:var(--muted);}
+  .ca-filter-btn:hover,.ca-filter-btn.active{color:var(--chic);background:#F1EDFF;}
+  .ca-filter-btn:disabled{opacity:.35;cursor:not-allowed;background:transparent;}
+  th:has(.ca-filter-menu){position:relative;}
+  .ca-filter-menu{position:absolute;top:calc(100% - 3px);left:.5rem;z-index:30;min-width:150px;padding:.3rem;background:var(--white);border:1px solid var(--line);border-radius:9px;box-shadow:0 8px 24px rgba(35,29,65,.14);}
+  .ca-filter-menu button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:.48rem .55rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.75rem;cursor:pointer;color:var(--nuit);}
+  .ca-filter-menu button:hover,.ca-filter-menu button.active{background:#F3F0FF;color:var(--chic);font-weight:700;}
+ 
+ 
+  #tab-content-suivi-ca .th-search-wrap{display:flex;align-items:center;gap:.35rem;}
+  #ca-commercial-search-btn{cursor:pointer;pointer-events:auto;position:relative;z-index:4;}
+  #ca-commercial-search-box{margin-top:.35rem;position:relative;z-index:5;}
+  #ca-commercial-search-input{min-width:165px;width:100%;font-family:'DM Sans',sans-serif;font-size:.75rem;padding:.4rem .5rem;border:1px solid var(--line);border-radius:7px;background:var(--white);color:var(--nuit);}
+ 
+</style>
+  <!-- Génération des relevés PDF de commissions -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+ 
+<div class="mockup-bar">
+  <div>🖌️ <strong>Maquette de travail</strong> — rien n'est connecté à Airtable, tout est en mémoire locale (JS).</div>
+  <div class="tag">Maquette V6.20 — Réseau + Clients + CA</div>
+</div>
+ 
+<div class="layout">
+  <aside>
+    <div class="brand"><span>C</span>HIC · OUF</div>
+    <div class="eyebrow">Espace commerci'al</div>
+    <nav id="main-nav">
+      <button class="ico-btn" data-tab="vue-ensemble"><span class="ico">🏠</span> Vue d'ensemble</button>
+      <button class="ico-btn" data-tab="prospects-clients"><span class="ico">📋</span> Prospects et clients</button>
+      <button class="ico-btn active" data-tab="prospects-commerciaux"><span class="ico">🧑‍💼</span> Prospects et commerciaux</button>
+      <button class="ico-btn" data-tab="suivi-ca"><span class="ico">💳</span> Suivi CA / Paiement</button>
+      <button class="ico-btn" data-tab="catalogue"><span class="ico">📦</span> Catalogue &amp; ressources</button>
+      <button class="ico-btn" data-tab="mes-liens"><span class="ico">🔗</span> Mes liens</button>
+      <button class="ico-btn" data-tab="outils"><span class="ico">🛠️</span> Les outils</button>
+      <button class="ico-btn" data-tab="compte"><span class="ico">⚙️</span> Mon compte</button>
+    </nav>
+  </aside>
+ 
+  <main>
+    <div class="greet-eyebrow">Espace commerci'al</div>
+    <h1 class="page-title">Bonjour Sandrine 👋</h1>
+ 
+    <div id="tab-content-built">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Prospects et commerciaux</h2>
+        <div class="section-sub">Pilote ici les prospects, la contractualisation et l'activation. Les alertes te montrent immédiatement ce qui demande une action.</div>
+      </div>
+      <div class="section-head-actions">
+        <button class="new-prospect-btn" id="new-prospect-btn">+ Nouveau prospect</button>
+      </div>
+    </div>
+ 
+    <div class="filter-row" id="filter-row"></div>
+ 
+    <div class="kpi-row" id="kpi-row"></div>
+ 
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Statut</th>
+            <th><div class="th-filter-wrap"><span class="th-filter-label" id="label-nom">Nom <button class="th-filter-btn" data-filter-toggle="nom" title="Rechercher par nom">⌕</button></span><input class="column-filter" id="filter-nom" type="search" autocomplete="off" placeholder="Nom…" aria-label="Filtrer par nom"></div></th>
+            <th><div class="th-filter-wrap"><span class="th-filter-label" id="label-prenom">Prénom <button class="th-filter-btn" data-filter-toggle="prenom" title="Rechercher par prénom">⌕</button></span><input class="column-filter" id="filter-prenom" type="search" autocomplete="off" placeholder="Prénom…" aria-label="Filtrer par prénom"></div></th>
+            <th><div class="th-filter-wrap"><span class="th-filter-label" id="label-email">Email <button class="th-filter-btn" data-filter-toggle="email" title="Rechercher par email">⌕</button></span><input class="column-filter email-filter" id="filter-email" type="search" autocomplete="off" placeholder="Email…" aria-label="Filtrer par email"></div></th>
+            <th><div class="th-filter-wrap"><span class="th-filter-label" id="label-tel">Téléphone <button class="th-filter-btn" data-filter-toggle="tel" title="Rechercher par téléphone">⌕</button></span><input class="column-filter tel-filter" id="filter-tel" type="search" autocomplete="off" placeholder="Téléphone…" aria-label="Filtrer par téléphone"></div></th>
+            <th>Décision</th>
+            <th>Contrat</th>
+            <th>Étape en cours</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+ 
+    <div class="annot">
+      💬 V4.7 : le dashboard distingue ce qui demande ton intervention de ce qui est géré par Make ou dépend d’un tiers. Seule la décision Accepté / À revoir / Refusé est une action manuelle ici ; les autres étapes sont surveillées automatiquement.
+    </div>
+ 
+    <div class="placeholder-panel">
+      <strong>Clients CAPE en direct</strong>
+      À venir dans cette même maquette.
+    </div>
+    </div>
+ 
+ 
+ 
+    <div id="tab-content-prospects-clients" style="display:none;">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Prospects et clients</h2>
+          <div class="section-sub">Pilotage des dossiers clients depuis le CAPE jusqu’au règlement. Le statut commercial de référence est celui de la table Audits.</div>
+        </div>
+        <div class="section-head-actions">
+          <button class="new-prospect-btn" id="new-client-btn">+ Nouveau prospect / client</button>
+        </div>
+      </div>
+ 
+      <div class="client-rule">
+        <strong>Règle du circuit :</strong>
+        CAPE / Audit → qualification → éventuelle demande de devis CHIC · OUF → devis Studeria envoyé → décision du client → prestation Studeria → règlement client.
+        Une commission n’existe que pour un dossier <strong>rattaché à un commercial</strong>, avec <strong>Audit = Signé</strong> et sur le <strong>montant réellement encaissé</strong>.
+        Les clients CHIC · OUF directs (commercial : Sandrine Darrieu) et les solutions externes ne génèrent aucune commission. Le suivi des règlements et commissions reste dans l’onglet Suivi CA / Paiement.
+      </div>
+ 
+      <div class="kpi-row" id="client-kpi-row"></div>
+ 
+      <div class="table-wrap client-table-wrap">
+        <table class="client-table">
+          <thead>
+            <tr>
+              <th>
+                <div class="th-search-wrap"><span>Entreprise / contact</span><button class="th-search-btn" data-client-search-field="entreprise" aria-label="Rechercher par entreprise ou contact">⌕</button></div>
+                <div class="th-search-box" data-client-search-box="entreprise" style="display:none;"><input type="search" data-client-search-input="entreprise" placeholder="Entreprise ou contact…"></div>
+              </th>
+              <th>
+                <div class="th-search-wrap"><span>Origine</span><button class="th-search-btn" data-client-search-field="origine" aria-label="Rechercher par origine">⌕</button></div>
+                <div class="th-search-box" data-client-search-box="origine" style="display:none;"><input type="search" data-client-search-input="origine" placeholder="Direct ou commercial…"></div>
+              </th>
+              <th>
+                <div class="th-search-wrap"><span>Commercial</span><button class="th-search-btn" data-client-search-field="commercial" aria-label="Rechercher par commercial">⌕</button></div>
+                <div class="th-search-box" data-client-search-box="commercial" style="display:none;"><input type="search" data-client-search-input="commercial" placeholder="Nom du commercial…"></div>
+              </th>
+              <th>Solution proposée</th>
+              <th>Devis Studeria</th>
+              <th>Décision devis</th>
+              <th>Prochaine étape</th>
+              <th class="client-action-col">Fiche</th>
+            </tr>
+          </thead>
+          <tbody id="client-rows"></tbody>
+        </table>
+      </div>
+ 
+      <div class="annot">
+        💬 V6.7 : <strong>Clients</strong> = identité et coordonnées · <strong>Audits</strong> = statut du dossier, demande et devis ·
+        <strong>Paiements</strong> = suivis dans l’onglet Suivi CA / Paiement. Toute solution <strong>CHIC · OUF / Studeria</strong> implique automatiquement une demande de devis (<strong>Audits.Demande_devis</strong>). La décision Accepté / Refusé est saisie directement dans la colonne <strong>Décision devis</strong>. CAPE/Audit et le besoin détaillé restent dans la fiche client. Les recherches Entreprise, Origine et Commercial s’ouvrent via les loupes des en-têtes.
+      </div>
+    </div>
+ 
+    <div id="tab-content-suivi-ca" style="display:none;">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Suivi CA / Paiement</h2>
+          <div class="section-sub">Uniquement les commerciaux actifs, les audits signés et les paiements clients encaissés. Le CA et les commissions sont calculés sur les paiements clients réellement encaissés : un impayé ne génère aucune commission.</div>
+        </div>
+      </div>
+ 
+      <div class="reseau-period-bar">
+        <div class="period-copy">Les montants financiers suivent la période sélectionnée. CAPE et taux de conversion restent cumulés dans cette maquette.</div>
+        <select id="reseau-period-select" class="reseau-period-select" aria-label="Période de suivi du chiffre d'affaires"></select>
+      </div>
+ 
+      <div class="kpi-row" id="reseau-kpi-row"></div>
+ 
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>
+<div class="th-search-wrap"><span>Commercial</span><button type="button" class="th-search-btn ca-search-btn" id="ca-commercial-search-btn" aria-label="Rechercher le nom d’un commercial" title="Rechercher un commercial">🔍</button></div>
+<div class="th-search-box" id="ca-commercial-search-box" style="display:none;"><input type="search" id="ca-commercial-search-input" placeholder="Rechercher un nom…"></div>
+</th>
+              <th>CAPE<br><span class="muted-cell">cumulé</span></th>
+              <th>Ventes<br><span class="muted-cell">encaissées</span></th>
+              <th>CA encaissé</th>
+              <th>Commission générée<br><span class="muted-cell">sur encaissé</span></th>
+              <th>
+                <div class="ca-filter-head"><span>Statut commission</span><button class="ca-filter-btn" id="ca-statut-filter-btn" title="Filtrer par statut">▾</button></div>
+                <div class="ca-filter-menu" id="ca-statut-filter-menu" style="display:none;">
+                  <button data-ca-statut-filter="tous">Tous</button>
+                  <button data-ca-statut-filter="ok">Abonnement OK</button>
+                  <button data-ca-statut-filter="bloquee">Commission bloquée</button>
+                  <button data-ca-statut-filter="versee">Commission versée</button>
+                </div>
+              </th>
+              
+              <th>Date paiement</th>
+              <th>Détail</th>
+            </tr>
+          </thead>
+          <tbody id="reseau-rows"></tbody>
+        </table>
+      </div>
+ 
+      <div class="annot">
+        💬 V6.20 : <strong>Commission générée</strong> est le montant de référence. <strong>Date paiement</strong> n’est renseignée que lorsque le statut est <strong>Commission versée</strong>. Une commission à verser ou bloquée affiche donc toujours « — ».
+      </div>
+    </div>
+ 
+    <div id="tab-content-placeholder" style="display:none;">
+      <div class="placeholder-panel" style="padding:3.5rem 2.5rem;">
+        <strong id="placeholder-title">Pas encore construit</strong>
+        Cet onglet n'existe pas encore dans la maquette — on le construira quand on l'abordera ensemble. Reviens sur "Prospects et commerciaux" pour voir ce qui est déjà en place.
+      </div>
+    </div>
+ 
+  </main>
+</div>
+ 
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer"></div>
+<div class="save-toast" id="toast"><span class="dotpulse"></span><span id="toast-text">Statut mis à jour</span></div>
+ 
+<script>
+  const DECISIONS = {
+    attente: { label: 'En attente', cls: 'st-attente' },
+    accepte: { label: 'Accepté', cls: 'st-accepte' },
+    revoir:  { label: 'À revoir', cls: 'st-revoir' },
+    refuse:  { label: 'Refusé', cls: 'st-refuse' },
+  };
+  const AUJOURDHUI = new Date(2026, 7, 25); // 25/08/2026
+ 
+  function parseFR(d) { const [j,m,a] = d.split('/').map(Number); return new Date(a, m-1, j); }
+  function joursDepuis(d) { return Math.floor((AUJOURDHUI - parseFR(d)) / 86400000); }
+  function frToISO(d) { if (!d) return ''; const [j,m,a] = d.split('/'); return `${a}-${m}-${j}`; }
+  function isoToFR(d) { if (!d) return ''; const [a,m,j] = d.split('-'); return `${j}/${m}/${a}`; }
+ 
+  // Données factices — à remplacer par de vraies données Airtable au moment du dev réel
+  let data = [
+    {
+      id: 1, prenom: 'Martin', nom: 'Duchêne', email: 'martin.duchene@example.com', tel: '06 12 34 56 78',
+      statutReseau: 'recrutement', ville: 'Lyon', linkedin: 'linkedin.com/in/martinduchene', situation: 'Salarié', experience: 'Commercial',
+      disponibiliteHebdo: '', siret: '',
+      source: 'LinkedIn-Campagne-Aout', motifRDV: 'Devenir consultant',
+      dateCandidature: '16/08/2026', dateRDV: '18/08/2026', dateEntretien: null,
+      evaluation: null, decision: 'attente', cgvAcceptees: false, dateAcceptationCGV: null,
+      contratEnvoye: null, contratSigne: null, contratSignatureId: null, dateLimiteSignature: null,
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: false, kitPaye: false, datePaiementKit: null,
+    },
+    {
+      id: 2, prenom: 'Claire', nom: 'Vasseur', email: 'claire.vasseur@example.com', tel: '07 45 22 11 90',
+      abonnementsStripe: { '2026-08': { statut: 'impaye', datePaiement: null } },
+      statutReseau: 'actif', ville: 'Nantes', linkedin: 'linkedin.com/in/clairevasseur', situation: 'Indépendant', experience: 'Management',
+      disponibiliteHebdo: '2 jours / semaine', siret: '812 345 678 00019', iban: 'FR76 XXXX XXXX XXXX XXXX XXXX 101',
+      source: 'Facebook-Campagne-Aout', motifRDV: 'Devenir consultant',
+      dateCandidature: '10/08/2026', dateRDV: '13/08/2026', dateEntretien: '15/08/2026',
+      evaluation: {
+        motivation: 18, commercial: 18, reseau: 17, autonomie: 12, numerique: 9, disponibilite: 10,
+        compteRendu: "Claire a un parcours de responsable régionale des ventes avant de se mettre à son compte. Discours très structuré, elle a immédiatement identifié comment elle activerait son réseau existant (une trentaine de TPE/PME dans son portefeuille actuel). Bonne compréhension du modèle CAPE dès la présentation. Seul point de vigilance : elle ne peut consacrer que 2 jours/semaine au démarrage, le temps de terminer une mission en cours chez un client.",
+      },
+      decision: 'accepte', cgvAcceptees: true, dateAcceptationCGV: '19/08/2026',
+      contratEnvoye: '20/08/2026', contratSigne: '21/08/2026', contratSignatureId: 'yt_92a1c7', dateLimiteSignature: '27/08/2026', dateActivation: '22/08/2026',
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: true, kitPaye: true, datePaiementKit: null,
+      capeEnvoyes: 14, ventes: 3, caGenere: 8400, commissionDue: 180, commissionVersee: 240, derniereActivite: '24/08/2026',
+      ventesDetail: [
+        { client: 'Atelier Dupré', date: '05/08/2026', montant: 3200, commission: 160, statut: 'versee', dateVersement: '20/08/2026', statutAudit: 'signe' },
+        { client: 'Menuiserie Ravel', date: '12/08/2026', montant: 1600, commission: 80, statut: 'versee', dateVersement: '20/08/2026', statutAudit: 'signe' },
+        { client: 'Cabinet Lefort', date: '22/08/2026', montant: 3600, commission: 180, statut: 'due', dateVersement: null, statutAudit: 'signe' },
+      ],
+    },
+    {
+      id: 3, prenom: 'Yann', nom: 'Le Bris', email: 'yann.lebris@example.com', tel: '—',
+      statutReseau: 'recrutement', ville: 'Rennes', linkedin: '', situation: 'En reconversion', experience: 'Autre',
+      disponibiliteHebdo: '4 jours / semaine', siret: '',
+      source: 'Organique', motifRDV: 'Devenir consultant',
+      dateCandidature: '09/08/2026', dateRDV: '11/08/2026', dateEntretien: '12/08/2026',
+      evaluation: {
+        motivation: 16, commercial: 8, reseau: 9, autonomie: 10, numerique: 6, disponibilite: 9,
+        compteRendu: "Yann est en reconversion depuis 6 mois, très motivé par le projet mais sans expérience commerciale directe (parcours technique en informatique). Discours sincère mais peu structuré face aux objections types testées en entretien. Réseau professionnel encore limité à son ancien secteur. À revoir dans quelques mois si son projet de reconversion se précise, ou en le orientant vers une phase d'accompagnement renforcé au démarrage.",
+      },
+      decision: 'revoir', cgvAcceptees: false, dateAcceptationCGV: null,
+      contratEnvoye: null, contratSigne: null, contratSignatureId: null, dateLimiteSignature: null,
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: false, kitPaye: false, datePaiementKit: null,
+    },
+    {
+      id: 4, prenom: 'Amélie', nom: 'Nkomo', email: 'amelie.nkomo@example.com', tel: '06 88 77 66 55',
+      statutReseau: 'recrutement', ville: 'Toulouse', linkedin: 'linkedin.com/in/amelienkomo', situation: 'Demandeur d\'emploi', experience: 'Marketing',
+      disponibiliteHebdo: 'Moins de 3h / semaine', siret: '',
+      source: 'Instagram', motifRDV: 'Devenir consultant',
+      dateCandidature: '05/08/2026', dateRDV: '08/08/2026', dateEntretien: '10/08/2026',
+      evaluation: {
+        motivation: 6, commercial: 5, reseau: 5, autonomie: 5, numerique: 4, disponibilite: 6,
+        compteRendu: "Amélie a exprimé un intérêt plutôt vague pour le projet, davantage motivée par la recherche d'un complément de revenu ponctuel que par une activité commerciale sur la durée. Disponibilité annoncée en entretien de moins de 3h par semaine, incompatible avec les objectifs du réseau. Pas de réseau professionnel mobilisable dans l'immédiat.",
+      },
+      decision: 'refuse', cgvAcceptees: false, dateAcceptationCGV: null,
+      contratEnvoye: null, contratSigne: null, contratSignatureId: null, dateLimiteSignature: null,
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: false, kitPaye: false, datePaiementKit: null,
+    },
+    {
+      id: 5, prenom: 'Karim', nom: 'Belhadj', email: 'karim.belhadj@example.com', tel: '06 33 22 11 00',
+      statutReseau: 'recrutement', ville: 'Marseille', linkedin: 'linkedin.com/in/karimbelhadj', situation: 'Entrepreneur', experience: 'Gestion d\'entreprise',
+      disponibiliteHebdo: '3-4 jours / semaine', siret: '901 234 567 00012',
+      source: 'Recommandation', motifRDV: 'Devenir consultant',
+      dateCandidature: '06/08/2026', dateRDV: '09/08/2026', dateEntretien: '11/08/2026',
+      evaluation: {
+        motivation: 16, commercial: 17, reseau: 16, autonomie: 11, numerique: 9, disponibilite: 10,
+        compteRendu: "Karim est déjà indépendant depuis 10 ans dans la vente B2B, à l'aise avec la facturation et la gestion administrative de son activité. Bon relationnel en entretien, argumentaire commercial déjà rodé. Comprend rapidement les mécaniques de commission et de diagnostic-first. Aucun point de vigilance particulier identifié.",
+      },
+      decision: 'accepte', cgvAcceptees: true, dateAcceptationCGV: '12/08/2026',
+      contratEnvoye: '13/08/2026', contratSigne: null, contratSignatureId: 'yt_47f0e2', dateLimiteSignature: '20/08/2026',
+      relanceJ2: true, relanceJ5: true, relanceJ7: true, dashboardEnvoye: false, kitPaye: false, datePaiementKit: null,
+    },
+    {
+      id: 6, prenom: 'Nadia', nom: 'Ferrand', email: 'nadia.ferrand@example.com', tel: '06 70 12 34 56',
+      abonnementsStripe: { '2026-08': { statut: 'paye', datePaiement: '03/08/2026' } },
+      statutReseau: 'actif', ville: 'Bordeaux', linkedin: 'linkedin.com/in/nadiaferrand', situation: 'Retraité', experience: 'Conseil',
+      disponibiliteHebdo: '4-5 jours / semaine', siret: '789 012 345 00027', iban: 'FR76 XXXX XXXX XXXX XXXX XXXX 202',
+      source: 'LinkedIn-Campagne-Juillet', motifRDV: 'Devenir consultant',
+      dateCandidature: '02/07/2026', dateRDV: '05/07/2026', dateEntretien: '07/07/2026',
+      evaluation: {
+        motivation: 19, commercial: 19, reseau: 18, autonomie: 14, numerique: 10, disponibilite: 11,
+        compteRendu: "Nadia a dirigé une équipe commerciale régionale pendant 15 ans avant sa retraite. Réseau TPE déjà actif et entretenu (elle en a cité plusieurs spontanément en entretien). Très à l'aise avec les outils numériques malgré ce qu'on pourrait attendre au vu de son âge — point qu'elle a elle-même relevé en souriant. Disponibilité large, aucun point de vigilance.",
+      },
+      decision: 'accepte', cgvAcceptees: true, dateAcceptationCGV: '09/07/2026',
+      contratEnvoye: '10/07/2026', contratSigne: '11/07/2026', contratSignatureId: 'yt_11b8a4', dateLimiteSignature: '17/07/2026', dateActivation: '12/07/2026',
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: true, kitPaye: true, datePaiementKit: null,
+      capeEnvoyes: 26, ventes: 7, caGenere: 19600, commissionDue: 0, commissionVersee: 980, derniereActivite: '25/08/2026',
+      ventesDetail: [
+        { client: 'Boulangerie Ferrand', date: '15/07/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Garage Mistral', date: '18/07/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Institut de beauté Léa', date: '22/07/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Cabinet comptable Rousset', date: '29/07/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Traiteur Bordelais', date: '05/08/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '20/08/2026', statutAudit: 'signe' },
+        { client: 'Pharmacie du Parc', date: '14/08/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '20/08/2026', statutAudit: 'signe' },
+        { client: 'Atelier céramique Sud', date: '21/08/2026', montant: 2800, commission: 140, statut: 'versee', dateVersement: '24/08/2026', statutAudit: 'signe' },
+      ],
+    },
+    {
+      id: 7, prenom: 'Julien', nom: 'Petit', email: 'julien.petit@example.com', tel: '06 55 44 33 22',
+      abonnementsStripe: { '2026-08': { statut: 'paye', datePaiement: '02/08/2026' } },
+      statutReseau: 'actif', ville: 'Lille', linkedin: 'linkedin.com/in/julienpetit', situation: 'Salarié', experience: 'Informatique',
+      disponibiliteHebdo: '2 jours / semaine', siret: '654 321 098 00015', iban: 'FR76 XXXX XXXX XXXX XXXX XXXX 303',
+      source: 'Organique', motifRDV: 'Devenir consultant',
+      dateCandidature: '15/06/2026', dateRDV: '18/06/2026', dateEntretien: '20/06/2026',
+      evaluation: {
+        motivation: 15, commercial: 12, reseau: 10, autonomie: 12, numerique: 15, disponibilite: 8,
+        compteRendu: "Julien vient du monde technique (développeur), très à l'aise avec les outils numériques et le discours autour de l'IA. Moins de background commercial pur, mais très motivé et pédagogue. Réseau professionnel encore en construction côté TPE. Disponibilité limitée à 2 jours/semaine en parallèle de son poste actuel.",
+      },
+      decision: 'accepte', cgvAcceptees: true, dateAcceptationCGV: '25/06/2026',
+      contratEnvoye: '26/06/2026', contratSigne: '27/06/2026', contratSignatureId: 'yt_58c3d1', dateLimiteSignature: '03/07/2026', dateActivation: '28/06/2026',
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: true, kitPaye: true, datePaiementKit: null,
+      capeEnvoyes: 9, ventes: 1, caGenere: 2800, commissionDue: 140, commissionVersee: 0, derniereActivite: '19/08/2026',
+      ventesDetail: [
+        { client: 'Studio graphique Nord', date: '19/08/2026', montant: 2800, commission: 140, statut: 'due', dateVersement: null, statutAudit: 'signe' },
+      ],
+    },
+    {
+      id: 8, prenom: 'Sophie', nom: 'Caron', email: 'sophie.caron@example.com', tel: '06 21 09 87 65',
+      abonnementsStripe: { '2026-08': { statut: 'impaye', datePaiement: null } },
+      statutReseau: 'actif', ville: 'Strasbourg', linkedin: 'linkedin.com/in/sophiecaron', situation: 'Entrepreneur', experience: 'Conseil',
+      disponibiliteHebdo: '3 jours / semaine', siret: '432 109 876 00021', iban: 'FR76 XXXX XXXX XXXX XXXX XXXX 404',
+      source: 'Recommandation', motifRDV: 'Devenir consultant',
+      dateCandidature: '20/05/2026', dateRDV: '23/05/2026', dateEntretien: '25/05/2026',
+      evaluation: {
+        motivation: 17, commercial: 16, reseau: 15, autonomie: 13, numerique: 8, disponibilite: 12,
+        compteRendu: "Sophie dirige déjà un petit cabinet de conseil en organisation, réseau TPE/PME solide dans sa région. Discours commercial mature, comprend vite les enjeux de diagnostic-first. Aisance numérique correcte sans être experte. Disponibilité de 3 jours/semaine compatible avec son activité actuelle.",
+      },
+      decision: 'accepte', cgvAcceptees: true, dateAcceptationCGV: '30/05/2026',
+      contratEnvoye: '31/05/2026', contratSigne: '01/06/2026', contratSignatureId: 'yt_73e9f4', dateLimiteSignature: '07/06/2026', dateActivation: '02/06/2026',
+      relanceJ2: false, relanceJ5: false, relanceJ7: false, dashboardEnvoye: true, kitPaye: true, datePaiementKit: null,
+      capeEnvoyes: 31, ventes: 9, caGenere: 24300, commissionDue: 315, commissionVersee: 900, derniereActivite: '23/08/2026',
+      ventesDetail: [
+        { client: 'Fromagerie Alsacienne', date: '10/06/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '05/07/2026', statutAudit: 'signe' },
+        { client: 'Serrurerie Klein', date: '18/06/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '05/07/2026', statutAudit: 'signe' },
+        { client: 'Cabinet dentaire Muller', date: '02/07/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Auto-école Vosges', date: '15/07/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Brasserie Strasbourgeoise', date: '28/07/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '05/08/2026', statutAudit: 'signe' },
+        { client: 'Salon de coiffure Vogel', date: '08/08/2026', montant: 3000, commission: 150, statut: 'versee', dateVersement: '20/08/2026', statutAudit: 'signe' },
+        { client: 'Menuiserie Weber', date: '14/08/2026', montant: 2100, commission: 105, statut: 'due', dateVersement: null, statutAudit: 'signe' },
+        { client: 'Cabinet architecte Roth', date: '19/08/2026', montant: 2100, commission: 105, statut: 'due', dateVersement: null, statutAudit: 'en_attente' },
+        { client: 'Pâtisserie Schmitt', date: '23/08/2026', montant: 2100, commission: 105, statut: 'due', dateVersement: null, statutAudit: 'signe' },
+      ],
+    },
+  ];
+ 
+ 
+  // V7 — clientData est l'unique source de vérité financière.
+  // Un paiement enregistré dans la fiche client (onglet Prospects et clients)
+  // alimente directement le Suivi CA / Paiement du commercial concerné — plus de données dupliquées.
+  function ventesForConsultant(fullName) {
+    return clientData
+      .filter(c => c.origine === 'commercial' && c.consultant === fullName && c.solutionType === 'chicouf')
+      .map(c => ({
+        client: c.entreprise,
+        date: c.dateSignature || c.dateEnvoiDevis || c.dateCape,
+        montant: c.montantDevis || 0,
+        statutAudit: ['Signé', 'Payé'].includes(c.auditStatut) ? 'signe' : '',
+        devisValide: c.auditStatut !== 'Perdu',
+        paiementsClient: c.paiements || [],
+      }));
+  }
+ 
+  function clientPaymentEntries(row) {
+    const out = [];
+    ventesEligibles(ventesForConsultant(`${row.prenom} ${row.nom}`)).forEach(v => {
+      (v.paiementsClient || []).forEach(p => out.push({
+        vente: v,
+        payment: p,
+        client: v.client,
+        dateVente: v.date,
+        montantDevis: v.montant || 0,
+        datePaiementClient: p.date,
+        montantEncaisse: p.montant || 0,
+        commission: Math.round((p.montant || 0) * 5) / 100,
+        statutCommission: p.statutCommission || 'due',
+        dateVersement: p.dateVersement || null,
+        referenceVersement: p.referenceVersement || null
+      }));
+    });
+    return out;
+  }
+ 
+  function venteEncaissementCumule(v) {
+    return (v.paiementsClient || []).reduce((s,p) => s + (p.montant || 0), 0);
+  }
+ 
+ 
+ 
+  // V6.1 — Prospects / Clients reconstruit à partir du processus métier validé.
+  // Airtable cible :
+  // Clients = identité ; Audits = pipeline (Statut + Demande_devis + Montant_HT + dates) ;
+  // Paiements = gérés dans Suivi CA / Paiement ; Consultants = rattachement au commercial.
+  const clientData = [
+    {id:'cl1',entreprise:'Maison Lenoir',contact:'Élodie Lenoir',email:'elodie@maisonlenoir.fr',telephone:'06 10 20 30 40',secteur:'Commerce',adresse:'12 rue du Marché, 91800 Brunoy',siteWeb:'https://maisonlenoir.fr',origine:'direct',consultant:'Sandrine Darrieu',dateCape:'22/08/2026',diagnostic:'CAPE-260822-01',auditStatut:'En attente',demandeDevis:true,solutionType:'chicouf',solutionProposee:'Automatisation du suivi client',descriptionBesoin:'Réduire les relances manuelles et centraliser les demandes clients.',dateDemandeDevis:'22/08/2026',dateEnvoiDevis:null,montantDevis:0,dateSignature:null,paiements:[],notes:'Prospect arrivé par CAPE direct. Solution Studeria : devis demandé.'},
+    {id:'cl2',entreprise:'Atelier du Parc',contact:'Marc Duval',email:'marc@atelierduparc.fr',telephone:'06 11 22 33 44',secteur:'Artisanat',adresse:'8 avenue du Parc, Lille',siteWeb:'https://atelierduparc.fr',origine:'commercial',consultant:'Julien Petit',dateCape:'19/08/2026',diagnostic:'CAPE-260819-04',auditStatut:'En attente',demandeDevis:true,solutionType:'chicouf',solutionProposee:'CRM simple + automatisations',descriptionBesoin:'Structurer le suivi des devis et relances.',dateDemandeDevis:'22/08/2026',dateEnvoiDevis:null,montantDevis:0,dateSignature:null,paiements:[],notes:'Demande de devis CHIC · OUF transmise.'},
+    {id:'cl3',entreprise:'Studio Nova',contact:'Inès Martin',email:'ines@studionova.fr',telephone:'06 20 30 40 50',secteur:'Communication',adresse:'3 rue des Arts, Bordeaux',siteWeb:'https://studionova.fr',origine:'commercial',consultant:'Nadia Ferrand',dateCape:'15/08/2026',diagnostic:'CAPE-260815-03',auditStatut:'Externe',demandeDevis:false,solutionType:'externe',solutionProposee:'Solution métier externe',descriptionBesoin:'Outil spécifique traité hors circuit CHIC · OUF / Studeria.',dateDemandeDevis:null,dateEnvoiDevis:null,montantDevis:0,dateSignature:null,paiements:[],notes:'Le commercial gère le devis en externe.'},
+    {id:'cl4',entreprise:'Cabinet Horizon',contact:'Claire Morel',email:'claire@cabinet-horizon.fr',telephone:'06 44 55 66 77',secteur:'Conseil',adresse:'44 rue Nationale, Strasbourg',siteWeb:'https://cabinet-horizon.fr',origine:'commercial',consultant:'Sophie Caron',dateCape:'12/08/2026',diagnostic:'CAPE-260812-02',auditStatut:'Envoyé',demandeDevis:true,solutionType:'chicouf',solutionProposee:'Accélérateur IA',descriptionBesoin:'Déployer deux automatisations et former l’équipe.',dateDemandeDevis:'14/08/2026',dateEnvoiDevis:'18/08/2026',montantDevis:3600,dateSignature:null,paiements:[],notes:'Devis Studeria transmis. Réponse du client attendue.'},
+    {id:'cl5',entreprise:'Boulangerie des Halles',contact:'Thomas Rey',email:'thomas@halles.fr',telephone:'06 70 80 90 10',secteur:'Boulangerie',adresse:'5 place des Halles, Bordeaux',siteWeb:'https://halles.fr',origine:'commercial',consultant:'Nadia Ferrand',dateCape:'05/08/2026',diagnostic:'CAPE-260805-01',auditStatut:'Signé',demandeDevis:true,solutionType:'chicouf',solutionProposee:'Automatisation commandes B2B',descriptionBesoin:'Centraliser les commandes professionnelles et rappels.',dateDemandeDevis:'07/08/2026',dateEnvoiDevis:'09/08/2026',montantDevis:2800,dateSignature:'11/08/2026',paiements:[{date:'20/08/2026',montant:1400,statutCommission:'due',dateVersement:null,referenceVersement:null}],notes:'Acompte encaissé.'},
+    {id:'cl6',entreprise:'Cabinet Arborescence',contact:'Luc Perrin',email:'luc@arborescence.fr',telephone:'06 31 41 51 61',secteur:'Expertise comptable',adresse:'21 quai Central, Paris',siteWeb:'https://arborescence.fr',origine:'direct',consultant:'Sandrine Darrieu',dateCape:'03/08/2026',diagnostic:'CAPE-260803-09',auditStatut:'Payé',demandeDevis:true,solutionType:'chicouf',solutionProposee:'Incubateur IA',descriptionBesoin:'Prioriser les usages IA et mettre en place les premiers workflows.',dateDemandeDevis:'04/08/2026',dateEnvoiDevis:'06/08/2026',montantDevis:2500,dateSignature:'08/08/2026',paiements:[{date:'18/08/2026',montant:2500}],notes:'Client CHIC · OUF direct : aucune commission.'}
+  ];
+ 
+  const clientSearchFields={entreprise:'',origine:'',commercial:''};
+ 
+  const AUDIT_STATUS = ['En attente','Envoyé','Signé','Perdu','Payé','Externe'];
+  function clientEncaisse(c){return (c.paiements||[]).reduce((s,p)=>s+(Number(p.montant)||0),0);}
+  function clientReste(c){return Math.max(0,(Number(c.montantDevis)||0)-clientEncaisse(c));}
+  function clientCommissionEligible(c){return c.origine==='commercial' && c.solutionType==='chicouf' && ['Signé','Payé'].includes(c.auditStatut);}
+  function clientCommission(c){return clientCommissionEligible(c)?Math.round(clientEncaisse(c)*5)/100:0;}
+ 
+  function clientStage(c){
+    if(c.auditStatut==='Externe'||c.solutionType==='externe')return {label:'Suivi externe',sub:'Hors devis / facturation CHIC · OUF'};
+    if(c.auditStatut==='Perdu')return {label:'Dossier perdu',sub:'Aucune suite'};
+    if(c.auditStatut==='Payé')return {label:'Client réglé',sub:c.origine==='commercial'?'Commission calculée sur encaissé':'Client direct — sans commission'};
+    if(c.auditStatut==='Signé'&&clientEncaisse(c)>0)return {label:'Règlement partiel',sub:`Reste ${clientReste(c).toLocaleString('fr-FR')} €`};
+    if(c.auditStatut==='Signé')return {label:'Attendre règlement',sub:'Prestation / facturation Studeria'};
+    if(c.auditStatut==='Envoyé')return {label:'Décision du client',sub:'Commercial : Accepté ou Refusé'};
+    if(c.demandeDevis)return {label:'Préparer le devis',sub:'Demande reçue par CHIC · OUF'};
+    return {label:'Qualifier le besoin',sub:'Choisir circuit CHIC · OUF ou externe'};
+  }
+ 
+  function auditBadgeClient(c){
+    const cls={'Signé':'ok','Payé':'ok','Perdu':'bad','Envoyé':'warn','Externe':'review','En attente':'review'}[c.auditStatut]||'review';
+    return `<span class="badge ${cls}">${c.auditStatut}</span><div class="muted-cell" style="margin-top:.22rem;">${c.diagnostic||'Création manuelle'}</div>`;
+  }
+ 
+  function quoteBadgeClient(c){
+    if(c.solutionType==='chicouf'&&!c.demandeDevis){
+      c.demandeDevis=true;
+      c.dateDemandeDevis=c.dateDemandeDevis||new Date().toLocaleDateString('fr-FR');
+    }
+    if(c.auditStatut==='Externe'||c.solutionType==='externe')return '<span class="badge">Externe — non géré</span>';
+    if(c.auditStatut==='Payé')return '<span class="badge ok">Devis accepté · payé</span>';
+    if(c.auditStatut==='Signé')return `<span class="badge ok">Devis accepté${c.dateSignature?' · '+c.dateSignature:''}</span>`;
+    if(c.auditStatut==='Perdu')return '<span class="badge bad">Devis refusé / perdu</span>';
+    if(c.auditStatut==='Envoyé')return `<span class="badge warn">Devis Studeria envoyé${c.montantDevis?' · '+c.montantDevis.toLocaleString('fr-FR')+' €':''}</span>`;
+    if(c.demandeDevis)return '<span class="badge review">Devis demandé</span>';
+    return '<span class="muted-cell">Pas de devis demandé</span>';
+  }
+ 
+  function decisionSelectClient(c){
+    if(c.auditStatut==='Externe'||c.solutionType==='externe') return '<span class="muted-cell">Non concerné</span>';
+    const current = (c.auditStatut==='Signé'||c.auditStatut==='Payé') ? 'accepte' : (c.auditStatut==='Perdu' ? 'refuse' : '');
+    const canEdit = ['Envoyé','Signé','Perdu','Payé'].includes(c.auditStatut);
+    if(!canEdit) return '<span class="muted-cell">—</span>';
+    return `<select class="quote-decision-select" data-client-decision="${c.id}" aria-label="Décision devis pour ${c.entreprise}">
+      <option value="" ${current===''?'selected':''}>— À renseigner —</option>
+      <option value="accepte" ${current==='accepte'?'selected':''}>Accepté</option>
+      <option value="refuse" ${current==='refuse'?'selected':''}>Refusé</option>
+    </select>`;
+  }
+ 
+  function renderClientKPIs(){
+    const nouveaux=clientData.filter(c=>c.auditStatut==='En attente'&&!c.demandeDevis).length;
+    const demandes=clientData.filter(c=>c.auditStatut==='En attente'&&c.demandeDevis).length;
+    const decisions=clientData.filter(c=>c.auditStatut==='Envoyé').length;
+    const impayes=clientData.filter(c=>c.auditStatut==='Signé'&&clientReste(c)>0).length;
+    const el=document.getElementById('client-kpi-row'); if(!el)return;
+    el.innerHTML=`<div class="client-kpi-title">À traiter</div>
+      <div class="kpi action-required"><span class="n">${nouveaux}</span> à qualifier</div>
+      <div class="kpi automation"><span class="n">${demandes}</span> devis à préparer</div>
+      <div class="kpi waiting"><span class="n">${decisions}</span> réponses devis</div>
+      <div class="kpi ${impayes?'anomaly':''}"><span class="n">${impayes}</span> règlements à suivre</div>`;
+  }
+ 
+  function renderClients(){
+    renderClientKPIs();
+    const tbody=document.getElementById('client-rows'); if(!tbody)return;
+    let rows=[...clientData];
+ 
+    const qEntreprise=(clientSearchFields.entreprise||'').trim().toLocaleLowerCase('fr');
+    const qOrigine=(clientSearchFields.origine||'').trim().toLocaleLowerCase('fr');
+    const qCommercial=(clientSearchFields.commercial||'').trim().toLocaleLowerCase('fr');
+ 
+    if(qEntreprise) rows=rows.filter(c=>`${c.entreprise} ${c.contact} ${c.email}`.toLocaleLowerCase('fr').includes(qEntreprise));
+    if(qOrigine) rows=rows.filter(c=>{
+      const label=c.origine==='direct'?'chic ouf direct':'commercial réseau';
+      return label.toLocaleLowerCase('fr').includes(qOrigine);
+    });
+    if(qCommercial) rows=rows.filter(c=>(c.origine==='direct'?'Sandrine Darrieu':(c.consultant||'')).toLocaleLowerCase('fr').includes(qCommercial));
+ 
+    if(!rows.length){tbody.innerHTML='<tr class="empty-row"><td colspan="8">Aucun dossier ne correspond à la recherche.</td></tr>';return;}
+ 
+    tbody.innerHTML=rows.map(c=>{
+      const st=clientStage(c);
+      return `<tr>
+        <td><strong>${c.entreprise}</strong><div class="muted-cell">${c.contact}<br>${c.email||'—'}</div></td>
+        <td><span class="client-origin ${c.origine==='direct'?'direct':'reseau'}">${c.origine==='direct'?'CHIC · OUF direct':'Commercial'}</span></td>
+        <td><strong>${c.origine==='direct'?'Sandrine Darrieu':(c.consultant||'À renseigner')}</strong></td>
+        <td><span class="client-route ${c.solutionType==='externe'?'external':'chicouf'}">${c.solutionType==='externe'?'Externe':'CHIC · OUF / Studeria'}</span><div class="process-text" style="margin-top:.28rem;">${c.solutionProposee||'<span class="muted-cell">À définir</span>'}</div></td>
+        <td>${quoteBadgeClient(c)}</td>
+        <td>${decisionSelectClient(c)}</td>
+        <td><div class="client-stage"><strong>${st.label}</strong><small>${st.sub}</small></div></td>
+        <td class="client-action-col"><button class="fiche-btn client-fiche-btn" data-client-id="${c.id}">Voir la fiche →</button></td>
+      </tr>`;
+    }).join('');
+ 
+    tbody.querySelectorAll('.client-fiche-btn').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();openClientDrawer(b.dataset.clientId);}));
+    tbody.querySelectorAll('[data-client-decision]').forEach(sel=>sel.addEventListener('change',()=>{
+      const c=clientData.find(x=>x.id===sel.dataset.clientDecision); if(!c)return;
+      if(sel.value==='accepte'){
+        c.auditStatut='Signé';
+        c.dateSignature=new Date().toLocaleDateString('fr-FR');
+        showToast('Devis accepté — Audit = Signé');
+      }else if(sel.value==='refuse'){
+        c.auditStatut='Perdu';
+        c.dateSignature=null;
+        showToast('Devis refusé — Audit = Perdu');
+      }else{
+        c.auditStatut='Envoyé';
+        c.dateSignature=null;
+        showToast('Décision remise à renseigner');
+      }
+      renderClients();
+    }));
+  }
+ 
+  function initClientHeaderSearch(){
+    document.querySelectorAll('[data-client-search-field]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const key=btn.dataset.clientSearchField;
+        const box=document.querySelector(`[data-client-search-box="${key}"]`);
+        if(!box)return;
+        const open=box.style.display!=='none';
+        box.style.display=open?'none':'block';
+        if(!open){
+          const input=box.querySelector('input');
+          if(input) setTimeout(()=>input.focus(),0);
+        }
+      });
+    });
+    document.querySelectorAll('[data-client-search-input]').forEach(input=>{
+      input.addEventListener('input',()=>{
+        clientSearchFields[input.dataset.clientSearchInput]=input.value;
+        const btn=document.querySelector(`[data-client-search-field="${input.dataset.clientSearchInput}"]`);
+        if(btn)btn.classList.toggle('active',!!input.value.trim());
+        renderClients();
+      });
+    });
+  }
+ 
+  function openNewClientDrawer(){
+    const drawer=document.getElementById('drawer');
+    drawer.innerHTML=`<button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="greet-eyebrow">Saisie manuelle</div><h3>Nouveau prospect / client</h3>
+      <div class="sub-line">À utiliser lorsqu’un prospect n’est pas créé automatiquement par le CAPE. Tous les champs utiles restent modifiables ensuite.</div>
+      <h4 class="block-title">Identité et coordonnées</h4>
+      <div class="client-form-grid">
+        <label>Entreprise *<input id="nc-entreprise"></label><label>Nom du contact *<input id="nc-contact"></label>
+        <label>Email<input id="nc-email" type="email"></label><label>Téléphone<input id="nc-tel"></label>
+        <label>Secteur<input id="nc-secteur"></label><label>Site web<input id="nc-site"></label>
+        <label class="full">Adresse<input id="nc-adresse"></label>
+      </div>
+      <h4 class="block-title">Origine et suivi</h4>
+      <div class="client-form-grid">
+        <label>Origine<select id="nc-origin"><option value="direct">CHIC · OUF direct</option><option value="commercial">Commercial du réseau</option></select></label>
+        <label>Commercial / consultant<input id="nc-consultant" placeholder="Obligatoire si client commercial"></label>
+        <label>Date CAPE / entrée<input id="nc-date" type="date"></label>
+        <label>Statut Audit<select id="nc-audit">${AUDIT_STATUS.map(s=>`<option>${s}</option>`).join('')}</select></label>
+        <label>Type de solution<select id="nc-solution-type"><option value="chicouf">CHIC · OUF / Studeria</option><option value="externe">Externe</option></select></label>
+        <label>Solution proposée<input id="nc-solution"></label>
+        <label class="full">Description du besoin<textarea id="nc-besoin"></textarea></label>
+        <label class="full">Notes<textarea id="nc-notes"></textarea></label>
+      </div>
+      <div class="client-action-bar"><button class="client-primary-btn" id="nc-save">Créer la fiche</button><button class="client-secondary-btn" onclick="closeDrawer()">Annuler</button></div>`;
+    drawer.querySelector('#nc-save').addEventListener('click',()=>{
+      const entreprise=drawer.querySelector('#nc-entreprise').value.trim(),contact=drawer.querySelector('#nc-contact').value.trim();
+      if(!entreprise||!contact){showToast('Entreprise et contact obligatoires');return;}
+      const origine=drawer.querySelector('#nc-origin').value, consultant=drawer.querySelector('#nc-consultant').value.trim();
+      if(origine==='commercial'&&!consultant){showToast('Renseigne le commercial');return;}
+      const d=drawer.querySelector('#nc-date').value, fr=d?d.split('-').reverse().join('/'):new Date().toLocaleDateString('fr-FR');
+      const statut=drawer.querySelector('#nc-audit').value, solType=drawer.querySelector('#nc-solution-type').value;
+      const autoDemande=solType==='chicouf';
+      clientData.unshift({id:'cl'+Date.now(),entreprise,contact,email:drawer.querySelector('#nc-email').value.trim(),telephone:drawer.querySelector('#nc-tel').value.trim(),secteur:drawer.querySelector('#nc-secteur').value.trim(),adresse:drawer.querySelector('#nc-adresse').value.trim(),siteWeb:drawer.querySelector('#nc-site').value.trim(),origine,consultant:origine==='commercial'?consultant:'Sandrine Darrieu',dateCape:fr,diagnostic:null,auditStatut:solType==='externe'?'Externe':statut,demandeDevis:autoDemande,solutionType:solType,solutionProposee:drawer.querySelector('#nc-solution').value.trim(),descriptionBesoin:drawer.querySelector('#nc-besoin').value.trim(),dateDemandeDevis:autoDemande?new Date().toLocaleDateString('fr-FR'):null,dateEnvoiDevis:null,montantDevis:0,dateSignature:null,paiements:[],notes:drawer.querySelector('#nc-notes').value.trim()});
+      closeDrawer();renderClients();showToast('Prospect / client créé dans la maquette');
+    });
+    document.getElementById('overlay').classList.add('show');drawer.classList.add('show');
+  }
+ 
+  function openClientDrawer(id){
+    const c=clientData.find(x=>x.id===id); if(!c)return;
+    const drawer=document.getElementById('drawer'), enc=clientEncaisse(c);
+    const requestBlock=c.origine==='commercial'&&c.solutionType==='chicouf'&&c.auditStatut==='En attente'&&!c.demandeDevis?`<div class="quote-card"><div class="quote-title">Demander un devis CHIC · OUF</div><div class="sub-line">La demande reprend le client, le besoin et la solution proposée. Dans Airtable, elle cochera Audits.Demande_devis.</div><button class="client-primary-btn" id="request-quote">Demander un devis CHIC · OUF</button></div>`:'';
+    const studeriaBlock=c.demandeDevis&&c.auditStatut==='En attente'?`<div class="quote-card"><div class="quote-title">Demande reçue ${c.dateDemandeDevis?'le '+c.dateDemandeDevis:''}</div><div class="sub-line">Studeria prépare le devis. Quand il est transmis, le dossier passe à « Envoyé ».</div><div class="client-form-grid" style="margin-top:.6rem;"><label>Montant HT du devis<input id="quote-amount" type="number" min="0" step="10" value="${c.montantDevis||''}"></label></div><div class="client-action-bar"><button class="client-primary-btn" id="studeria-sent">Marquer « Devis Studeria envoyé »</button></div></div>`:'';
+    const reste=clientReste(c);
+    const paymentBlock=(c.auditStatut==='Signé'||(c.auditStatut==='Payé'&&reste>0))?`<div class="quote-card">
+        <div class="quote-title">Paiement reçu du client</div>
+        <div class="sub-line">Studeria t'informe qu'un paiement a été encaissé (le client peut payer en plusieurs fois) — enregistre-le ici pour déclencher le calcul de commission.</div>
+        <div class="client-form-grid" style="margin-top:.6rem;">
+          <label>Montant devis HT<input value="${(c.montantDevis||0).toLocaleString('fr-FR')} €" disabled></label>
+          <label>Déjà encaissé<input value="${enc.toLocaleString('fr-FR')} €" disabled></label>
+          <label>Reste à encaisser<input value="${reste.toLocaleString('fr-FR')} €" disabled></label>
+          <label>Nouveau paiement reçu<input id="new-payment-amount" type="number" min="0" step="10" placeholder="Montant en €"></label>
+          <label>Date du paiement<input id="new-payment-date" type="date" value="${new Date().toISOString().slice(0,10)}"></label>
+        </div>
+        <div class="client-action-bar"><button class="client-primary-btn" id="register-payment">Enregistrer ce paiement</button></div>
+      </div>`:'';
+ 
+    drawer.innerHTML=`<button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="greet-eyebrow">Fiche prospect / client</div><h3>${c.entreprise}</h3><div class="sub-line">${c.contact} · ${c.email||'—'} · ${c.telephone||'—'}</div>
+      <h4 class="block-title">Informations client</h4>
+      <div class="client-form-grid">
+        <label>Entreprise<input id="ec-entreprise" value="${c.entreprise}"></label><label>Nom du contact<input id="ec-contact" value="${c.contact}"></label>
+        <label>Email<input id="ec-email" type="email" value="${c.email||''}"></label><label>Téléphone<input id="ec-tel" value="${c.telephone||''}"></label>
+        <label>Secteur<input id="ec-secteur" value="${c.secteur||''}"></label><label>Site web<input id="ec-site" value="${c.siteWeb||''}"></label>
+        <label class="full">Adresse<input id="ec-adresse" value="${c.adresse||''}"></label>
+        <label>Origine<select id="ec-origin"><option value="direct" ${c.origine==='direct'?'selected':''}>CHIC · OUF direct</option><option value="commercial" ${c.origine==='commercial'?'selected':''}>Commercial du réseau</option></select></label>
+        <label>Commercial / consultant<input id="ec-consultant" value="${c.origine==='direct'?'Sandrine Darrieu':(c.consultant||'')}"></label>
+      </div>
+            <h4 class="block-title">CAPE / Audit</h4>
+      <div class="client-form-grid">
+        <label>Date CAPE / entrée<input id="ec-date" value="${c.dateCape||''}"></label>
+        <label>Référence CAPE<input id="ec-diagnostic" value="${c.diagnostic||''}" placeholder="Création manuelle"></label>
+        <label>Statut Audit<select id="ec-audit">${AUDIT_STATUS.map(s=>`<option ${c.auditStatut===s?'selected':''}>${s}</option>`).join('')}</select></label>
+        <label>Demande de devis<input value="${c.demandeDevis?'Oui':'Non'}" disabled></label>
+      </div>
+      <h4 class="block-title">Besoin & solution</h4>
+      <div class="client-form-grid">
+        <label>Type de solution<select id="ec-soltype"><option value="chicouf" ${c.solutionType==='chicouf'?'selected':''}>CHIC · OUF / Studeria</option><option value="externe" ${c.solutionType==='externe'?'selected':''}>Externe</option></select></label>
+        <label>Solution proposée<input id="ec-solution" value="${c.solutionProposee||''}"></label>
+        <label class="full">Description du besoin<textarea id="ec-besoin">${c.descriptionBesoin||''}</textarea></label>
+      </div>
+      <h4 class="block-title">Notes</h4>
+      <div class="client-form-grid"><label class="full">Notes<textarea id="ec-notes">${c.notes||''}</textarea></label></div>
+      <div class="client-action-bar"><button class="client-secondary-btn" id="ec-save">Enregistrer les modifications</button></div>
+      ${c.solutionType==='externe'||c.auditStatut==='Externe'?'<div class="client-alert"><strong>Solution externe :</strong> le commercial gère son devis hors CHIC · OUF. Pas de prestation Studeria, pas de facturation gérée ici et pas de commission CHIC · OUF.</div>':''}
+      ${requestBlock}${studeriaBlock}${paymentBlock}
+      ${(c.paiements&&c.paiements.length)?`<h4 class="block-title">Historique des paiements reçus</h4><div class="ledger">${c.paiements.map(p=>`<div class="ledger-row"><div class="ledger-main"><span class="ledger-client">Paiement du ${p.date}</span></div><div class="ledger-amounts"><span class="ledger-montant">${Number(p.montant).toLocaleString('fr-FR')} €</span></div></div>`).join('')}</div>`:''}`;
+ 
+    drawer.querySelector('#ec-save').addEventListener('click',()=>{
+      c.entreprise=drawer.querySelector('#ec-entreprise').value.trim(); c.contact=drawer.querySelector('#ec-contact').value.trim();
+      c.email=drawer.querySelector('#ec-email').value.trim(); c.telephone=drawer.querySelector('#ec-tel').value.trim();
+      c.secteur=drawer.querySelector('#ec-secteur').value.trim(); c.siteWeb=drawer.querySelector('#ec-site').value.trim(); c.adresse=drawer.querySelector('#ec-adresse').value.trim();
+      c.origine=drawer.querySelector('#ec-origin').value; c.consultant=c.origine==='commercial'?drawer.querySelector('#ec-consultant').value.trim():'Sandrine Darrieu';
+      c.dateCape=drawer.querySelector('#ec-date').value.trim(); c.diagnostic=drawer.querySelector('#ec-diagnostic').value.trim()||null;
+      c.dateCape=drawer.querySelector('#ec-date').value.trim();
+      c.diagnostic=drawer.querySelector('#ec-diagnostic').value.trim()||null;
+      c.auditStatut=drawer.querySelector('#ec-audit').value;
+      c.solutionType=drawer.querySelector('#ec-soltype').value;
+      if(c.solutionType==='chicouf'&&!c.demandeDevis){
+        c.demandeDevis=true;
+        c.dateDemandeDevis=new Date().toLocaleDateString('fr-FR');
+      }
+      c.solutionProposee=drawer.querySelector('#ec-solution').value.trim();
+      c.descriptionBesoin=drawer.querySelector('#ec-besoin').value.trim();
+      c.notes=drawer.querySelector('#ec-notes').value.trim();
+      if(c.solutionType==='externe')c.auditStatut='Externe';
+      closeDrawer();renderClients();showToast('Fiche client mise à jour');
+    });
+    const rq=drawer.querySelector('#request-quote'); if(rq)rq.addEventListener('click',()=>{c.demandeDevis=true;c.dateDemandeDevis=new Date().toLocaleDateString('fr-FR');closeDrawer();renderClients();showToast('Demande de devis CHIC · OUF enregistrée');});
+    const ss=drawer.querySelector('#studeria-sent'); if(ss)ss.addEventListener('click',()=>{const a=Number(drawer.querySelector('#quote-amount').value)||0;if(!a){showToast('Renseigne le montant du devis');return;}c.montantDevis=a;c.dateEnvoiDevis=new Date().toLocaleDateString('fr-FR');c.auditStatut='Envoyé';closeDrawer();renderClients();showToast('Devis Studeria marqué comme envoyé');});
+    const rp=drawer.querySelector('#register-payment'); if(rp)rp.addEventListener('click',()=>{
+      const amountInput=drawer.querySelector('#new-payment-amount'); const dateInput=drawer.querySelector('#new-payment-date');
+      const montant=Number(amountInput.value)||0;
+      if(montant<=0){showToast('Renseigne un montant de paiement');return;}
+      const resteAvant=clientReste(c);
+      if(montant>resteAvant){showToast(`Le montant dépasse le reste à encaisser (${resteAvant.toLocaleString('fr-FR')} €)`);return;}
+      const dateISO=dateInput.value; const dateF=dateISO?isoToFR(dateISO):new Date().toLocaleDateString('fr-FR');
+      c.paiements=c.paiements||[]; c.paiements.push({date:dateF,montant,statutCommission:'due',dateVersement:null,referenceVersement:null});
+      if(clientReste(c)<=0){c.auditStatut='Payé';}
+      closeDrawer();renderClients();renderReseau();showToast(`Paiement de ${montant.toLocaleString('fr-FR')} € enregistré`);
+    });
+    document.getElementById('overlay').classList.add('show');drawer.classList.add('show');
+  }
+ 
+  let filtreActif = 'tous';
+  let filtresColonnes = { nom:'', prenom:'', email:'', tel:'' };
+  let filtreAction = null;
+ 
+  const RECO_LABEL = {
+    recommande: { txt: '🟢 Recommandé par l\'IA', cls: 'ok' },
+    a_examiner: { txt: '🟠 À examiner', cls: 'warn' },
+    non_recommande: { txt: '🔴 Non recommandé', cls: 'bad' },
+  };
+ 
+  function exitReason(row) {
+    if (row.statutReseau === 'actif') return null;
+    if (row.sortieParcours === 'abandon') return 'abandon';
+    if (row.sortieParcours === 'non_engage') return 'non_engage';
+    if (row.decision === 'refuse') return 'refuse';
+    return null;
+  }
+ 
+  function isExited(row) { return !!exitReason(row); }
+ 
+  function exitLabel(row) {
+    const r = exitReason(row);
+    if (r === 'refuse') return 'Refusé';
+    if (r === 'abandon') return 'Abandon';
+    if (r === 'non_engage') return 'Non engagé';
+    return '';
+  }
+ 
+  function nextAction(row) {
+    // V4.2 : Airtable conserve les faits, Make exécute les automatisations,
+    // le dashboard signale seulement l'action humaine, l'attente ou une anomalie.
+    if (row.statutReseau === 'actif') return { key:'done', type:'done-state', label:'Commercial actif' };
+    if (isExited(row)) return { key:'done', type:'done-state', label:`Parcours terminé — ${exitLabel(row)}` };
+ 
+    if (!row.dateRDV) {
+      return { key:'automation', type:'automation', label:'Relances prise de RDV — Make' };
+    }
+    if (!row.dateEntretien) {
+      return { key:'waiting', type:'waiting', label:'En attente de l’entretien' };
+    }
+    if (!row.evaluation) {
+      return { key:'automation', type:'automation', label:'Analyse de l’entretien en cours — Fathom / Claude / Make' };
+    }
+    if (row.decision === 'attente') {
+      return { key:'decision', type:'action-required', label:'Décision à prendre — action requise' };
+    }
+    if (row.decision === 'revoir') {
+      return { key:'waiting', type:'waiting', label:'À revoir — suivi manuel' };
+    }
+    if (row.decision === 'refuse') {
+      return { key:'automation', type:'automation', label:'Email de refus — Make' };
+    }
+    if (!row.contratEnvoye) {
+      return { key:'automation', type:'automation', label:'Envoi du contrat — Make' };
+    }
+    if (!row.contratSigne) {
+      const j = joursDepuis(row.contratEnvoye);
+      // Une relance attendue mais non enregistrée est une anomalie potentielle.
+      if (j >= 7 && !row.relanceJ7) return { key:'anomaly', type:'anomaly', label:'⚠ Relance J+7 non confirmée' };
+      if (j >= 5 && !row.relanceJ5) return { key:'anomaly', type:'anomaly', label:'⚠ Relance J+5 non confirmée' };
+      if (j >= 2 && !row.relanceJ2) return { key:'anomaly', type:'anomaly', label:'⚠ Relance J+2 non confirmée' };
+      if (j < 2) return { key:'waiting', type:'waiting', label:'En attente de signature' };
+      if (j < 5) return { key:'automation', type:'automation', label:'Relance J+2 effectuée — Make' };
+      if (j < 7) return { key:'automation', type:'automation', label:'Relance J+5 effectuée — Make' };
+      return { key:'waiting', type:'waiting', label:'Relances terminées — attente signature' };
+    }
+    if (!row.kitPaye) {
+      return { key:'waiting', type:'waiting', label:'En attente du paiement Stripe' };
+    }
+    return { key:'automation', type:'automation', label:'Création du compte — automatique' };
+  }
+ 
+  function actionMatches(row, key) {
+    if (!key) return true;
+    return nextAction(row).key === key;
+  }
+ 
+  function contractualisation(row) {
+    return row.statutReseau === 'recrutement' && !isExited(row) && row.decision === 'accepte';
+  }
+ 
+  function contratBadge(row) {
+    if (isExited(row)) return `<span class="muted-cell">—</span>`;
+    if (row.contratSigne) return `<span class="badge ok">Signé le ${row.contratSigne}</span>`;
+    if (row.contratEnvoye) {
+      const j = joursDepuis(row.contratEnvoye);
+      if (j >= 7) return `<span class="badge bad">En attente — ${j} j (J+7 dépassé)</span>`;
+      if (j >= 2) return `<span class="badge warn">Envoyé le ${row.contratEnvoye}</span>`;
+      return `<span class="badge review">Envoyé le ${row.contratEnvoye}</span>`;
+    }
+    if (row.decision === 'accepte') return `<span class="badge warn">Contrat pas encore parti</span>`;
+    return `<span class="muted-cell">—</span>`;
+  }
+ 
+  function renderFilters() {
+    const nbProspects = data.filter(r => r.statutReseau === 'recrutement' && !isExited(r) && r.decision !== 'accepte').length;
+    const nbContract = data.filter(contractualisation).length;
+    const nbActifs = data.filter(r => r.statutReseau === 'actif').length;
+    const nbSortis = data.filter(isExited).length;
+    const filters = [
+      { key: 'tous', label: `Tous (${data.length})` },
+      { key: 'candidats', label: `Prospects (${nbProspects})` },
+      { key: 'contractualisation', label: `À contractualiser (${nbContract})` },
+      { key: 'actif', label: `Commerciaux actifs (${nbActifs})` },
+      { key: 'sortis', label: `Sortis (${nbSortis})` },
+    ];
+    document.getElementById('filter-row').innerHTML = filters.map(f =>
+      `<button class="filter-btn ${filtreActif === f.key ? 'active' : ''}" data-key="${f.key}">${f.label}</button>`
+    ).join('');
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => { filtreActif = btn.dataset.key; filtreAction = null; render(); });
+    });
+  }
+ 
+  function renderKPIs() {
+    const prospects = data.filter(r => r.statutReseau === 'recrutement' && !isExited(r));
+    const defs = [
+      { key:'decision', label:'décisions à prendre', cls:'action-required' },
+      { key:'automation', label:'automatisations en cours', cls:'automation' },
+      { key:'waiting', label:'attentes externes', cls:'waiting' },
+      { key:'anomaly', label:'anomalies à vérifier', cls:'anomaly' },
+    ];
+    const html = defs.map(d => {
+      const n = prospects.filter(r => actionMatches(r,d.key)).length;
+      return `<div class="kpi ${d.cls} ${filtreAction===d.key?'filter-active':''}" data-action-filter="${d.key}" title="Cliquer pour filtrer la liste"><span class="n">${n}</span> ${d.label}</div>`;
+    }).join('');
+    document.getElementById('kpi-row').innerHTML = `<div class="kpi-title">À surveiller</div>${html}`;
+    document.querySelectorAll('[data-action-filter]').forEach(k => {
+      k.addEventListener('click', () => {
+        const key = k.dataset.actionFilter;
+        filtreAction = filtreAction === key ? null : key;
+        filtreActif = 'tous';
+        render();
+      });
+    });
+  }
+ 
+  function render() {
+    renderFilters();
+    renderKPIs();
+    renderReseau();
+    const tbody = document.getElementById('rows');
+    tbody.innerHTML = '';
+    let visibles = data.filter(r => {
+      if (filtreActif === 'candidats') return r.statutReseau === 'recrutement' && !isExited(r) && r.decision !== 'accepte';
+      if (filtreActif === 'contractualisation') return contractualisation(r);
+      if (filtreActif === 'actif') return r.statutReseau === 'actif';
+      if (filtreActif === 'sortis') return isExited(r);
+      return true;
+    });
+    if (filtreAction) visibles = visibles.filter(r => actionMatches(r, filtreAction));
+    const normalize = v => String(v ?? '').toLocaleLowerCase('fr');
+    visibles = visibles.filter(r => {
+      return Object.entries(filtresColonnes).every(([champ, valeur]) => {
+        const q = valeur.trim().toLocaleLowerCase('fr');
+        return !q || normalize(r[champ]).includes(q);
+      });
+    });
+ 
+    if (!visibles.length) {
+      const rechercheActive = Object.values(filtresColonnes).some(v => v.trim());
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="9">Aucun résultat${rechercheActive ? ' pour ces critères de recherche' : ''}.</td></tr>`;
+    }
+ 
+    visibles.forEach((row) => {
+      const tr = document.createElement('tr');
+      tr.dataset.id = row.id;
+      const decisionCell = row.statutReseau === 'actif'
+        ? `<span class="badge ok">Actif ✓</span>`
+        : isExited(row) && exitReason(row) !== 'refuse'
+          ? `<span class="badge review">${DECISIONS[row.decision].label}</span>`
+          : `<select class="decision-select ${DECISIONS[row.decision].cls}" data-id="${row.id}">
+            ${Object.entries(DECISIONS).map(([k,v]) => `<option value="${k}" ${k===row.decision?'selected':''}>${v.label}</option>`).join('')}
+          </select>`;
+      tr.innerHTML = `
+        <td><span class="reseau-tag ${row.statutReseau === 'actif' ? 'actif' : (exitReason(row)==='abandon' ? 'abandon' : exitReason(row)==='non_engage' ? 'nonengage' : exitReason(row)==='refuse' ? 'sortie' : 'recrutement')}">${row.statutReseau === 'actif' ? 'Commercial actif' : (isExited(row) ? exitLabel(row) : 'Prospect')}</span></td>
+        <td class="name">${row.nom}</td>
+        <td>${row.prenom}</td>
+        <td><a class="mail" href="mailto:${row.email}" onclick="event.stopPropagation()">${row.email}</a></td>
+        <td class="muted-cell">${row.tel}</td>
+        <td>${decisionCell}</td>
+        <td>${contratBadge(row)}</td>
+        <td><span class="next-action ${nextAction(row).type || ''}">${nextAction(row).label}</span></td>
+        <td><button class="fiche-btn" data-id="${row.id}">Voir la fiche →</button></td>
+      `;
+      // La fiche complète s'ouvre uniquement via le bouton « Voir la fiche ».
+      // La ligne et la colonne « Étape en cours » restent informatives et ne sont pas cliquables.
+      tbody.appendChild(tr);
+    });
+ 
+    // Zone Prospects : ce handler ne cible QUE les boutons « Voir la fiche ».
+    document.querySelectorAll('.fiche-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openDrawer(Number(btn.dataset.id));
+      });
+    });
+ 
+    document.querySelectorAll('.decision-select').forEach(sel => {
+      sel.addEventListener('click', e => e.stopPropagation());
+      sel.addEventListener('change', (e) => {
+        e.stopPropagation();
+        const id = Number(e.target.dataset.id);
+        const row = data.find(r => r.id === id);
+        const newVal = e.target.value;
+        row.decision = newVal;
+        if (newVal === 'refuse') row.sortieParcours = 'refuse';
+        else if (row.sortieParcours === 'refuse') row.sortieParcours = null;
+        showToast('Enregistrement…');
+        setTimeout(() => {
+          showToast(`Statut mis à jour → ${DECISIONS[newVal].label}`);
+          render();
+        }, 450);
+      });
+    });
+  }
+ 
+  function stepState(done, isCurrent, blocked, paused) {
+    if (blocked) return 'blocked';
+    if (paused) return 'paused';
+    if (done) return 'done';
+    if (isCurrent) return 'current';
+    return 'pending';
+  }
+ 
+  function buildTimeline(row) {
+    const steps = [];
+    steps.push({ title: row.origineCreation === 'manuel' ? 'Prospect créé' : 'Candidature reçue', date: row.dateCandidature, done: true });
+    steps.push({ title: 'RDV pris', date: row.dateRDV, done: !!row.dateRDV, editKey: 'dateRDV' });
+    steps.push({ title: 'Entretien réalisé', date: row.dateEntretien, done: !!row.dateEntretien, editKey: 'dateEntretien' });
+    steps.push({ title: 'Compte-rendu & scoring IA (automatique)', done: !!row.evaluation, current: !!row.dateEntretien && !row.evaluation, evaluation: row.evaluation });
+ 
+    if (row.sortieParcours === 'abandon') {
+      steps.push({ title: 'Parcours terminé : Abandon du prospect', date: row.dateSortie || null, done: true, blocked: true });
+      return steps;
+    }
+    if (row.sortieParcours === 'non_engage') {
+      steps.push({ title: 'Parcours terminé : Prospect non engagé', date: row.dateSortie || null, done: true, paused: true });
+      return steps;
+    }
+    if (row.decision === 'refuse') {
+      steps.push({ title: 'Décision : Refusé', date: null, done: true, blocked: true });
+      return steps;
+    }
+ 
+    steps.push({
+      title: row.decision === 'accepte' ? 'Décision : Accepté' : (row.decision === 'revoir' ? 'Décision : À revoir' : 'Validation de la candidature'),
+      date: null, done: row.decision === 'accepte',
+      current: row.decision === 'attente',
+      paused: row.decision === 'revoir',
+    });
+ 
+    // Étapes futures — toujours visibles en attente, se mettent à jour automatiquement
+    // (contrat envoyé dès l'acceptation, CGV/signature/paiement dès que les outils externes confirment)
+    steps.push({
+      title: row.contratEnvoye ? 'Contrat envoyé' : (row.decision === 'accepte' ? 'Contrat pas encore parti' : 'Contrat envoyé'),
+      date: row.contratEnvoye, done: !!row.contratEnvoye, current: row.decision === 'accepte' && !row.contratEnvoye,
+      relances: !row.contratSigne && row.contratEnvoye ? [row.relanceJ2, row.relanceJ5, row.relanceJ7] : null,
+    });
+    steps.push({ title: 'CGV acceptées', date: row.dateAcceptationCGV, done: !!row.cgvAcceptees, current: !!row.contratEnvoye && !row.cgvAcceptees });
+    steps.push({ title: 'Contrat signé', date: row.contratSigne, done: !!row.contratSigne, current: !!row.contratEnvoye && !row.contratSigne });
+    steps.push({ title: 'Paiement du kit (500€)', date: row.datePaiementKit || null, done: !!row.kitPaye, current: !!row.contratSigne && !row.kitPaye });
+    steps.push({ title: 'Compte commercial activé', date: row.dateActivation || null, done: row.statutReseau === 'actif' });
+    return steps;
+  }
+ 
+  const CRITERES = [
+    { key: 'motivation', label: 'Motivation', max: 20 },
+    { key: 'commercial', label: 'Capacité commerciale', max: 20 },
+    { key: 'reseau', label: 'Réseau / relationnel', max: 20 },
+    { key: 'autonomie', label: 'Autonomie', max: 15 },
+    { key: 'numerique', label: 'Aisance numérique', max: 10 },
+    { key: 'disponibilite', label: 'Disponibilité', max: 15 },
+  ];
+ 
+  function evalScoreTotal(ev) {
+    return CRITERES.reduce((sum, c) => sum + (ev[c.key] || 0), 0);
+  }
+  function evalReco(total) {
+    if (total >= 75) return RECO_LABEL.recommande;
+    if (total >= 50) return RECO_LABEL.a_examiner;
+    return RECO_LABEL.non_recommande;
+  }
+ 
+  function tlEvalHtml(ev, stepIndex) {
+    if (!ev) return `<div class="tl-eval-empty">En attente du compte-rendu Fathom</div>`;
+    const total = evalScoreTotal(ev);
+    const reco = evalReco(total);
+    return `
+      <div class="tl-eval-compact">
+        <span class="tl-eval-score">${total}<span class="tl-eval-max">/100</span></span>
+        <span class="badge ${reco.cls}">${reco.txt}</span>
+        <button class="tl-eval-btn" data-step="${stepIndex}">Voir le détail et le compte-rendu →</button>
+      </div>
+      <div class="tl-eval-detail" id="tl-eval-detail-${stepIndex}" style="display:none;">
+        <div class="eval-list"><div class="lbl">Détail par critère</div>
+          ${CRITERES.map(c => `
+            <div class="eval-crit-row">
+              <span class="eval-crit-label">${c.label}</span>
+              <div class="eval-crit-bar"><div class="eval-crit-fill" style="width:${(ev[c.key]/c.max*100)}%"></div></div>
+              <span class="eval-crit-val">${ev[c.key]}/${c.max}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="eval-list"><div class="lbl">Compte-rendu IA</div><p class="tl-eval-cr">${ev.compteRendu}</p></div>
+        <div class="tl-eval-link">📄 Renvoi vers l'enregistrement Fathom complet</div>
+      </div>
+    `;
+  }
+ 
+  function renderTimelineHtml(row) {
+    const steps = buildTimeline(row);
+    const chunks = [];
+    steps.forEach((s, i) => {
+      if (i === 0) chunks.push('<div class="phase-label">Candidature</div>');
+      if (i === 5) chunks.push('<div class="phase-label">Contractualisation</div>');
+      if (i === 8) chunks.push('<div class="phase-label">Activation</div>');
+      const state = stepState(s.done, s.current, s.blocked, s.paused);
+      chunks.push(`
+        <div class="tl-step ${state}">
+          <div class="tl-marker"><div class="tl-dot">${s.done?'✓':''}</div>${i<steps.length-1?'<div class="tl-line"></div>':''}</div>
+          <div class="tl-body">
+            <div class="tl-title">${s.title}</div>
+            ${s.evaluation !== undefined ? tlEvalHtml(s.evaluation, i) : ''}
+            ${s.date ? `<div class="tl-date-row"><span class="tl-date">${s.date}</span>${s.editKey?`<button class="tl-edit-btn" data-edit-date="${s.editKey}">✏️</button>`:''}</div>` : (s.editKey ? `<div class="tl-date-row"><span class="tl-date">Pas encore fixée</span><button class="tl-edit-btn" data-edit-date="${s.editKey}">✏️</button></div>` : '')}
+            ${s.relances ? `<div class="tl-relances">${s.relances.map(x=>`<span class="relance-dot ${x?'sent':''}"></span>`).join('')}<span class="tl-relances-label">Relances J+2 / J+5 / J+7</span></div>`:''}
+          </div>
+        </div>`);
+    });
+    return chunks.join('');
+  }
+ 
+  function currentMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+ 
+  function subscriptionForMonth(row, monthKey) {
+    const item = (row.abonnementsStripe || {})[monthKey];
+    return item || { statut: 'impaye', datePaiement: null };
+  }
+ 
+ 
+  function subscriptionBadgeHtml(row, monthKey) {
+    const sub = subscriptionForMonth(row, monthKey);
+    if (commissionPaymentBlocked(row, monthKey)) return '<span class="subscription-status blocked">⛔ Commissions bloquées</span>';
+    if (sub.statut === 'paye') return '<span class="subscription-status ok">✓ Abonnement OK</span>';
+    return '<span class="subscription-status bad">● Abonnement impayé</span>';
+  }
+ 
+  let reseauPeriod = currentMonthKey();
+ 
+  function allReseauMonths() {
+    const months = new Set();
+    data.filter(r => r.statutReseau === 'actif').forEach(row => {
+      clientPaymentEntries(row).forEach(e => { const k = commissionMonthKey(e.datePaiementClient); if (k) months.add(k); });
+      Object.keys(row.abonnementsStripe || {}).forEach(k => months.add(k));
+    });
+    return [...months].sort((a,b) => b.localeCompare(a));
+  }
+ 
+  function paymentEntriesForMonth(row, monthKey) {
+    const entries = clientPaymentEntries(row);
+    if (monthKey === 'all') return entries;
+    return entries.filter(e => commissionMonthKey(e.datePaiementClient) === monthKey);
+  }
+ 
+  function reseauFinancials(row) {
+    const entries = reseauPeriod === 'all'
+      ? clientPaymentEntries(row)
+      : commissionEntriesForMonth(row, reseauPeriod);
+ 
+    const totalsBase = commissionEntryTotals(entries);
+    const ventesEncaissees = new Set(entries.map(e => e.vente || e.client || e.datePaiementClient)).size;
+    const abonnementPaye = reseauPeriod === 'all'
+      ? true
+      : subscriptionForMonth(row, reseauPeriod).statut === 'paye';
+ 
+    const payable = abonnementPaye ? totalsBase.dues : 0;
+    const bloquee = abonnementPaye ? 0 : totalsBase.dues;
+ 
+    return {
+      entries,
+      ventesEncaissees,
+      abonnementPaye,
+      payable,
+      bloquee,
+      totals: {
+        encaisse: totalsBase.encaisse,
+        generees: totalsBase.commissions,
+        dues: totalsBase.dues,
+        versees: totalsBase.versees
+      }
+    };
+  }
+ 
+  function renderReseauPeriodSelect() {
+    const sel = document.getElementById('reseau-period-select');
+    if (!sel) return;
+    const months = allReseauMonths();
+    if (reseauPeriod !== 'all' && !months.includes(reseauPeriod)) reseauPeriod = months[0] || 'all';
+    sel.innerHTML = [
+      '<option value="all">Cumulé — toutes périodes</option>',
+      ...months.map(m => `<option value="${m}" ${reseauPeriod===m?'selected':''}>${commissionMonthLabel(m)}</option>`)
+    ].join('');
+    sel.value = reseauPeriod;
+    if (!sel.dataset.bound) {
+      sel.addEventListener('change', () => { reseauPeriod = sel.value; renderReseau(); });
+      sel.dataset.bound = '1';
+    }
+  }
+ 
+  let caCommercialSearch = '';
+  let caStatutFilter='tous';
+ 
+  function commissionStatus(row, f, period){
+    const generated = f.totals.generees > 0;
+    const outstanding = f.totals.dues > 0;
+    const hasPaid = f.totals.versees > 0;
+ 
+    if(generated && !outstanding && hasPaid){
+      return {key:'versee', label:'Commission versée', cls:'ok'};
+    }
+    if(f.bloquee > 0){
+      return {key:'bloquee', label:'Commission bloquée', cls:'bad', sub:'Abonnement impayé'};
+    }
+    if(outstanding && f.payable > 0){
+      return {key:'ok', label:'Abonnement OK — à verser', cls:'ok'};
+    }
+    if(!generated){
+      return {key:'ok', label:'Aucune commission', cls:'review'};
+    }
+    return {key:'ok', label:'Abonnement OK', cls:'ok'};
+  }
+ 
+  function commissionPaymentDate(row, period){
+    const paid = clientPaymentEntries(row).filter(e => e.statutCommission === 'versee' && e.dateVersement);
+    const scoped = (period && period !== 'all')
+      ? paid.filter(e => commissionMonthKey(e.datePaiementClient) === period)
+      : paid;
+    if(!scoped.length) return '—';
+    return scoped
+      .map(e => e.dateVersement)
+      .filter(Boolean)
+      .sort((a,b) => parseFR(a) - parseFR(b))
+      .pop() || '—';
+  }
+ 
+  function renderReseau() {
+    renderReseauPeriodSelect();
+ 
+    const actifs = data.filter(r => r.statutReseau === 'actif');
+    const rows = actifs.map(row => ({ row, f: reseauFinancials(row) }));
+ 
+    const caTotal = rows.reduce((sum,x) => sum + x.f.totals.encaisse, 0);
+    const commissionDueTotal = rows.reduce((sum,x) => sum + x.f.totals.generees, 0);
+    const commissionPayableTotal = rows.reduce((sum,x) => sum + x.f.payable, 0);
+    const commissionBloqueeTotal = rows.reduce((sum,x) => sum + x.f.bloquee, 0);
+    const commissionVerseeTotal = rows.reduce((sum,x) => sum + x.f.totals.versees, 0);
+    const impayesSansCommission = reseauPeriod === 'all' ? 0 : rows.filter(x => !x.f.abonnementPaye && x.f.totals.dues === 0).length;
+    const periodLabel = reseauPeriod === 'all' ? 'cumulé' : commissionMonthLabel(reseauPeriod);
+ 
+    document.getElementById('reseau-kpi-row').innerHTML = `
+      <div class="kpi"><span class="n">${caTotal.toLocaleString('fr-FR')} €</span> CA encaissé — ${periodLabel}</div>
+      <div class="kpi ${commissionDueTotal ? 'alert' : ''}"><span class="n">${commissionDueTotal.toLocaleString('fr-FR')} €</span> commissions générées sur encaissements</div>
+      <div class="kpi"><span class="n">${commissionPayableTotal.toLocaleString('fr-FR')} €</span> à payer</div>
+      <div class="kpi ${commissionBloqueeTotal ? 'alert' : ''}"><span class="n">${commissionBloqueeTotal.toLocaleString('fr-FR')} €</span> commissions bloquées — abonnement impayé</div>
+      <div class="kpi"><span class="n">${commissionVerseeTotal.toLocaleString('fr-FR')} €</span> versées</div>
+      ${impayesSansCommission ? `<div class="kpi alert"><span class="n">${impayesSansCommission}</span> abonnement${impayesSansCommission>1?'s':''} impayé${impayesSansCommission>1?'s':''} sans commission due</div>` : ''}
+    `;
+ 
+    const tbody = document.getElementById('reseau-rows');
+    let displayRows = caCommercialSearch.trim()
+      ? rows.filter(({row}) => `${row.prenom} ${row.nom}`.toLocaleLowerCase('fr').includes(caCommercialSearch.trim().toLocaleLowerCase('fr')))
+      : rows.slice();
+ 
+    if(reseauPeriod !== 'all'){
+    }
+    if(caStatutFilter!=='tous'){
+      displayRows=displayRows.filter(x=>commissionStatus(x.row,x.f,reseauPeriod).key===caStatutFilter);
+    }
+    if(!displayRows.length){
+      tbody.innerHTML='<tr><td colspan="10" class="empty-row">Aucun commercial ne correspond à cette recherche.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = displayRows
+      .slice()
+      .sort((a,b) => {
+        const pa = a.f.bloquee > 0 ? 3 : (a.f.payable > 0 ? 2 : (!a.f.abonnementPaye && reseauPeriod !== 'all' ? 1 : 0));
+        const pb = b.f.bloquee > 0 ? 3 : (b.f.payable > 0 ? 2 : (!b.f.abonnementPaye && reseauPeriod !== 'all' ? 1 : 0));
+        return pb - pa || b.f.totals.encaisse - a.f.totals.encaisse;
+      })
+      .map(({row,f}) => {
+        return `
+        <tr class="reseau-row" data-id="${row.id}">
+          <td class="name">${row.prenom} ${row.nom}</td>
+          <td>${row.capeEnvoyes}</td>
+          <td>${f.ventesEncaissees}</td>
+          <td><strong>${f.totals.encaisse.toLocaleString('fr-FR')} €</strong></td>
+          <td>${f.totals.generees ? `<span class="badge warn">${f.totals.generees.toLocaleString('fr-FR')} €</span>` : '<span class="muted-cell">—</span>'}</td>
+          <td>${(() => { const st=commissionStatus(row,f,reseauPeriod); return `<span class="badge ${st.cls}">${st.label}</span>${st.sub?`<div class="payment-warning">${st.sub}</div>`:''}`; })()}</td>
+          <td class="muted-cell">${commissionStatus(row,f,reseauPeriod).key==='versee' ? commissionPaymentDate(row, reseauPeriod) : '—'}</td>
+          <td><button class="commission-detail-btn" data-id="${row.id}">Détail commission →</button></td>
+        </tr>`;
+      }).join('');
+ 
+    document.querySelectorAll('.reseau-row').forEach(tr => { tr.style.cursor = 'default'; });
+    document.querySelectorAll('.commission-detail-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openCommissionDetail(Number(btn.dataset.id), reseauPeriod === 'all' ? null : reseauPeriod);
+      });
+    });
+  }
+ 
+ 
+  function initCaCommercialSearch(){
+    const btn=document.getElementById('ca-commercial-search-btn');
+    const box=document.getElementById('ca-commercial-search-box');
+    const input=document.getElementById('ca-commercial-search-input');
+    if(!btn||!box||!input) return;
+ 
+    if(!btn.dataset.searchBound){
+      btn.addEventListener('click',(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen=box.style.display!=='none';
+        box.style.display=isOpen?'none':'block';
+        if(!isOpen) setTimeout(()=>input.focus(),0);
+      });
+      btn.dataset.searchBound='1';
+    }
+ 
+    if(!input.dataset.searchBound){
+      input.addEventListener('input',()=>{
+        caCommercialSearch=input.value || '';
+        btn.classList.toggle('active',!!caCommercialSearch.trim());
+        renderReseau();
+      });
+      input.addEventListener('keydown',(e)=>{
+        if(e.key==='Escape'){
+          input.value='';
+          caCommercialSearch='';
+          btn.classList.remove('active');
+          box.style.display='none';
+          renderReseau();
+        }
+      });
+      input.dataset.searchBound='1';
+    }
+ 
+    const bindFilterMenu=(buttonId,menuId,attr,stateSetter)=>{
+      const fbtn=document.getElementById(buttonId), menu=document.getElementById(menuId);
+      if(!fbtn||!menu||fbtn.dataset.bound)return;
+      fbtn.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        const open=menu.style.display!=='none';
+        document.querySelectorAll('.ca-filter-menu').forEach(m=>m.style.display='none');
+        menu.style.display=open?'none':'block';
+      });
+      menu.querySelectorAll(`[${attr}]`).forEach(opt=>opt.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        stateSetter(opt.getAttribute(attr));
+        menu.style.display='none';
+        menu.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b===opt));
+        fbtn.classList.toggle('active',opt.getAttribute(attr)!=='tous');
+        renderReseau();
+      }));
+      fbtn.dataset.bound='1';
+    };
+    bindFilterMenu('ca-statut-filter-btn','ca-statut-filter-menu','data-ca-statut-filter',v=>caStatutFilter=v);
+  }
+ 
+  function fieldRow(label, value, key, type, locked) {
+    const displayVal = value === null || value === undefined || value === '' ? '—' : (type === 'checkbox' ? (value ? '✓ Oui' : '— Non') : value);
+    if (locked) {
+      return `<div class="ff-row"><span class="ff-label">${label}</span><span class="ff-value ff-locked" title="Alimenté automatiquement par Make — non modifiable ici">🔒 ${displayVal}</span></div>`;
+    }
+    return `
+      <div class="ff-row" data-key="${key}" data-type="${type}">
+        <span class="ff-label">${label}</span>
+        <span class="ff-value ff-editable">${displayVal} <button class="ff-edit-btn" data-key="${key}" data-type="${type}" data-current="${value === null || value === undefined ? '' : value}">✏️</button></span>
+      </div>`;
+  }
+ 
+  function fullFieldsHtml(row) {
+    return `
+      <div class="ff-group">
+        <div class="ff-group-title">Identité</div>
+        ${fieldRow('Ville', row.ville, 'ville', 'text')}
+        ${fieldRow('LinkedIn', row.linkedin, 'linkedin', 'text')}
+        ${fieldRow('Situation', row.situation, 'situation', 'text')}
+        ${fieldRow('Expérience', row.experience, 'experience', 'text')}
+        ${fieldRow('Disponibilité hebdo', row.disponibiliteHebdo, 'disponibiliteHebdo', 'text')}
+        ${fieldRow('SIRET', row.siret, 'siret', 'text')}
+      </div>
+      <div class="ff-group">
+        <div class="ff-group-title">Coordonnées bancaires</div>
+        ${fieldRow('IBAN', row.iban, 'iban', 'text')}
+        <div class="note">Utilisé uniquement pour le versement des commissions.</div>
+      </div>
+      <div class="ff-group">
+        <div class="ff-group-title">Candidature</div>
+        ${fieldRow('Source / campagne', row.source, null, 'text', true)}
+        ${fieldRow('Motif du RDV', row.motifRDV, null, 'text', true)}
+        ${fieldRow('Date candidature', row.dateCandidature, null, 'text', true)}
+      </div>
+      <div class="ff-group">
+        <div class="ff-group-title">Contrat — infos techniques</div>
+        ${fieldRow('Date limite signature', row.dateLimiteSignature, 'dateLimiteSignature', 'date')}
+        ${fieldRow('ID signature Youtrust', row.contratSignatureId, null, 'text', true)}
+        ${fieldRow('Lien dashboard envoyé', row.dashboardEnvoye, null, 'checkbox', true)}
+      </div>
+    `;
+  }
+ 
+  function parseFRDateParts(value) {
+    if (!value) return null;
+    const parts = value.split('/').map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) return null;
+    return { day: parts[0], month: parts[1], year: parts[2] };
+  }
+ 
+  function venteEligibleSuivi(v) {
+    // V5.8 — Une vente n'est commissionnable que si :
+    // 1) le devis est validé ;
+    // 2) l'Audit lié a le statut "Signé" ;
+    // 3) un paiement client est réellement encaissé (géré ensuite dans clientPaymentEntries).
+    // À la connexion Airtable, statutAudit viendra de la table Audits → champ Statut.
+    return !!(v && v.devisValide !== false && String(v.statutAudit || '').toLowerCase() === 'signe');
+  }
+ 
+  function ventesEligibles(ventes) {
+    return (ventes || []).filter(venteEligibleSuivi);
+  }
+ 
+  function commissionMonthKey(dateFR) {
+    const p = parseFRDateParts(dateFR);
+    return p ? `${p.year}-${String(p.month).padStart(2,'0')}` : '';
+  }
+ 
+  function commissionMonthLabel(key) {
+    if (!key) return 'Toutes les périodes';
+    const [year, month] = key.split('-').map(Number);
+    const d = new Date(year, month - 1, 1);
+    return d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }).replace(/^./, c => c.toUpperCase());
+  }
+ 
+  function commissionMonthsForRow(row) {
+    return [...new Set(clientPaymentEntries(row).map(e => commissionMonthKey(e.datePaiementClient)).filter(Boolean))]
+      .sort((a,b) => b.localeCompare(a));
+  }
+ 
+  function commissionEntriesForMonth(row, monthKey) {
+    return clientPaymentEntries(row).filter(e => commissionMonthKey(e.datePaiementClient) === monthKey);
+  }
+ 
+  function commissionEntryTotals(entries) {
+    return {
+      encaisse: entries.reduce((s,e) => s + (e.montantEncaisse || 0), 0),
+      commissions: entries.reduce((s,e) => s + (e.commission || 0), 0),
+      versees: entries.filter(e => e.statutCommission === 'versee').reduce((s,e) => s + (e.commission || 0), 0),
+      dues: entries.filter(e => e.statutCommission === 'due').reduce((s,e) => s + (e.commission || 0), 0),
+    };
+  }
+ 
+  // Compatibilité avec les appels existants de sécurité abonnement.
+  function ventesForMonth(ventes, monthKey) {
+    return ventesEligibles(ventes).filter(v => (v.paiementsClient || []).some(p => commissionMonthKey(p.date) === monthKey));
+  }
+ 
+  function commissionMonthTotals(items) {
+    if (!items || !items.length) return { ventes:0, encaisse:0, commissions:0, versees:0, dues:0 };
+    if (items[0] && Object.prototype.hasOwnProperty.call(items[0], 'montantEncaisse')) {
+      const t = commissionEntryTotals(items);
+      return { ventes:t.encaisse, ...t };
+    }
+    const entries = [];
+    items.forEach(v => (v.paiementsClient || []).forEach(p => entries.push({
+      montantEncaisse:p.montant||0,
+      commission:Math.round((p.montant||0)*5)/100,
+      statutCommission:p.statutCommission||'due'
+    })));
+    const t=commissionEntryTotals(entries);
+    return { ventes:t.encaisse, ...t };
+  }
+ 
+  function commissionPaymentBlocked(row, monthKey) {
+    const entries = commissionEntriesForMonth(row, monthKey);
+    const dues = commissionEntryTotals(entries).dues;
+    return dues > 0 && subscriptionForMonth(row, monthKey).statut !== 'paye';
+  }
+ 
+  function commissionLedgerHtml(entries) {
+    if (!entries.length) return '<div class="eval-empty">Aucun paiement client encaissé pour ce mois. Aucun CA ni commission n’est donc généré.</div>';
+    return entries.map(e => {
+      const cumul = venteEncaissementCumule(e.vente);
+      const reste = Math.max(0, e.montantDevis - cumul);
+      return `
+      <div class="ledger-row">
+        <div class="ledger-main">
+          <span class="ledger-client">${e.client}</span>
+          <span class="ledger-date">Devis ${e.montantDevis.toLocaleString('fr-FR')} € · paiement client le ${e.datePaiementClient}</span>
+          <span class="ledger-date">Encaissé sur ce règlement : <strong>${e.montantEncaisse.toLocaleString('fr-FR')} €</strong> · reste client à encaisser : ${reste.toLocaleString('fr-FR')} €</span>
+        </div>
+        <div class="ledger-amounts">
+          <span class="ledger-montant">Commission 5 % : ${e.commission.toLocaleString('fr-FR')} €</span>
+          <span class="badge ${e.statutCommission === 'versee' ? 'ok' : 'warn'}">${e.statutCommission === 'versee' ? `versée le ${e.dateVersement}${e.referenceVersement ? ` · réf. ${e.referenceVersement}` : ''}` : 'due'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+ 
+  function updateCommissionMonthView(row, monthKey) {
+    const entries = commissionEntriesForMonth(row, monthKey);
+    const totals = commissionEntryTotals(entries);
+    const summary = document.getElementById('commission-month-summary');
+    const ledger = document.getElementById('commission-month-ledger');
+    const blocked = commissionPaymentBlocked(row, monthKey);
+    const sub = subscriptionForMonth(row, monthKey);
+    if (summary) summary.innerHTML = `
+      <div class="mini"><strong>${totals.encaisse.toLocaleString('fr-FR')} €</strong>CA réellement encaissé</div>
+      <div class="mini"><strong>${totals.commissions.toLocaleString('fr-FR')} €</strong>Commission générée (5 %)</div>
+      <div class="mini"><strong>${totals.versees.toLocaleString('fr-FR')} €</strong>Commissions versées</div>
+      <div class="mini"><strong>${totals.dues.toLocaleString('fr-FR')} €</strong>${blocked ? 'Commissions bloquées' : 'Commissions restant dues'}</div>
+      <div style="grid-column:1/-1">${subscriptionBadgeHtml(row, monthKey)}${sub.datePaiement ? `<span class="muted-cell" style="margin-left:.5rem">Stripe payé le ${sub.datePaiement}</span>` : ''}</div>
+      ${row.commissionPayouts && row.commissionPayouts[monthKey] ? `<div class="payout-proof" style="grid-column:1/-1"><strong>Versement commissions enregistré</strong><br>Date : ${row.commissionPayouts[monthKey].date} · Montant : ${row.commissionPayouts[monthKey].montant.toLocaleString('fr-FR')} € · Référence : ${row.commissionPayouts[monthKey].reference || '—'}</div>` : ''}
+      ${blocked ? `<div class="commission-block-alert" style="grid-column:1/-1;margin:.1rem 0 0"><strong>Versement suspendu</strong>L'abonnement Stripe de ${commissionMonthLabel(monthKey)} n'est pas confirmé. Ne verse pas les commissions tant que le paiement de l'abonnement n'est pas reçu.</div>` : ''}`;
+    if (ledger) ledger.innerHTML = commissionLedgerHtml(entries);
+  }
+ 
+  function generateCommissionPDF(row, monthKey) {
+    const entries = commissionEntriesForMonth(row, monthKey);
+    if (!entries.length) { showToast('Aucun paiement client encaissé à inclure dans ce relevé.'); return; }
+    if (!window.jspdf || !window.jspdf.jsPDF) { showToast('Bibliothèque PDF indisponible. Vérifie la connexion internet.'); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const totals = commissionEntryTotals(entries);
+    const monthLabel = commissionMonthLabel(monthKey);
+    const commercial = `${row.prenom} ${row.nom}`;
+    doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text('CHIC · OUF - Relevé de commissions',14,18);
+    doc.setFontSize(12); doc.text(commercial,14,27);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text(`Période d'encaissement : ${monthLabel}`,14,34);
+    doc.text('Base de calcul : audit signé + paiements clients réellement reçus',14,40);
+    doc.text(`Édité le : ${new Date().toLocaleDateString('fr-FR')}`,14,46);
+    const sub=subscriptionForMonth(row,monthKey);
+    doc.text(`Abonnement Stripe : ${sub.statut==='paye' ? `payé${sub.datePaiement?` le ${sub.datePaiement}`:''}` : 'non confirmé'}`,14,52);
+    const payout=row.commissionPayouts&&row.commissionPayouts[monthKey];
+    if(payout) doc.text(`Versement commissions : ${payout.date} - réf. ${payout.reference||'—'}`,14,58);
+    const blocked=commissionPaymentBlocked(row,monthKey);
+    if(blocked){ doc.setFont('helvetica','bold'); doc.text('COMMISSIONS SUSPENDUES - abonnement Stripe non confirmé',14,payout?64:58); doc.setFont('helvetica','normal'); }
+    const body=entries.map(e=>[
+      e.client,
+      e.datePaiementClient,
+      `${e.montantDevis.toLocaleString('fr-FR')} €`,
+      `${e.montantEncaisse.toLocaleString('fr-FR')} €`,
+      `${e.commission.toLocaleString('fr-FR')} €`,
+      e.dateVersement||'En attente'
+    ]);
+    doc.autoTable({
+      startY:payout?(blocked?70:64):(blocked?64:58),
+      head:[['Client','Paiement client','Devis','Encaissé','Commission 5 %','Paiement commission']],
+      body, theme:'grid', styles:{font:'helvetica',fontSize:7.6,cellPadding:2,overflow:'linebreak'}, headStyles:{fontStyle:'bold'},
+      columnStyles:{0:{cellWidth:38},1:{cellWidth:25},2:{cellWidth:25,halign:'right'},3:{cellWidth:27,halign:'right'},4:{cellWidth:25,halign:'right'},5:{cellWidth:35}}
+    });
+    const y=doc.lastAutoTable.finalY+10;
+    doc.setFont('helvetica','bold'); doc.setFontSize(10);
+    doc.text(`CA encaissé : ${totals.encaisse.toLocaleString('fr-FR')} €`,14,y);
+    doc.text(`Commission générée (5 %) : ${totals.commissions.toLocaleString('fr-FR')} €`,14,y+6);
+    doc.setFont('helvetica','normal');
+    doc.text(`Commissions versées : ${totals.versees.toLocaleString('fr-FR')} €`,14,y+12);
+    doc.text(`Commissions restant dues : ${totals.dues.toLocaleString('fr-FR')} €`,14,y+18);
+    doc.setFontSize(8); doc.text('Document de suivi des commissions - CHIC · OUF',14,287);
+    const safeName=`${row.prenom}-${row.nom}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9-]/g,'-');
+    doc.save(`releve-commissions-${safeName}-${monthKey}.pdf`); showToast(`Relevé PDF généré - ${monthLabel}`);
+  }
+ 
+  function openCommissionDetail(id, preferredMonth=null) {
+    const row=data.find(r=>r.id===id);
+    const drawer=document.getElementById('drawer');
+    const allEntries=clientPaymentEntries(row);
+    const totalDue=allEntries.filter(e=>e.statutCommission==='due').reduce((s,e)=>s+e.commission,0);
+    const totalVersee=allEntries.filter(e=>e.statutCommission==='versee').reduce((s,e)=>s+e.commission,0);
+    const months=commissionMonthsForRow(row);
+    const defaultMonth=preferredMonth&&months.includes(preferredMonth)?preferredMonth:(months[0]||'');
+    drawer.innerHTML=`
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="greet-eyebrow">Détail commission</div>
+      <h3>${row.prenom} ${row.nom}</h3>
+      <div class="sub-line">Commission calculée uniquement si l’audit est signé et sur les paiements clients réellement encaissés · taux de maquette : 5 %.</div>
+      <div class="drawer-decision" style="margin-top:1rem;">
+        <label>IBAN du commercial</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;">
+          <strong style="font-size:.88rem;color:var(--nuit);letter-spacing:.03em;">${row.iban||'Non renseigné'}</strong>
+          <button class="edit-btn" id="commission-edit-iban">Modifier dans la fiche</button>
+        </div>
+        ${row.iban?'':'<div class="note" style="color:var(--bad-fg);">⚠ IBAN manquant : à compléter avant tout versement.</div>'}
+      </div>
+      <div class="comm-summary">
+        <div class="comm-summary-item"><span class="n">${totalVersee.toLocaleString('fr-FR')} €</span>versé (cumulé)</div>
+        <div class="comm-summary-item ${totalDue?'alert':''}"><span class="n">${totalDue.toLocaleString('fr-FR')} €</span>dû sur encaissements</div>
+      </div>
+      <div class="commission-report-tools">
+        <label for="commission-month-select">Mois d'encaissement</label>
+        <div class="commission-report-row">
+          <select class="commission-month-select" id="commission-month-select">${months.length?months.map(m=>`<option value="${m}" ${m===defaultMonth?'selected':''}>${commissionMonthLabel(m)}</option>`).join(''):'<option value="">Aucune période disponible</option>'}</select>
+          <button class="commission-pdf-btn" id="commission-pdf-btn" ${months.length?'':'disabled'}>Générer le PDF</button>
+          <button class="commission-payout-btn" id="commission-payout-btn" disabled>Valider le versement</button>
+          <button class="commission-email-btn" disabled title="Sera relié à l'envoi email dans une étape ultérieure">Envoyer par email</button>
+        </div>
+        <div class="payout-ref-row"><label for="commission-payout-ref">Référence du paiement</label><input id="commission-payout-ref" type="text" placeholder="Ex. VIR-2026-08-001"></div>
+        <div class="commission-report-help">Un dossier n’est commissionnable que si l’audit lié a le statut « Signé ». Même signé, sans encaissement client il génère 0 € de CA et 0 € de commission. En cas de paiement partiel, la commission est calculée uniquement sur la somme reçue. Le versement reste bloqué si l’abonnement Stripe n’est pas confirmé.</div>
+      </div>
+      <div class="commission-month-summary" id="commission-month-summary"></div>
+      <h4 class="block-title">Encaissements clients du mois</h4>
+      <div class="ledger" id="commission-month-ledger"></div>`;
+    document.getElementById('overlay').classList.add('show'); drawer.classList.add('show');
+    const editIbanBtn=document.getElementById('commission-edit-iban');
+    if(editIbanBtn) editIbanBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openDrawer(row.id);const panel=document.getElementById('full-fields');if(panel)panel.style.display='block';const toggle=document.getElementById('full-toggle');if(toggle)toggle.textContent='📄 Masquer la fiche complète ▴';});
+    if(defaultMonth) updateCommissionMonthView(row,defaultMonth);
+    const monthSelect=document.getElementById('commission-month-select'); const pdfBtn=document.getElementById('commission-pdf-btn'); const payoutBtn=document.getElementById('commission-payout-btn');
+    const refreshPayoutState=()=>{
+      if(!payoutBtn||!monthSelect||!monthSelect.value)return;
+      const entries=commissionEntriesForMonth(row,monthSelect.value); const dues=commissionEntryTotals(entries).dues; const ibanMissing=!row.iban||!String(row.iban).trim();
+      payoutBtn.disabled=commissionPaymentBlocked(row,monthSelect.value)||dues<=0||ibanMissing;
+      payoutBtn.title=ibanMissing?'Versement bloqué : IBAN du commercial manquant':(commissionPaymentBlocked(row,monthSelect.value)?'Versement bloqué : abonnement Stripe impayé':(dues<=0?'Aucune commission due pour ce mois':'Valider le versement des commissions du mois'));
+    };
+    if(monthSelect) monthSelect.addEventListener('change',()=>{updateCommissionMonthView(row,monthSelect.value);refreshPayoutState();}); refreshPayoutState();
+    if(payoutBtn) payoutBtn.addEventListener('click',e=>{
+      e.preventDefault();e.stopPropagation(); if(!row.iban||!String(row.iban).trim()){showToast('Versement bloqué : IBAN manquant.');return;} if(commissionPaymentBlocked(row,monthSelect.value)){showToast('Versement bloqué : abonnement Stripe non payé.');return;}
+      const entries=commissionEntriesForMonth(row,monthSelect.value); const duesBefore=commissionEntryTotals(entries).dues; const refInput=document.getElementById('commission-payout-ref'); const reference=(refInput&&refInput.value.trim())||`VERSEMENT-${monthSelect.value}`; const today=new Date().toLocaleDateString('fr-FR');
+      entries.filter(x=>x.statutCommission==='due').forEach(x=>{x.payment.statutCommission='versee';x.payment.dateVersement=today;x.payment.referenceVersement=reference;});
+      row.commissionPayouts=row.commissionPayouts||{}; row.commissionPayouts[monthSelect.value]={date:today,reference,montant:duesBefore};
+      const refreshed=clientPaymentEntries(row); row.commissionDue=refreshed.filter(x=>x.statutCommission==='due').reduce((s,x)=>s+x.commission,0); row.commissionVersee=refreshed.filter(x=>x.statutCommission==='versee').reduce((s,x)=>s+x.commission,0);
+      updateCommissionMonthView(row,monthSelect.value);refreshPayoutState();renderReseau();showToast(`Versement validé · ${reference}`);
+    });
+    if(pdfBtn) pdfBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();generateCommissionPDF(row,monthSelect.value);});
+  }
+ 
+  function todayFR() {
+    return isoToFR(new Date().toISOString().slice(0,10));
+  }
+ 
+  function completeAction(row, message) {
+    showToast(message);
+    render();
+    openDrawer(row.id);
+  }
+ 
+  function showActionPanel(row, type) {
+    const old = document.getElementById('action-panel');
+    if (old) old.remove();
+    const button = document.getElementById('drawer-primary-action');
+    if (!button) return;
+    const panel = document.createElement('div');
+    panel.id = 'action-panel';
+    panel.className = 'action-panel';
+ 
+    if (type === 'decision') {
+      panel.innerHTML = `<div class="action-panel-title">Quelle décision veux-tu enregistrer ?</div>
+        <div class="action-choice-row">
+          <button class="action-choice ok" data-decision="accepte">✓ Accepter</button>
+          <button class="action-choice review" data-decision="revoir">À revoir</button>
+          <button class="action-choice bad" data-decision="refuse">Refuser</button>
+        </div>`;
+      button.after(panel);
+      panel.querySelectorAll('[data-decision]').forEach(b => b.addEventListener('click', () => {
+        row.decision = b.dataset.decision;
+        completeAction(row, `Décision enregistrée → ${DECISIONS[row.decision].label}`);
+      }));
+      return;
+    }
+ 
+  }
+ 
+  function applyPrimaryAction(row) {
+    const a = nextAction(row);
+    // Dans le process réel, seule la décision est une action manuelle du dashboard.
+    if (a.key === 'decision') { showActionPanel(row, 'decision'); return; }
+  }
+ 
+  function primaryActionHtml(row) {
+    const a = nextAction(row);
+    if (a.key !== 'decision') return '';
+    return `<button class="drawer-primary-action" id="drawer-primary-action">Prendre une décision</button>`;
+  }
+ 
+  function openCreateProspectDrawer() {
+    const drawer = document.getElementById('drawer');
+    drawer.innerHTML = `
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="greet-eyebrow">Nouveau prospect</div>
+      <h3>Créer une fiche prospect</h3>
+      <div class="sub-line">Pour un appel direct, une recommandation, un contact LinkedIn ou tout prospect qui n'est pas passé par le formulaire.</div>
+ 
+      <form class="create-form" id="create-prospect-form">
+        <div class="create-grid">
+          <label>Prénom *<input type="text" id="create-prenom" required></label>
+          <label>Nom *<input type="text" id="create-nom" required></label>
+        </div>
+        <div class="create-grid">
+          <label>Email<input type="email" id="create-email" placeholder="email@exemple.fr"></label>
+          <label>Téléphone<input type="text" id="create-tel" placeholder="06 00 00 00 00"></label>
+        </div>
+        <div class="create-grid">
+          <label>Ville<input type="text" id="create-ville"></label>
+          <label>LinkedIn<input type="url" id="create-linkedin" placeholder="https://linkedin.com/in/..."></label>
+        </div>
+        <div class="create-grid">
+          <label>Situation<input type="text" id="create-situation" placeholder="Salarié, indépendant, reconversion…"></label>
+          <label>Expérience<input type="text" id="create-experience" placeholder="Commercial, conseil, marketing…"></label>
+        </div>
+        <div class="create-grid">
+          <label>Disponibilité hebdo<input type="text" id="create-disponibilite" placeholder="Ex. 2 jours / semaine"></label>
+          <label>SIRET<input type="text" id="create-siret" placeholder="14 chiffres"></label>
+        </div>
+        <div class="create-grid">
+          <label>Date candidature<input type="date" id="create-date-candidature" value="${frToISO(todayFR())}"></label>
+          <label>Source
+            <select id="create-source">
+              <option value="Appel direct">Appel direct</option>
+              <option value="Recommandation">Recommandation</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Email direct">Email direct</option>
+              <option value="Rencontre / réseau">Rencontre / réseau</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </label>
+        </div>
+        <label>Note de départ<textarea id="create-note" placeholder="Contexte du premier contact, demande, disponibilité…"></textarea></label>
+        <div class="create-help">Seuls le prénom et le nom sont obligatoires. Les autres informations peuvent être complétées maintenant ou plus tard dans la fiche.</div>
+        <div class="create-actions">
+          <button type="submit" class="create-save">Créer le prospect</button>
+          <button type="button" class="create-cancel" id="create-cancel">Annuler</button>
+        </div>
+      </form>
+    `;
+ 
+    drawer.querySelector('#create-prospect-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const prenom = drawer.querySelector('#create-prenom').value.trim();
+      const nom = drawer.querySelector('#create-nom').value.trim();
+      if (!prenom || !nom) return;
+      const newId = data.reduce((m, r) => Math.max(m, Number(r.id) || 0), 0) + 1;
+      const prospect = {
+        id: newId,
+        prenom,
+        nom,
+        email: drawer.querySelector('#create-email').value.trim(),
+        tel: drawer.querySelector('#create-tel').value.trim() || '—',
+        statutReseau: 'recrutement',
+        ville: drawer.querySelector('#create-ville').value.trim(),
+        linkedin: drawer.querySelector('#create-linkedin').value.trim(),
+        situation: drawer.querySelector('#create-situation').value.trim(),
+        experience: drawer.querySelector('#create-experience').value.trim(),
+        disponibiliteHebdo: drawer.querySelector('#create-disponibilite').value.trim(),
+        siret: drawer.querySelector('#create-siret').value.trim(),
+        iban: '',
+        source: drawer.querySelector('#create-source').value,
+        motifRDV: 'Prospect créé manuellement',
+        noteInitiale: drawer.querySelector('#create-note').value.trim(),
+        notesSuivi: drawer.querySelector('#create-note').value.trim(),
+        origineCreation: 'manuel',
+        dateCandidature: isoToFR(drawer.querySelector('#create-date-candidature').value) || todayFR(),
+        dateRDV: null,
+        dateEntretien: null,
+        evaluation: null,
+        decision: 'attente',
+        sortieParcours: null,
+        dateSortie: null,
+        cgvAcceptees: false,
+        dateAcceptationCGV: null,
+        contratEnvoye: null,
+        contratSigne: null,
+        contratSignatureId: null,
+        dateLimiteSignature: null,
+        relanceJ2: false,
+        relanceJ5: false,
+        relanceJ7: false,
+        dashboardEnvoye: false,
+        kitPaye: false,
+        datePaiementKit: null,
+      };
+      data.unshift(prospect);
+      filtreActif = 'tous';
+      filtreAction = null;
+      showToast('Prospect créé');
+      render();
+      openDrawer(newId);
+    });
+    drawer.querySelector('#create-cancel').addEventListener('click', closeDrawer);
+    document.getElementById('overlay').classList.add('show');
+    drawer.classList.add('show');
+  }
+ 
+  function openDrawer(id) {
+    const row = data.find(r => r.id === id);
+    const steps = buildTimeline(row);
+    const drawer = document.getElementById('drawer');
+    drawer.innerHTML = `
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="greet-eyebrow">Fiche prospect</div>
+      <h3>${row.prenom} ${row.nom}</h3>
+ 
+      <div class="info-block" id="info-block">
+        <div class="info-view" id="info-view">
+          <div class="sub-line"><a href="mailto:${row.email}">${row.email}</a> · ${row.tel}</div>
+          <button class="edit-btn" id="edit-btn">✏️ Modifier les coordonnées</button>
+        </div>
+        <div class="info-edit" id="info-edit" style="display:none;">
+          <label>Prénom<input type="text" id="edit-prenom" value="${row.prenom}"></label>
+          <label>Nom<input type="text" id="edit-nom" value="${row.nom}"></label>
+          <label>Email<input type="email" id="edit-email" value="${row.email}"></label>
+          <label>Téléphone<input type="text" id="edit-tel" value="${row.tel === '—' ? '' : row.tel}"></label>
+          <div class="edit-actions">
+            <button class="edit-save" id="edit-save">Enregistrer</button>
+            <button class="edit-cancel" id="edit-cancel">Annuler</button>
+          </div>
+        </div>
+      </div>
+ 
+      <h4 class="block-title" style="margin-top:1.4rem;">Suivi du prospect</h4>
+      <div class="followup-card">
+        <label>Rendez-vous
+          <input type="date" id="followup-rdv" value="${frToISO(row.dateRDV || '')}">
+        </label>
+        <label>Notes de suivi
+          <textarea id="followup-notes" placeholder="Contexte de l'échange, points importants, suite à donner…">${row.notesSuivi || row.noteInitiale || ''}</textarea>
+        </label>
+        ${row.statutReseau !== 'actif' ? `<label>Situation du parcours
+          <select id="followup-sortie" style="width:100%;">
+            <option value="" ${!row.sortieParcours || row.sortieParcours==='refuse' ? 'selected' : ''}>En cours</option>
+            <option value="abandon" ${row.sortieParcours==='abandon' ? 'selected' : ''}>Abandon du prospect</option>
+            <option value="non_engage" ${row.sortieParcours==='non_engage' ? 'selected' : ''}>Prospect non engagé</option>
+          </select>
+        </label>` : ''}
+        <label>Décision
+          <select class="decision-select ${DECISIONS[row.decision].cls}" data-id="${row.id}" style="width:100%;">
+            ${Object.entries(DECISIONS).map(([k,v]) => `<option value="${k}" ${k===row.decision?'selected':''}>${v.label}</option>`).join('')}
+          </select>
+        </label>
+        <div class="followup-help">La situation du parcours sert uniquement à sortir un prospect du suivi actif lorsqu'il abandonne ou reste non engagé. Un refus reste géré par la décision « Refusé ».</div>
+        <button class="followup-save" id="followup-save">Enregistrer le suivi</button>
+      </div>
+      ${primaryActionHtml(row)}
+ 
+      <h4 class="block-title">Progression</h4>
+      <div class="timeline" id="timeline">
+        ${steps.map((s, i) => `
+          <div class="tl-step ${stepState(s.done, s.current, s.blocked, s.paused)}">
+            <div class="tl-marker">
+              <div class="tl-dot">${s.done ? '✓' : ''}</div>
+              ${i < steps.length - 1 ? '<div class="tl-line"></div>' : ''}
+            </div>
+            <div class="tl-body">
+              <div class="tl-title">${s.title}</div>
+              <div class="tl-date-row" data-edit-key="${s.editKey || ''}">
+                ${s.date ? `<span class="tl-date">${s.date}</span>` : (s.editKey ? `<span class="tl-date muted-cell">Pas encore fixée</span>` : '')}
+                ${s.editKey ? `<button class="tl-edit-btn" data-key="${s.editKey}" data-current="${s.date || ''}">✏️</button>` : ''}
+              </div>
+              ${s.relances ? `<div class="tl-relances">
+                <span class="relance-dot ${s.relances[0] ? 'sent' : ''}" title="Relance J+2"></span>
+                <span class="relance-dot ${s.relances[1] ? 'sent' : ''}" title="Relance J+5"></span>
+                <span class="relance-dot ${s.relances[2] ? 'sent' : ''}" title="Notification interne J+7"></span>
+                <span class="tl-relances-label">Relances J+2 / J+5 · Notification interne J+7</span>
+              </div>` : ''}
+              ${s.evaluation !== undefined ? tlEvalHtml(s.evaluation, i) : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+ 
+      <button class="full-toggle" id="full-toggle">📄 Voir la fiche complète (tous les champs Airtable) ▾</button>
+      <div class="full-fields" id="full-fields" style="display:none;">
+        ${fullFieldsHtml(row)}
+      </div>
+    `;
+    document.querySelectorAll('.tl-eval-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(`tl-eval-detail-${btn.dataset.step}`);
+        const isOpen = panel.style.display !== 'none';
+        panel.style.display = isOpen ? 'none' : 'block';
+        btn.textContent = isOpen ? "Voir les réponses de l'entretien →" : "Masquer les réponses ▴";
+      });
+    });
+ 
+    document.getElementById('full-toggle').addEventListener('click', () => {
+      const panel = document.getElementById('full-fields');
+      const isOpen = panel.style.display !== 'none';
+      panel.style.display = isOpen ? 'none' : 'block';
+      document.getElementById('full-toggle').textContent = isOpen
+        ? '📄 Voir la fiche complète (tous les champs Airtable) ▾'
+        : '📄 Masquer la fiche complète ▴';
+    });
+ 
+    document.querySelectorAll('.ff-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        const type = btn.dataset.type;
+        const current = btn.dataset.current;
+        const rowEl = btn.closest('.ff-row');
+        let inputHtml;
+        if (type === 'checkbox') {
+          inputHtml = `<select id="ff-input-${key}"><option value="true" ${current==='true'?'selected':''}>Oui</option><option value="false" ${current!=='true'?'selected':''}>Non</option></select>`;
+        } else if (type === 'date') {
+          inputHtml = `<input type="date" id="ff-input-${key}" value="${frToISO(current)}">`;
+        } else {
+          inputHtml = `<input type="text" id="ff-input-${key}" value="${current}">`;
+        }
+        rowEl.innerHTML = `
+          <span class="ff-label">${rowEl.querySelector('.ff-label') ? rowEl.querySelector('.ff-label').textContent : ''}</span>
+          <span class="ff-row-edit">
+            ${inputHtml}
+            <button class="ff-row-save" data-key="${key}" data-type="${type}">✓</button>
+            <button class="ff-row-cancel">✕</button>
+          </span>
+        `;
+        rowEl.querySelector('.ff-row-save').addEventListener('click', () => {
+          const input = document.getElementById(`ff-input-${key}`);
+          let newVal = input.value;
+          if (type === 'checkbox') newVal = newVal === 'true';
+          if (type === 'date') newVal = isoToFR(newVal);
+          row[key] = newVal;
+          showToast('Enregistrement…');
+          setTimeout(() => {
+            showToast('Champ mis à jour');
+            render();
+            openDrawer(id);
+            document.getElementById('full-fields').style.display = 'block';
+            document.getElementById('full-toggle').textContent = '📄 Masquer la fiche complète ▴';
+          }, 450);
+        });
+        rowEl.querySelector('.ff-row-cancel').addEventListener('click', () => {
+          openDrawer(id);
+          document.getElementById('full-fields').style.display = 'block';
+          document.getElementById('full-toggle').textContent = '📄 Masquer la fiche complète ▴';
+        });
+      });
+    });
+ 
+    document.querySelectorAll('.tl-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        const current = btn.dataset.current;
+        const rowEl = btn.closest('.tl-date-row');
+        rowEl.innerHTML = `
+          <div class="tl-date-edit">
+            <input type="date" id="tl-input-${key}" value="${frToISO(current)}">
+            <button class="tl-date-save" data-key="${key}">Enregistrer</button>
+            <button class="tl-date-cancel" data-key="${key}">Annuler</button>
+          </div>
+        `;
+        rowEl.querySelector('.tl-date-save').addEventListener('click', () => {
+          const newIso = document.getElementById(`tl-input-${key}`).value;
+          if (newIso) {
+            row[key] = isoToFR(newIso);
+            showToast('Enregistrement…');
+            setTimeout(() => {
+              showToast('Date mise à jour');
+              render();
+              openDrawer(id);
+            }, 450);
+          }
+        });
+        rowEl.querySelector('.tl-date-cancel').addEventListener('click', () => openDrawer(id));
+      });
+    });
+ 
+    document.getElementById('edit-btn').addEventListener('click', () => {
+      document.getElementById('info-view').style.display = 'none';
+      document.getElementById('info-edit').style.display = 'flex';
+    });
+    document.getElementById('edit-cancel').addEventListener('click', () => {
+      document.getElementById('info-edit').style.display = 'none';
+      document.getElementById('info-view').style.display = 'block';
+    });
+    document.getElementById('edit-save').addEventListener('click', () => {
+      row.prenom = document.getElementById('edit-prenom').value.trim() || row.prenom;
+      row.nom = document.getElementById('edit-nom').value.trim() || row.nom;
+      row.email = document.getElementById('edit-email').value.trim() || row.email;
+      row.tel = document.getElementById('edit-tel').value.trim() || '—';
+      showToast('Enregistrement…');
+      setTimeout(() => {
+        showToast('Informations mises à jour');
+        render();
+        openDrawer(id);
+      }, 450);
+    });
+ 
+    const followupSave = document.getElementById('followup-save');
+    if (followupSave) followupSave.addEventListener('click', () => {
+      row.dateRDV = isoToFR(document.getElementById('followup-rdv').value) || null;
+      row.notesSuivi = document.getElementById('followup-notes').value.trim();
+      const decisionSelect = drawer.querySelector('.followup-card .decision-select');
+      if (decisionSelect) {
+        row.decision = decisionSelect.value;
+        if (row.decision === 'refuse') row.sortieParcours = 'refuse';
+        else if (row.sortieParcours === 'refuse') row.sortieParcours = null;
+      }
+      const sortieSelect = document.getElementById('followup-sortie');
+      if (sortieSelect && row.decision !== 'refuse') {
+        const previous = row.sortieParcours;
+        row.sortieParcours = sortieSelect.value || null;
+        if (row.sortieParcours && row.sortieParcours !== previous) row.dateSortie = todayFR();
+        if (!row.sortieParcours) row.dateSortie = null;
+      }
+      showToast('Enregistrement…');
+      setTimeout(() => {
+        showToast('Suivi du prospect mis à jour');
+        render();
+        openDrawer(id);
+      }, 450);
+    });
+ 
+    const primaryBtn = document.getElementById('drawer-primary-action');
+    if (primaryBtn) primaryBtn.addEventListener('click', () => applyPrimaryAction(row));
+ 
+    drawer.querySelector('.decision-select').addEventListener('change', (e) => {
+      e.target.className = `decision-select ${DECISIONS[e.target.value].cls}`;
+    });
+    document.getElementById('overlay').classList.add('show');
+    drawer.classList.add('show');
+  }
+ 
+  function closeDrawer() {
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('drawer').classList.remove('show');
+  }
+  document.getElementById('overlay').addEventListener('click', closeDrawer);
+ 
+  let toastTimer;
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+ 
+  const TAB_LABELS = {
+    'vue-ensemble': "Vue d'ensemble",
+    'prospects-clients': 'Prospects et clients',
+    'catalogue': 'Catalogue & ressources',
+    'mes-liens': 'Mes liens',
+    'outils': 'Les outils',
+    'compte': 'Mon compte',
+  };
+ 
+  function showTab(tab) {
+    document.getElementById('tab-content-built').style.display = tab === 'prospects-commerciaux' ? 'block' : 'none';
+    document.getElementById('tab-content-prospects-clients').style.display = tab === 'prospects-clients' ? 'block' : 'none';
+    document.getElementById('tab-content-suivi-ca').style.display = tab === 'suivi-ca' ? 'block' : 'none';
+    const isPlaceholder = !['prospects-commerciaux','prospects-clients','suivi-ca'].includes(tab);
+    if (tab === 'prospects-clients') renderClients();
+    if (tab === 'suivi-ca') {
+      renderReseau();
+      initCaCommercialSearch();
+    }
+    document.getElementById('tab-content-placeholder').style.display = isPlaceholder ? 'block' : 'none';
+    if (isPlaceholder) {
+      document.getElementById('placeholder-title').textContent = `${TAB_LABELS[tab]} — pas encore construit`;
+    }
+  }
+ 
+  document.querySelectorAll('#main-nav button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showTab(btn.dataset.tab);
+    });
+  });
+ 
+ 
+  document.getElementById('new-client-btn')?.addEventListener('click', openNewClientDrawer);
+ 
+  function initColumnFilters() {
+    const mapping = {
+      'filter-nom': 'nom',
+      'filter-prenom': 'prenom',
+      'filter-email': 'email',
+      'filter-tel': 'tel',
+    };
+ 
+    function syncFilterVisual(champ) {
+      const input = document.getElementById(`filter-${champ}`);
+      const label = document.getElementById(`label-${champ}`);
+      const btn = document.querySelector(`[data-filter-toggle="${champ}"]`);
+      const active = !!filtresColonnes[champ].trim();
+      if (btn) btn.classList.toggle('active', active);
+      if (active && input) {
+        input.classList.add('open');
+        if (label) label.style.display = 'none';
+      }
+    }
+ 
+    Object.entries(mapping).forEach(([id, champ]) => {
+      const input = document.getElementById(id);
+      const label = document.getElementById(`label-${champ}`);
+      const btn = document.querySelector(`[data-filter-toggle="${champ}"]`);
+      if (!input || !btn) return;
+      input.value = filtresColonnes[champ];
+      syncFilterVisual(champ);
+ 
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (input.classList.contains('open')) {
+          if (!input.value.trim()) {
+            input.classList.remove('open');
+            if (label) label.style.display = 'inline-flex';
+          } else {
+            input.focus();
+            input.select();
+          }
+        } else {
+          input.classList.add('open');
+          if (label) label.style.display = 'none';
+          input.focus();
+        }
+      });
+ 
+      input.addEventListener('input', () => {
+        filtresColonnes[champ] = input.value;
+        btn.classList.toggle('active', !!input.value.trim());
+        render();
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          input.value = '';
+          filtresColonnes[champ] = '';
+          input.classList.remove('open');
+          if (label) label.style.display = 'inline-flex';
+          btn.classList.remove('active');
+          render();
+        }
+      });
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) {
+          input.classList.remove('open');
+          if (label) label.style.display = 'inline-flex';
+        }
+      });
+      input.addEventListener('click', e => e.stopPropagation());
+    });
+  }
+ 
+  document.getElementById('new-prospect-btn').addEventListener('click', openCreateProspectDrawer);
+  initColumnFilters();
+  initCaCommercialSearch();
+  render();
+</script>
+ 
+</body>
+</html>
