@@ -10,6 +10,7 @@ const AIRTABLE_BASE_ID = 'appPbx0vHGCSTE9wR';
 const CONSULTANTS_TABLE = 'tblZe72whfqw8IPAx';
 const CLIENTS_TABLE = 'tblPhDItWoYN7jgtA';
 const AUDITS_TABLE = 'tblrZJAmMBa2SKjSF';
+const PAIEMENTS_TABLE = 'tblxB3tjITPrkBUp8';
 
 async function airtableGet(path, apiKey) {
   const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${path}`, {
@@ -53,6 +54,18 @@ export default async function handler(req, res) {
       audits = auditsData.records || [];
     }
 
+    // La table Paiements enregistre à la fois les paiements du commercial (kit,
+    // abonnement) et ceux de ses clients (prestation/devis) — un même enregistrement
+    // peut être lié aux deux pour l'attribution de commission. On fetch tout ce qui
+    // est lié à CE consultant, puis on filtre en JS selon ce qu'on cherche.
+    const paiementIds = consultant.fields.Paiements || [];
+    let paiements = [];
+    if (paiementIds.length > 0) {
+      const formula = encodeURIComponent(`OR(${orRecordIds(paiementIds)})`);
+      const paiementsData = await airtableGet(`${PAIEMENTS_TABLE}?filterByFormula=${formula}`, AIRTABLE_API_KEY);
+      paiements = paiementsData.records || [];
+    }
+
     const clientById = Object.fromEntries(clients.map(c => [c.id, c]));
 
     const pipeline = { 'En attente': [], 'Envoyé': [], 'Signé': [], 'Payé': [], 'Perdu': [] };
@@ -74,6 +87,40 @@ export default async function handler(req, res) {
     const devisEnCours = pipeline['En attente'].length + pipeline['Envoyé'].length;
     const totalDevis = audits.length;
     const tauxSignature = totalDevis > 0 ? Math.round((pipeline['Signé'].length / totalDevis) * 100) : 0;
+
+    // Onboarding — 10 étapes. 8 sont déduites automatiquement de l'état déjà
+    // stocké dans Airtable (principe : Airtable stocke l'état, pas de nouvelle
+    // source de vérité créée pour ça). 2 ne peuvent pas être détectées
+    // automatiquement (pas de LMS, pas de tracking des réseaux sociaux) : le
+    // commercial les coche lui-même via POST /api/update-links.
+    //
+    // "Premier prospect" ≠ "Premier CAPE" : un client peut exister sans CAPE
+    // (bouton "créer un prospect" côté dashboard), donc premier_prospect regarde
+    // juste s'il y a au moins un Client, tandis que premier_cape regarde si au
+    // moins un de ces clients a un Diagnostic réellement lié.
+    const paiementKitOk = paiements.some(p =>
+      p.fields.Origine === 'Commercial' &&
+      p.fields.Type_paiement === 'Kit démarrage' &&
+      p.fields.Statut_paiement === 'OK'
+    );
+    const premierCape = clients.some(c => (c.fields.Diagnostics || []).length > 0);
+    const premiereVente = audits.some(a => (a.fields.Statut || '') === 'Payé');
+    const onboardingSteps = [
+      { id: 'compte_cree', label: 'Compte créé', done: true },
+      { id: 'contrat_signe', label: 'Contrat signé', done: !!consultant.fields.Date_signature_contrat },
+      { id: 'paiement_effectue', label: 'Paiement effectué', done: paiementKitOk },
+      { id: 'profil_complete', label: 'Profil complété', done: !!(consultant.fields.Lien_Calendly && consultant.fields.Lien_Zoom) },
+      { id: 'formation_terminee', label: 'Formation terminée', done: !!consultant.fields.Formation_terminee },
+      { id: 'premiere_publication', label: 'Première publication', done: !!consultant.fields.Premiere_publication_confirmee },
+      { id: 'premier_prospect', label: 'Premier prospect', done: clients.length > 0 },
+      { id: 'premier_cape', label: 'Premier CAPE', done: premierCape },
+      { id: 'premier_devis', label: 'Premier devis', done: audits.length > 0 },
+      { id: 'premiere_vente', label: 'Première vente', done: premiereVente }
+    ];
+    const onboarding = {
+      steps: onboardingSteps,
+      pourcentage: Math.round((onboardingSteps.filter(s => s.done).length / onboardingSteps.length) * 100)
+    };
 
     const clientsOut = clients.map(c => {
       const clientAudits = audits.filter(a => (a.fields.Client || []).includes(c.id));
@@ -126,7 +173,8 @@ export default async function handler(req, res) {
       },
       pipeline,
       clients: clientsOut,
-      commissions
+      commissions,
+      onboarding
     });
   } catch (err) {
     console.error('Erreur dashboard-data:', err);

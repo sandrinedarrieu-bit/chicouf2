@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Configuration serveur incomplète.' });
   }
 
-  const { calendly, zoom } = req.body || {};
+  const { calendly, zoom, formationTerminee, premierePublication } = req.body || {};
 
   if (!isValidUrl(calendly) || !isValidUrl(zoom)) {
     return res.status(400).json({ error: 'Lien invalide. Vérifiez le format (https://...).' });
@@ -44,6 +44,11 @@ export default async function handler(req, res) {
   const fields = {};
   if (calendly !== undefined) fields.Lien_Calendly = calendly;
   if (zoom !== undefined) fields.Lien_Zoom = zoom;
+  // Étapes d'onboarding qu'on ne peut pas détecter automatiquement (pas de LMS,
+  // pas de tracking des réseaux sociaux) : le commercial les coche lui-même
+  // depuis son dashboard. Uniquement true, jamais décochable une fois cochées.
+  if (formationTerminee === true) fields.Formation_terminee = true;
+  if (premierePublication === true) fields.Premiere_publication_confirmee = true;
 
   if (Object.keys(fields).length === 0) {
     return res.status(400).json({ error: 'Aucun champ à mettre à jour.' });

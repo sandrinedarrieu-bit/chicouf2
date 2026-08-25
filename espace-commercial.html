@@ -292,6 +292,22 @@
   .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--nuit); color: #fff; padding: .8rem 1.4rem; border-radius: 10px; font-size: .87rem; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 2000; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
   .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.error { background: #B3261E; }
+
+  /* onboarding */
+  .onboarding-block .section-block-head { margin-bottom: .9rem; }
+  .onboarding-pct { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); }
+  .onboarding-progress-track { background: var(--cream); border: 1px solid #E8E6E1; border-radius: 999px; height: 10px; overflow: hidden; margin-bottom: 1.1rem; }
+  .onboarding-progress-fill { background: linear-gradient(90deg, var(--ouf), var(--chic)); height: 100%; border-radius: 999px; transition: width .4s ease; }
+  .onboarding-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .6rem; }
+  .onboarding-step { display: flex; align-items: flex-start; gap: .6rem; background: var(--white); border: 1px solid #E8E6E1; border-radius: 10px; padding: .65rem .8rem; font-size: .84rem; }
+  .onboarding-step-check { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; background: #F1EFE8; color: transparent; margin-top: .05rem; }
+  .onboarding-step.done .onboarding-step-check { background: #DFF3E6; color: #1A7F4F; }
+  .onboarding-step-label { color: var(--body); }
+  .onboarding-step.done .onboarding-step-label { color: var(--muted); }
+  .btn-onboarding-confirm { display: block; margin-top: .5rem; background: var(--ouf-cta); color: #fff; border: none; border-radius: 8px; padding: .4rem .75rem; font-size: .76rem; font-weight: 600; cursor: pointer; }
+  .btn-onboarding-confirm:hover { background: var(--ouf-cta-hover); }
+  .btn-onboarding-confirm:disabled { opacity: .6; cursor: default; }
+  .onboarding-complete-msg { background: var(--or-l); border: 1px solid #F5D89A; border-radius: 10px; padding: .8rem 1rem; font-size: .88rem; font-weight: 600; color: var(--chic); text-align: center; margin-top: 1rem; }
 </style>
 </head>
 <body>
@@ -344,6 +360,18 @@
       <a href="https://tally.so/r/D4OlX5" target="_blank" rel="noopener">📋 Remplir le récap post-appel</a>
       <a href="admin-commerciaux.html">👥 Gérer les accès commerciaux</a>
     </div>
+  </div>
+
+  <div class="section-block onboarding-block" id="onboardingBlock" style="display:none;">
+    <div class="section-block-head">
+      <h2>Progression de l'onboarding</h2>
+      <span class="onboarding-pct" id="onboardingPct">0%</span>
+    </div>
+    <div class="onboarding-progress-track">
+      <div class="onboarding-progress-fill" id="onboardingProgressFill" style="width:0%;"></div>
+    </div>
+    <div class="onboarding-steps" id="onboardingSteps"></div>
+    <p class="onboarding-complete-msg" id="onboardingCompleteMsg" style="display:none;">🎉 Bravo, ton onboarding est terminé !</p>
   </div>
 
   <div class="stats-grid">
@@ -858,6 +886,77 @@
     });
   }
 
+  // Les 2 seules étapes que le commercial coche lui-même (pas de LMS, pas de
+  // tracking des réseaux sociaux) — write-once côté backend, donc jamais
+  // redécochables une fois confirmées.
+  const MANUAL_ONBOARDING_STEPS = {
+    formation_terminee: { field: 'formationTerminee', confirmLabel: 'Je confirme avoir terminé ma formation' },
+    premiere_publication: { field: 'premierePublication', confirmLabel: 'Je confirme avoir publié ma première communication' }
+  };
+
+  let onboardingCache = null;
+
+  function renderOnboarding(onboarding) {
+    onboardingCache = onboarding;
+    const block = document.getElementById('onboardingBlock');
+    if (!onboarding || !onboarding.steps) {
+      block.style.display = 'none';
+      return;
+    }
+    block.style.display = 'block';
+
+    document.getElementById('onboardingPct').textContent = onboarding.pourcentage + '%';
+    document.getElementById('onboardingProgressFill').style.width = onboarding.pourcentage + '%';
+
+    document.getElementById('onboardingSteps').innerHTML = onboarding.steps.map(s => {
+      const manual = MANUAL_ONBOARDING_STEPS[s.id];
+      const actionHtml = (manual && !s.done)
+        ? `<button type="button" class="btn-onboarding-confirm" data-step="${s.id}">${manual.confirmLabel}</button>`
+        : '';
+      return `<div class="onboarding-step ${s.done ? 'done' : ''}">
+        <span class="onboarding-step-check">${s.done ? '✓' : ''}</span>
+        <div style="flex:1;">
+          <div class="onboarding-step-label">${s.label}</div>
+          ${actionHtml}
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('onboardingCompleteMsg').style.display = onboarding.pourcentage >= 100 ? 'block' : 'none';
+
+    document.querySelectorAll('#onboardingSteps .btn-onboarding-confirm').forEach(btn => {
+      btn.addEventListener('click', () => confirmOnboardingStep(btn.dataset.step, btn));
+    });
+  }
+
+  async function confirmOnboardingStep(stepId, btn) {
+    const manual = MANUAL_ONBOARDING_STEPS[stepId];
+    if (!manual) return;
+    btn.disabled = true;
+    btn.textContent = 'Enregistrement…';
+    try {
+      const res = await fetch('/api/update-links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [manual.field]: true })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Erreur');
+
+      const step = onboardingCache.steps.find(s => s.id === stepId);
+      if (step) step.done = true;
+      onboardingCache.pourcentage = Math.round(
+        (onboardingCache.steps.filter(s => s.done).length / onboardingCache.steps.length) * 100
+      );
+      renderOnboarding(onboardingCache);
+      showToast('Étape validée');
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = manual.confirmLabel;
+      showToast(err.message || 'Erreur lors de la mise à jour', 'error');
+    }
+  }
+
   const RESEAU_BADGE_CLASS = { 'Signé': 'signe', 'RDV pris': 'rdv', 'Contact': 'contact' };
 
   function renderHistoriqueEntries(historique) {
@@ -962,6 +1061,7 @@
       renderClients(data.clients);
       renderLinks(data.liens);
       renderCommissions(data.commissions);
+      renderOnboarding(data.onboarding);
     } catch (err) {
       console.error(err);
       document.getElementById('pipelineGrid').innerHTML = '<div class="pipeline-empty">Erreur de chargement.</div>';
