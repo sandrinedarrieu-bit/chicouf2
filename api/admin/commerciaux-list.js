@@ -21,6 +21,7 @@ const CLIENTS_TABLE = 'tblPhDItWoYN7jgtA';
 const AUDITS_TABLE = 'tblrZJAmMBa2SKjSF';
 const HISTORIQUE_TABLE = 'tbl2iu6bQ38Un4s8p';
 const PAIEMENTS_TABLE = 'tblxB3tjITPrkBUp8';
+const EVALUATIONS_TABLE = 'tblLSOIKDKUe1JJes';
 const ADMIN_EMAIL = 'contact@chicouf.pro';
 const COMMISSION_RATE = 0.05;
 
@@ -29,11 +30,33 @@ const COMMISSION_RATE = 0.05;
 const MAKE_EMAIL_WEBHOOK = 'https://hook.eu1.make.com/1q2av6e3065l7om7iiyc6lpy0evoca80';
 const INVITE_VALIDITY_MS = 1000 * 60 * 60 * 48; // 48 heures
 
-// Statuts de candidature suivis dans l'onglet Prospects commerciaux.
-const PROSPECT_STATUTS = ['Nouveau candidat', 'RDV pris', 'Candidat non engagé', 'Accepté', 'À revoir', 'Refusé', 'Actif'];
-// Seules ces 3 valeurs sont choisissables depuis le menu Décision — les autres statuts
-// restent en lecture seule côté dashboard (cohérent avec ALLOWED_TRANSITIONS de request-devis.js).
-const DECISION_OPTIONS = ['Accepté', 'À revoir', 'Refusé'];
+// Les 6 seules valeurs réelles du champ Statut (singleSelect Airtable) — "RDV pris" n'existe
+// PAS comme valeur de Statut, c'est un état déduit côté UI de la présence de Date_RDV.
+const STATUT_CHOICES = ['Nouveau candidat', 'Candidat non engagé', 'Accepté', 'À revoir', 'Refusé', 'Actif'];
+// Seules ces 4 valeurs sont choisissables depuis le menu Décision — "Nouveau candidat" est
+// l'état initial (jamais réassignable manuellement) et "Actif" est posé par l'automatisation
+// une fois le kit payé, jamais par ce endpoint (cohérent avec ALLOWED_TRANSITIONS de request-devis.js).
+const DECISION_OPTIONS = ['Accepté', 'À revoir', 'Refusé', 'Candidat non engagé'];
+
+// Champs de la fiche prospect modifiables depuis le dashboard (bloc "Identité" + corrections
+// manuelles exceptionnelles de date). Toute clé absente de cette liste est refusée par
+// handleUpdateField — ça empêche d'écrire par-dessus un champ verrouillé (alimenté par Make/
+// Calendly/Youtrust/Stripe) même si quelqu'un fabrique la requête à la main.
+const EDITABLE_FIELDS = {
+  prenom: 'Prenom',
+  nom: 'Nom',
+  email: 'Email',
+  telephone: 'Téléphone',
+  ville: 'Ville',
+  linkedin: 'LinkedIn ', // espace final réel dans Airtable
+  situation: 'Situation',
+  disponibiliteHebdo: 'Disponibilité hebdo',
+  siret: 'SIRET',
+  iban: 'IBAN',
+  dateLimiteSignature: 'Date_limite_signature',
+  dateRDV: 'Date_RDV',
+  dateEntretien: 'Date entretien' // espace réel dans le nom du champ, pas un underscore
+};
 
 function orRecordIds(ids) {
   return ids.map((id) => `RECORD_ID()="${id}"`).join(',');
@@ -123,32 +146,106 @@ async function requireAdmin(session, apiKey) {
   return (me.fields.Email || '').trim().toLowerCase() === ADMIN_EMAIL;
 }
 
-// --- Prospects commerciaux : candidats en recrutement (au-delà des commerciaux déjà signés) ---
-async function getProspects(apiKey) {
-  const formula = encodeURIComponent(`OR(${PROSPECT_STATUTS.map((s) => `{Statut}="${s}"`).join(',')})`);
+// --- Prospects et commerciaux : tout le pipeline de recrutement + les commerciaux actifs ---
+async function getProspectsCommerciaux(apiKey) {
+  const formula = encodeURIComponent(`OR(${STATUT_CHOICES.map((s) => `{Statut}="${s}"`).join(',')})`);
   const data = await airtableFetch(
     `${CONSULTANTS_TABLE}?filterByFormula=${formula}&sort[0][field]=Date_RDV&sort[0][direction]=desc`,
     apiKey
   );
-  return (data.records || []).map((r) => {
-    const statut = r.fields.Statut || '';
+  const records = data.records || [];
+
+  // Batch : une seule requête OR(...) pour toutes les évaluations liées, plutôt qu'un
+  // aller-retour Airtable par candidat.
+  const allEvalIds = records.flatMap((r) => r.fields.Evaluations || []);
+  let evalById = {};
+  if (allEvalIds.length > 0) {
+    const evalData = await airtableGet(
+      `${EVALUATIONS_TABLE}?filterByFormula=${encodeURIComponent(`OR(${orRecordIds(allEvalIds)})`)}`,
+      apiKey
+    );
+    evalById = Object.fromEntries((evalData.records || []).map((e) => [e.id, e]));
+  }
+
+  // Idem pour les paiements — sert uniquement à détecter le paiement du kit de démarrage
+  // (Origine="Commercial", Type_paiement="Kit démarrage", Statut_paiement="OK"), même règle
+  // que dans dashboard-data.js.
+  const allPaiementIds = records.flatMap((r) => r.fields.Paiements || []);
+  let paiementById = {};
+  if (allPaiementIds.length > 0) {
+    const paiementsData = await airtableGet(
+      `${PAIEMENTS_TABLE}?filterByFormula=${encodeURIComponent(`OR(${orRecordIds(allPaiementIds)})`)}`,
+      apiKey
+    );
+    paiementById = Object.fromEntries((paiementsData.records || []).map((p) => [p.id, p]));
+  }
+
+  return records.map((r) => {
+    const f = r.fields;
+    const statut = f.Statut || 'Nouveau candidat';
+
+    // Un candidat peut en théorie avoir plusieurs évaluations liées (retest) — on ne garde
+    // que le scoring recrutement le plus récent, jamais un self-audit CAPE (autre usage de
+    // cette même table Evaluations).
+    const evaluations = (f.Evaluations || [])
+      .map((id) => evalById[id])
+      .filter((e) => e && e.fields.Type_evaluation === 'Scoring recrutement')
+      .sort((a, b) => (b.fields.Date_evaluation || '').localeCompare(a.fields.Date_evaluation || ''));
+    const latestEval = evaluations[0];
+
+    const kitPaiement = (f.Paiements || [])
+      .map((id) => paiementById[id])
+      .find((p) => p && p.fields.Origine === 'Commercial' && p.fields.Type_paiement === 'Kit démarrage' && p.fields.Statut_paiement === 'OK');
+
     return {
       id: r.id,
-      nom: r.fields.Nom || '',
-      prenom: r.fields.Prenom || '',
-      email: r.fields.Email || '',
-      telephone: r.fields['Téléphone'] || '',
-      dateRDV: r.fields.Date_RDV || null,
-      relances: {
-        h4: !!r.fields.Relance_RDV_4h_envoyee,
-        h24: !!r.fields.Relance_RDV_24h_envoyee,
-        j3: !!r.fields.Relance_RDV_3j_envoyee
-      },
+      // Pas de champ "Date de candidature" dans Airtable — createdTime (métadonnée native de
+      // l'API Airtable) sert de date de première trace, sans inventer de champ.
+      dateCandidature: r.createdTime,
+      prenom: f.Prenom || '',
+      nom: f.Nom || '',
+      email: f.Email || '',
+      telephone: f['Téléphone'] || '',
       statut,
-      cgvAcceptees: !!r.fields.CGV_acceptees,
-      dateEnvoiContrat: r.fields.Date_envoi_contrat || null,
-      dateSignatureContrat: r.fields.Date_signature_contrat || null,
-      dashboardEnvoye: !!r.fields.Dashboard_envoye
+      statutReseau: statut === 'Actif' ? 'actif' : 'recrutement',
+      exitReason: statut === 'Refusé' ? 'refuse' : (statut === 'Candidat non engagé' ? 'non_engage' : null),
+      ville: f.Ville || '',
+      linkedin: f['LinkedIn '] || '',
+      situation: f.Situation || '',
+      experience: f.Experience || [],
+      disponibiliteHebdo: f['Disponibilité hebdo'] || '',
+      siret: f.SIRET || '',
+      iban: f.IBAN || '',
+      source: f.Source || '',
+      motifRDV: f.Motif_RDV || '',
+      // Un candidat venu du formulaire Tally a toujours un Motif_RDV ; un prospect créé à la
+      // main depuis le dashboard n'en a pas — pas de champ dédié, dérivé de ce qui existe déjà.
+      origineCreation: f.Motif_RDV ? 'formulaire' : 'manuel',
+      dateRDV: f.Date_RDV || null,
+      dateEntretien: f['Date entretien'] || null,
+      evaluation: latestEval ? {
+        motivation: latestEval.fields.Score_motivation || 0,
+        commercial: latestEval.fields.Score_commercial || 0,
+        reseau: latestEval.fields.Score_reseau || 0,
+        autonomie: latestEval.fields.Score_autonomie || 0,
+        numerique: latestEval.fields.Score_numerique || 0,
+        disponibilite: latestEval.fields.Score_disponibilite || 0,
+        total: latestEval.fields.Score_total || 0,
+        decisionIA: latestEval.fields.Decision_IA || '',
+        compteRendu: latestEval.fields.Compte_rendu_IA || ''
+      } : null,
+      cgvAcceptees: !!f.CGV_acceptees,
+      dateAcceptationCGV: f.Date_acceptation_CGV || null,
+      contratEnvoye: f.Date_envoi_contrat || null,
+      contratSigne: f.Date_signature_contrat || null,
+      contratSignatureId: f.Contrat_signature_id || null,
+      dateLimiteSignature: f.Date_limite_signature || null,
+      relanceJ2: !!f.Relance_J2_envoyee,
+      relanceJ5: !!f.Relance_J5_envoyee,
+      notificationJ7: !!f.Notification_J7_envoyee,
+      dashboardEnvoye: !!f.Dashboard_envoye,
+      kitPaye: !!kitPaiement,
+      datePaiementKit: kitPaiement ? (kitPaiement.fields.Date_paiement || null) : null
     };
   });
 }
@@ -277,6 +374,56 @@ async function handleUpdateStatut(req, res, apiKey) {
   }
 }
 
+// --- POST action:'create-prospect' : fiche créée à la main (appel direct, recommandation...) ---
+async function handleCreateProspect(req, res, apiKey) {
+  const { prenom, nom, email, telephone, ville, linkedin, situation, disponibiliteHebdo, siret, source } = req.body || {};
+  if (!prenom || !nom) {
+    return res.status(400).json({ error: 'Prénom et nom sont requis.' });
+  }
+
+  const fields = { Prenom: prenom, Nom: nom, Statut: 'Nouveau candidat' };
+  if (email) fields.Email = email;
+  if (telephone) fields['Téléphone'] = telephone;
+  if (ville) fields.Ville = ville;
+  if (linkedin) fields['LinkedIn '] = linkedin;
+  if (situation) fields.Situation = situation;
+  if (disponibiliteHebdo) fields['Disponibilité hebdo'] = disponibiliteHebdo;
+  if (siret) fields.SIRET = siret;
+  if (source) fields.Source = source;
+
+  try {
+    const created = await airtableFetch(CONSULTANTS_TABLE, apiKey, {
+      method: 'POST',
+      body: JSON.stringify({ fields, typecast: true })
+    });
+    return res.status(200).json({ ok: true, id: created.id });
+  } catch (err) {
+    console.error('Erreur create-prospect:', err);
+    return res.status(500).json({ error: 'Erreur lors de la création du prospect.' });
+  }
+}
+
+// --- POST action:'update-field' : édition d'un champ de la fiche (bloc Identité + correction
+// manuelle exceptionnelle de date) — jamais un champ verrouillé, voir EDITABLE_FIELDS. ---
+async function handleUpdateField(req, res, apiKey) {
+  const { id, key, value } = req.body || {};
+  const airtableField = EDITABLE_FIELDS[key];
+  if (!id || !airtableField) {
+    return res.status(400).json({ error: 'Champ non modifiable.' });
+  }
+
+  try {
+    const updated = await airtableFetch(`${CONSULTANTS_TABLE}/${id}`, apiKey, {
+      method: 'PATCH',
+      body: JSON.stringify({ fields: { [airtableField]: value === '' ? null : value }, typecast: true })
+    });
+    return res.status(200).json({ ok: true, value: updated.fields[airtableField] ?? null });
+  } catch (err) {
+    console.error('Erreur update-field:', err);
+    return res.status(500).json({ error: 'Erreur lors de la mise à jour du champ.' });
+  }
+}
+
 // --- POST action:'send-dashboard-link' : envoie le lien d'invitation dashboard ---
 async function handleSendDashboardLink(req, res, apiKey, sessionSecret) {
   const { id } = req.body || {};
@@ -331,6 +478,8 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const action = (req.body || {}).action;
       if (action === 'update-statut') return handleUpdateStatut(req, res, AIRTABLE_API_KEY);
+      if (action === 'create-prospect') return handleCreateProspect(req, res, AIRTABLE_API_KEY);
+      if (action === 'update-field') return handleUpdateField(req, res, AIRTABLE_API_KEY);
       if (action === 'send-dashboard-link') {
         if (!SESSION_SECRET) return res.status(500).json({ error: 'Configuration serveur incomplète.' });
         return handleSendDashboardLink(req, res, AIRTABLE_API_KEY, SESSION_SECRET);
@@ -343,7 +492,7 @@ export default async function handler(req, res) {
     const resource = req.query.resource || 'reseau';
 
     if (resource === 'prospects') {
-      const prospects = await getProspects(AIRTABLE_API_KEY);
+      const prospects = await getProspectsCommerciaux(AIRTABLE_API_KEY);
       res.setHeader('Cache-Control', 'private, no-store');
       return res.status(200).json({ prospects });
     }

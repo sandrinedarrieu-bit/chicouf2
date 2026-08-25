@@ -238,27 +238,177 @@
     .two-col-bottom { grid-template-columns: 1fr; }
   }
 
-  /* prospects commerciaux (admin) */
-  .prospects-row { display: flex; align-items: center; padding: .85rem 1.2rem; border-bottom: 1px solid #EEEBE4; font-size: .82rem; gap: .5rem; min-width: 1120px; }
-  .prospects-row:last-child { border-bottom: none; }
-  .prospects-row.head { background: var(--cream); font-size: .7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
-  .prospects-row .p-nom { flex: 1.1; font-weight: 600; color: var(--body); }
-  .prospects-row .p-email { flex: 1.3; color: var(--muted); font-size: .78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .prospects-row .p-tel { flex: .9; color: var(--muted); font-size: .78rem; }
-  .prospects-row .p-date { flex: .8; color: var(--muted); font-size: .78rem; }
-  .prospects-row .p-relances { flex: .8; display: flex; gap: .3rem; }
-  .prospects-row .p-statut { flex: 1.1; }
-  .prospects-row .p-decision { flex: 1; }
-  .prospects-row .p-cgv { flex: .5; text-align: center; }
-  .prospects-row .p-contrat { flex: .9; color: var(--muted); font-size: .78rem; }
-  .prospects-row .p-action { flex: 1; text-align: right; }
+  /* prospects et commerciaux (admin) — pipeline de recrutement complet */
   .relance-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #E0DDD5; }
   .relance-dot.sent { background: #1A7F4F; }
-  .decision-select { border: 1.5px solid #E0DDD5; border-radius: 8px; padding: .35rem .5rem; font-family: inherit; font-size: .8rem; background: var(--white); color: var(--body); }
-  .decision-select:disabled { opacity: .6; }
   .btn-send-link { background: var(--ouf-cta); color: #fff; border: none; border-radius: 8px; padding: .4rem .8rem; font-size: .78rem; font-weight: 600; cursor: pointer; }
   .btn-send-link:hover { background: var(--ouf-cta-hover); }
   .btn-send-link:disabled { opacity: .6; cursor: default; }
+
+  :root {
+    --ok-bg: #E3F3EA; --ok-fg: #1F7A4D; --ok-bd: #B7E2C9;
+    --warn-bg: #FEF3E2; --warn-fg: #B5720B; --warn-bd: #F7D89A;
+    --bad-bg: #FBE9E7; --bad-fg: #B4402F; --bad-bd: #F3C1BA;
+    --review-bg: #EDEBFA; --review-fg: #5B3FBF; --review-bd: #D4CCF5;
+  }
+
+  .pc-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .pc-filter-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .pc-filter-btn { border: 1px solid #E0DDD5; background: var(--white); color: var(--muted); font-family: inherit; font-size: .8rem; font-weight: 600; padding: .5rem 1rem; border-radius: 20px; cursor: pointer; }
+  .pc-filter-btn:hover { border-color: var(--lilas); }
+  .pc-filter-btn.active { background: var(--chic); color: #fff; border-color: var(--chic); }
+  .pc-new-btn { border: 0; cursor: pointer; background: var(--chic); color: #fff; font-family: inherit; font-size: .82rem; font-weight: 700; padding: .65rem .95rem; border-radius: 9px; white-space: nowrap; }
+  .pc-new-btn:hover { background: var(--ouf-cta-hover); }
+
+  .pc-kpi-row { display: flex; gap: .7rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .pc-kpi-title { width: 100%; font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: .86rem; margin-bottom: .1rem; }
+  .pc-kpi { background: var(--white); border: 1px solid #E8E6E1; border-radius: 12px; padding: .75rem 1rem; font-size: .78rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; cursor: pointer; }
+  .pc-kpi:hover { border-color: var(--lilas); }
+  .pc-kpi .n { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--chic); }
+  .pc-kpi.filter-active { outline: 2px solid var(--ouf); outline-offset: 1px; }
+  .pc-kpi.action-required .n { color: var(--bad-fg); }
+  .pc-kpi.automation .n { color: var(--review-fg); }
+  .pc-kpi.waiting .n { color: var(--warn-fg); }
+  .pc-kpi.anomaly { border-color: var(--bad-bd); background: var(--bad-bg); }
+  .pc-kpi.anomaly .n { color: var(--bad-fg); }
+
+  .pc-table-wrap { background: var(--white); border: 1px solid #E8E6E1; border-radius: 16px; overflow-x: auto; }
+  .pc-table { width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 1100px; }
+  .pc-table thead th { text-align: left; font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); padding: .8rem .9rem; border-bottom: 1px solid #EEEBE4; white-space: nowrap; background: var(--cream); }
+  .pc-table tbody td { padding: .8rem .9rem; border-bottom: 1px solid #EEEBE4; vertical-align: middle; }
+  .pc-table tbody tr:last-child td { border-bottom: none; }
+  .pc-table tbody tr:hover { background: #FCFBF9; }
+  .pc-table td.pc-name { font-weight: 600; color: var(--nuit); }
+  .pc-table a.pc-mail { color: var(--ouf); text-decoration: underline; font-size: .8rem; }
+  .pc-muted { color: var(--muted); }
+  .pc-th-filter-wrap { display: flex; align-items: center; gap: .3rem; position: relative; }
+  .pc-th-filter-btn { all: unset; cursor: pointer; font-size: .78rem; color: #AAA6A0; padding: .1rem; border-radius: 4px; }
+  .pc-th-filter-btn:hover, .pc-th-filter-btn.active { color: var(--ouf); background: var(--review-bg); }
+  .pc-column-filter { display: none; width: 110px; font-family: inherit; font-size: .74rem; color: var(--body); background: var(--white); border: 1px solid #E0DDD5; border-radius: 7px; padding: .3rem .4rem; margin-top: .3rem; }
+  .pc-column-filter.open { display: block; }
+
+  .pc-fiche-btn { all: unset; cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--ouf); white-space: nowrap; }
+  .pc-fiche-btn:hover { text-decoration: underline; }
+
+  .badge.ok { background: var(--ok-bg); color: var(--ok-fg); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn-fg); }
+  .badge.bad { background: var(--bad-bg); color: var(--bad-fg); }
+  .badge.review { background: var(--review-bg); color: var(--review-fg); }
+
+  select.decision-select { border: 1.5px solid #E0DDD5; border-radius: 8px; padding: .35rem .5rem; font-family: inherit; font-size: .8rem; background: var(--white); color: var(--body); cursor: pointer; min-width: 130px; }
+  select.decision-select:disabled { opacity: .6; }
+  select.decision-select.st-accepte { border-color: var(--ok-bd); background: var(--ok-bg); color: var(--ok-fg); }
+  select.decision-select.st-revoir { border-color: var(--review-bd); background: var(--review-bg); color: var(--review-fg); }
+  select.decision-select.st-refuse { border-color: var(--bad-bd); background: var(--bad-bg); color: var(--bad-fg); }
+  select.decision-select.st-nonengage { border-color: var(--warn-bd); background: var(--warn-bg); color: var(--warn-fg); }
+
+  .pc-next-action { font-size: .78rem; font-weight: 600; color: var(--chic); white-space: nowrap; }
+  .pc-next-action.action-required { color: var(--bad-fg); font-weight: 700; }
+  .pc-next-action.automation { color: var(--review-fg); }
+  .pc-next-action.waiting { color: var(--warn-fg); }
+  .pc-next-action.anomaly { color: var(--bad-fg); font-weight: 800; }
+  .pc-next-action.done-state { color: var(--ok-fg); }
+
+  /* drawer fiche prospect */
+  .pc-overlay { position: fixed; inset: 0; background: rgba(44,44,62,.45); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 1500; }
+  .pc-overlay.show { opacity: 1; pointer-events: auto; }
+  .pc-drawer { position: fixed; top: 0; right: 0; height: 100vh; width: min(480px, 92vw); background: var(--cream); box-shadow: -12px 0 32px rgba(0,0,0,.15); transform: translateX(100%); transition: transform .25s ease; z-index: 1501; overflow-y: auto; padding: 2rem 1.6rem 3rem; }
+  .pc-drawer.show { transform: translateX(0); }
+  .pc-drawer-close { all: unset; cursor: pointer; float: right; font-size: 1.3rem; color: var(--muted); line-height: 1; padding: .2rem .4rem; }
+  .pc-drawer-close:hover { color: var(--nuit); }
+  .pc-drawer h3 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--chic); font-size: 1.3rem; margin-top: .3rem; }
+  .pc-drawer .pc-sub-line { font-size: .82rem; color: var(--muted); margin-top: .2rem; }
+  .pc-drawer .pc-sub-line a { color: var(--ouf); }
+  .pc-drawer h4.pc-block-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--chic); margin: 1.6rem 0 .8rem; }
+  .pc-phase-label { font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ouf); margin: .2rem 0 .7rem 2.35rem; }
+
+  .pc-edit-btn { all: unset; cursor: pointer; font-size: .76rem; font-weight: 600; color: var(--ouf); margin-top: .5rem; display: inline-block; }
+  .pc-edit-btn:hover { text-decoration: underline; }
+  .pc-info-edit { background: var(--white); border: 1px solid #E8E6E1; border-radius: 12px; padding: 1rem; margin-top: .6rem; display: flex; flex-direction: column; gap: .7rem; }
+  .pc-info-edit label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); display: flex; flex-direction: column; gap: .3rem; }
+  .pc-info-edit input, .pc-info-edit select { font-family: inherit; font-size: .84rem; font-weight: 500; color: var(--body); padding: .5rem .6rem; border-radius: 8px; border: 1px solid #E0DDD5; }
+  .pc-edit-actions { display: flex; gap: .6rem; margin-top: .2rem; }
+  .pc-edit-save { all: unset; cursor: pointer; font-size: .8rem; font-weight: 700; color: #fff; background: var(--chic); padding: .5rem 1rem; border-radius: 8px; }
+  .pc-edit-cancel { all: unset; cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--muted); padding: .5rem .6rem; }
+  .pc-edit-cancel:hover { color: var(--nuit); }
+
+  .pc-decision-block { margin-top: 1.2rem; padding: 1rem; background: var(--white); border-radius: 12px; border: 1px solid #E8E6E1; }
+  .pc-decision-block label { font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: .5rem; }
+  .pc-decision-block select { width: 100%; }
+  .pc-decision-help { font-size: .74rem; color: var(--muted); margin-top: .6rem; }
+
+  .pc-timeline { display: flex; flex-direction: column; }
+  .pc-tl-step { display: flex; gap: .8rem; position: relative; padding-bottom: 1.3rem; }
+  .pc-tl-step:last-child { padding-bottom: 0; }
+  .pc-tl-marker { width: 22px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+  .pc-tl-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .68rem; font-weight: 800; border: 2px solid #D8D5CE; background: var(--white); color: transparent; z-index: 2; }
+  .pc-tl-line { width: 2px; flex: 1; background: #E2E0DA; margin-top: 2px; }
+  .pc-tl-step.done .pc-tl-dot { background: var(--ok-fg); border-color: var(--ok-fg); color: #fff; }
+  .pc-tl-step.done .pc-tl-line { background: var(--ok-fg); }
+  .pc-tl-step.current .pc-tl-dot { background: var(--or); border-color: var(--or); color: #fff; }
+  .pc-tl-step.blocked .pc-tl-dot { border-color: var(--bad-fg); }
+  .pc-tl-step.blocked .pc-tl-title { color: var(--bad-fg); }
+  .pc-tl-step.paused .pc-tl-dot { background: var(--review-fg); border-color: var(--review-fg); border-style: dashed; }
+  .pc-tl-step.paused .pc-tl-title { color: var(--review-fg); }
+  .pc-tl-body { flex: 1; padding-top: 1px; }
+  .pc-tl-title { font-size: .86rem; font-weight: 600; color: var(--nuit); }
+  .pc-tl-step.pending .pc-tl-title { color: var(--muted); font-weight: 500; }
+  .pc-tl-date { font-size: .74rem; color: var(--muted); margin-top: .1rem; }
+  .pc-tl-date-row { display: flex; align-items: center; gap: .5rem; margin-top: .1rem; }
+  .pc-tl-relances { display: flex; align-items: center; gap: 5px; margin-top: .35rem; }
+  .pc-tl-relances-label { font-size: .68rem; color: var(--muted); margin-left: .2rem; }
+  .pc-tl-edit-btn { all: unset; cursor: pointer; font-size: .72rem; opacity: .55; }
+  .pc-tl-edit-btn:hover { opacity: 1; }
+  .pc-tl-date-edit { display: flex; align-items: center; gap: .5rem; margin-top: .2rem; }
+  .pc-tl-date-edit input { font-family: inherit; font-size: .78rem; padding: .3rem .5rem; border-radius: 6px; border: 1px solid #E0DDD5; }
+  .pc-tl-date-edit button { all: unset; cursor: pointer; font-size: .74rem; font-weight: 700; padding: .3rem .6rem; border-radius: 6px; }
+  .pc-tl-date-save { background: var(--chic); color: #fff; }
+  .pc-tl-date-cancel { color: var(--muted); }
+
+  .pc-eval-empty { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: .3rem; }
+  .pc-eval-compact { display: flex; align-items: center; gap: .6rem; margin-top: .4rem; flex-wrap: wrap; }
+  .pc-eval-score { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--chic); }
+  .pc-eval-max { font-size: .72rem; font-weight: 500; color: var(--muted); }
+  .pc-eval-btn { all: unset; cursor: pointer; font-size: .76rem; font-weight: 600; color: var(--ouf); }
+  .pc-eval-btn:hover { text-decoration: underline; }
+  .pc-eval-detail { background: var(--white); border: 1px solid #E8E6E1; border-radius: 10px; padding: .8rem .9rem; margin-top: .5rem; }
+  .pc-eval-crit-row { display: flex; align-items: center; gap: .6rem; margin-top: .4rem; }
+  .pc-eval-crit-label { font-size: .76rem; color: var(--body); width: 140px; flex-shrink: 0; }
+  .pc-eval-crit-bar { flex: 1; height: 6px; border-radius: 4px; background: #EFEDE7; overflow: hidden; }
+  .pc-eval-crit-fill { height: 100%; background: var(--ouf); border-radius: 4px; }
+  .pc-eval-crit-val { font-size: .74rem; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+  .pc-eval-cr { font-size: .8rem; color: var(--body); line-height: 1.5; margin-top: .5rem; }
+  .pc-eval-lbl { font-weight: 700; font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: .6rem; }
+
+  .pc-full-toggle { all: unset; cursor: pointer; display: block; margin-top: 1.8rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; color: var(--chic); }
+  .pc-full-toggle:hover { color: var(--ouf); }
+  .pc-ff-group { background: var(--white); border: 1px solid #E8E6E1; border-radius: 12px; padding: .8rem 1rem; margin-bottom: .8rem; }
+  .pc-ff-group-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: .5rem; }
+  .pc-ff-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .4rem 0; border-bottom: 1px dashed #EEEBE4; font-size: .8rem; }
+  .pc-ff-row:last-child { border-bottom: none; }
+  .pc-ff-label { color: var(--muted); flex-shrink: 0; }
+  .pc-ff-value { color: var(--nuit); font-weight: 500; text-align: right; display: flex; align-items: center; gap: .4rem; }
+  .pc-ff-locked { color: var(--muted); font-style: italic; cursor: help; }
+  .pc-ff-edit-btn { all: unset; cursor: pointer; font-size: .7rem; opacity: .5; }
+  .pc-ff-edit-btn:hover { opacity: 1; }
+  .pc-ff-row-edit { display: flex; align-items: center; gap: .5rem; }
+  .pc-ff-row-edit input { font-family: inherit; font-size: .78rem; padding: .3rem .5rem; border-radius: 6px; border: 1px solid #E0DDD5; width: 140px; }
+  .pc-ff-row-edit button { all: unset; cursor: pointer; font-size: .72rem; font-weight: 700; padding: .25rem .55rem; border-radius: 6px; }
+  .pc-ff-row-save { background: var(--chic); color: #fff; }
+  .pc-ff-row-cancel { color: var(--muted); }
+
+  .pc-create-form { display: flex; flex-direction: column; gap: .8rem; margin-top: 1.2rem; }
+  .pc-create-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+  .pc-create-form label { font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); display: flex; flex-direction: column; gap: .3rem; }
+  .pc-create-form input, .pc-create-form select { width: 100%; font-family: inherit; font-size: .84rem; color: var(--body); background: var(--white); border: 1px solid #E0DDD5; border-radius: 8px; padding: .58rem .65rem; }
+  .pc-create-actions { display: flex; gap: .6rem; margin-top: .3rem; }
+  .pc-create-save { border: 0; cursor: pointer; flex: 1; background: var(--chic); color: #fff; font-family: inherit; font-size: .84rem; font-weight: 700; padding: .72rem 1rem; border-radius: 9px; }
+  .pc-create-cancel { border: 1px solid #E0DDD5; cursor: pointer; background: var(--white); color: var(--muted); font-family: inherit; font-size: .82rem; font-weight: 600; padding: .72rem .9rem; border-radius: 9px; }
+  .pc-create-help { font-size: .76rem; color: var(--muted); line-height: 1.45; }
+
+  @media (max-width: 780px) {
+    .pc-drawer { padding: 1.5rem 1.1rem 2.5rem; }
+  }
 
   /* suivi CA / paiement (admin) */
   .ca-mois-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
@@ -339,7 +489,7 @@
     <button class="tab-btn active" data-tab="overview"><span class="tab-icon">🏠</span>Vue d'ensemble</button>
     <button class="tab-btn" data-tab="liens"><span class="tab-icon">🔗</span>Mes liens</button>
     <button class="tab-btn" data-tab="prospects"><span class="tab-icon">📋</span>Prospects &amp; devis</button>
-    <button class="tab-btn" data-tab="prospects-commerciaux" id="tabProspectsCommerciaux" hidden><span class="tab-icon">🧑‍💼</span>Prospects commerciaux</button>
+    <button class="tab-btn" data-tab="prospects-commerciaux" id="tabProspectsCommerciaux" hidden><span class="tab-icon">🧑‍💼</span>Prospects et commerciaux</button>
     <button class="tab-btn" data-tab="paiements" id="tabPaiements" hidden><span class="tab-icon">💳</span>Suivi CA / Paiement</button>
     <button class="tab-btn" data-tab="catalogue"><span class="tab-icon">📦</span>Catalogue &amp; ressources</button>
     <button class="tab-btn" data-tab="outils"><span class="tab-icon">🛠️</span>Les outils</button>
@@ -499,23 +649,34 @@
   <div class="tab-panel" data-tab="prospects-commerciaux">
   <div class="section-block">
     <div class="section-block-head">
-      <h2>Prospects commerciaux</h2>
+      <h2>Prospects et commerciaux</h2>
+      <button type="button" class="pc-new-btn" id="pcNewProspectBtn">+ Nouveau prospect</button>
     </div>
-    <div class="reseau-table" id="prospectsTable" style="overflow-x:auto;">
-      <div class="prospects-row head">
-        <span class="p-nom">Nom</span>
-        <span class="p-email">Email</span>
-        <span class="p-tel">Téléphone</span>
-        <span class="p-date">1er échange</span>
-        <span class="p-relances">Relances</span>
-        <span class="p-statut">Statut</span>
-        <span class="p-decision">Décision</span>
-        <span class="p-cgv">CGV</span>
-        <span class="p-contrat">Contrat envoyé</span>
-        <span class="p-contrat">Signature</span>
-        <span class="p-action">Dashboard</span>
-      </div>
-      <div class="prospects-row"><span style="color:var(--muted);font-style:italic;">Chargement…</span></div>
+
+    <div class="pc-filter-row" id="pcFilterRow"></div>
+    <div class="pc-kpi-row" id="pcKpiRow"></div>
+
+    <div class="pc-table-wrap">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Statut</th>
+            <th><div class="pc-th-filter-wrap"><span>Nom <button type="button" class="pc-th-filter-btn" data-filter-toggle="nom" title="Rechercher par nom">⌕</button></span></div><input class="pc-column-filter" id="pcFilterNom" type="search" autocomplete="off" placeholder="Nom…"></th>
+            <th><div class="pc-th-filter-wrap"><span>Prénom <button type="button" class="pc-th-filter-btn" data-filter-toggle="prenom" title="Rechercher par prénom">⌕</button></span></div><input class="pc-column-filter" id="pcFilterPrenom" type="search" autocomplete="off" placeholder="Prénom…"></th>
+            <th><div class="pc-th-filter-wrap"><span>Email <button type="button" class="pc-th-filter-btn" data-filter-toggle="email" title="Rechercher par email">⌕</button></span></div><input class="pc-column-filter" style="width:160px;" id="pcFilterEmail" type="search" autocomplete="off" placeholder="Email…"></th>
+            <th><div class="pc-th-filter-wrap"><span>Téléphone <button type="button" class="pc-th-filter-btn" data-filter-toggle="telephone" title="Rechercher par téléphone">⌕</button></span></div><input class="pc-column-filter" id="pcFilterTelephone" type="search" autocomplete="off" placeholder="Téléphone…"></th>
+            <th>Décision</th>
+            <th>Contrat</th>
+            <th>Étape en cours</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="pcRows"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="annot" style="margin-top:1rem;">
+      💬 Seule la décision Accepté / À revoir / Refusé / Candidat non engagé est une action manuelle ici ; les autres étapes (relances, contrat, activation) sont surveillées et exécutées automatiquement par Make.
     </div>
   </div>
   </div>
@@ -762,6 +923,9 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="pc-overlay" id="pcOverlay"></div>
+<div class="pc-drawer" id="pcDrawer"></div>
+
 <script>
   const STATUT_CLASS = {
     'En attente': 'attente',
@@ -773,8 +937,6 @@
     'Externe': 'externe'
   };
   const PIPELINE_ORDER = ['En attente', 'Envoyé', 'Signé', 'Payé', 'Perdu'];
-  const PROSPECT_STATUT_CLASS = { 'Nouveau candidat': 'aucun', 'RDV pris': 'envoye', 'Candidat non engagé': 'perdu', 'Accepté': 'signe', 'À revoir': 'attente', 'Refusé': 'rejete', 'Actif': 'externe' };
-  const DECISION_OPTIONS = ['Accepté', 'À revoir', 'Refusé'];
   const ORIGINE_CLASS = { 'Commercial': 'envoye', 'Client CAPE': 'externe' };
   const PAIEMENT_STATUT_CLASS = { 'OK': 'paye', 'Rejeté': 'rejete' };
 
@@ -1150,125 +1312,713 @@
     }
   }
 
-  // --- Prospects commerciaux (admin) ---
-  function renderRelanceDots(relances) {
-    return `
-      <span class="relance-dot ${relances.h4 ? 'sent' : ''}" title="Relance 4h : ${relances.h4 ? 'envoyée' : 'non envoyée'}"></span>
-      <span class="relance-dot ${relances.h24 ? 'sent' : ''}" title="Relance 24h : ${relances.h24 ? 'envoyée' : 'non envoyée'}"></span>
-      <span class="relance-dot ${relances.j3 ? 'sent' : ''}" title="Relance 3j : ${relances.j3 ? 'envoyée' : 'non envoyée'}"></span>
-    `;
+  // --- Prospects et commerciaux (admin) — pipeline de recrutement complet ---
+  const PC_DECISION_OPTIONS = ['Accepté', 'À revoir', 'Refusé', 'Candidat non engagé'];
+  const PC_DECISION_CLASS = { accepte: 'st-accepte', revoir: 'st-revoir', refuse: 'st-refuse', nonengage: 'st-nonengage' };
+  const PC_SITUATION_CHOICES = ['Salarié', "Demandeur d'emploi", 'Indépendant', 'Entrepreneur', 'Retraité', 'En reconversion', 'Autre'];
+  const PC_SOURCE_CHOICES = ['LinkedIn', 'Facebook', 'Instagram', 'TikTok', 'Recherche personnelle', 'Recommandation', 'Autre'];
+  const PC_CRITERES = [
+    { key: 'motivation', label: 'Motivation', max: 20 },
+    { key: 'commercial', label: 'Capacité commerciale', max: 20 },
+    { key: 'reseau', label: 'Réseau / relationnel', max: 20 },
+    { key: 'autonomie', label: 'Autonomie', max: 15 },
+    { key: 'numerique', label: 'Aisance numérique', max: 10 },
+    { key: 'disponibilite', label: 'Disponibilité', max: 15 }
+  ];
+
+  let pcData = [];
+  let pcFiltreActif = 'tous';
+  let pcFiltresColonnes = { nom: '', prenom: '', email: '', telephone: '' };
+  let pcFiltreAction = null;
+
+  function pcFmtDate(iso) {
+    return iso ? new Date(iso).toLocaleDateString('fr-FR') : '—';
   }
 
-  function checkOrDash(value) {
-    return value
-      ? '<span style="color:#1A7F4F;font-weight:700;">✓</span>'
-      : '<span style="color:var(--muted);">—</span>';
+  function pcJoursDepuis(iso) {
+    if (!iso) return 0;
+    return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  }
+
+  function pcDecisionFromStatut(statut) {
+    if (statut === 'Accepté') return 'accepte';
+    if (statut === 'À revoir') return 'revoir';
+    if (statut === 'Refusé') return 'refuse';
+    if (statut === 'Candidat non engagé') return 'nonengage';
+    return 'attente';
+  }
+
+  function pcIsExited(row) { return row.exitReason !== null; }
+  function pcContractualisation(row) { return row.statutReseau === 'recrutement' && !pcIsExited(row) && row.statut === 'Accepté'; }
+
+  // Le dashboard signale l'action humaine, l'attente ou une anomalie — Airtable garde les
+  // faits, Make exécute les automatisations (même principe que le reste du dashboard).
+  function pcNextAction(row) {
+    if (row.statutReseau === 'actif') return { key: 'done', type: 'done-state', label: 'Commercial actif' };
+    const decision = pcDecisionFromStatut(row.statut);
+    if (decision === 'refuse') return { key: 'done', type: 'done-state', label: 'Parcours terminé — Refusé' };
+    if (decision === 'nonengage') return { key: 'done', type: 'done-state', label: 'Parcours terminé — Candidat non engagé' };
+
+    if (!row.dateRDV) return { key: 'automation', type: 'automation', label: 'Relances prise de RDV — Make' };
+    if (!row.dateEntretien) return { key: 'waiting', type: 'waiting', label: "En attente de l'entretien" };
+    if (!row.evaluation) return { key: 'automation', type: 'automation', label: "Analyse de l'entretien en cours — Fathom / Claude / Make" };
+    if (decision === 'attente') return { key: 'decision', type: 'action-required', label: 'Décision à prendre — action requise' };
+    if (decision === 'revoir') return { key: 'waiting', type: 'waiting', label: 'À revoir — suivi manuel' };
+
+    if (!row.contratEnvoye) return { key: 'automation', type: 'automation', label: 'Envoi du contrat — Make' };
+    if (!row.contratSigne) {
+      const j = pcJoursDepuis(row.contratEnvoye);
+      if (j >= 7 && !row.notificationJ7) return { key: 'anomaly', type: 'anomaly', label: '⚠ Relance J+7 non confirmée' };
+      if (j >= 5 && !row.relanceJ5) return { key: 'anomaly', type: 'anomaly', label: '⚠ Relance J+5 non confirmée' };
+      if (j >= 2 && !row.relanceJ2) return { key: 'anomaly', type: 'anomaly', label: '⚠ Relance J+2 non confirmée' };
+      if (j < 2) return { key: 'waiting', type: 'waiting', label: 'En attente de signature' };
+      if (j < 5) return { key: 'automation', type: 'automation', label: 'Relance J+2 effectuée — Make' };
+      if (j < 7) return { key: 'automation', type: 'automation', label: 'Relance J+5 effectuée — Make' };
+      return { key: 'waiting', type: 'waiting', label: 'Relances terminées — attente signature' };
+    }
+    if (!row.kitPaye) return { key: 'waiting', type: 'waiting', label: 'En attente du paiement Stripe' };
+    return { key: 'automation', type: 'automation', label: 'Création du compte — automatique' };
+  }
+
+  function pcActionMatches(row, key) {
+    if (!key) return true;
+    return pcNextAction(row).key === key;
+  }
+
+  function pcContratBadge(row) {
+    const decision = pcDecisionFromStatut(row.statut);
+    if (row.statutReseau !== 'actif' && (decision === 'refuse' || decision === 'nonengage')) return `<span class="pc-muted">—</span>`;
+    if (row.contratSigne) return `<span class="badge ok">Signé le ${pcFmtDate(row.contratSigne)}</span>`;
+    if (row.contratEnvoye) {
+      const j = pcJoursDepuis(row.contratEnvoye);
+      if (j >= 7) return `<span class="badge bad">En attente — ${j} j (J+7 dépassé)</span>`;
+      if (j >= 2) return `<span class="badge warn">Envoyé le ${pcFmtDate(row.contratEnvoye)}</span>`;
+      return `<span class="badge review">Envoyé le ${pcFmtDate(row.contratEnvoye)}</span>`;
+    }
+    if (decision === 'accepte') return `<span class="badge warn">Contrat pas encore parti</span>`;
+    return `<span class="pc-muted">—</span>`;
+  }
+
+  function pcDecisionSelectHtml(row, idAttr) {
+    const decision = pcDecisionFromStatut(row.statut);
+    return `<select class="decision-select ${PC_DECISION_CLASS[decision] || ''}" ${idAttr}>
+      ${!PC_DECISION_OPTIONS.includes(row.statut) ? `<option value="" disabled selected>— Choisir —</option>` : ''}
+      ${PC_DECISION_OPTIONS.map(o => `<option value="${o}" ${o === row.statut ? 'selected' : ''}>${o}</option>`).join('')}
+    </select>`;
+  }
+
+  async function pcUpdateStatut(id, statut) {
+    const res = await fetch('/api/admin/commerciaux-list', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'update-statut', id, statut })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Erreur');
+    return result;
+  }
+
+  async function pcUpdateField(id, key, value) {
+    const res = await fetch('/api/admin/commerciaux-list', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'update-field', id, key, value })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Erreur');
+    return result;
+  }
+
+  function pcRenderFilters() {
+    const nbProspects = pcData.filter(r => r.statutReseau === 'recrutement' && !pcIsExited(r) && r.statut !== 'Accepté').length;
+    const nbContract = pcData.filter(pcContractualisation).length;
+    const nbActifs = pcData.filter(r => r.statutReseau === 'actif').length;
+    const nbSortis = pcData.filter(pcIsExited).length;
+    const filters = [
+      { key: 'tous', label: `Tous (${pcData.length})` },
+      { key: 'candidats', label: `Prospects (${nbProspects})` },
+      { key: 'contractualisation', label: `À contractualiser (${nbContract})` },
+      { key: 'actif', label: `Commerciaux actifs (${nbActifs})` },
+      { key: 'sortis', label: `Sortis (${nbSortis})` }
+    ];
+    document.getElementById('pcFilterRow').innerHTML = filters.map(f =>
+      `<button type="button" class="pc-filter-btn ${pcFiltreActif === f.key ? 'active' : ''}" data-key="${f.key}">${f.label}</button>`
+    ).join('');
+    document.querySelectorAll('#pcFilterRow .pc-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => { pcFiltreActif = btn.dataset.key; pcFiltreAction = null; pcRender(); });
+    });
+  }
+
+  function pcRenderKPIs() {
+    const prospects = pcData.filter(r => r.statutReseau === 'recrutement' && !pcIsExited(r));
+    const defs = [
+      { key: 'decision', label: 'décisions à prendre', cls: 'action-required' },
+      { key: 'automation', label: 'automatisations en cours', cls: 'automation' },
+      { key: 'waiting', label: 'attentes externes', cls: 'waiting' },
+      { key: 'anomaly', label: 'anomalies à vérifier', cls: 'anomaly' }
+    ];
+    const html = defs.map(d => {
+      const n = prospects.filter(r => pcActionMatches(r, d.key)).length;
+      return `<div class="pc-kpi ${d.cls} ${pcFiltreAction === d.key ? 'filter-active' : ''}" data-action-filter="${d.key}" title="Cliquer pour filtrer la liste"><span class="n">${n}</span> ${d.label}</div>`;
+    }).join('');
+    document.getElementById('pcKpiRow').innerHTML = `<div class="pc-kpi-title">À surveiller</div>${html}`;
+    document.querySelectorAll('#pcKpiRow [data-action-filter]').forEach(k => {
+      k.addEventListener('click', () => {
+        const key = k.dataset.actionFilter;
+        pcFiltreAction = pcFiltreAction === key ? null : key;
+        pcFiltreActif = 'tous';
+        pcRender();
+      });
+    });
+  }
+
+  function pcRender() {
+    pcRenderFilters();
+    pcRenderKPIs();
+    const tbody = document.getElementById('pcRows');
+
+    let visibles = pcData.filter(r => {
+      if (pcFiltreActif === 'candidats') return r.statutReseau === 'recrutement' && !pcIsExited(r) && r.statut !== 'Accepté';
+      if (pcFiltreActif === 'contractualisation') return pcContractualisation(r);
+      if (pcFiltreActif === 'actif') return r.statutReseau === 'actif';
+      if (pcFiltreActif === 'sortis') return pcIsExited(r);
+      return true;
+    });
+    if (pcFiltreAction) visibles = visibles.filter(r => pcActionMatches(r, pcFiltreAction));
+    const normalize = v => String(v ?? '').toLocaleLowerCase('fr');
+    visibles = visibles.filter(r => Object.entries(pcFiltresColonnes).every(([champ, valeur]) => {
+      const q = valeur.trim().toLocaleLowerCase('fr');
+      return !q || normalize(r[champ]).includes(q);
+    }));
+
+    if (!visibles.length) {
+      const rechercheActive = Object.values(pcFiltresColonnes).some(v => v.trim());
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Aucun résultat${rechercheActive ? ' pour ces critères de recherche' : ''}.</td></tr>`;
+    } else {
+      tbody.innerHTML = visibles.map(row => {
+        const decision = pcDecisionFromStatut(row.statut);
+        const statutTagClass = row.statutReseau === 'actif' ? 'ok' : (decision === 'nonengage' ? 'warn' : decision === 'refuse' ? 'bad' : 'review');
+        const statutLabel = row.statutReseau === 'actif' ? 'Commercial actif' : (pcIsExited(row) ? row.statut : 'Prospect');
+        const decisionCell = row.statutReseau === 'actif'
+          ? `<span class="badge ok">Actif ✓</span>`
+          : pcDecisionSelectHtml(row, `data-id="${row.id}"`);
+        const action = pcNextAction(row);
+        return `<tr data-row-id="${row.id}">
+          <td><span class="badge ${statutTagClass}">${statutLabel}</span></td>
+          <td class="pc-name">${row.nom || '—'}</td>
+          <td>${row.prenom || '—'}</td>
+          <td>${row.email ? `<a class="pc-mail" href="mailto:${row.email}">${row.email}</a>` : '—'}</td>
+          <td class="pc-muted">${row.telephone || '—'}</td>
+          <td>${decisionCell}</td>
+          <td>${pcContratBadge(row)}</td>
+          <td><span class="pc-next-action ${action.type || ''}">${action.label}</span></td>
+          <td><button type="button" class="pc-fiche-btn" data-id="${row.id}">Voir la fiche →</button></td>
+        </tr>`;
+      }).join('');
+    }
+
+    tbody.querySelectorAll('.pc-fiche-btn').forEach(btn => {
+      btn.addEventListener('click', () => pcOpenDrawer(btn.dataset.id));
+    });
+    tbody.querySelectorAll('.decision-select').forEach(select => {
+      const previous = select.value;
+      select.addEventListener('click', e => e.stopPropagation());
+      select.addEventListener('change', async () => {
+        const statut = select.value;
+        select.disabled = true;
+        try {
+          await pcUpdateStatut(select.dataset.id, statut);
+          showToast(`Statut mis à jour → ${statut}`);
+          loadActionsBanner();
+          await pcLoadData();
+        } catch (err) {
+          select.value = previous;
+          select.disabled = false;
+          showToast(err.message || 'Erreur lors de la mise à jour', 'error');
+        }
+      });
+    });
+  }
+
+  async function pcLoadData() {
+    const res = await fetch('/api/admin/commerciaux-list?resource=prospects');
+    if (!res.ok) throw new Error('Erreur de chargement');
+    const data = await res.json();
+    pcData = data.prospects || [];
+    pcRender();
   }
 
   async function loadProspects() {
-    const table = document.getElementById('prospectsTable');
     try {
-      const res = await fetch('/api/admin/commerciaux-list?resource=prospects');
-      if (!res.ok) throw new Error('Erreur de chargement');
-      const data = await res.json();
-      const prospects = data.prospects || [];
+      await pcLoadData();
+    } catch (err) {
+      document.getElementById('pcRows').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Erreur de chargement.</td></tr>';
+    }
+  }
 
-      const rows = prospects.map(p => {
-        const dateStr = p.dateRDV ? new Date(p.dateRDV).toLocaleDateString('fr-FR') : '—';
-        const statutBadge = `<span class="badge ${PROSPECT_STATUT_CLASS[p.statut] || 'aucun'}">${p.statut || '—'}</span>`;
-        // Aucune décision possible tant que le candidat n'a pas eu son entretien.
-        const decisionCell = p.statut === 'Nouveau candidat'
-          ? '—'
-          : `<select class="decision-select" data-id="${p.id}">
-              ${!DECISION_OPTIONS.includes(p.statut) ? `<option value="" disabled selected>— Choisir —</option>` : ''}
-              ${DECISION_OPTIONS.map(o => `<option value="${o}" ${o === p.statut ? 'selected' : ''}>${o}</option>`).join('')}
-            </select>`;
-        const contratEnvoye = p.dateEnvoiContrat ? new Date(p.dateEnvoiContrat).toLocaleDateString('fr-FR') : '—';
-        const dateSignature = p.dateSignatureContrat ? new Date(p.dateSignatureContrat).toLocaleDateString('fr-FR') : '—';
-        const dashboardCell = p.dashboardEnvoye
-          ? checkOrDash(true)
-          : `<button type="button" class="btn-send-link" data-id="${p.id}">Envoyer</button>`;
+  function pcInitColumnSearch() {
+    document.querySelectorAll('[data-filter-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.filterToggle;
+        const input = document.getElementById('pcFilter' + key.charAt(0).toUpperCase() + key.slice(1));
+        const isOpen = input.classList.contains('open');
+        input.classList.toggle('open', !isOpen);
+        btn.classList.toggle('active', !isOpen);
+        if (!isOpen) input.focus();
+      });
+    });
+    Object.keys(pcFiltresColonnes).forEach(key => {
+      const input = document.getElementById('pcFilter' + key.charAt(0).toUpperCase() + key.slice(1));
+      input.addEventListener('input', () => { pcFiltresColonnes[key] = input.value; pcRender(); });
+    });
+  }
 
-        return `<div class="prospects-row" data-row-id="${p.id}">
-          <span class="p-nom">${p.prenom || ''} ${p.nom || ''}</span>
-          <span class="p-email">${p.email ? `<a href="mailto:${p.email}">${p.email}</a>` : '—'}</span>
-          <span class="p-tel">${p.telephone || '—'}</span>
-          <span class="p-date">${dateStr}</span>
-          <span class="p-relances">${renderRelanceDots(p.relances)}</span>
-          <span class="p-statut">${statutBadge}</span>
-          <span class="p-decision">${decisionCell}</span>
-          <span class="p-cgv">${checkOrDash(p.cgvAcceptees)}</span>
-          <span class="p-contrat">${contratEnvoye}</span>
-          <span class="p-contrat">${dateSignature}</span>
-          <span class="p-action">${dashboardCell}</span>
-        </div>`;
-      }).join('');
+  // --- Timeline de la fiche prospect ---
+  function pcStepState(done, isCurrent, blocked, paused) {
+    if (blocked) return 'blocked';
+    if (paused) return 'paused';
+    if (done) return 'done';
+    if (isCurrent) return 'current';
+    return 'pending';
+  }
 
-      table.innerHTML = `
-        <div class="prospects-row head">
-          <span class="p-nom">Nom</span>
-          <span class="p-email">Email</span>
-          <span class="p-tel">Téléphone</span>
-          <span class="p-date">1er échange</span>
-          <span class="p-relances">Relances</span>
-          <span class="p-statut">Statut</span>
-          <span class="p-decision">Décision</span>
-          <span class="p-cgv">CGV</span>
-          <span class="p-contrat">Contrat envoyé</span>
-          <span class="p-contrat">Signature</span>
-          <span class="p-action">Dashboard</span>
-        </div>
-        ${prospects.length ? rows : '<div class="prospects-row"><span style="color:var(--muted);font-style:italic;">Aucun prospect pour le moment.</span></div>'}
-      `;
+  function pcBuildTimeline(row) {
+    const decision = pcDecisionFromStatut(row.statut);
+    const steps = [];
+    steps.push({ title: row.origineCreation === 'manuel' ? 'Prospect créé' : 'Candidature reçue', date: row.dateCandidature, done: true });
+    steps.push({ title: 'RDV pris', date: row.dateRDV, done: !!row.dateRDV, editKey: 'dateRDV' });
+    steps.push({ title: 'Entretien réalisé', date: row.dateEntretien, done: !!row.dateEntretien, editKey: 'dateEntretien' });
+    steps.push({ title: 'Compte-rendu & scoring IA (automatique)', done: !!row.evaluation, current: !!row.dateEntretien && !row.evaluation, evaluation: row.evaluation });
 
-      table.querySelectorAll('.decision-select').forEach(select => {
-        const previous = select.value;
-        select.addEventListener('change', async () => {
-          const statut = select.value;
-          select.disabled = true;
+    if (decision === 'nonengage') {
+      steps.push({ title: 'Parcours terminé : Candidat non engagé', date: null, done: true, paused: true });
+      return steps;
+    }
+    if (decision === 'refuse') {
+      steps.push({ title: 'Décision : Refusé', date: null, done: true, blocked: true });
+      return steps;
+    }
+
+    steps.push({
+      title: decision === 'accepte' ? 'Décision : Accepté' : (decision === 'revoir' ? 'Décision : À revoir' : 'Validation de la candidature'),
+      date: null, done: decision === 'accepte', current: decision === 'attente', paused: decision === 'revoir'
+    });
+    steps.push({
+      title: row.contratEnvoye ? 'Contrat envoyé' : (decision === 'accepte' ? 'Contrat pas encore parti' : 'Contrat envoyé'),
+      date: row.contratEnvoye, done: !!row.contratEnvoye, current: decision === 'accepte' && !row.contratEnvoye,
+      relances: !row.contratSigne && row.contratEnvoye ? [row.relanceJ2, row.relanceJ5, row.notificationJ7] : null
+    });
+    steps.push({ title: 'CGV acceptées', date: row.dateAcceptationCGV, done: !!row.cgvAcceptees, current: !!row.contratEnvoye && !row.cgvAcceptees });
+    steps.push({ title: 'Contrat signé', date: row.contratSigne, done: !!row.contratSigne, current: !!row.contratEnvoye && !row.contratSigne });
+    steps.push({ title: 'Paiement du kit (500€)', date: row.datePaiementKit, done: !!row.kitPaye, current: !!row.contratSigne && !row.kitPaye });
+    steps.push({ title: 'Compte commercial activé', date: null, done: row.statutReseau === 'actif' });
+    return steps;
+  }
+
+  function pcEvalHtml(ev, stepIndex) {
+    if (!ev) return `<div class="pc-eval-empty">En attente du compte-rendu Fathom</div>`;
+    const badgeCls = ev.decisionIA.includes('🟢') ? 'ok' : ev.decisionIA.includes('🟠') ? 'warn' : 'bad';
+    return `
+      <div class="pc-eval-compact">
+        <span class="pc-eval-score">${ev.total}<span class="pc-eval-max">/100</span></span>
+        <span class="badge ${badgeCls}">${ev.decisionIA}</span>
+        <button type="button" class="pc-eval-btn" data-step="${stepIndex}">Voir le détail et le compte-rendu →</button>
+      </div>
+      <div class="pc-eval-detail" id="pcEvalDetail${stepIndex}" style="display:none;">
+        <div class="pc-eval-lbl">Détail par critère</div>
+        ${PC_CRITERES.map(c => `
+          <div class="pc-eval-crit-row">
+            <span class="pc-eval-crit-label">${c.label}</span>
+            <div class="pc-eval-crit-bar"><div class="pc-eval-crit-fill" style="width:${(ev[c.key] / c.max * 100)}%"></div></div>
+            <span class="pc-eval-crit-val">${ev[c.key]}/${c.max}</span>
+          </div>
+        `).join('')}
+        <div class="pc-eval-lbl">Compte-rendu IA</div>
+        <p class="pc-eval-cr">${ev.compteRendu || '—'}</p>
+      </div>
+    `;
+  }
+
+  function pcTimelineHtml(row) {
+    const steps = pcBuildTimeline(row);
+    const chunks = [];
+    steps.forEach((s, i) => {
+      if (i === 0) chunks.push('<div class="pc-phase-label">Candidature</div>');
+      if (i === 5) chunks.push('<div class="pc-phase-label">Contractualisation</div>');
+      if (i === 8) chunks.push('<div class="pc-phase-label">Activation</div>');
+      const state = pcStepState(s.done, s.current, s.blocked, s.paused);
+      chunks.push(`
+        <div class="pc-tl-step ${state}">
+          <div class="pc-tl-marker"><div class="pc-tl-dot">${s.done ? '✓' : ''}</div>${i < steps.length - 1 ? '<div class="pc-tl-line"></div>' : ''}</div>
+          <div class="pc-tl-body">
+            <div class="pc-tl-title">${s.title}</div>
+            <div class="pc-tl-date-row">
+              ${s.date ? `<span class="pc-tl-date">${pcFmtDate(s.date)}</span>` : (s.editKey ? `<span class="pc-tl-date pc-muted">Pas encore fixée</span>` : '')}
+              ${s.editKey ? `<button type="button" class="pc-tl-edit-btn" data-key="${s.editKey}" data-current="${s.date || ''}">✏️</button>` : ''}
+            </div>
+            ${s.relances ? `<div class="pc-tl-relances">
+              <span class="relance-dot ${s.relances[0] ? 'sent' : ''}" title="Relance J+2"></span>
+              <span class="relance-dot ${s.relances[1] ? 'sent' : ''}" title="Relance J+5"></span>
+              <span class="relance-dot ${s.relances[2] ? 'sent' : ''}" title="Notification interne J+7"></span>
+              <span class="pc-tl-relances-label">Relances J+2 / J+5 · Notification interne J+7</span>
+            </div>` : ''}
+            ${s.evaluation !== undefined ? pcEvalHtml(s.evaluation, i) : ''}
+          </div>
+        </div>`);
+    });
+    return chunks.join('');
+  }
+
+  // --- Fiche complète (tous les champs Airtable) ---
+  function pcFieldRow(label, rawValue, key, type, locked) {
+    let displayVal;
+    if (rawValue === null || rawValue === undefined || rawValue === '') displayVal = '—';
+    else if (type === 'checkbox') displayVal = rawValue ? '✓ Oui' : '— Non';
+    else if (type === 'date') displayVal = pcFmtDate(rawValue);
+    else displayVal = rawValue;
+
+    if (locked) {
+      return `<div class="pc-ff-row"><span class="pc-ff-label">${label}</span><span class="pc-ff-value pc-ff-locked" title="Alimenté automatiquement — non modifiable ici">🔒 ${displayVal}</span></div>`;
+    }
+    const currentAttr = (rawValue === null || rawValue === undefined) ? '' : rawValue;
+    return `<div class="pc-ff-row">
+      <span class="pc-ff-label">${label}</span>
+      <span class="pc-ff-value">${displayVal} <button type="button" class="pc-ff-edit-btn" data-key="${key}" data-type="${type}" data-current="${currentAttr}">✏️</button></span>
+    </div>`;
+  }
+
+  function pcFullFieldsHtml(row) {
+    return `
+      <div class="pc-ff-group">
+        <div class="pc-ff-group-title">Identité</div>
+        ${pcFieldRow('Ville', row.ville, 'ville', 'text')}
+        ${pcFieldRow('LinkedIn', row.linkedin, 'linkedin', 'text')}
+        ${pcFieldRow('Situation', row.situation, 'situation', 'select')}
+        ${pcFieldRow('Expérience', (row.experience || []).join(', '), null, 'text', true)}
+        ${pcFieldRow('Disponibilité hebdo', row.disponibiliteHebdo, 'disponibiliteHebdo', 'text')}
+        ${pcFieldRow('SIRET', row.siret, 'siret', 'text')}
+      </div>
+      <div class="pc-ff-group">
+        <div class="pc-ff-group-title">Coordonnées bancaires</div>
+        ${pcFieldRow('IBAN', row.iban, 'iban', 'text')}
+      </div>
+      <div class="pc-ff-group">
+        <div class="pc-ff-group-title">Candidature</div>
+        ${pcFieldRow('Source / campagne', row.source, null, 'text', true)}
+        ${pcFieldRow('Motif du RDV', row.motifRDV, null, 'text', true)}
+        ${pcFieldRow('Date candidature', row.dateCandidature, null, 'date', true)}
+      </div>
+      <div class="pc-ff-group">
+        <div class="pc-ff-group-title">Contrat — infos techniques</div>
+        ${pcFieldRow('Date limite signature', row.dateLimiteSignature, 'dateLimiteSignature', 'date')}
+        ${pcFieldRow('ID signature Youtrust', row.contratSignatureId, null, 'text', true)}
+        ${pcFieldRow('Lien dashboard envoyé', row.dashboardEnvoye, null, 'checkbox', true)}
+      </div>
+    `;
+  }
+
+  function pcBindFullFieldsEdit(drawer, id) {
+    drawer.querySelectorAll('.pc-ff-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        const type = btn.dataset.type;
+        const current = btn.dataset.current;
+        const rowEl = btn.closest('.pc-ff-row');
+        const label = rowEl.querySelector('.pc-ff-label').textContent;
+        let inputHtml;
+        if (type === 'select') {
+          inputHtml = `<select id="pcFfInput">${PC_SITUATION_CHOICES.map(c => `<option value="${c}" ${c === current ? 'selected' : ''}>${c}</option>`).join('')}</select>`;
+        } else if (type === 'date') {
+          inputHtml = `<input type="date" id="pcFfInput" value="${current}">`;
+        } else {
+          inputHtml = `<input type="text" id="pcFfInput" value="${current}">`;
+        }
+        rowEl.innerHTML = `
+          <span class="pc-ff-label">${label}</span>
+          <span class="pc-ff-row-edit">
+            ${inputHtml}
+            <button type="button" class="pc-ff-row-save">✓</button>
+            <button type="button" class="pc-ff-row-cancel">✕</button>
+          </span>`;
+        rowEl.querySelector('.pc-ff-row-save').addEventListener('click', async () => {
+          const newVal = document.getElementById('pcFfInput').value;
+          showToast('Enregistrement…');
           try {
-            const res = await fetch('/api/admin/commerciaux-list', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'update-statut', id: select.dataset.id, statut })
-            });
-            const result = await res.json();
-            if (!res.ok) throw new Error(result.error || 'Erreur');
-            showToast('Statut mis à jour');
-            loadProspects();
-            loadActionsBanner();
+            await pcUpdateField(id, key, newVal);
+            await pcLoadData();
+            showToast('Champ mis à jour');
+            pcOpenDrawer(id, true);
           } catch (err) {
-            select.value = previous;
-            select.disabled = false;
             showToast(err.message || 'Erreur lors de la mise à jour', 'error');
           }
         });
+        rowEl.querySelector('.pc-ff-row-cancel').addEventListener('click', () => pcOpenDrawer(id, true));
       });
+    });
+  }
 
-      table.querySelectorAll('.btn-send-link').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          btn.disabled = true;
-          btn.textContent = 'Envoi…';
+  function pcBindTimelineDateEdit(drawer, id) {
+    drawer.querySelectorAll('.pc-tl-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.key;
+        const current = btn.dataset.current ? btn.dataset.current.slice(0, 10) : '';
+        const rowEl = btn.closest('.pc-tl-date-row');
+        rowEl.innerHTML = `
+          <div class="pc-tl-date-edit">
+            <input type="date" id="pcTlInput" value="${current}">
+            <button type="button" class="pc-tl-date-save">Enregistrer</button>
+            <button type="button" class="pc-tl-date-cancel">Annuler</button>
+          </div>`;
+        rowEl.querySelector('.pc-tl-date-save').addEventListener('click', async () => {
+          const newVal = document.getElementById('pcTlInput').value;
+          if (!newVal) return;
+          showToast('Enregistrement…');
           try {
-            const res = await fetch('/api/admin/commerciaux-list', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'send-dashboard-link', id: btn.dataset.id })
-            });
-            const result = await res.json();
-            if (!res.ok) throw new Error(result.error || 'Erreur');
-            showToast('Lien envoyé');
-            loadProspects();
+            await pcUpdateField(id, key, newVal);
+            await pcLoadData();
+            showToast('Date mise à jour');
+            pcOpenDrawer(id);
           } catch (err) {
-            btn.disabled = false;
-            btn.textContent = 'Envoyer';
-            showToast(err.message || 'Erreur lors de l\'envoi', 'error');
+            showToast(err.message || 'Erreur lors de la mise à jour', 'error');
           }
         });
+        rowEl.querySelector('.pc-tl-date-cancel').addEventListener('click', () => pcOpenDrawer(id));
       });
-    } catch (err) {
-      table.innerHTML = '<div class="prospects-row"><span style="color:var(--muted);">Erreur de chargement.</span></div>';
+    });
+  }
+
+  function pcCloseDrawer() {
+    document.getElementById('pcOverlay').classList.remove('show');
+    document.getElementById('pcDrawer').classList.remove('show');
+  }
+
+  function pcOpenDrawer(id, keepFullFieldsOpen) {
+    const row = pcData.find(r => r.id === id);
+    if (!row) return;
+    const decision = pcDecisionFromStatut(row.statut);
+    const drawer = document.getElementById('pcDrawer');
+    drawer.innerHTML = `
+      <button type="button" class="pc-drawer-close" id="pcDrawerClose">✕</button>
+      <div class="greet-eyebrow">Fiche prospect</div>
+      <h3>${row.prenom} ${row.nom}</h3>
+
+      <div id="pcInfoView">
+        <div class="pc-sub-line">${row.email ? `<a href="mailto:${row.email}">${row.email}</a>` : '—'} · ${row.telephone || '—'}</div>
+        <button type="button" class="pc-edit-btn" id="pcEditInfoBtn">✏️ Modifier les coordonnées</button>
+      </div>
+      <div class="pc-info-edit" id="pcInfoEdit" style="display:none;">
+        <label>Prénom<input type="text" id="pcEditPrenom" value="${row.prenom}"></label>
+        <label>Nom<input type="text" id="pcEditNom" value="${row.nom}"></label>
+        <label>Email<input type="email" id="pcEditEmail" value="${row.email}"></label>
+        <label>Téléphone<input type="text" id="pcEditTelephone" value="${row.telephone}"></label>
+        <div class="pc-edit-actions">
+          <button type="button" class="pc-edit-save" id="pcEditSave">Enregistrer</button>
+          <button type="button" class="pc-edit-cancel" id="pcEditCancel">Annuler</button>
+        </div>
+      </div>
+
+      ${row.statutReseau !== 'actif' ? `
+      <div class="pc-decision-block">
+        <label for="pcDecisionSelect">Décision</label>
+        ${pcDecisionSelectHtml(row, 'id="pcDecisionSelect"')}
+        <div class="pc-decision-help">Seule cette décision est une action manuelle — les étapes suivantes (contrat, CGV, paiement) sont automatiques.</div>
+      </div>` : ''}
+
+      ${(row.kitPaye && !row.dashboardEnvoye) ? `<button type="button" class="btn-send-link" id="pcSendDashboardLink" style="margin-top:1rem;width:100%;">Envoyer le lien dashboard</button>` : ''}
+
+      <h4 class="pc-block-title">Progression</h4>
+      <div class="pc-timeline" id="pcTimeline">${pcTimelineHtml(row)}</div>
+
+      <button type="button" class="pc-full-toggle" id="pcFullToggle">📄 Voir la fiche complète (tous les champs Airtable) ▾</button>
+      <div class="pc-full-fields" id="pcFullFields" style="display:none;">${pcFullFieldsHtml(row)}</div>
+    `;
+
+    drawer.querySelectorAll('.pc-eval-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById('pcEvalDetail' + btn.dataset.step);
+        const isOpen = panel.style.display !== 'none';
+        panel.style.display = isOpen ? 'none' : 'block';
+        btn.textContent = isOpen ? 'Voir le détail et le compte-rendu →' : 'Masquer le détail ▴';
+      });
+    });
+
+    document.getElementById('pcFullToggle').addEventListener('click', () => {
+      const panel = document.getElementById('pcFullFields');
+      const isOpen = panel.style.display !== 'none';
+      panel.style.display = isOpen ? 'none' : 'block';
+      document.getElementById('pcFullToggle').textContent = isOpen
+        ? '📄 Voir la fiche complète (tous les champs Airtable) ▾'
+        : '📄 Masquer la fiche complète ▴';
+    });
+    if (keepFullFieldsOpen) {
+      document.getElementById('pcFullFields').style.display = 'block';
+      document.getElementById('pcFullToggle').textContent = '📄 Masquer la fiche complète ▴';
     }
+
+    pcBindFullFieldsEdit(drawer, id);
+    pcBindTimelineDateEdit(drawer, id);
+
+    document.getElementById('pcDrawerClose').addEventListener('click', pcCloseDrawer);
+    document.getElementById('pcEditInfoBtn').addEventListener('click', () => {
+      document.getElementById('pcInfoView').style.display = 'none';
+      document.getElementById('pcInfoEdit').style.display = 'flex';
+    });
+    document.getElementById('pcEditCancel').addEventListener('click', () => {
+      document.getElementById('pcInfoEdit').style.display = 'none';
+      document.getElementById('pcInfoView').style.display = 'block';
+    });
+    document.getElementById('pcEditSave').addEventListener('click', async () => {
+      const updates = {
+        prenom: document.getElementById('pcEditPrenom').value.trim(),
+        nom: document.getElementById('pcEditNom').value.trim(),
+        email: document.getElementById('pcEditEmail').value.trim(),
+        telephone: document.getElementById('pcEditTelephone').value.trim()
+      };
+      showToast('Enregistrement…');
+      try {
+        for (const [key, value] of Object.entries(updates)) {
+          await pcUpdateField(id, key, value);
+        }
+        await pcLoadData();
+        showToast('Informations mises à jour');
+        pcOpenDrawer(id);
+      } catch (err) {
+        showToast(err.message || 'Erreur lors de la mise à jour', 'error');
+      }
+    });
+
+    const decisionSelect = document.getElementById('pcDecisionSelect');
+    if (decisionSelect) {
+      decisionSelect.addEventListener('change', async () => {
+        const statut = decisionSelect.value;
+        decisionSelect.disabled = true;
+        try {
+          await pcUpdateStatut(id, statut);
+          showToast(`Statut mis à jour → ${statut}`);
+          loadActionsBanner();
+          await pcLoadData();
+          pcOpenDrawer(id);
+        } catch (err) {
+          decisionSelect.disabled = false;
+          showToast(err.message || 'Erreur lors de la mise à jour', 'error');
+        }
+      });
+    }
+
+    const sendLinkBtn = document.getElementById('pcSendDashboardLink');
+    if (sendLinkBtn) {
+      sendLinkBtn.addEventListener('click', async () => {
+        sendLinkBtn.disabled = true;
+        sendLinkBtn.textContent = 'Envoi…';
+        try {
+          const res = await fetch('/api/admin/commerciaux-list', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'send-dashboard-link', id })
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || 'Erreur');
+          showToast('Lien envoyé');
+          await pcLoadData();
+          pcOpenDrawer(id);
+        } catch (err) {
+          sendLinkBtn.disabled = false;
+          sendLinkBtn.textContent = 'Envoyer le lien dashboard';
+          showToast(err.message || "Erreur lors de l'envoi", 'error');
+        }
+      });
+    }
+
+    document.getElementById('pcOverlay').classList.add('show');
+    drawer.classList.add('show');
+  }
+
+  function pcOpenCreateDrawer() {
+    const drawer = document.getElementById('pcDrawer');
+    drawer.innerHTML = `
+      <button type="button" class="pc-drawer-close" id="pcDrawerClose">✕</button>
+      <div class="greet-eyebrow">Nouveau prospect</div>
+      <h3>Créer une fiche prospect</h3>
+      <div class="pc-sub-line">Pour un appel direct, une recommandation, un contact LinkedIn ou tout prospect qui n'est pas passé par le formulaire.</div>
+      <form class="pc-create-form" id="pcCreateForm">
+        <div class="pc-create-grid">
+          <label>Prénom *<input type="text" id="pcCreatePrenom" required></label>
+          <label>Nom *<input type="text" id="pcCreateNom" required></label>
+        </div>
+        <div class="pc-create-grid">
+          <label>Email<input type="email" id="pcCreateEmail" placeholder="email@exemple.fr"></label>
+          <label>Téléphone<input type="text" id="pcCreateTelephone" placeholder="06 00 00 00 00"></label>
+        </div>
+        <div class="pc-create-grid">
+          <label>Ville<input type="text" id="pcCreateVille"></label>
+          <label>LinkedIn<input type="url" id="pcCreateLinkedin" placeholder="https://linkedin.com/in/..."></label>
+        </div>
+        <div class="pc-create-grid">
+          <label>Situation
+            <select id="pcCreateSituation">
+              <option value="">—</option>
+              ${PC_SITUATION_CHOICES.map(c => `<option value="${c}">${c}</option>`).join('')}
+            </select>
+          </label>
+          <label>Disponibilité hebdo<input type="text" id="pcCreateDisponibilite" placeholder="Ex. 2 jours / semaine"></label>
+        </div>
+        <div class="pc-create-grid">
+          <label>SIRET<input type="text" id="pcCreateSiret" placeholder="14 chiffres"></label>
+          <label>Source
+            <select id="pcCreateSource">
+              ${PC_SOURCE_CHOICES.map(c => `<option value="${c}">${c}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+        <div class="pc-create-help">Seuls le prénom et le nom sont obligatoires. Les autres informations peuvent être complétées maintenant ou plus tard dans la fiche.</div>
+        <div class="pc-create-actions">
+          <button type="submit" class="pc-create-save">Créer le prospect</button>
+          <button type="button" class="pc-create-cancel" id="pcCreateCancel">Annuler</button>
+        </div>
+        <p id="pcCreateMsg" style="font-size:.85rem;text-align:center;"></p>
+      </form>
+    `;
+    document.getElementById('pcDrawerClose').addEventListener('click', pcCloseDrawer);
+    document.getElementById('pcCreateCancel').addEventListener('click', pcCloseDrawer);
+    document.getElementById('pcCreateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prenom = document.getElementById('pcCreatePrenom').value.trim();
+      const nom = document.getElementById('pcCreateNom').value.trim();
+      if (!prenom || !nom) return;
+      const msg = document.getElementById('pcCreateMsg');
+      const submitBtn = drawer.querySelector('.pc-create-save');
+      submitBtn.disabled = true;
+      msg.textContent = '';
+      try {
+        const res = await fetch('/api/admin/commerciaux-list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'create-prospect',
+            prenom, nom,
+            email: document.getElementById('pcCreateEmail').value.trim(),
+            telephone: document.getElementById('pcCreateTelephone').value.trim(),
+            ville: document.getElementById('pcCreateVille').value.trim(),
+            linkedin: document.getElementById('pcCreateLinkedin').value.trim(),
+            situation: document.getElementById('pcCreateSituation').value,
+            disponibiliteHebdo: document.getElementById('pcCreateDisponibilite').value.trim(),
+            siret: document.getElementById('pcCreateSiret').value.trim(),
+            source: document.getElementById('pcCreateSource').value
+          })
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Erreur');
+        showToast('Prospect créé');
+        await pcLoadData();
+        pcOpenDrawer(result.id);
+      } catch (err) {
+        submitBtn.disabled = false;
+        msg.textContent = err.message || 'Erreur lors de la création';
+        msg.style.color = '#b3261e';
+      }
+    });
+    document.getElementById('pcOverlay').classList.add('show');
+    drawer.classList.add('show');
   }
 
   // --- Suivi CA / Paiement (admin) ---
@@ -1331,6 +2081,10 @@
     document.querySelectorAll('#paiementsFilter .people-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
     renderPaiementsTable(btn.dataset.filter);
   });
+
+  pcInitColumnSearch();
+  document.getElementById('pcNewProspectBtn').addEventListener('click', pcOpenCreateDrawer);
+  document.getElementById('pcOverlay').addEventListener('click', pcCloseDrawer);
 
   document.getElementById('tabNav').addEventListener('click', (e) => {
     const btn = e.target.closest('.tab-btn');
